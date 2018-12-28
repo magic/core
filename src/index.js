@@ -60,7 +60,8 @@ const prepare = {
   vendor: dependencies => {
     const componentFile = path.join(__dirname, 'lib', 'modules', 'component.js')
     let vendorString = ''
-    vendorString += fs.readFileSync(componentFile, 'utf8')
+    vendorString += fs
+      .readFileSync(componentFile, 'utf8')
       .replace(/const (.*?) = require\((.*?)\)/gm, (m, $1, $2) => `import ${$1} from ${$2}`)
       .replace('module.exports = component', '')
       .replace('const component', 'export const C')

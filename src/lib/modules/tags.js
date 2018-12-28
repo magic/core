@@ -103,15 +103,7 @@ const htmlTags = [
   'wbr',
 ]
 
-const headTags = [
-  'html',
-  'head',
-  'title',
-  'meta',
-  'link',
-  'body',
-  'script',
-]
+const headTags = ['html', 'head', 'title', 'meta', 'link', 'body', 'script']
 
 const exp = {
   component,

@@ -6,7 +6,6 @@ const ROOT = process.cwd()
 const configPath = path.join(process.cwd(), 'config.js')
 let config = {}
 if (fs.existsSync(configPath)) {
-
   config = require(configPath)
   if (config.ROOT) {
     config.ROOT = path.resolve(process.cwd(), config.ROOT)
@@ -25,6 +24,5 @@ config = {
     TMP,
   },
 }
-
 
 module.exports = config
