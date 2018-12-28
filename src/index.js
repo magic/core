@@ -57,24 +57,23 @@ const prepare = {
     return component
   },
 
-  vendor: dependencies => {
-    const componentFile = path.join(__dirname, 'lib', 'modules', 'component.js')
-    let vendorString = ''
-    vendorString += fs
-      .readFileSync(componentFile, 'utf8')
-      .replace(/const (.*?) = require\((.*?)\)/gm, (m, $1, $2) => `import ${$1} from ${$2}`)
-      .replace('module.exports = component', '')
-      .replace('const component', 'export const C')
+  vendor: ({ tags, components }) => {
+    const componentFile = library.component
+    const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
+    const hyperappContent = fs.readFileSync(hyperappFile, 'utf8')
+    let vendorString = hyperappContent.replace(/export function (.*)\(/gm, (m, $1) => `window.${$1} = function ${$1}(`)
+    vendorString += `window.C = ${library.component.toString()}\n`
       .replace(/attributes/gm, 'a')
       .replace(/name/gm, 'n')
       .replace(/children/gm, 'c')
 
-    vendorString += `
-const deps = {}
-['${Object.keys(dependencies).join(",'")}'].forEach(d => deps[d] = C(d))
-export default deps
-`
-    vendorString = vendorString.replace(/\n/gim, ' ').replace(/\s\s*/gim, ' ')
+    vendorString += `['${tags.join(",'")}'].forEach(d => window[d] = C(d);)`
+    components.forEach(comp => {
+      console.log(comp)
+    })
+
+    vendorString = vendorString
+      .replace(/\n\n*/gim, '\n')
     return vendorString
   },
 
@@ -184,7 +183,7 @@ const renderApp = () => {
 
   const { dependencies, components, tags } = getDependencies(pages)
 
-  const vendor = prepare.vendor(dependencies)
+  const vendor = prepare.vendor({ components, tags })
   console.log(vendor)
 
   const preparedStyle = css(style)
