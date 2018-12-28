@@ -4,4 +4,7 @@ module.exports = {
   fixIndent: require('./fixIndent'),
   isUpperCase: require('./isUpperCase'),
   mkdirp: require('./mkdirp'),
+  isTagUsed: require('./isTagUsed'),
+  getDependencies: require('./getDependencies'),
+  modules: require('./modules'),
 }
