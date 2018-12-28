@@ -28,7 +28,7 @@ const renderApp = cmds => {
   console.timeEnd('render app')
 
   if (cmds.includes('watch')) {
-    watch({ config, ...transpiled})
+    watch({ config, ...transpiled })
   }
 
   if (cmds.includes('serve')) {
