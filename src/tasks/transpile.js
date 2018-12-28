@@ -35,13 +35,7 @@ transpile.pages = (files, app) => {
     .map(page => ({
       ...page,
       state: deep.merge(app.state, page.state),
-    }))
-    .map(page => ({
-      ...page,
       actions: deep.merge(app.actions, page.actions),
-    }))
-    .map(page => ({
-      ...page,
       style: deep.merge(app.style, page.style),
     }))
 
