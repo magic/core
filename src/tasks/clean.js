@@ -8,10 +8,8 @@ const isLocalPath = p => {
   return p.startsWith(cwd) && p !== cwd
 }
 
-const clean = () => {
+const clean = ({ config }) => {
   const dir = config.DIR.TMP
-  console.time('clean')
-  console.log(`start cleaning ${dir})`)
 
   if (is.string(dir) && !is.empty(dir)) {
     if (!isLocalPath(path.resolve(dir))) {
@@ -22,7 +20,6 @@ const clean = () => {
 
     rmrf(dir)
   }
-  console.timeEnd('clean')
 }
 
 module.exports = clean

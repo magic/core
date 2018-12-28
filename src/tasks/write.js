@@ -4,23 +4,6 @@ const { parse } = require('@babel/parser')
 
 const { mkdirp } = require('../lib')
 
-let presets = [
-  [
-    'env',
-    {
-      modules: false,
-      targets: {
-        browsers: ['last 2 versions', 'safari >= 7'],
-      },
-    },
-  ],
-]
-
-const babelOpts = {
-  sourceMaps: 'both',
-  presets,
-}
-
 const write = ({ pages, vendor, style, config }) => {
   write.html({ pages, config })
   fs.writeFileSync(path.join(config.DIR.TMP, 'vendor.js'), vendor.bundle.code)
@@ -38,7 +21,5 @@ write.html = ({ pages, config }) => {
     fs.writeFileSync(pagePath, page.rendered)
   })
 }
-
-write.ast = (code, opts) => parse(code, opts)
 
 module.exports = write
