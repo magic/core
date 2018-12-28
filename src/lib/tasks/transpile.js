@@ -45,6 +45,8 @@ transpile.vendor = (components, tags) => {
 
   const { code } = generate(ast, babelOpts)
   babelOpts.minified = true
+  babelOpts.comments = false
+
   const minified = generate(ast, babelOpts)
 
   fs.writeFileSync(path.join(config.DIR.TMP, 'vendor.js'), code)
