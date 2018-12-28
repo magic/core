@@ -1,7 +1,11 @@
 const http = require('http')
 
-const handler = (req, res) => {
-  console.log(req, res)
+const serve = ({ app, pages }) => {
+  const handler = (req, res) => {
+    console.log(req, res)
+  }
+
+  http.createServer(handler).listen(3000)
 }
 
-http.createServer(handler).listen(3000)
+module.exports = serve

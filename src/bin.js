@@ -32,5 +32,5 @@ if (process.argv.includes('dev') || process.argv.includes('development')) {
   cmds.push('serve')
 }
 
-// const run = require('./index.js')
-// run(cmds)
+const run = require('./index.js')
+run(cmds)

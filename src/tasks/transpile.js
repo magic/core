@@ -1,107 +1,100 @@
 const fs = require('fs')
 const path = require('path')
+const { parse } = require('@babel/parser')
+const generate = require('@babel/generator').default
+const { renderToString } = require('hyperapp-render')
+const css = require('@magic/css')
 const deep = require('@magic/deep')
-const is = require('@magic/types')
 
-const library = require('../modules')
-const { getFiles, isTagUsed, isUpperCase } = require('../lib')
+const { mkdirp, getDependencies } = require('../lib')
+const modules = require('../modules')
+const prepare = require('./prepare')
 const config = require('../config')
 
-const transpile = app => {
-  const files = getFiles(config.DIR.PAGE)
+let presets = [
+  [
+    'env',
+    {
+      modules: false,
+      targets: {
+        browsers: ['last 2 versions', 'safari >= 7'],
+      },
+    },
+  ],
+]
 
-  const pages = transpile.pages(files, app)
-  const dependencies = transpile.dependencies(app)
+const babelOpts = {
+  sourceMaps: 'both',
+  presets,
+}
+
+const transpile = ({ app, pages }) => {
+  const { dependencies, components, tags } = getDependencies(pages, app)
+
+  const transpiled = transpile.html(app, pages)
+  const vendor = transpile.vendor(components, tags, dependencies)
+  const style = transpile.style(transpiled.style)
 
   return {
-    pages,
-    dependencies,
+    style,
+    vendor,
+    pages: transpiled.pages,
+    app,
   }
 }
 
-transpile.file = file => {
-  const name = file.replace(config.DIR.PAGE, '').replace('index.js', '')
+transpile.vendor = (components, tags) => {
+  const vendor = prepare.vendor({ components, tags })
+
+  babelOpts.filename = 'vendor'
+  const ast = transpile.ast(vendor, babelOpts)
+  const bundle = generate(ast, babelOpts)
+
+  babelOpts.minified = true
+  babelOpts.comments = false
+  const minified = generate(ast, babelOpts)
 
   return {
-    ...require(file)(library),
-    name,
+    ast,
+    bundle,
+    minified,
   }
 }
 
-transpile.pages = (files, app) => {
-  const pages = files
-    .map(transpile.file)
-    .map(transpile.stringify)
-    .map(page => ({
-      ...page,
-      state: deep.merge(app.state, page.state),
-      actions: deep.merge(app.actions, page.actions),
-      style: deep.merge(app.style, page.style),
-    }))
-
-  return pages
-}
-
-transpile.stringify = component => {
-  component.str = ''
-  Object.keys(component).forEach(key => {
-    if (isUpperCase(key) && is.fn(component[key])) {
-      component.str += component[key].toString()
-    }
-  })
-  return component
-}
-
-transpile.vendor = ({ tags, components }) => {
-  const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
-  const hyperappContent = fs
-    .readFileSync(hyperappFile, 'utf8')
-    .replace(/export function (.*)\(/gm, (_, $1) => `window.${$1} = function ${$1}(`)
-
-  let vendorString = ''
-  vendorString += hyperappContent
-
-  vendorString += `const C = window.C = ${library.component.toString()}\n`
-    .replace(/attributes/gm, 'a')
-    .replace(/name/gm, 'n')
-    .replace(/children/gm, 'c')
-
-  tags.forEach(tag => {
-    vendorString += `const ${tag} = window.${tag} = C('${tag}')\n`
-  })
-
-  components.forEach(comp => {
-    vendorString += `const ${comp} = window.${comp} = ${library[comp].toString()}\n`
-  })
-
-  return vendorString
-}
-
-transpile.dependencies = str => {
-  if (is.fn(str.View)) {
-    str = str.View.toString()
-  }
-
-  const deps = Object.keys(library)
-    .filter(isTagUsed(str))
-    .map(key => {
-      if (isUpperCase(key)) {
-        const dep = library[key]
-        if (dep) {
-          if (is.fn(dep.toString)) {
-            const keys = transpile.dependencies(dep.toString())
-            return [key, ...keys]
-          }
-        }
-      } else {
-        if (is.function(library.tags.body[key])) {
-          return key
-        }
+transpile.html = (app, pages) => {
+  let style = {}
+  pages.forEach(page => {
+    page.dependencies = prepare.dependencies(page.str)
+    page.dependencies.forEach(dep => {
+      const lib = modules[dep] || {}
+      if (lib.state) {
+        page.state = deep.merge(lib.state, page.state)
+      }
+      if (lib.actions) {
+        page.actions = deep.merge(lib.actions, page.actions)
+      }
+      if (lib.style) {
+        page.style = deep.merge(lib.style, page.style)
       }
     })
-    .filter(a => a)
 
-  return deep.flatten(deps)
+    page.rendered = renderToString(app.View(page), page.state, page.actions)
+    style = deep.merge(style, page.style)
+    let pagePath = path.join(config.DIR.TMP, page.name)
+    mkdirp(pagePath)
+    if (!pagePath.endsWith('index.js') && pagePath.endsWith('/')) {
+      pagePath = path.join(pagePath, 'index.html')
+    }
+  })
+
+  return {
+    style,
+    pages,
+  }
 }
+
+transpile.style = style => css(style)
+
+transpile.ast = (code, opts) => parse(code, opts)
 
 module.exports = transpile

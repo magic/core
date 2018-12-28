@@ -12,14 +12,16 @@ if (fs.existsSync(configPath)) {
   }
 }
 
-const PAGE = path.join(config.ROOT, 'pages')
+const PAGES = path.join(config.ROOT, 'pages')
 const TMP = path.join(process.cwd(), '.tmp')
+const ASSETS = path.join(config.ROOT, 'assets')
 
 config = {
   ...config,
   DIR: {
-    PAGE,
+    PAGES,
     TMP,
+    ASSETS,
   },
 }
 
