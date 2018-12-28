@@ -14,7 +14,7 @@ const renderApp = () => {
   const { dependencies, components, tags } = getDependencies(pages)
 
   const style = transpile.pages(pages)
-  transpile.vendor(components, tags)
+  transpile.vendor(components, tags, dependencies)
   transpile.style(style)
 }
 
