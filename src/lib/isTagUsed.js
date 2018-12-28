@@ -1,5 +1,3 @@
-
-
 const isTagUsed = str => fn =>
   str.includes(` ${fn}(`) ||
   str.includes(`,${fn}(`) ||

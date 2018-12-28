@@ -2,13 +2,13 @@ const fs = require('fs')
 const path = require('path')
 const deep = require('@magic/deep')
 const is = require('@magic/types')
-const { app, isTagUsed } = require('../')
+
+const app = require('../modules/app')
 const library = require('../modules')
+const isTagUsed = require('../isTagUsed')
 const merge = require('./merge')
-
 const config = require('../../config')
-
-const isUpperCase = n => n[0].toUpperCase() === n[0]
+const isUpperCase = require('../isUpperCase')
 
 const prepare = {
   file(file) {
@@ -52,7 +52,8 @@ const prepare = {
 
   vendor: ({ tags, components }) => {
     const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
-    const hyperappContent = fs.readFileSync(hyperappFile, 'utf8')
+    const hyperappContent = fs
+      .readFileSync(hyperappFile, 'utf8')
       .replace(/export function (.*)\(/gm, (_, $1) => `window.${$1} = function ${$1}(`)
 
     let vendorString = ''
