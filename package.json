@@ -5,7 +5,10 @@
   "main": "src/index.js",
   "scripts": {
     "start": "t -p",
-    "build": "node src/index.js",
+    "build": "node src/bin.js build",
+    "clean": "node src/bin.js clean",
+    "serve": "node src/bin.js serve",
+    "dev": "node src/bin.js dev",
     "format": "f -w",
     "test": "t",
     "calls": "calls"
