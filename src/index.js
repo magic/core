@@ -1,14 +1,11 @@
-const { getFiles, getDependencies } = require('./lib/')
-const { prepare, transpile } = require('./lib/tasks')
-const config = require('./config')
-const { app } = require('./lib')
+const { transpile, write } = require('./tasks')
+const { app } = require('./modules')
 
 const renderApp = () => {
-  const files = getFiles(config.DIR.PAGE)
-  const { pages, dependencies } = prepare(files, app)
+  const { pages, dependencies } = transpile(app)
 
   app.dependencies = dependencies
-  transpile(pages, app)
+  write(pages, app)
 }
 
 renderApp()

@@ -1,8 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 
-const ROOT = process.cwd()
-
 const configPath = path.join(process.cwd(), 'config.js')
 let config = {}
 if (fs.existsSync(configPath)) {

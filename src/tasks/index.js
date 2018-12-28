@@ -1,6 +1,5 @@
 module.exports = {
-  merge: require('./merge'),
+  write: require('./write'),
   transpile: require('./transpile'),
-  prepare: require('./prepare'),
   used: require('./used'),
 }

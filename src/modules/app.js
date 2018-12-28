@@ -4,7 +4,8 @@ const is = require('@magic/types')
 
 const deep = require('@magic/deep')
 const { h } = require('hyperapp')
-const config = require('../../config')
+
+const config = require('../config')
 
 let reset
 const maybeResetCssFile = path.join(config.ROOT, 'assets', 'reset.css.js')

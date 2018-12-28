@@ -6,11 +6,10 @@ const { renderToString } = require('hyperapp-render')
 const css = require('@magic/css')
 const deep = require('@magic/deep')
 
-const mkdirp = require('../mkdirp')
+const { mkdirp, getDependencies } = require('../lib')
 const modules = require('../modules')
-const prepare = require('./prepare')
-const config = require('../../config')
-const getDependencies = require('../getDependencies')
+const transpile = require('./transpile')
+const config = require('../config')
 
 let presets = [
   [
@@ -29,19 +28,19 @@ const babelOpts = {
   presets,
 }
 
-const transpile = (pages, app) => {
+const write = (pages, app) => {
   const { dependencies, components, tags } = getDependencies(pages, app)
 
-  const style = transpile.html(pages, app)
-  transpile.vendor(components, tags, dependencies)
-  transpile.style(style)
+  const style = write.html(pages, app)
+  write.vendor(components, tags, dependencies)
+  write.style(style)
 }
 
-transpile.vendor = (components, tags) => {
-  const vendor = prepare.vendor({ components, tags })
+write.vendor = (components, tags) => {
+  const vendor = transpile.vendor({ components, tags })
 
   babelOpts.filename = 'vendor'
-  const ast = transpile.ast(vendor, babelOpts)
+  const ast = write.ast(vendor, babelOpts)
 
   const { code } = generate(ast, babelOpts)
   babelOpts.minified = true
@@ -53,10 +52,10 @@ transpile.vendor = (components, tags) => {
   fs.writeFileSync(path.join(config.DIR.TMP, 'vendor.min.js'), minified.code)
 }
 
-transpile.html = (pages, app) => {
+write.html = (pages, app) => {
   let style = {}
   pages.forEach(page => {
-    page.dependencies = prepare.dependencies(page.str)
+    page.dependencies = transpile.dependencies(page.str)
     page.dependencies.forEach(dep => {
       const lib = modules[dep] || {}
       if (lib.state) {
@@ -83,11 +82,11 @@ transpile.html = (pages, app) => {
   return style
 }
 
-transpile.style = style => {
-  const preparedStyle = css(style)
-  fs.writeFileSync(path.join(config.DIR.TMP, 'main.css'), preparedStyle.minified)
+write.style = style => {
+  const transpiledStyle = css(style)
+  fs.writeFileSync(path.join(config.DIR.TMP, 'main.css'), transpiledStyle.minified)
 }
 
-transpile.ast = (code, opts) => parse(code, opts)
+write.ast = (code, opts) => parse(code, opts)
 
-module.exports = transpile
+module.exports = write

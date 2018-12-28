@@ -4,14 +4,14 @@ const deep = require('@magic/deep')
 const is = require('@magic/types')
 
 const library = require('../modules')
-const isTagUsed = require('../isTagUsed')
-const merge = require('./merge')
-const config = require('../../config')
-const isUpperCase = require('../isUpperCase')
+const { getFiles, isTagUsed, isUpperCase } = require('../lib')
+const config = require('../config')
 
-const prepare = (files, app) => {
-  const pages = prepare.pages(files, app)
-  const dependencies = prepare.dependencies(app)
+const transpile = app => {
+  const files = getFiles(config.DIR.PAGE)
+
+  const pages = transpile.pages(files, app)
+  const dependencies = transpile.dependencies(app)
 
   return {
     pages,
@@ -19,7 +19,7 @@ const prepare = (files, app) => {
   }
 }
 
-prepare.file = file => {
+transpile.file = file => {
   const name = file.replace(config.DIR.PAGE, '').replace('index.js', '')
 
   return {
@@ -28,10 +28,10 @@ prepare.file = file => {
   }
 }
 
-prepare.pages = (files, app) => {
+transpile.pages = (files, app) => {
   const pages = files
-    .map(prepare.file)
-    .map(prepare.stringify)
+    .map(transpile.file)
+    .map(transpile.stringify)
     .map(page => ({
       ...page,
       state: deep.merge(app.state, page.state),
@@ -48,7 +48,7 @@ prepare.pages = (files, app) => {
   return pages
 }
 
-prepare.stringify = component => {
+transpile.stringify = component => {
   component.str = ''
   Object.keys(component).forEach(key => {
     if (isUpperCase(key) && is.fn(component[key])) {
@@ -58,7 +58,7 @@ prepare.stringify = component => {
   return component
 }
 
-prepare.vendor = ({ tags, components }) => {
+transpile.vendor = ({ tags, components }) => {
   const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
   const hyperappContent = fs
     .readFileSync(hyperappFile, 'utf8')
@@ -83,7 +83,7 @@ prepare.vendor = ({ tags, components }) => {
   return vendorString
 }
 
-prepare.dependencies = str => {
+transpile.dependencies = str => {
   if (is.fn(str.View)) {
     str = str.View.toString()
   }
@@ -95,7 +95,7 @@ prepare.dependencies = str => {
         const dep = library[key]
         if (dep) {
           if (is.fn(dep.toString)) {
-            const keys = prepare.dependencies(dep.toString())
+            const keys = transpile.dependencies(dep.toString())
             return [key, ...keys]
           }
         }
@@ -110,4 +110,4 @@ prepare.dependencies = str => {
   return deep.flatten(deps)
 }
 
-module.exports = prepare
+module.exports = transpile
