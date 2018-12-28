@@ -6,11 +6,11 @@ const { renderToString } = require('hyperapp-render')
 const css = require('@magic/css')
 const deep = require('@magic/deep')
 
-const app = require('../modules/app')
 const mkdirp = require('../mkdirp')
 const modules = require('../modules')
 const prepare = require('./prepare')
 const config = require('../../config')
+const getDependencies = require('../getDependencies')
 
 let presets = [
   [
@@ -29,54 +29,63 @@ const babelOpts = {
   presets,
 }
 
-const transpile = {
-  vendor: (components, tags) => {
-    const vendor = prepare.vendor({ components, tags })
+const transpile = (pages, app) => {
+  const { dependencies, components, tags } = getDependencies(pages, app)
 
-    babelOpts.filename = 'vendor'
-    const ast = transpile.ast(vendor, babelOpts)
+  const style = transpile.html(pages, app)
+  transpile.vendor(components, tags, dependencies)
+  transpile.style(style)
+}
 
-    const { code } = generate(ast, babelOpts)
-    babelOpts.minified = true
-    const minified = generate(ast, babelOpts)
+transpile.vendor = (components, tags) => {
+  const vendor = prepare.vendor({ components, tags })
 
-    fs.writeFileSync(path.join(config.DIR.TMP, 'vendor.js'), code)
-    fs.writeFileSync(path.join(config.DIR.TMP, 'vendor.min.js'), minified.code)
-  },
-  pages: pages => {
-    let style = {}
-    pages.forEach(page => {
-      page.dependencies = prepare.dependencies(page.str)
-      page.dependencies.forEach(dep => {
-        const lib = modules[dep] || {}
-        if (lib.state) {
-          page.state = deep.merge(lib.state, page.state)
-        }
-        if (lib.actions) {
-          page.actions = deep.merge(lib.actions, page.actions)
-        }
-        if (lib.style) {
-          page.style = deep.merge(lib.style, page.style)
-        }
-      })
+  babelOpts.filename = 'vendor'
+  const ast = transpile.ast(vendor, babelOpts)
 
-      page.rendered = renderToString(app.View(page), page.state, page.actions)
-      style = deep.merge(style, page.style)
-      let pagePath = path.join(config.DIR.TMP, page.name)
-      mkdirp(pagePath)
-      if (!pagePath.endsWith('index.js') && pagePath.endsWith('/')) {
-        pagePath = path.join(pagePath, 'index.html')
+  const { code } = generate(ast, babelOpts)
+  babelOpts.minified = true
+  const minified = generate(ast, babelOpts)
+
+  fs.writeFileSync(path.join(config.DIR.TMP, 'vendor.js'), code)
+  fs.writeFileSync(path.join(config.DIR.TMP, 'vendor.min.js'), minified.code)
+}
+
+transpile.html = (pages, app) => {
+  let style = {}
+  pages.forEach(page => {
+    page.dependencies = prepare.dependencies(page.str)
+    page.dependencies.forEach(dep => {
+      const lib = modules[dep] || {}
+      if (lib.state) {
+        page.state = deep.merge(lib.state, page.state)
       }
-      fs.writeFileSync(pagePath, page.rendered)
+      if (lib.actions) {
+        page.actions = deep.merge(lib.actions, page.actions)
+      }
+      if (lib.style) {
+        page.style = deep.merge(lib.style, page.style)
+      }
     })
 
-    return style
-  },
-  style: style => {
-    const preparedStyle = css(style)
-    fs.writeFileSync(path.join(config.DIR.TMP, 'main.css'), preparedStyle.minified)
-  },
-  ast: (code, opts) => parse(code, opts),
+    page.rendered = renderToString(app.View(page), page.state, page.actions)
+    style = deep.merge(style, page.style)
+    let pagePath = path.join(config.DIR.TMP, page.name)
+    mkdirp(pagePath)
+    if (!pagePath.endsWith('index.js') && pagePath.endsWith('/')) {
+      pagePath = path.join(pagePath, 'index.html')
+    }
+    fs.writeFileSync(pagePath, page.rendered)
+  })
+
+  return style
 }
+
+transpile.style = style => {
+  const preparedStyle = css(style)
+  fs.writeFileSync(path.join(config.DIR.TMP, 'main.css'), preparedStyle.minified)
+}
+
+transpile.ast = (code, opts) => parse(code, opts)
 
 module.exports = transpile

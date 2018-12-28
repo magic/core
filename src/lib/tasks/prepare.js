@@ -3,100 +3,111 @@ const path = require('path')
 const deep = require('@magic/deep')
 const is = require('@magic/types')
 
-const app = require('../modules/app')
 const library = require('../modules')
 const isTagUsed = require('../isTagUsed')
 const merge = require('./merge')
 const config = require('../../config')
 const isUpperCase = require('../isUpperCase')
 
-const prepare = {
-  file(file) {
-    const name = file.replace(config.DIR.PAGE, '').replace('index.js', '')
+const prepare = (files, app) => {
+  const pages = prepare.pages(files, app)
+  const dependencies = prepare.dependencies(app)
 
-    return {
-      ...require(file)(library),
-      name,
+  return {
+    pages,
+    dependencies,
+  }
+}
+
+prepare.file = file => {
+  const name = file.replace(config.DIR.PAGE, '').replace('index.js', '')
+
+  return {
+    ...require(file)(library),
+    name,
+  }
+}
+
+prepare.pages = (files, app) => {
+  const pages = files
+    .map(prepare.file)
+    .map(prepare.stringify)
+    .map(page => ({
+      ...page,
+      state: deep.merge(app.state, page.state),
+    }))
+    .map(page => ({
+      ...page,
+      actions: deep.merge(app.actions, page.actions),
+    }))
+    .map(page => ({
+      ...page,
+      style: deep.merge(app.style, page.style),
+    }))
+
+  return pages
+}
+
+prepare.stringify = component => {
+  component.str = ''
+  Object.keys(component).forEach(key => {
+    if (isUpperCase(key) && is.fn(component[key])) {
+      component.str += component[key].toString()
     }
-  },
+  })
+  return component
+}
 
-  pages(files) {
-    const pages = files
-      .map(prepare.file)
-      .map(prepare.stringify)
-      .map(page => ({
-        ...page,
-        state: merge.state(app, page),
-      }))
-      .map(page => ({
-        ...page,
-        actions: merge.actions(app, page),
-      }))
-      .map(page => ({
-        ...page,
-        style: merge.style(app, page),
-      }))
+prepare.vendor = ({ tags, components }) => {
+  const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
+  const hyperappContent = fs
+    .readFileSync(hyperappFile, 'utf8')
+    .replace(/export function (.*)\(/gm, (_, $1) => `window.${$1} = function ${$1}(`)
 
-    return pages
-  },
+  let vendorString = ''
+  vendorString += hyperappContent
 
-  stringify: component => {
-    component.str = ''
-    Object.keys(component).forEach(key => {
-      if (isUpperCase(key) && is.fn(component[key])) {
-        component.str += component[key].toString()
-      }
-    })
-    return component
-  },
+  vendorString += `const C = window.C = ${library.component.toString()}\n`
+    .replace(/attributes/gm, 'a')
+    .replace(/name/gm, 'n')
+    .replace(/children/gm, 'c')
 
-  vendor: ({ tags, components }) => {
-    const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
-    const hyperappContent = fs
-      .readFileSync(hyperappFile, 'utf8')
-      .replace(/export function (.*)\(/gm, (_, $1) => `window.${$1} = function ${$1}(`)
+  tags.forEach(tag => {
+    vendorString += `const ${tag} = window.${tag} = C('${tag}')\n`
+  })
 
-    let vendorString = ''
-    vendorString += hyperappContent
+  components.forEach(comp => {
+    vendorString += `const ${comp} = window.${comp} = ${library[comp].toString()}\n`
+  })
 
-    vendorString += `const C = window.C = ${library.component.toString()}\n`
-      .replace(/attributes/gm, 'a')
-      .replace(/name/gm, 'n')
-      .replace(/children/gm, 'c')
+  return vendorString
+}
 
-    tags.forEach(tag => {
-      vendorString += `const ${tag} = window.${tag} = C('${tag}')\n`
-    })
+prepare.dependencies = str => {
+  if (is.fn(str.View)) {
+    str = str.View.toString()
+  }
 
-    components.forEach(comp => {
-      vendorString += `const ${comp} = window.${comp} = ${library[comp].toString()}\n`
-    })
-
-    return vendorString
-  },
-
-  dependencies: str => {
-    const deps = Object.keys(library)
-      .filter(isTagUsed(str))
-      .map(key => {
-        if (isUpperCase(key)) {
-          const dep = library[key]
-          if (dep) {
-            if (is.fn(dep.toString)) {
-              const keys = prepare.dependencies(dep.toString())
-              return [key, ...keys]
-            }
-          }
-        } else {
-          if (is.function(library.tags.body[key])) {
-            return key
+  const deps = Object.keys(library)
+    .filter(isTagUsed(str))
+    .map(key => {
+      if (isUpperCase(key)) {
+        const dep = library[key]
+        if (dep) {
+          if (is.fn(dep.toString)) {
+            const keys = prepare.dependencies(dep.toString())
+            return [key, ...keys]
           }
         }
-      })
-      .filter(a => a)
+      } else {
+        if (is.function(library.tags.body[key])) {
+          return key
+        }
+      }
+    })
+    .filter(a => a)
 
-    return deep.flatten(deps)
-  },
+  return deep.flatten(deps)
 }
 
 module.exports = prepare

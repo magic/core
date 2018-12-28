@@ -1,21 +1,14 @@
-const { getFiles, app, getDependencies } = require('./lib/')
+const { getFiles, getDependencies } = require('./lib/')
 const { prepare, transpile } = require('./lib/tasks')
-
 const config = require('./config')
+const { app } = require('./lib')
 
 const renderApp = () => {
   const files = getFiles(config.DIR.PAGE)
+  const { pages, dependencies } = prepare(files, app)
 
-  const pages = prepare.pages(files)
-
-  app.str = app.View.toString()
-  app.dependencies = prepare.dependencies(app.str)
-
-  const { dependencies, components, tags } = getDependencies(pages)
-
-  const style = transpile.pages(pages)
-  transpile.vendor(components, tags, dependencies)
-  transpile.style(style)
+  app.dependencies = dependencies
+  transpile(pages, app)
 }
 
 renderApp()

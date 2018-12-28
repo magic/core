@@ -1,9 +1,8 @@
 const deep = require('@magic/deep')
-const app = require('./modules/app')
 
 const isUpperCase = require('./isUpperCase')
 
-const getDependencies = pages => {
+const getDependencies = (pages, app) => {
   const allDeps = [...app.dependencies, pages.map(page => page.dependencies)]
 
   const dependencies = {}
