@@ -6,4 +6,5 @@ module.exports = {
   isTagUsed: require('./isTagUsed'),
   getDependencies: require('./getDependencies'),
   rmrf: require('./rmrf'),
+  isLocalPath: require('./isLocalPath'),
 }
