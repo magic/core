@@ -55,7 +55,7 @@ let app = {
         state.title && title(state.title),
         state.description &&
           meta({ name: 'description', property: 'og:description', content: state.description }),
-        link({ rel: 'stylesheet', href: '/main.css' }),
+        link({ rel: 'stylesheet', href: '/magic.css' }),
         page.Head && page.Head(state, actions),
       ]),
       body([
