@@ -8,7 +8,7 @@ const renderApp = cmds => {
 
   if (cmds.includes('clean')) {
     console.time('clean')
-    clean(config)
+    clean({ config })
     console.timeEnd('clean')
   }
 
@@ -25,6 +25,7 @@ const renderApp = cmds => {
     write({ config, ...transpiled })
     console.timeEnd('build')
   }
+
   console.timeEnd('render app')
 
   if (cmds.includes('watch')) {

@@ -1,12 +1,6 @@
 const is = require('@magic/types')
 const path = require('path')
-const { rmrf } = require('../lib')
-const config = require('../config')
-
-const isLocalPath = p => {
-  const cwd = process.cwd()
-  return p.startsWith(cwd) && p !== cwd
-}
+const { rmrf, isLocalPath } = require('../lib')
 
 const clean = ({ config }) => {
   const dir = config.DIR.TMP
@@ -18,6 +12,7 @@ const clean = ({ config }) => {
       throw new Error(msg)
     }
 
+    console.log('remove', dir)
     rmrf(dir)
   }
 }
