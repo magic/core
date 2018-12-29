@@ -40,6 +40,9 @@ const transpile = ({ app, pages }) => {
     vendor,
     pages: transpiled.pages,
     app,
+    dependencies,
+    components,
+    tags,
   }
 }
 

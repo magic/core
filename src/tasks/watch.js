@@ -4,11 +4,8 @@ const watchLoop = () => {
   setTimeout(watchLoop, 300)
 }
 
-const watch = ({ app, pages, config }) => {
-  // const dirs = [
-  //   path.join(config.ROOT, 'assets'
-  // ]
-  console.log({ app, pages, config })
+const watch = (props) => {
+  // console.log(props)
 }
 
 module.exports = watch

@@ -28,12 +28,14 @@ const renderApp = cmds => {
 
   console.timeEnd('render app')
 
+  const props = { config, transpiled, prepared }
+
   if (cmds.includes('watch')) {
-    watch({ config, ...transpiled })
+    watch(props)
   }
 
   if (cmds.includes('serve')) {
-    serve({ config, ...transpiled })
+    serve(props)
   }
 }
 

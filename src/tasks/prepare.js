@@ -26,6 +26,7 @@ const prepare = ({ app }) => {
   return {
     pages,
     app,
+    files,
   }
 }
 
