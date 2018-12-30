@@ -1,4 +1,3 @@
-const { div } = require('./tags')
 const Inside = require('./Inside')
 
 const Wrapper = (state, actions) => div({ class: 'Wrapper' }, Inside(state, actions))

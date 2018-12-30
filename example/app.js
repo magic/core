@@ -4,6 +4,6 @@ module.exports = {
       title: 'Custom App Title',
       description: 'Custom App Description',
     },
-    menu: [{ to: '/', text: 'home' }, { to: '/about', text: 'about' }],
+    menu: [{ to: '/', text: 'home' }, { to: '/deep/', text: 'deep' }],
   },
 }

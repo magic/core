@@ -7,4 +7,8 @@ module.exports = {
   getDependencies: require('./getDependencies'),
   rmrf: require('./rmrf'),
   isLocalPath: require('./isLocalPath'),
+  addTrailingSlash: require('./addTrailingSlash'),
+  getContentType: require('./getContentType'),
+  getFileType: require('./getFileType'),
+  contentTypes: require('./contentTypes'),
 }

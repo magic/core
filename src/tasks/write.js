@@ -14,7 +14,7 @@ const write = ({ pages, vendor, style, config }) => {
     fs.writeFileSync(pagePath, page.rendered)
   })
 
-  fs.writeFileSync(path.join(config.DIR.TMP, 'vendor.js'), vendor.bundle.code)
+  fs.writeFileSync(path.join(config.DIR.TMP, 'magic.js'), vendor.bundle.code)
   fs.writeFileSync(path.join(config.DIR.TMP, 'vendor.min.js'), vendor.minified.code)
   fs.writeFileSync(path.join(config.DIR.TMP, 'magic.css'), style.minified)
 }

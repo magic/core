@@ -6,4 +6,5 @@ module.exports = {
   clean: require('./clean'),
   serve: require('./serve'),
   transpile: require('./transpile'),
+  globals: require('./globals'),
 }

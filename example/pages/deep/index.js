@@ -1,4 +1,4 @@
-module.exports = ({ p, meta, h1, div, title }) => ({
+module.exports = {
   state: {
     title: 'h1 deep/index',
     content: ['div deep/index'],
@@ -10,5 +10,4 @@ module.exports = ({ p, meta, h1, div, title }) => ({
   },
 
   Body: state => [h1(state.title), div(state.content.map(p))],
-  Head: state => title(state.htmlTitle),
-})
+}

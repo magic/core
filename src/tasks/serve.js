@@ -1,24 +1,52 @@
+const path = require('path')
+const fs = require('fs')
 const http = require('http')
+const { addTrailingSlash, getContentType } = require('../lib/')
 
 const serve = (props) => {
-  // console.log({ props })
-  const css = props.transpiled.style.minified
-  const vendor = props.transpiled.vendor.minified
+  const { transpiled, config } = props
+  const css = transpiled.style.minified
+  const vendor = transpiled.vendor.minified.code
   const pages = {}
-  props.transpiled.pages.forEach(page => {
+  transpiled.pages.forEach(page => {
     pages[page.name] = page.rendered
   })
 
-  const app = props.transpiled.app
-
   const handler = (req, res) => {
-    if (pages[req.url]) {
+    let url = req.url
+    if (url === '/magic.css') {
+      res.writeHead(200, 'text/css')
+      res.end(css)
+      return
+    }
+
+    if (url === '/magic.js') {
+      res.writeHead(200, 'application/javascript')
+      res.end(vendor)
+      return
+    }
+
+    if (pages[addTrailingSlash(url)]) {
+      url = addTrailingSlash(url)
+    }
+
+    if (pages[url]) {
       res.writeHead(200, 'text/html')
       res.end(pages[req.url])
       return
     }
 
-    console.log(req.url)
+    const maybeFilePath = path.join(config.DIR.STATIC, url)
+    if (fs.existsSync(maybeFilePath)) {
+      const content = fs.readFileSync(maybeFilePath)
+      const contentType = getContentType(url)
+      res.writeHead(200, contentType)
+      res.end(content)
+    }
+
+    console.log('404', url)
+    res.writeHead(404)
+    res.end('Not found')
   }
 
   http.createServer(handler).listen(3000)

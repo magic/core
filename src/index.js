@@ -1,6 +1,10 @@
-const { prepare, write, watch, clean, transpile, serve } = require('./tasks')
-const { app } = require('./modules')
 const config = require('./config')
+const globals = require('./tasks/globals')
+globals({ config })
+// require app after calling globals to get them in app
+const { app } = require('./modules')
+
+const { prepare, write, watch, clean, transpile, serve } = require('./tasks')
 
 const renderApp = cmds => {
   console.time('render app')

@@ -6,7 +6,7 @@ const { renderToString } = require('hyperapp-render')
 const css = require('@magic/css')
 const deep = require('@magic/deep')
 
-const { mkdirp, getDependencies } = require('../lib')
+const { mkdirp, getDependencies, isUpperCase } = require('../lib')
 const modules = require('../modules')
 const prepare = require('./prepare')
 const config = require('../config')
@@ -29,25 +29,20 @@ const babelOpts = {
 }
 
 const transpile = ({ app, pages }) => {
-  const { dependencies, components, tags } = getDependencies(pages, app)
-
-  const transpiled = transpile.html(app, pages)
-  const vendor = transpile.vendor(components, tags, dependencies)
+  const deps = getDependencies({ app, pages })
+  const transpiled = transpile.html(deps)
+  const vendor = transpile.vendor(deps)
   const style = transpile.style(transpiled.style)
 
   return {
     style,
     vendor,
-    pages: transpiled.pages,
-    app,
-    dependencies,
-    components,
-    tags,
+    ...deps,
   }
 }
 
-transpile.vendor = (components, tags) => {
-  const vendor = prepare.vendor({ components, tags })
+transpile.vendor = props => {
+  const vendor = prepare.vendor(props)
 
   babelOpts.filename = 'vendor'
   const ast = transpile.ast(vendor, babelOpts)
@@ -64,10 +59,10 @@ transpile.vendor = (components, tags) => {
   }
 }
 
-transpile.html = (app, pages) => {
+transpile.html = ({ app, pages }) => {
   let style = {}
   pages.forEach(page => {
-    page.dependencies = prepare.dependencies(page.str)
+    // page.dependencies = prepare.dependencies(page.str)
     page.dependencies.forEach(dep => {
       const lib = modules[dep] || {}
       if (lib.state) {

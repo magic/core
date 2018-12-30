@@ -125,4 +125,11 @@ headTags.forEach(name => {
   exp.tags.head[name] = prepared
 })
 
+const description = attrs => {
+  exp.meta({ name: 'description', property: 'og:description', content: attrs })
+}
+
+exp.tags.head.description = description
+exp.description = description
+
 module.exports = exp

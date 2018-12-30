@@ -1,8 +1,14 @@
-const isTagUsed = str => fn =>
-  str.includes(` ${fn}(`) ||
-  str.includes(`,${fn}(`) ||
-  str.includes(`\n${fn}(`) ||
-  str.includes(`[${fn}(`) ||
-  str.includes(`(${fn})`) ||
-  str.includes(`(${fn}(`)
+const isTagUsed = str => fn => {
+  const incs = [
+    ` ${fn}(`,
+    `,${fn}(`,
+    `\n${fn}(`,
+    `[${fn}(`,
+    `(${fn})`,
+    `(${fn}(`,
+  ].some(t => str.includes(t))
+
+  return incs
+}
+
 module.exports = isTagUsed
