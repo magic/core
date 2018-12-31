@@ -1,6 +1,10 @@
 const theme = {
-  '.Wrapper': {
+  'a': {
     color: 'blue',
+
+    '&:hover': {
+      color: 'orange',
+    },
   },
 }
 

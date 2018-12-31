@@ -8,13 +8,13 @@ module.exports = {
   },
 
   actions: {
-    testAction: (state, actions) => ({ test: !state.test }),
-    setTitle: () => state => ({ title: state.title + 'test' }),
+    testAction: () => (state, actions) => ({ test: !state.test }),
+    setTitle: () => state => ({ title: state.title + ' test' }),
   },
 
   Body: (state, actions) => [
     h1(state.title),
     div({ onclick: actions.setTitle }, state.content.map(p)),
-    Wrapper(state, actions),
+    Wrapper.View(state, actions),
   ],
 }

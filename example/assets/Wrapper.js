@@ -1,19 +1,27 @@
 const Inside = require('./Inside')
 
-const Wrapper = (state, actions) => div({ class: 'Wrapper' }, Inside(state, actions))
+module.exports = {
+  state: {
+    wrapperStateVar: false,
+  },
 
-Wrapper.state = {
-  test: false,
-}
+  actions: {
+    wrapperAction: () => state => console.log('wrapperAction') || ({ wrapperStateVar: !state.wrapperStateVar }),
+  },
 
-Wrapper.actions = {
-  wrapperAction: state => ({ test: !state.test }),
-}
+  View: (state, actions) =>
+    div({ 
+      class: `Wrapper${state.wrapperStateVar ? ' Test' : ''}`, 
+      onclick: actions.wrapperAction,
+    }, Inside(state, actions)),
 
-Wrapper.style = {
-  '.Wrapper': {
-    color: 'orange',
+  style: {
+    '.Wrapper': {
+      color: 'orange',
+    
+      '&.Test': {
+        color: 'green',
+      },
+    },
   },
 }
-
-module.exports = Wrapper
