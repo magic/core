@@ -3,7 +3,7 @@ const fs = require('fs')
 const http = require('http')
 const { addTrailingSlash, getContentType } = require('../lib/')
 
-const serve = (props) => {
+const serve = props => {
   const { transpiled, config } = props
   const css = transpiled.style.minified
   const vendor = transpiled.vendor.minified.code

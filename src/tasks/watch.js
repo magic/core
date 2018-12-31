@@ -4,7 +4,7 @@ const watchLoop = () => {
   setTimeout(watchLoop, 300)
 }
 
-const watch = (props) => {
+const watch = props => {
   // console.log(props)
 }
 
