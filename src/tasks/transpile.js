@@ -1,3 +1,4 @@
+const is = require('@magic/types')
 const fs = require('fs')
 const path = require('path')
 const { parse } = require('@babel/parser')
@@ -31,13 +32,15 @@ const babelOpts = {
 const transpile = ({ app, pages }) => {
   const deps = getDependencies({ app, pages })
   const transpiled = transpile.html(deps)
-  const vendor = transpile.vendor(deps)
-  const style = transpile.style(transpiled.style)
+  const vendor = transpile.vendor(transpiled)
+  const style = transpile.style(transpiled)
+
+  console.log(Object.keys(deps), Object.keys(transpiled))
 
   return {
+    ...transpiled,
     style,
     vendor,
-    ...deps,
   }
 }
 
@@ -59,39 +62,47 @@ transpile.vendor = props => {
   }
 }
 
-transpile.html = ({ app, pages }) => {
+transpile.html = props => {
+  const { app, pages } = props
   let style = {}
+  
   pages.forEach(page => {
-    // page.dependencies = prepare.dependencies(page.str)
     page.dependencies.forEach(dep => {
-      const lib = modules[dep] || {}
-      if (lib.state) {
-        page.state = deep.merge(lib.state, page.state)
-      }
-      if (lib.actions) {
-        page.actions = deep.merge(lib.actions, page.actions)
-      }
-      if (lib.style) {
-        page.style = deep.merge(lib.style, page.style)
+      if (is.object(dep)) {
+        Object.entries(dep).forEach(([name, component]) => {
+          if (is.object(component)) {
+            if (component.state) {
+              page.state = deep.merge(component.state, page.state)
+            }
+            if (component.actions) {
+              page.actions = deep.merge(component.actions, page.actions)
+            }
+            if (component.style) {
+              page.style = deep.merge(page.style, component.style)
+            }
+          }
+        })
       }
     })
 
     page.rendered = renderToString(app.View(page), page.state, page.actions)
-    style = deep.merge(style, page.style)
-    let pagePath = path.join(config.DIR.TMP, page.name)
-    mkdirp(pagePath)
-    if (!pagePath.endsWith('index.js') && pagePath.endsWith('/')) {
-      pagePath = path.join(pagePath, 'index.html')
-    }
   })
 
   return {
+    ...props,
     style,
     pages,
   }
 }
 
-transpile.style = style => css(style)
+transpile.style = ({ app, pages }) => {
+  let style = app.style
+  pages.forEach(page => {
+    style = deep.merge(style, page.style)
+  })
+
+  return css(style)
+}
 
 transpile.ast = (code, opts) => parse(code, opts)
 

@@ -20,11 +20,10 @@ const stringifyComponent = component => {
 const prepare = ({ app }) => {
   const files = getFiles(config.DIR.PAGES)
 
-  const pages = prepare.pages(files, app)
+  const prepared = prepare.pages(files, app)
 
   return {
-    pages,
-    app,
+    ...prepared,
     files,
   }
 }
@@ -43,7 +42,7 @@ const getDeepPageNameObject = (name, arg) => {
 
   const obj = {}
   let temp = obj
-  arr.forEach((_,i) => {
+  arr.forEach((_, i) => {
     let a = {}
     if (i === arr.length - 1) {
       // pass arg as deepest key
@@ -65,21 +64,24 @@ prepare.pages = (files, app) => {
       const actionObject = getDeepPageNameObject(name, page.actions)
       app.state = deep.merge(app.state, { pages: stateObject })
       app.actions = deep.merge(app.actions, { pages: actionObject })
+      app.style = deep.merge(app.style, page.style)
 
       return {
         ...page,
         state: deep.merge(app.state, page.state),
         actions: deep.merge(app.actions, page.actions),
-        style: deep.merge(app.style, page.style),
       }
     })
 
-  return pages
+  return {
+    pages,
+    app,
+  }
 }
 
 const sanitizeName = name => {
   if (name === '/' || !name) {
-    name = "index"
+    name = 'index'
   }
 
   if (name.startsWith('/')) {
@@ -113,7 +115,23 @@ const stringifyObject = (object, indent = '') => {
   return object
 }
 
-prepare.vendor = (props) => {
+const handleDeps = ([name, component]) => {
+  if (is.fn(component.View)) {
+    component = `const ${name} = { View: ${component.View.toString()} }\n`
+  } else if (is.fn(component)) {
+    if (global.tags.body[name]) {
+      component = `const ${name} = C('${name}')\n`
+    } else {
+      component = `const ${name} = ${component.toString()}\n`
+    }
+  } else {
+    throw new Error(`unknown dependency type in ${name}: ${typeof component}`)
+  }
+
+  return component
+}
+
+prepare.vendor = props => {
   const { pages, dependencies } = props
   const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
   const hyperappContent = fs
@@ -128,13 +146,11 @@ prepare.vendor = (props) => {
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
 
-  props.dependencies.forEach(dep => {
-    if (isUpperCase(dep)) {
-      vendorString += `const ${dep} = ${global[dep].toString()}\n`
-    } else {
-      vendorString += `const ${dep} = C('${dep}')\n`
-    }
-  })
+  const depString = Object.entries(props.dependencies)
+    .map(handleDeps)
+    .join('')
+  // console.log({ depString })
+  vendorString += depString
 
   vendorString += 'const pages = {}\n'
 
@@ -147,17 +163,25 @@ prepare.vendor = (props) => {
       name = `[${name
         .split('/')
         .map(n => `"${n}"`)
-        .join('][')
-      }]`
+        .join('][')}]`
     }
 
     if (name === '404') {
       has404 = true
     }
 
+
+    const componentArgString = [
+      `Object.assign({}, state, state.pages['${name}'])`,
+      `Object.assign({}, actions, state.pages['${name}'])`,
+    ].join(',')
+
     const view = page.Body.toString()
       .replace(/state\./gm, `state.pages['${name}'].`)
       .replace(/actions\./gm, `actions.pages['${name}'].`)
+      // .replace(/\(state, actions\)/gm, `(${componentArgString})`)
+
+    // console.log(view)
 
     const str = `pages['${name}'] = ${view}\n`
     vendorString += str
@@ -173,10 +197,9 @@ prepare.vendor = (props) => {
   const actionString = `const actions = ${stringifyObject(app.actions)}\n`
   vendorString += actionString
 
-
   const getPageUrl = `
 const pathname = window.location.pathname
-let url = !location.pathname || pathname === '/' 
+let url = !pathname || pathname === '/' 
   ? 'index' 
   : pathname
 
@@ -191,12 +214,18 @@ state.url = url
   vendorString += getPageUrl
 
   const viewString = `
-const view = (state, actions) => div({ class: 'wrapper' }, [
-  state.menu && Menu(state, actions),
-  pages[state.url]
-    ? pages[state.url](state, actions)
-    : pages['404'],
-])
+const view = (state, actions) => {
+  const page = pages[state.url]
+  state = { ...state, ...state.pages[state.url] }
+  actions = { ...actions, ...actions.pages[state.url] }
+
+  return div({ class: 'wrapper' }, [
+    state.menu && Menu(state, actions),
+    page
+      ? page(state, actions)
+      : pages['404'],
+  ])
+}
 `
 
   vendorString += viewString
@@ -208,11 +237,9 @@ if (!mDiv) {
   mDiv.id = 'magic'
   document.body.appendChild(mDiv)
 }
+app(state, actions, view, mDiv)\n
 `
   vendorString += createMagic
-
-  const appString = `app(state, actions, view, mDiv)\n`
-  vendorString += appString
 
   return vendorString
 }
