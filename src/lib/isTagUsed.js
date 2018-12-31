@@ -6,6 +6,7 @@ const isTagUsed = str => fn => {
     `[${fn}(`,
     `(${fn})`,
     `(${fn}(`,
+    `${fn}.View`,
   ].some(t => str.includes(t))
 
   return incs
