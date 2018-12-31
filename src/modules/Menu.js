@@ -1,5 +1,3 @@
-const { nav, ul, a, li } = require('./tags')
-
 const Menu = state =>
   state.menu &&
   state.menu.length &&
