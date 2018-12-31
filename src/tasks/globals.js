@@ -4,7 +4,7 @@ const is = require('@magic/types')
 const deep = require('@magic/deep')
 let components = require('../modules')
 
-const keys = global.keys = new Set()
+const keys = (global.keys = new Set())
 
 const globalize = (key, value) => {
   if (is.array(key)) {

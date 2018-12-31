@@ -34,6 +34,8 @@ if (config.THEME) {
   }
 }
 
+const jsSrc = process.env.NODE_ENV === 'production' ? '/magic.min.js' : '/magic.js'
+
 let app = {
   state: {
     app: {
@@ -57,16 +59,16 @@ let app = {
       ]),
       body([
         app.Body(page.Body)(state, actions),
-        script({ type: 'text/javascript', src: '/magic.js' }),
+        script({ type: 'text/javascript', src: jsSrc }),
       ]),
     ]),
   ],
-  Body: (page) => (state, actions) => [
+  Body: page => (state, actions) => [
     div({ id: 'magic' }, [
-      div({ class: "wrapper" }, [
-        state.menu && Menu(state, actions),
-        page && page(state, actions),
-      ])
+      div({ class: 'wrapper' }, [
+        state.menu && Menu(state, actions), 
+        page && page(state, actions)
+      ]),
     ]),
   ],
 }
