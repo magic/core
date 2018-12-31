@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "t -p",
-    "build": "node src/bin.js build",
+    "build": "NODE_ENV=production node src/bin.js build",
     "clean": "node src/bin.js clean",
     "serve": "node src/bin.js serve",
     "dev": "node src/bin.js dev",
@@ -22,7 +22,8 @@
     "@magic/types": "0.0.2",
     "babel-preset-env": "1.7.0",
     "hyperapp": "1.2.9",
-    "hyperapp-render": "3.0.0"
+    "hyperapp-render": "3.0.0",
+    "node-zopfli-es": "1.0.0"
   },
   "devDependencies": {
     "@magic/test": "0.0.2"
