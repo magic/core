@@ -5,57 +5,74 @@ const is = require('@magic/types')
 const isUpperCase = require('./isUpperCase')
 const isTagUsed = require('./isTagUsed')
 
-const { tags } = require('../modules/')
+const getUsedComponents = str => Array.from(global.keys).filter(isTagUsed(str))
 
-const getStringDependencies = str => {
-  if (is.fn(str)) {
-    str = str.toString()
-  } else if (is.obj(str)) {
-    return getPageDependencies(str)
-  }
-
-  const deps = new Set()
-  
-  Array.from(global.keys)
-    .filter(isTagUsed(str))
-    .forEach(key => {
-      if (isUpperCase(key)) {
-        const keys = getStringDependencies(global[key])
-          .forEach(k => deps.add(k))
-        deps.add(key)
-      } 
-
-      if (global.tags.body[key]) {
-        deps.add(key)
+const getComponentDependencies = str =>
+  getUsedComponents(str).map(name => {
+    const component = global[name]
+    if (is.fn(component)) {
+      if (global.tags.body[name]) {
+        return {
+          [name]: component,
+        }
       }
-    })
 
-  return Array.from(deps)
+      const deps = {}
+      getComponentDependencies(component.toString()).forEach(dep => {
+        Object.entries(dep).forEach(([name, comp]) => {
+          deps[name] = comp
+        })
+      })
+
+      return {
+        ...deps,
+        [name]: component,
+      }
+    } else if (is.array(component)) {
+      throw new Error(`getComponentDependencies got array ${name}`)
+    } else if (is.object(component)) {
+      let entries = {}
+      Object.entries(component)
+        .filter(([k]) => isUpperCase(k))
+        .map(([k, v]) => {
+          if (global[k]) {
+            entries[k] = getComponentDependencies(v.toString())
+          } else {
+            getComponentDependencies(v.toString()).forEach(dep => {
+              Object.entries(dep).forEach(([k, v]) => {
+                entries[k] = v
+              })
+            })
+          }
+        })
+
+      return { [name]: component, ...entries }
+    } else {
+      throw new Error(`unknown component type: ${typeof component}`)
+    }
+  })
+
+const flattenDeps = deps => {
+  const dependencies = {}
+  deps = deep.flatten(deps).map(f => {
+    Object.entries(f).forEach(([k, f]) => {
+      dependencies[k] = f
+    })
+  })
+
+  return dependencies
 }
 
-const getPageDependencies = (o) => {
-  const dependencies = Object.keys(o)
-    .filter(isUpperCase)
-    .map(k => {
-      const view = o[k]
-      return getStringDependencies(view)
-    })
-    .filter(a => a && a.length)
-  
-  return {
-    ...o,
-    dependencies: deep.flatten(dependencies),
-  }
+const getPageDependencies = page => {
+  page.dependencies = getComponentDependencies(page.Body.toString())
+  return page
 }
 
 const getDependencies = ({ pages, app }) => {
   pages = pages.map(getPageDependencies)
-  app = getPageDependencies(app)
-  
-  const dependencies = Array.from(new Set(deep.flatten([
-    ...pages.map(p => p.dependencies), 
-    ...app.dependencies,
-  ])))
+  app.dependencies = getComponentDependencies(app.Body.toString())
+
+  const dependencies = flattenDeps([...pages.map(p => p.dependencies), app.dependencies])
 
   return { pages, app, dependencies }
 }
