@@ -7,8 +7,8 @@ const isTagUsed = require('./isTagUsed')
 
 const getUsedComponents = str => Array.from(global.keys).filter(isTagUsed(str))
 
-const getComponentDependencies = str =>
-  getUsedComponents(str).map(name => {
+const getComponentDependencies = str => {
+  const components = getUsedComponents(str).map(name => {
     const component = global[name]
     if (is.fn(component)) {
       if (global.tags.body[name]) {
@@ -52,6 +52,9 @@ const getComponentDependencies = str =>
     }
   })
 
+  return components
+}
+
 const flattenDeps = deps => {
   const dependencies = {}
   deps = deep.flatten(deps).map(f => {
@@ -78,4 +81,15 @@ const getDependencies = ({ pages, app }) => {
   return { pages, app, dependencies }
 }
 
-module.exports = getDependencies
+const getDeps = props => {
+  const deps = {}
+  getComponentDependencies(props).forEach(o => {
+    Object.entries(o).forEach(([k, v]) => {
+      deps[k] = v
+    })
+  })
+
+  return deps
+}
+
+module.exports = getDeps

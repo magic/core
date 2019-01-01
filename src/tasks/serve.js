@@ -3,12 +3,15 @@ const fs = require('fs')
 const http = require('http')
 const { addTrailingSlash, getContentType } = require('../lib/')
 
-const serve = props => {
-  const { transpiled, config } = props
-  const css = transpiled.style.minified
-  const vendor = transpiled.vendor.minified.code
+const isProd = process.env.NODE_ENV === 'production'
+
+const serve = () => {
+  const { css, lib, static } = global.app
+  const style = isProd ? css.minified : css.css
+  const js = isProd ? lib.minified.code : lib.bundle.code
+
   const pages = {}
-  transpiled.pages.forEach(page => {
+  global.app.pages.forEach(page => {
     pages[page.name] = page.rendered
   })
 
@@ -16,13 +19,13 @@ const serve = props => {
     let url = req.url
     if (url === '/magic.css') {
       res.writeHead(200, 'text/css')
-      res.end(css)
+      res.end(style)
       return
     }
 
-    if (url === '/magic.js') {
+    if (url === '/magic.js' || url === '/magic.min.js') {
       res.writeHead(200, 'application/javascript')
-      res.end(vendor)
+      res.end(js)
       return
     }
 
@@ -36,12 +39,11 @@ const serve = props => {
       return
     }
 
-    const maybeFilePath = path.join(config.DIR.STATIC, url)
-    if (fs.existsSync(maybeFilePath)) {
-      const content = fs.readFileSync(maybeFilePath)
+    if (static[url]) {
       const contentType = getContentType(url)
       res.writeHead(200, contentType)
-      res.end(content)
+      res.end(static[url])
+      return
     }
 
     console.log('404', url)

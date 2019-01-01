@@ -2,9 +2,9 @@ const fs = require('fs')
 const path = require('path')
 const is = require('@magic/types')
 const deep = require('@magic/deep')
-let components = require('../modules')
-const { getFiles, getDependencies } = require('../lib')
-const prepare = require('./prepare')
+let components = require('../../modules')
+const { getFiles, getDependencies } = require('../../lib')
+const prepareLib = require('./prepareLib')
 
 global.keys = new Set()
 
@@ -20,7 +20,7 @@ const globalize = (key, value) => {
 }
 
 let exists = false
-const globals = ({ config }) => {
+const prepare = ({ config }) => {
   global.config = config
 
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
@@ -38,6 +38,11 @@ const globals = ({ config }) => {
     const page = require(file)
     page.file = file
     page.name = file.replace(config.DIR.PAGES, '').replace(/index?.js/gm, '')
+    page.path = path.join(config.DIR.TMP, page.name)
+    if (!page.path.endsWith('index.js') && page.path.endsWith('/')) {
+      page.path = path.join(page.path, 'index.html')
+    }
+
     page.dependencies = getDependencies(page.Body.toString())
 
     Object.entries(page.dependencies).forEach(([k, c]) => {
@@ -56,11 +61,10 @@ const globals = ({ config }) => {
     return page
   })
 
-  const { app } = require('../modules')
-  global.app = app
+  global.app = components.app
 
-  app.state = deep.merge(app.state, { pages: [] })
-  app.actions = deep.merge(app.actions, { pages: [] })
+  app.state = deep.merge(app.state, { pages: {} })
+  app.actions = deep.merge(app.actions, { pages: {} })
   app.dependencies = getDependencies(app.Body.toString())
 
   Object.entries(app.dependencies).forEach(([k, dep]) => {
@@ -83,12 +87,22 @@ const globals = ({ config }) => {
     pages.forEach(page => {
       app.dependencies = deep.merge(app.dependencies, page.dependencies)
     })
-    app.style = deep.merge(page.style)
+
+    app.style = deep.merge(app.style, page.style)
   })
 
   app.files = files
   app.pages = pages
-  app.lib = prepare()
+
+  app.static = {}
+  getFiles(config.DIR.STATIC).map(f => {
+    const name = f.replace(config.DIR.STATIC, '')
+    app.static[name] = fs.readFileSync(f)
+  })
+
+  app.lib = {
+    str: prepareLib(),
+  }
 }
 
-module.exports = globals
+module.exports = prepare
