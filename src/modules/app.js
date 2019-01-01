@@ -7,6 +7,8 @@ const { h } = require('hyperapp')
 
 const config = require('../config')
 
+const isProd = process.env.NODE_ENV === 'production'
+
 let reset
 const maybeResetCssFile = path.join(config.ROOT, 'themes', 'reset.css.js')
 if (fs.existsSync(maybeResetCssFile)) {
@@ -41,7 +43,6 @@ let app = {
       description: 'App Description',
     },
     url: '/',
-    logo: config.logo,
   },
 
   // default app style
@@ -63,24 +64,26 @@ let app = {
       ]),
     ]),
   ],
-  Body: (page, state, actions) => [
-    div({ id: 'magic' },
+  Body: (page, state, actions) =>
+    div(
+      { id: 'magic' },
       div({ class: 'wrapper' }, [
-        header({ class: 'main'}, [
+        header({ class: 'main' }, [
           state.logo && img({ class: 'logo', src: state.logo, role: 'presentation' }),
           state.menu && Menu.View(state, actions),
         ]),
         page && page(state, actions),
       ]),
-    )
-  ],
+    ),
 }
 
 const maybeAppFile = path.join(config.ROOT, 'app.js')
 if (maybeAppFile !== __filename && fs.existsSync(maybeAppFile)) {
   const maybeApp = require(maybeAppFile)
-  if (is.object(maybeApp)) {
-    app = deep.merge(app, maybeApp)
+  if (is.object(maybeApp) && !is.empty(maybeApp)) {
+    app.state = deep.merge(app.state, maybeApp.state)
+    app.actions = deep.merge(app.actions, maybeApp.actions)
+    app.style = deep.merge(app.style, maybeApp.style)
   }
 }
 
