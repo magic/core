@@ -63,13 +63,14 @@ const flattenDeps = deps => {
   return dependencies
 }
 
-const getPageDependencies = page => {
-  page.dependencies = getComponentDependencies(page.Body.toString())
-  return page
-}
+const getPageDependencies = page => ({
+  ...page,
+  dependencies: getComponentDependencies(page.Body.toString()),
+})
 
 const getDependencies = ({ pages, app }) => {
   pages = pages.map(getPageDependencies)
+
   app.dependencies = getComponentDependencies(app.Body.toString())
 
   const dependencies = flattenDeps([...pages.map(p => p.dependencies), app.dependencies])
