@@ -1,0 +1,24 @@
+language: node_js
+
+node_js:
+  - "10"
+
+os:
+  - linux
+  - osx
+
+env:
+  matrix:
+    - NODE_VERSION="10"
+
+matrix:
+  fast_finish: true
+
+install:
+  - npm install
+
+script:
+  - npm test
+
+after_success:
+  - npm run calls
