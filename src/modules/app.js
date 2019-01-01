@@ -53,6 +53,7 @@ let app = {
     html([
       head([
         meta({ charset: 'utf-8' }),
+        link({ rel: 'icon', href: '/favicon.ico' }),
         state.title && title(state.title),
         state.description && description(state.description),
         link({ rel: 'stylesheet', href: '/magic.css' }),
