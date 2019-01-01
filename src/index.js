@@ -29,6 +29,10 @@ const renderApp = cmds => {
     runCmd('connect')
   }
 
+  if (cmds.publish) {
+    runCmd('publish')
+  }
+
   if (cmds.serve) {
     tasks.serve()
   }

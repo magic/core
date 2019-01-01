@@ -5,4 +5,5 @@ module.exports = {
   serve: require('./serve'),
   transpile: require('./transpile'),
   connect: require('./connect'),
+  publish: require('./publish'),
 }

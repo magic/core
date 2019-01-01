@@ -1,0 +1,29 @@
+const log = require('@magic/log')
+
+const { getGitConfig, xc } = require('../lib/')
+
+const publish = async () => {
+  try {
+    const git = await getGitConfig()
+    const outDir = config.DIR.PUBLIC.replace(`${process.cwd()}/`, '')
+
+    const cmdPrefix = `--prefix=${outDir}`
+    const cmdOnto = `--onto=${git.ORIGIN}/${git.BRANCH}`
+    const cmdArgv = `${cmdPrefix} ${cmdOnto}`
+    const cmd = `git subtree split ${cmdArgv}`
+
+    log.time(cmd)
+    const { stdout } = await xc(cmd)
+    const id = stdout.trim()
+    log.timeEnd(cmd)
+
+    const pushCommand = `git push ${git.ORIGIN} ${id.trim()}:${git.BRANCH}`
+    log.time(pushCommand)
+    await xc(pushCommand)
+    log.timeEnd(pushCommand)
+  } catch (e) {
+    throw e
+  }
+}
+
+module.exports = publish

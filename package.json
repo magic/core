@@ -12,7 +12,8 @@
     "format": "f -w",
     "test": "t",
     "calls": "calls",
-    "connect": "node src/bin.js connect"
+    "connect": "node src/bin.js connect",
+    "publish": "node src/bin.js publish"
   },
   "dependencies": {
     "@babel/core": "7.2.2",
