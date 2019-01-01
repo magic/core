@@ -7,8 +7,8 @@ const { mkdirp } = require('../lib')
 
 const isProd = process.env.NODE_ENV === 'production'
 
-const write = () => {
-  const { css, lib, pages, static } = global.app
+const write = (app) => {
+  const { css, lib, pages, static } = app
   // write static first to make sure all other files below get written
   // even if there is a name clash
   Object.entries(static).forEach(([name, content]) => {

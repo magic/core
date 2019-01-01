@@ -5,13 +5,24 @@ const { addTrailingSlash, getContentType } = require('../lib/')
 
 const isProd = process.env.NODE_ENV === 'production'
 
-const serve = () => {
-  const { css, lib, static } = global.app
+const prepare = require('./prepare')
+
+const watch = (app) => {
+  const prep = prepare()
+  console.log({ prep })
+
+  setTimeout(() => watch(app), 500)
+}
+
+const serve = (app) => {
+  // watch(app)
+
+  const { css, lib, static } = app
   const style = isProd ? css.minified : css.css
   const js = lib.code
 
   const pages = {}
-  global.app.pages.forEach(page => {
+  app.pages.forEach(page => {
     pages[page.name] = page.rendered
   })
 

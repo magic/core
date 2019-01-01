@@ -15,6 +15,17 @@ const config = require('../config')
 
 const isProd = process.env.NODE_ENV === 'production'
 
+const transpile = (app) => {
+  const pages = transpile.html(app)
+  const code = transpile.lib(app.lib)
+  const css = transpile.css(app.style)
+  return {
+    pages,
+    code,
+    css,
+  }
+}
+
 const presets = [
   [
     '@babel/preset-env',
@@ -41,34 +52,28 @@ const babelOpts = {
   plugins: isProd ? plugins : [],
 }
 
-const transpile = () => {
-  transpile.html()
-  transpile.lib()
-  transpile.css()
-}
 
-transpile.html = () => {
-  global.app.pages.forEach(page => {
-    const state = deep.merge(global.app.state, page.state)
-    const actions = deep.merge(global.app.actions, page.actions)
-    page.rendered = renderToString(app.View(page), state, actions)
+transpile.html = ({ state, actions, pages, View }) => {
+  const html = pages.map(page => {
+    state = deep.merge(state, page.state)
+    actions = deep.merge(actions, page.actions)
+    const rendered = applyWebRoot(renderToString(View(page), state, actions))
 
-    page.rendered = applyWebRoot(page.rendered)
+    return {
+      ...page,
+      rendered,
+    }
   })
+
+  return html
 }
 
-transpile.lib = () => {
-  const str = global.app.lib.str
+transpile.lib = (lib) => {
+  const str = lib.str
   const bundle = babel.transformSync(str, babelOpts)
-
-  global.app.lib = {
-    ...global.app.lib,
-    code: bundle.code,
-  }
+  return bundle.code
 }
 
-transpile.css = () => {
-  global.app.css = css(global.app.style)
-}
+transpile.css = (style) => css(style)
 
 module.exports = transpile

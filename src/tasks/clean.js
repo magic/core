@@ -2,7 +2,7 @@ const is = require('@magic/types')
 const path = require('path')
 const { rmrf, isLocalPath } = require('../lib')
 
-const clean = ({ config }) => {
+const clean = () => {
   const dir = config.DIR.PUBLIC
 
   if (is.string(dir) && !is.empty(dir)) {

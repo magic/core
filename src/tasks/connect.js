@@ -4,7 +4,6 @@ const { getGitConfig, xc } = require('../lib/')
 
 const connect = async () => {
   const git = await getGitConfig()
-  console.log({ git })
 
   // const outDir = OUT_DIR.replace(`${process.cwd()}/`, '')
   const dir = config.DIR.PUBLIC.replace(`${process.cwd()}/`, '')

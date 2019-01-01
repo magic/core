@@ -7,7 +7,7 @@ const { getFiles, isTagUsed, isUpperCase, getDependencies, applyWebRoot } = requ
 
 const { stringifyObject, handleDeps } = require('./lib/')
 
-const prepareLib = () => {
+const prepareLib = (app) => {
   let libString = ''
 
   const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
@@ -22,7 +22,7 @@ const prepareLib = () => {
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
 
-  const depString = Object.entries(global.app.dependencies)
+  const depString = Object.entries(app.dependencies)
     .map(handleDeps)
     .join('')
 
@@ -32,7 +32,7 @@ const prepareLib = () => {
 
   let has404 = false
 
-  global.app.pages.forEach(page => {
+  app.pages.forEach(page => {
     if (page.name === '/404/') {
       has404 = true
     }
@@ -49,16 +49,16 @@ const prepareLib = () => {
   pageString += '\n}\n'
   libString += pageString
 
-  const stateString = `const state = ${stringifyObject(global.app.state)}\n`
+  const stateString = `const state = ${stringifyObject(app.state)}\n`
   libString += stateString
 
   const urlString = `\nstate.url = window.location.pathname\n`
   libString += urlString
 
-  const actionString = `const actions = ${stringifyObject(global.app.actions)}\n`
+  const actionString = `const actions = ${stringifyObject(app.actions)}\n`
   libString += actionString
 
-  const b = global.app.Body.toString()
+  const b = app.Body.toString()
     .split("{ id: 'magic' },")[1]
     .split('    )')[0]
     .trim()
@@ -94,8 +94,6 @@ app(state, actions, view, mD)\n
       // replace urls 
       .replace(/'\//gm, `'${config.WEB_ROOT}`)
       .replace(/"\//gm, `"${config.WEB_ROOT}`)
-
-      console.log(libString)
   }
 
   return libString
