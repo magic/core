@@ -8,7 +8,7 @@ const { renderToString } = require('hyperapp-render')
 const css = require('@magic/css')
 const deep = require('@magic/deep')
 
-const { mkdirp, getDependencies, isUpperCase } = require('../lib')
+const { mkdirp, getDependencies, isUpperCase, applyWebRoot } = require('../lib')
 const modules = require('../modules')
 const prepare = require('./prepare')
 const config = require('../config')
@@ -52,6 +52,8 @@ transpile.html = () => {
     const state = deep.merge(global.app.state, page.state)
     const actions = deep.merge(global.app.actions, page.actions)
     page.rendered = renderToString(app.View(page), state, actions)
+
+    page.rendered = applyWebRoot(page.rendered)
   })
 }
 
