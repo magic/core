@@ -41,6 +41,7 @@ let app = {
       description: 'App Description',
     },
     url: '/',
+    logo: config.logo,
   },
 
   // default app style
@@ -57,18 +58,21 @@ let app = {
         page.Head && page.Head(state, actions),
       ]),
       body([
-        app.Body(page.Body)(state, actions),
+        app.Body(page.Body, state, actions),
         script({ type: 'text/javascript', src: '/magic.js' }),
       ]),
     ]),
   ],
-  Body: page => (state, actions) => [
-    div({ id: 'magic' }, [
+  Body: (page, state, actions) => [
+    div({ id: 'magic' },
       div({ class: 'wrapper' }, [
-        state.menu && Menu.View(state, actions),
+        header({ class: 'main'}, [
+          state.logo && img({ class: 'logo', src: state.logo, role: 'presentation' }),
+          state.menu && Menu.View(state, actions),
+        ]),
         page && page(state, actions),
       ]),
-    ]),
+    )
   ],
 }
 
