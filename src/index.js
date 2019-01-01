@@ -9,7 +9,7 @@ const runCmd = (cmd, fn, ...args) => {
 
 const renderApp = cmds => {
   console.time('render app')
-  console.log(`render app ${cmds}`)
+  console.log(`render app ${Object.keys(cmds).join(' ')}`)
 
   runCmd('prepare', prepare, { config })
 
