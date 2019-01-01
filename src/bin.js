@@ -33,7 +33,6 @@ tasks
 
 if (process.argv.includes('dev') || process.argv.includes('development')) {
   cmds.build = true
-  cmds.watch = true
   cmds.serve = true
 }
 
