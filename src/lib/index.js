@@ -10,6 +10,7 @@ module.exports = {
   getContentType: require('./getContentType'),
   getFileType: require('./getFileType'),
   contentTypes: require('./contentTypes'),
+  applyWebRoot: require('./applyWebRoot'),
   getGitConfig: require('./getGitConfig'),
   xc: require('./xc'),
 }
