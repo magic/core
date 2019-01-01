@@ -8,7 +8,7 @@ const isProd = process.env.NODE_ENV === 'production'
 const serve = () => {
   const { css, lib, static } = global.app
   const style = isProd ? css.minified : css.css
-  const js = isProd ? lib.minified.code : lib.bundle.code
+  const js = lib.code
 
   const pages = {}
   global.app.pages.forEach(page => {

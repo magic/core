@@ -28,7 +28,7 @@ const prepareLib = () => {
 
   libString += depString
 
-  libString += 'const pages = {}\n'
+  let pageString = 'const pages = {\n'
 
   let has404 = false
 
@@ -37,33 +37,29 @@ const prepareLib = () => {
       has404 = true
     }
 
-    const componentArgString = [
-      '=> {',
-      `state = { ...state, ...state.pages['${page.name}'] };`,
-      `actions = { ...actions, ...actions.pages['${page.name}'] };`,
-      'return ',
-    ].join(' ')
-
     const view = page.Body.toString()
-    // replace first arrow
-    // .replace('=>', componentArgString)
 
-    const str = `pages['${page.name}'] = ${view}\n`
-    libString += str
+    pageString += `\n  '${page.name}': ${view},`
   })
 
   if (!has404) {
-    libString += 'pages["404"] = div("404 not found")\n'
+    pageString += '\n  "/404/": div("404 not found"),'
   }
+
+  pageString += '\n}\n'
+  libString += pageString
 
   const stateString = `const state = ${stringifyObject(global.app.state)}\n`
   libString += stateString
+
+  const urlString = `\nstate.url = window.location.pathname\n`
+  libString += urlString
 
   const actionString = `const actions = ${stringifyObject(global.app.actions)}\n`
   libString += actionString
 
   const viewString = `
-const view = (state, actions) => {
+function view(state, actions) {
   const page = pages[state.url]
   Object.assign(state, state.pages[state.url])
   Object.assign(actions, actions.pages[state.url])
@@ -72,7 +68,7 @@ const view = (state, actions) => {
     state.menu && Menu.View(state, actions),
     page
       ? page(state, actions)
-      : pages['404'],
+      : pages['/404/'],
   ])
 }
 `

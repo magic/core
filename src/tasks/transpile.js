@@ -1,6 +1,7 @@
 const is = require('@magic/types')
 const fs = require('fs')
 const path = require('path')
+const babel = require('@babel/core')
 const { parse } = require('@babel/parser')
 const generate = require('@babel/generator').default
 const { renderToString } = require('hyperapp-render')
@@ -12,22 +13,38 @@ const modules = require('../modules')
 const prepare = require('./prepare')
 const config = require('../config')
 
-let presets = [
+const isProd = process.env.NODE_ENV === 'production'
+
+const presets = [
   [
-    'env',
+    '@babel/preset-env',
     {
-      modules: false,
       targets: {
         ie: '8',
-        // browsers: ['last 2 versions', 'safari >= 7'],
       },
+      useBuiltIns: "entry",
+      forceAllTransforms: true,
+      ignoreBrowserslistConfig: true,
+      modules: false,
+      debug: isProd,
     },
   ],
 ]
 
+const plugins = [
+  '@babel/plugin-transform-arrow-functions',
+  'minify-dead-code-elimination',
+  // '@babel/plugin-transform-runtime',
+]
+
 const babelOpts = {
-  sourceMaps: 'both',
+  filename: 'magic.js',
+  minified: isProd,
+  comments: !isProd,
+  configFile: false,
+  sourceMaps: false,
   presets,
+  plugins,
 }
 
 const transpile = () => {
@@ -45,20 +62,12 @@ transpile.html = () => {
 }
 
 transpile.lib = () => {
-  babelOpts.filename = 'magic'
   const str = global.app.lib.str
-  const ast = parse(str, babelOpts)
-  const bundle = generate(ast, babelOpts)
-
-  babelOpts.minified = true
-  babelOpts.comments = false
-  const minified = generate(ast, babelOpts)
+  const bundle = babel.transformSync(str, babelOpts)
 
   global.app.lib = {
     ...global.app.lib,
-    ast,
-    bundle,
-    minified,
+    code: bundle.code,
   }
 }
 
