@@ -29,7 +29,7 @@ const presets = [
   ],
 ]
 
-const plugins = ['@babel/plugin-transform-arrow-functions', 'minify-dead-code-elimination']
+const plugins = ['@babel/plugin-transform-arrow-functions']
 
 const babelOpts = {
   filename: 'magic.js',
