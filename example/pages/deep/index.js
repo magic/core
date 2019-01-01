@@ -10,5 +10,9 @@ module.exports = {
     deepAction: state => ({ test: !state.test }),
   },
 
-  Body: (state, actions) => [h1(state.title), div(state.content.map(p))],
+  Body: (state, actions) => [
+    h1(state.title),
+    div(state.content.map(p)),
+    Count.View(state, actions),
+  ],
 }
