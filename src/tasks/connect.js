@@ -13,10 +13,10 @@ const connect = async () => {
   const cmdArgv = `${cmdPrefix} ${cmdOnto}`
   const cmd = `git subtree push ${cmdArgv}`
 
-  log('exec', cmd)
-
   try {
+    console.time(cmd)
     await xc(cmd)
+    console.timeEnd(cmd)
   } catch (e) {
     throw e
   }
