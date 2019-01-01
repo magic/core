@@ -1,9 +1,9 @@
 const config = require('./config')
-const { clean, prepare, transpile, serve, write } = require('./tasks')
+const tasks = require('./tasks')
 
-const runCmd = (cmd, fn, ...args) => {
+const runCmd = (cmd, ...args) => {
   console.time(cmd)
-  fn(...args)
+  tasks[cmd](...args)
   console.timeEnd(cmd)
 }
 
@@ -11,22 +11,26 @@ const renderApp = cmds => {
   console.time('render app')
   console.log(`render app ${Object.keys(cmds).join(' ')}`)
 
-  runCmd('prepare', prepare, { config })
+  runCmd('prepare', { config })
 
   if (cmds.clean) {
-    runCmd('clean', clean, { config })
+    runCmd('clean', { config })
   }
 
-  runCmd('transpile', transpile)
+  runCmd('transpile')
 
   if (cmds.build || cmds.serve) {
-    runCmd('write', write)
+    runCmd('write')
   }
 
   console.timeEnd('render app')
 
+  if (cmds.connect) {
+    runCmd('connect')
+  }
+
   if (cmds.serve) {
-    serve()
+    tasks.serve()
   }
 }
 
