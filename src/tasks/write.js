@@ -22,13 +22,14 @@ const write = () => {
     fs.writeFileSync(page.path, page.rendered)
   })
 
-  fs.writeFileSync(path.join(config.DIR.TMP, 'magic.js'), lib.code)
+  const jsFile = path.join(config.DIR.TMP, 'magic.js')
+  fs.writeFileSync(jsFile, lib.code)
 
   fs.writeFileSync(path.join(config.DIR.TMP, 'magic.css'), isProd ? css.css : css.minified)
 
   if (isProd) {
     const zipped = zip.gzipSync(lib.code)
-    fs.writeFileSync(`${minTempFile}.gz`, zipped)
+    fs.writeFileSync(`${jsFile}.gz`, zipped)
   }
 }
 
