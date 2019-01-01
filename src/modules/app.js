@@ -34,8 +34,6 @@ if (config.THEME) {
   }
 }
 
-const jsSrc = { type: 'text/javascript', src: '/magic.js' }
-
 let app = {
   state: {
     app: {
@@ -58,7 +56,10 @@ let app = {
         link({ rel: 'stylesheet', href: '/magic.css' }),
         page.Head && page.Head(state, actions),
       ]),
-      body([app.Body(page.Body)(state, actions), script(jsSrc)]),
+      body([
+        app.Body(page.Body)(state, actions),
+        script({ type: 'text/javascript', src: '/magic.js' }),
+      ]),
     ]),
   ],
   Body: page => (state, actions) => [
