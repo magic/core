@@ -7,7 +7,7 @@ const preparePages = files =>
     const page = require(file)
     page.file = file
     page.name = file.replace(config.DIR.PAGES, '').replace(/index?.js/gm, '')
-    page.path = path.join(config.DIR.TMP, page.name)
+    page.path = path.join(config.DIR.PUBLIC, page.name)
     if (!page.path.endsWith('index.js') && page.path.endsWith('/')) {
       page.path = path.join(page.path, 'index.html')
     }

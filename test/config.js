@@ -11,9 +11,9 @@ module.exports = [
     info: 'config.ROOT has the expected value',
   },
   {
-    fn: config.DIR.TMP,
+    fn: config.DIR.PUBLIC,
     expect: path.join(process.cwd(), '.tmp'),
-    info: 'config.DIR.TMP has the expected value',
+    info: 'config.DIR.PUBLIC has the expected value',
   },
   {
     fn: config.DIR.PAGES,

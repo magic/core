@@ -3,7 +3,7 @@ const path = require('path')
 const { rmrf, isLocalPath } = require('../lib')
 
 const clean = ({ config }) => {
-  const dir = config.DIR.TMP
+  const dir = config.DIR.PUBLIC
 
   if (is.string(dir) && !is.empty(dir)) {
     if (!isLocalPath(path.resolve(dir))) {
