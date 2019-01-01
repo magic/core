@@ -11,7 +11,8 @@
     "dev": "node src/bin.js dev",
     "format": "f -w",
     "test": "t",
-    "calls": "calls"
+    "calls": "calls",
+    "connect": "node src/bin.js connect"
   },
   "dependencies": {
     "@babel/core": "7.2.2",

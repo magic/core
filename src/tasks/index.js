@@ -4,4 +4,5 @@ module.exports = {
   clean: require('./clean'),
   serve: require('./serve'),
   transpile: require('./transpile'),
+  connect: require('./connect'),
 }
