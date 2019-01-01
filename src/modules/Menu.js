@@ -2,15 +2,22 @@ const Menu = {
   actions: {
     go: e => state => {
       e.preventDefault()
-      const url = e.target.href.replace(window.location.origin, '')
-
-      if (url !== state.url) {
-        window.history && window.history.pushState({ urlPath: url }, '', url)
-
-        return {
-          url,
-          prev: state.url,
+      let url = state.url
+      if (e.target && e.target.href) {
+        url = e.target.href.replace(window.location.origin, '')
+        if (url !== state.url) {
+          window.history && window.history.pushState({ urlPath: url }, '', url)
         }
+      } else {
+        if (e.state) {
+          url = e.state.urlPath
+        } else {
+          url = '/'
+        }
+      } 
+      return {
+        url,
+        prev: state.url,
       }
     },
   },
@@ -18,6 +25,10 @@ const Menu = {
   View: (state, actions) => {
     if (!state.menu || !state.menu.length) {
       return
+    }
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('popstate', actions.go)
     }
 
     return nav({ class: 'Menu' }, [
