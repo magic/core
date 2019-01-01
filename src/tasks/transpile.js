@@ -19,10 +19,8 @@ const presets = [
   [
     '@babel/preset-env',
     {
-      targets: {
-        ie: '8',
-      },
-      useBuiltIns: "entry",
+      targets: '>0.25%, not dead',
+      // useBuiltIns: 'entry',
       forceAllTransforms: true,
       ignoreBrowserslistConfig: true,
       modules: false,
@@ -31,11 +29,7 @@ const presets = [
   ],
 ]
 
-const plugins = [
-  '@babel/plugin-transform-arrow-functions',
-  'minify-dead-code-elimination',
-  // '@babel/plugin-transform-runtime',
-]
+const plugins = ['@babel/plugin-transform-arrow-functions', 'minify-dead-code-elimination']
 
 const babelOpts = {
   filename: 'magic.js',
@@ -43,8 +37,8 @@ const babelOpts = {
   comments: !isProd,
   configFile: false,
   sourceMaps: false,
-  presets,
-  plugins,
+  presets: isProd ? presets : [],
+  plugins: isProd ? plugins : [],
 }
 
 const transpile = () => {
