@@ -59,7 +59,7 @@ const prepareLib = () => {
   libString += actionString
 
   const b = global.app.Body.toString()
-    .split("div({ id: 'magic' },")[1]
+    .split("{ id: 'magic' },")[1]
     .split('    )')[0]
     .trim()
 
