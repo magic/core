@@ -6,19 +6,21 @@ module.exports = {
   },
 
   actions: {
-    wrapperAction: () => state => console.log('wrapperAction') || ({ wrapperStateVar: !state.wrapperStateVar }),
+    wrapperAction: () => state => ({ wrapperStateVar: !state.wrapperStateVar }),
   },
 
   View: (state, actions) =>
-    div({ 
-      class: `Wrapper${state.wrapperStateVar ? ' Test' : ''}`, 
-      onclick: actions.wrapperAction,
-    }, Inside(state, actions)),
+    div(
+      {
+        class: `Wrapper${state.wrapperStateVar ? ' Test' : ''}`,
+      },
+      [Inside(state, actions), button({ onclick: actions.wrapperAction }, 'click me')],
+    ),
 
   style: {
     '.Wrapper': {
       color: 'orange',
-    
+
       '&.Test': {
         color: 'green',
       },
