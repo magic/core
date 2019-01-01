@@ -3,7 +3,7 @@ const path = require('path')
 const deep = require('@magic/deep')
 const is = require('@magic/types')
 
-const { getFiles, isTagUsed, isUpperCase, getDependencies } = require('../../lib/')
+const { getFiles, isTagUsed, isUpperCase, getDependencies, applyWebRoot } = require('../../lib/')
 
 const { stringifyObject, handleDeps } = require('./lib/')
 
@@ -88,6 +88,12 @@ if (!mD) {
 app(state, actions, view, mD)\n
 `
   libString += createMagic
+
+  if (process.env.NODE_ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
+    libString = libString
+      // replace urls 
+      .replace(/'\//gm, `'${config.WEB_ROOT}`)
+  }
 
   return libString
 }
