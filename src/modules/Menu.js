@@ -14,7 +14,7 @@ const Menu = {
         } else {
           url = '/'
         }
-      } 
+      }
       return {
         url,
         prev: state.url,
