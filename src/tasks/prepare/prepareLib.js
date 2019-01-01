@@ -37,7 +37,7 @@ const prepareLib = () => {
       has404 = true
     }
 
-    const view = page.Body.toString()
+    let view = page.Body.toString()
 
     pageString += `\n  '${page.name}': ${view},`
   })
@@ -58,18 +58,20 @@ const prepareLib = () => {
   const actionString = `const actions = ${stringifyObject(global.app.actions)}\n`
   libString += actionString
 
+  const b = global.app.Body.toString()
+    .split("div({ id: 'magic' },")[1]
+    .split('    )')[0]
+    .trim()
+
+  const wrapper = b.substr(0, b.length - 1)
+
   const viewString = `
 function view(state, actions) {
   const page = pages[state.url]
-  Object.assign(state, state.pages[state.url])
-  Object.assign(actions, actions.pages[state.url])
+  state = { ...state.pages[state.url], ...state }
+  actions = { ...actions.pages[state.url], ...actions }
 
-  return div({ class: 'wrapper' }, [
-    state.menu && Menu.View(state, actions),
-    page
-      ? page(state, actions)
-      : pages['/404/'],
-  ])
+  return ${wrapper}
 }
 `
 

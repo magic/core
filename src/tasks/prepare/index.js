@@ -5,19 +5,9 @@ const deep = require('@magic/deep')
 let components = require('../../modules')
 const { getFiles, getDependencies } = require('../../lib')
 const prepareLib = require('./prepareLib')
+const preparePages = require('./preparePages')
 
 global.keys = new Set()
-
-const globalize = (key, value) => {
-  if (is.array(key)) {
-    keys.add(key[0])
-    global[key[0]] = key[1]
-    return
-  }
-
-  keys.add(key)
-  global[key] = value
-}
 
 let exists = false
 const prepare = ({ config }) => {
@@ -30,38 +20,16 @@ const prepare = ({ config }) => {
     components = deep.merge(components, assets)
   }
 
-  Object.entries(components).forEach(globalize)
+  Object.entries(components).forEach(([key, value]) => {
+    keys.add(key)
+    global[key] = value
+  })
 
   const files = getFiles(config.DIR.PAGES)
 
-  const pages = files.map(file => {
-    const page = require(file)
-    page.file = file
-    page.name = file.replace(config.DIR.PAGES, '').replace(/index?.js/gm, '')
-    page.path = path.join(config.DIR.TMP, page.name)
-    if (!page.path.endsWith('index.js') && page.path.endsWith('/')) {
-      page.path = path.join(page.path, 'index.html')
-    }
+  global.app = require('../../modules/app')
 
-    page.dependencies = getDependencies(page.Body.toString())
-
-    Object.entries(page.dependencies).forEach(([k, c]) => {
-      if (c.state) {
-        page.state = deep.merge(c.state, page.state)
-      }
-      if (c.actions) {
-        page.actions = deep.merge(c.actions, page.actions)
-      }
-
-      if (c.style) {
-        page.style = deep.merge(c.style, page.style)
-      }
-    })
-
-    return page
-  })
-
-  global.app = components.app
+  app.files = files
 
   app.state = deep.merge(app.state, { pages: {} })
   app.actions = deep.merge(app.actions, { pages: {} })
@@ -79,6 +47,7 @@ const prepare = ({ config }) => {
     }
   })
 
+  const pages = preparePages(files)
   pages.forEach(page => {
     app.state.pages[page.name] = page.state
     app.actions.pages[page.name] = page.actions
@@ -90,8 +59,6 @@ const prepare = ({ config }) => {
 
     app.style = deep.merge(app.style, page.style)
   })
-
-  app.files = files
   app.pages = pages
 
   app.static = {}
