@@ -1,40 +1,31 @@
 const config = require('./config')
 const { clean, prepare, transpile, serve, write } = require('./tasks')
 
+const runCmd = (cmd, fn, ...args) => {
+  console.time(cmd)
+  fn(...args)
+  console.timeEnd(cmd)
+}
+
 const renderApp = cmds => {
   console.time('render app')
   console.log(`render app ${cmds}`)
 
-  console.time('prepare')
-  prepare({ config })
-  console.timeEnd('prepare')
+  runCmd('prepare', prepare, { config })
 
-  if (cmds.includes('clean')) {
-    console.time('clean')
-    clean({ config })
-    console.timeEnd('clean')
+  if (cmds.clean) {
+    runCmd('clean', clean, { config })
   }
 
-  console.time('transpile')
-  transpile()
-  console.timeEnd('transpile')
-  // console.log(app)
+  runCmd('transpile', transpile)
 
-  if (cmds.includes('build') || cmds.includes('serve')) {
-    console.time('write')
-    write()
-    console.timeEnd('write')
+  if (cmds.build || cmds.serve) {
+    runCmd('write', write)
   }
 
   console.timeEnd('render app')
 
-  // const props = { config, transpiled, prepared }
-
-  if (cmds.includes('watch')) {
-    // watch(props)
-  }
-
-  if (cmds.includes('serve')) {
+  if (cmds.serve) {
     serve()
   }
 }

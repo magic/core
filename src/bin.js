@@ -24,12 +24,17 @@ help    - this help text
 }
 
 const tasks = ['clean', 'watch', 'build', 'serve', 'zip', 'connect', 'publish']
-const cmds = tasks.filter(task => process.argv.includes(task))
+const cmds = {}
+tasks
+  .filter(task => process.argv.includes(task))
+  .forEach(task => {
+    cmds[task] = true
+  })
 
 if (process.argv.includes('dev') || process.argv.includes('development')) {
-  cmds.push('build')
-  cmds.push('watch')
-  cmds.push('serve')
+  cmds.build = true
+  cmds.watch = true
+  cmds.serve = true
 }
 
 const run = require('./index.js')
