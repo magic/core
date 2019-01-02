@@ -6,23 +6,30 @@ const deep = require('@magic/deep')
 const { h } = require('hyperapp')
 
 const config = require('../config')
+const { requireNow } = require('../lib/')
 
 const isProd = process.env.NODE_ENV === 'production'
 
-let reset
+let reset = {}
 const maybeResetCssFile = path.join(config.ROOT, 'themes', 'reset.css.js')
 if (fs.existsSync(maybeResetCssFile)) {
-  reset = require(maybeResetCssFile)
-} else {
-  reset = require('./reset.css.js')
+  reset = {
+    ...reset,
+    ...requireNow(maybeResetCssFile),
+  }
+} 
+
+reset = {
+  ...reset,
+  ...requireNow(path.join(process.cwd(), 'src', 'modules', 'reset.css.js'))
 }
 
 let Menu
 const maybeMenuFile = path.join(config.ROOT, 'assets', 'Menu.js')
 if (fs.existsSync(maybeMenuFile)) {
-  Menu = require(maybeMenuFile)
+  Menu = requireNow(maybeMenuFile)
 } else {
-  Menu = require('./Menu.js')
+  Menu = requireNow(path.join(process.cwd(), 'src', 'modules', 'Menu.js'))
 }
 
 let style = {
@@ -32,7 +39,7 @@ let style = {
 if (config.THEME) {
   const themeFile = path.join(config.ROOT, 'themes', config.THEME, 'css.js')
   if (fs.existsSync(themeFile)) {
-    style = deep.merge(style, require(themeFile))
+    style = deep.merge(style, requireNow(themeFile))
   }
 }
 
@@ -80,7 +87,7 @@ let app = {
 
 const maybeAppFile = path.join(config.ROOT, 'app.js')
 if (maybeAppFile !== __filename && fs.existsSync(maybeAppFile)) {
-  const maybeApp = require(maybeAppFile)
+  const maybeApp = requireNow(maybeAppFile)
   if (is.object(maybeApp) && !is.empty(maybeApp)) {
     app.state = deep.merge(app.state, maybeApp.state)
     app.actions = deep.merge(app.actions, maybeApp.actions)

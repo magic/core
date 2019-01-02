@@ -10,7 +10,7 @@ const preparePages = require('./preparePages')
 global.keys = new Set()
 
 let exists = false
-const prepare = () => {
+const prepare = (app) => {
   global.config = require('../../config')
 
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
@@ -26,8 +26,6 @@ const prepare = () => {
   })
 
   const files = getFiles(config.DIR.PAGES)
-
-  const app = require('../../modules/app')
 
   app.files = files
 

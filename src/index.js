@@ -1,6 +1,8 @@
 const config = require('./config')
 const tasks = require('./tasks')
 
+const App = require('./modules/app')
+
 const runCmd = (cmd, ...args) => {
   console.time(cmd)
   const result = tasks[cmd](...args)
@@ -12,7 +14,7 @@ const renderApp = cmds => {
   console.time('render app')
   console.log(`render app ${Object.keys(cmds).join(' ')}`)
 
-  const app = runCmd('prepare', { config })
+  const app = runCmd('prepare', App)
 
   if (cmds.clean) {
     runCmd('clean')

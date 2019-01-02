@@ -53,19 +53,17 @@ const babelOpts = {
 }
 
 
-transpile.html = ({ state, actions, pages, View }) => {
-  const html = pages.map(page => {
-    state = deep.merge(state, page.state)
-    actions = deep.merge(actions, page.actions)
-    const rendered = applyWebRoot(renderToString(View(page), state, actions))
+transpile.html = app => app.pages.map(transpile.page(app))
 
-    return {
-      ...page,
-      rendered,
-    }
-  })
+transpile.page = app => page => {
+  const state = deep.merge(page.state, app.state)
+  const actions = deep.merge(page.actions, app.actions)
+  const rendered = applyWebRoot(renderToString(app.View(page), state, actions))
 
-  return html
+  return {
+    ...page,
+    rendered,
+  }
 }
 
 transpile.lib = (lib) => {

@@ -1,25 +1,17 @@
 const path = require('path')
 const fs = require('fs')
 const http = require('http')
-const { addTrailingSlash, getContentType } = require('../lib/')
+const { addTrailingSlash, getContentType, requireNow } = require('../../lib/')
+const is = require('@magic/types')
 
 const isProd = process.env.NODE_ENV === 'production'
 
-const prepare = require('./prepare')
-
-const watch = (app) => {
-  const prep = prepare()
-  console.log({ prep })
-
-  setTimeout(() => watch(app), 500)
-}
+const watch = require('./watch')
 
 const serve = (app) => {
-  // watch(app)
+  global.app = app
+  watch(app)
 
-  const { css, lib, static } = app
-  const style = isProd ? css.minified : css.css
-  const js = lib.code
 
   const pages = {}
   app.pages.forEach(page => {
@@ -27,6 +19,10 @@ const serve = (app) => {
   })
 
   const handler = (req, res) => {
+    const { css, lib, static } = global.app
+    const style = isProd ? css.minified : css.css
+    const js = lib.code
+
     let url = req.url
     if (url === '/magic.css') {
       res.writeHead(200, 'text/css')

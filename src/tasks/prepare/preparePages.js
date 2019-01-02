@@ -1,10 +1,10 @@
 const path = require('path')
 const deep = require('@magic/deep')
-const { getDependencies } = require('../../lib')
+const { getDependencies, requireNow } = require('../../lib')
 
 const preparePages = files =>
   files.map(file => {
-    const page = require(file)
+    const page = requireNow(file)
     page.file = file
     page.name = file.replace(config.DIR.PAGES, '').replace(/index?.js/gm, '')
     page.path = path.join(config.DIR.PUBLIC, page.name)
