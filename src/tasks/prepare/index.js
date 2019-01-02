@@ -3,7 +3,7 @@ const path = require('path')
 const is = require('@magic/types')
 const deep = require('@magic/deep')
 let components = require('../../modules')
-const { getFiles, getDependencies } = require('../../lib')
+const { getFiles, getDependencies, isUpperCase } = require('../../lib')
 const prepareLib = require('./prepareLib')
 const preparePages = require('./preparePages')
 
@@ -51,10 +51,26 @@ const prepare = (app) => {
     app.actions.pages[page.name] = page.actions
 
     const dependencies = getDependencies(page.Body.toString())
-    pages.forEach(page => {
-      app.dependencies = deep.merge(app.dependencies, page.dependencies)
+    Object.entries(dependencies).forEach(([name, component]) => {
+      if (is.object(component) && isUpperCase(name)) {
+        if (component.global) {
+          Object.entries(component.global.state)
+            .filter(s => s[1] === true)
+            .forEach(([key, val]) => {
+              app.state[key] = component.state[key]
+            })
+          
+          Object.entries(component.global.actions)
+            .filter(s => s[1] === true)
+            .forEach(([key, val]) => {
+              app.actions[key] = component.actions[key]
+            })
+
+        }
+      }
     })
 
+    app.dependencies = deep.merge(app.dependencies, page.dependencies)
     app.style = deep.merge(app.style, page.style)
   })
   app.pages = pages
