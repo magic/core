@@ -35,8 +35,12 @@ const serve = app => {
       return
     }
 
-    if (pages[addTrailingSlash(url)]) {
-      url = addTrailingSlash(url)
+    const addedSlashUrl = addTrailingSlash(url)
+    if (url !== addedSlashUrl && pages[addedSlashUrl]) {
+      res.writeHead(302, {
+        'Location': addedSlashUrl,
+      })
+      res.end()
     }
 
     if (pages[url]) {
