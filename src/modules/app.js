@@ -17,11 +17,11 @@ if (fs.existsSync(maybeResetCssFile)) {
     ...reset,
     ...requireNow(maybeResetCssFile),
   }
-} 
+}
 
 reset = {
   ...reset,
-  ...requireNow(path.join(process.cwd(), 'src', 'modules', 'reset.css.js'))
+  ...requireNow(path.join(process.cwd(), 'src', 'modules', 'reset.css.js')),
 }
 
 let Menu
@@ -80,7 +80,7 @@ let app = {
           state.logo && img({ class: 'logo', src: state.logo, role: 'presentation' }),
           state.menu && Menu.View(state, actions),
         ]),
-        page && page(state, actions),
+        page ? page(state, actions) : div('404 - not found'),
       ]),
     ),
 }
