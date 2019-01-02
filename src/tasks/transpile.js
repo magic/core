@@ -15,7 +15,7 @@ const config = require('../config')
 
 const isProd = process.env.NODE_ENV === 'production'
 
-const transpile = (app) => {
+const transpile = app => {
   const pages = transpile.html(app)
   const code = transpile.lib(app.lib)
   const css = transpile.css(app.style)
@@ -52,7 +52,6 @@ const babelOpts = {
   plugins: isProd ? plugins : [],
 }
 
-
 transpile.html = app => app.pages.map(transpile.page(app))
 
 transpile.page = app => page => {
@@ -66,12 +65,12 @@ transpile.page = app => page => {
   }
 }
 
-transpile.lib = (lib) => {
+transpile.lib = lib => {
   const str = lib.str
   const bundle = babel.transformSync(str, babelOpts)
   return bundle.code
 }
 
-transpile.css = (style) => css(style)
+transpile.css = style => css(style)
 
 module.exports = transpile

@@ -6,7 +6,7 @@ const getGitConfig = async () => {
   if (config.GIT && config.GIT.ORIGIN) {
     return config.GIT
   }
-  
+
   log.info('config.GIT missing ORIGIN')
   const git = config.GIT || {}
 

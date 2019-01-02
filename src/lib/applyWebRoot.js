@@ -1,4 +1,4 @@
-const applyWebRoot = (str) => {
+const applyWebRoot = str => {
   if (config.WEB_ROOT === '/' || process.env.NODE_ENV !== 'production') {
     return str
   }

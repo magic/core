@@ -7,7 +7,7 @@ const { getFiles, isTagUsed, isUpperCase, getDependencies, applyWebRoot } = requ
 
 const { stringifyObject, handleDeps } = require('./lib/')
 
-const prepareLib = (app) => {
+const prepareLib = app => {
   let libString = ''
 
   const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
@@ -91,7 +91,7 @@ app(state, actions, view, mD)\n
 
   if (process.env.NODE_ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
     libString = libString
-      // replace urls 
+      // replace urls
       .replace(/'\//gm, `'${config.WEB_ROOT}`)
       .replace(/"\//gm, `"${config.WEB_ROOT}`)
   }

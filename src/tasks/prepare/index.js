@@ -10,7 +10,7 @@ const preparePages = require('./preparePages')
 global.keys = new Set()
 
 let exists = false
-const prepare = (app) => {
+const prepare = app => {
   global.config = require('../../config')
 
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
@@ -59,13 +59,12 @@ const prepare = (app) => {
             .forEach(([key, val]) => {
               app.state[key] = component.state[key]
             })
-          
+
           Object.entries(component.global.actions)
             .filter(s => s[1] === true)
             .forEach(([key, val]) => {
               app.actions[key] = component.actions[key]
             })
-
         }
       }
     })

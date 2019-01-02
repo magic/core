@@ -8,10 +8,9 @@ const isProd = process.env.NODE_ENV === 'production'
 
 const watch = require('./watch')
 
-const serve = (app) => {
+const serve = app => {
   global.app = app
   watch(app)
-
 
   const pages = {}
   app.pages.forEach(page => {
