@@ -22,8 +22,8 @@ const Menu = {
     },
   },
 
-  View: (state, actions) => {
-    if (!state.menu || !state.menu.length) {
+  View: ({ name = 'menu' }) => (state, actions) => {
+    if (!state[name] || !state[name].length) {
       return
     }
 
@@ -33,7 +33,7 @@ const Menu = {
 
     return nav({ class: 'Menu' }, [
       ul(
-        state.menu.map(item => [
+        state[name].map(item => [
           li({ class: state.url === item.to ? 'active' : '' }, [
             a({ href: item.to, onclick: actions.go }, item.text),
           ]),
