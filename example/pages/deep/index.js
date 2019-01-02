@@ -9,9 +9,5 @@ module.exports = {
     deepAction: state => ({ test: !state.test }),
   },
 
-  Body: (state, actions) => [
-    h1(state.title),
-    div('page content'),
-    Count.View(state, actions),
-  ],
+  Body: (state, actions) => [h1(state.title), div('page content'), Count.View(state, actions)],
 }

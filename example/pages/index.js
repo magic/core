@@ -9,10 +9,7 @@ module.exports = {
     div([
       p('index page content'),
       p('can stretch multiple lines'),
-      ul([
-        li('and contain'),
-        li('lists of content'),
-      ]),
+      ul([li('and contain'), li('lists of content')]),
     ]),
     Count.View(state, actions),
     Wrapper.View(state, actions),
