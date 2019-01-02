@@ -6,9 +6,13 @@ const preparePages = files =>
   files.map(file => {
     const page = requireNow(file)
     page.file = file
-    page.name = file.replace(config.DIR.PAGES, '').replace(/index?.js/gm, '')
+    page.name = file
+      .replace(config.DIR.PAGES, '')
+      .replace(/index.js/gm, '')
+      .replace('.js', '/')
+
     page.path = path.join(config.DIR.PUBLIC, page.name)
-    if (!page.path.endsWith('index.js') && page.path.endsWith('/')) {
+    if (page.path.endsWith('/')) {
       page.path = path.join(page.path, 'index.html')
     }
 
