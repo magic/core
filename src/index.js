@@ -3,45 +3,45 @@ const tasks = require('./tasks')
 
 const App = require('./modules/app')
 
-const runCmd = (cmd, ...args) => {
+const runCmd = async (cmd, ...args) => {
   console.time(cmd)
-  const result = tasks[cmd](...args)
+  const result = await tasks[cmd](...args)
   console.timeEnd(cmd)
   return result
 }
 
-const renderApp = cmds => {
+const run = async cmds => {
   console.time('render app')
   console.log(`render app ${Object.keys(cmds).join(' ')}`)
 
-  const app = runCmd('prepare', App)
-
   if (cmds.clean) {
-    runCmd('clean')
+    await runCmd('clean')
   }
 
-  const { pages, code, css } = runCmd('transpile', app)
-  app.pages = pages
-  app.lib.code = code
-  app.css = css
-
-  if (cmds.build || cmds.serve) {
-    runCmd('write', app)
-  }
-
-  console.timeEnd('render app')
-
-  if (cmds.connect) {
-    runCmd('connect')
+  if (cmds.connect || cmds.publish) {
+    await runCmd('connect')
   }
 
   if (cmds.publish) {
-    runCmd('publish')
+    await runCmd('publish')
   }
 
-  if (cmds.serve) {
-    tasks.serve(app)
+  if (cmds.build || cmds.serve) {
+    const app = await runCmd('prepare', App)
+
+    const { pages, bundle, css } = await runCmd('transpile', app)
+    app.pages = pages
+    app.lib.bundle = bundle
+    app.css = css
+
+    await runCmd('write', app)
+
+    console.timeEnd('render app')
+
+    if (cmds.serve) {
+      tasks.serve(app)
+    }
   }
 }
 
-module.exports = renderApp
+module.exports = run
