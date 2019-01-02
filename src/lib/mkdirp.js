@@ -1,7 +1,7 @@
 const path = require('path')
-const fs = require('fs')
+const fs = require('./fs')
 
-const mkdirp = p => {
+const mkdirp = async p => {
   if (!p) {
     throw new Error('mkdirp needs an argument')
   }
@@ -10,10 +10,11 @@ const mkdirp = p => {
 
   try {
     const dir = path.dirname(p)
-    if (!fs.existsSync(dir)) {
-      mkdirp(dir)
+    const exists = await fs.exists(dir)
+    if (!exists) {
+      await mkdirp(dir)
     }
-    fs.mkdirSync(p)
+    await fs.mkdir(p)
     return true
   } catch (e) {
     if (e.code !== 'EEXIST') {

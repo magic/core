@@ -10,7 +10,7 @@ const preparePages = require('./preparePages')
 global.keys = new Set()
 
 let exists = false
-const prepare = app => {
+const prepare = async app => {
   global.config = require('../../config')
 
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
@@ -25,7 +25,7 @@ const prepare = app => {
     global[key] = value
   })
 
-  const files = getFiles(config.DIR.PAGES)
+  const files = await getFiles(config.DIR.PAGES)
 
   app.files = files
 
@@ -45,10 +45,13 @@ const prepare = app => {
     }
   })
 
-  const pages = preparePages(files)
-  pages.forEach(page => {
-    app.state.pages[page.name] = page.state
-    app.actions.pages[page.name] = page.actions
+  app.pages = preparePages(files).map(page => {
+    if (!is.empty(page.state)) {
+      app.state.pages[page.name] = page.state
+    }
+    if (!is.empty(page.actions)) {
+      app.actions.pages[page.name] = page.actions
+    }
 
     const dependencies = getDependencies(page.Body.toString())
     Object.entries(dependencies).forEach(([name, component]) => {
@@ -71,14 +74,17 @@ const prepare = app => {
 
     app.dependencies = deep.merge(app.dependencies, page.dependencies)
     app.style = deep.merge(app.style, page.style)
+    return page
   })
-  app.pages = pages
 
   app.static = {}
-  getFiles(config.DIR.STATIC).map(f => {
-    const name = f.replace(config.DIR.STATIC, '')
-    app.static[name] = fs.readFileSync(f)
-  })
+  const staticFiles = await getFiles(config.DIR.STATIC)
+  await Promise.all(
+    staticFiles.map(async f => {
+      const name = f.replace(config.DIR.STATIC, '')
+      app.static[name] = fs.readFileSync(f)
+    }),
+  )
 
   app.lib = {
     str: prepareLib(app),

@@ -2,7 +2,7 @@ const is = require('@magic/types')
 const path = require('path')
 const { rmrf, isLocalPath } = require('../lib')
 
-const clean = () => {
+const clean = async () => {
   const dir = config.DIR.PUBLIC
 
   if (is.string(dir) && !is.empty(dir)) {
@@ -13,7 +13,7 @@ const clean = () => {
     }
 
     console.log('remove', dir)
-    rmrf(dir)
+    await rmrf(dir)
   }
 }
 
