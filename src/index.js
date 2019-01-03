@@ -14,11 +14,13 @@ const run = async cmds => {
   console.time('render app')
   console.log(`render app ${Object.keys(cmds).join(' ')}`)
 
+  global.config = require('./config')
+
   if (cmds.clean) {
     await runCmd('clean')
   }
 
-  if (cmds.connect || cmds.publish) {
+  if (cmds.connect) {
     await runCmd('connect')
   }
 

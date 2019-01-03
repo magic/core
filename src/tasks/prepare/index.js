@@ -3,7 +3,7 @@ const path = require('path')
 const is = require('@magic/types')
 const deep = require('@magic/deep')
 let components = require('../../modules')
-const { getFiles, getDependencies, isUpperCase } = require('../../lib')
+const { getFiles, getDependencies, isUpperCase, requireNow } = require('../../lib')
 const prepareLib = require('./prepareLib')
 const preparePages = require('./preparePages')
 
@@ -11,7 +11,7 @@ global.keys = new Set()
 
 let exists = false
 const prepare = async app => {
-  global.config = require('../../config')
+  global.config = requireNow(require.resolve('../../config'))
 
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
   if (exists || fs.existsSync(maybeAssetFile)) {
