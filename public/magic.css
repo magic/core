@@ -1,4 +1,6 @@
-h3, h4, h5, h6, p, blockquote, pre,
+.Wrapper { color: orange; }
+ .Wrapper.Test { color: green; }
+ h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
@@ -21,8 +23,10 @@ footer, header, hgroup, menu, nav, section { display: block; }
  header.main .logo { float: left; }
  header.main .Menu { float: right; margin: 2em 0 0; }
  header.main .Menu li { float: left; margin: 0 0.5em 0 0; }
+ h1,h2,h3 { margin: 0.5em 0; }
+ h1 { font-size: 1.3em; }
+ h2 { font-size: 1.2em; font-weight: bold; }
+ h3 { font-size: 1.2em; }
  a { text-decoration: none; color: blue; outline: none; }
  a:hover { color: orange; }
  .Menu .active { text-decoration: underline; }
- .Wrapper { color: orange; }
- .Wrapper.Test { color: green; }
