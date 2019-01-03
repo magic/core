@@ -57,23 +57,27 @@ const prepare = async app => {
     Object.entries(dependencies).forEach(([name, component]) => {
       if (is.object(component) && isUpperCase(name)) {
         if (component.global) {
-          Object.entries(component.global.state)
-            .filter(s => s[1] === true)
-            .forEach(([key, val]) => {
-              app.state[key] = component.state[key]
-            })
+          if (component.global.state) {
+            Object.entries(component.global.state)
+              .filter(s => s[1] === true)
+              .forEach(([key, val]) => {
+                app.state[key] = component.state[key]
+              })
+          }
 
-          Object.entries(component.global.actions)
-            .filter(s => s[1] === true)
-            .forEach(([key, val]) => {
-              app.actions[key] = component.actions[key]
-            })
+          if (component.global.actions) {
+            Object.entries(component.global.actions)
+              .filter(s => s[1] === true)
+              .forEach(([key, val]) => {
+                app.actions[key] = component.actions[key]
+              })
+          }
         }
       }
     })
 
-    app.dependencies = deep.merge(app.dependencies, page.dependencies)
-    app.style = deep.merge(app.style, page.style)
+    app.dependencies = deep.merge(page.dependencies, app.dependencies)
+    app.style = deep.merge(page.style, app.style)
     return page
   })
 

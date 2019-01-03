@@ -17,6 +17,9 @@ const presets = [
 ]
 
 const plugins = ['@babel/plugin-transform-arrow-functions']
+if (isProd) {
+  plugins.push('minify-mangle-names')
+}
 
 const babelOpts = {
   filename: 'magic.js',

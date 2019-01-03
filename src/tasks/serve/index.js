@@ -10,19 +10,23 @@ const watch = require('./watch')
 
 const serve = app => {
   global.app = app
-  watch(app)
-
-  const pages = {}
-  app.pages.forEach(page => {
-    pages[page.name] = page.rendered
-  })
+  watch()
 
   const handler = (req, res) => {
     const { css, lib, static } = global.app
-    const style = isProd ? css.minified : css.css
-    const js = lib.code
 
-    let url = req.url
+    const pages = {}
+    app.pages.forEach(page => {
+      pages[page.name] = page.rendered
+    })
+
+    const style = isProd ? css.minified : css.css
+
+    const js = lib.bundle.code
+
+    const WEB_ROOT = addTrailingSlash(config.WEB_ROOT || '/')
+    let url = req.url.replace(WEB_ROOT, '/')
+
     if (url === '/magic.css') {
       res.writeHead(200, 'text/css')
       res.end(style)
@@ -35,6 +39,13 @@ const serve = app => {
       return
     }
 
+    if (static[url]) {
+      const contentType = getContentType(url)
+      res.writeHead(200, contentType)
+      res.end(static[url])
+      return
+    }
+
     const addedSlashUrl = addTrailingSlash(url)
     if (url !== addedSlashUrl && pages[addedSlashUrl]) {
       res.writeHead(302, {
@@ -43,22 +54,14 @@ const serve = app => {
       res.end()
     }
 
-    if (pages[url]) {
-      res.writeHead(200, 'text/html')
-      res.end(pages[req.url])
-      return
+    // fall back to 404 page
+    // which got added automatically.
+    if (!pages[url]) {
+      url = '/404/'
     }
 
-    if (static[url]) {
-      const contentType = getContentType(url)
-      res.writeHead(200, contentType)
-      res.end(static[url])
-      return
-    }
-
-    console.log('404', url)
-    res.writeHead(404)
-    res.end('Not found')
+    res.writeHead(200, 'text/html')
+    res.end(pages[url])
   }
 
   http.createServer(handler).listen(3000)

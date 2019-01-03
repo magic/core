@@ -1,13 +1,28 @@
 const path = require('path')
 const deep = require('@magic/deep')
+const is = require('@magic/types')
 const { getDependencies, requireNow } = require('../../lib')
 
 const requirePage = p => {
   return requireNow(p)
 }
 
-const preparePages = files =>
-  files.map(file => {
+const mapObject = (o, key, c) => ([k, v]) => {
+  const isGlobal = c.global && c.global[key] && Object.keys(c.global[key]).includes(k)
+  if (!isGlobal) {
+    if (!is.defined(o[key])) {
+      o[key] = {
+        [k]: v,
+      }
+    } else if (is.undefined(o[key][k])) {
+      o[key][k] = v
+    }
+  }
+  return o
+}
+
+const preparePages = files => {
+  const pages = files.map(file => {
     const page = requirePage(file)
     page.file = file
     page.name = file
@@ -24,10 +39,11 @@ const preparePages = files =>
 
     Object.entries(page.dependencies).forEach(([k, c]) => {
       if (c.state) {
-        page.state = deep.merge(c.state, page.state)
+        Object.entries(c.state).forEach(mapObject(page, 'state', c))
       }
+
       if (c.actions) {
-        page.actions = deep.merge(c.actions, page.actions)
+        Object.entries(c.actions).forEach(mapObject(page, 'actions', c))
       }
 
       if (c.style) {
@@ -38,4 +54,17 @@ const preparePages = files =>
     return page
   })
 
+  const has404 = pages.some(p => p.name === '/404/')
+  if (!has404) {
+    const page404 = {
+      name: '/404/',
+      path: path.join(config.DIR.PUBLIC, '404', 'index.html'),
+      Body: (state, actions) => div('404 - not found'),
+    }
+    page404.dependencies = getDependencies(page404.Body.toString())
+    pages.push(page404)
+  }
+
+  return pages
+}
 module.exports = preparePages

@@ -30,21 +30,11 @@ const prepareLib = app => {
 
   let pageString = 'const pages = {\n'
 
-  let has404 = false
-
   app.pages.forEach(page => {
-    if (page.name === '/404/') {
-      has404 = true
-    }
-
     let view = page.Body.toString()
 
     pageString += `\n  '${page.name}': ${view},`
   })
-
-  if (!has404) {
-    pageString += '\n  "/404/": div("404 not found"),'
-  }
 
   pageString += '\n}\n'
   libString += pageString
@@ -68,8 +58,19 @@ const prepareLib = app => {
   const viewString = `
 function view(state, actions) {
   const page = pages[state.url]
-  state = { ...state.pages[state.url], ...state }
-  actions = { ...actions.pages[state.url], ...actions }
+
+  const pageState = state.pages[state.url]
+  for (let key in pageState) {
+    if (pageState.hasOwnProperty(key)) {
+      state[key] = pageState[key]
+    }
+  }
+  const pageActions = actions.pages[state.url]
+  for (let key in pageActions) {
+    if (pageActions.hasOwnProperty(key)) {
+      actions[key] = pageActions[key]
+    }
+  }
 
   return ${wrapper}
 }
@@ -85,8 +86,7 @@ if (!mD) {
   mD.id = 'magic'
   d.body.appendChild(mD)
 }
-app(state, actions, view, mD)\n
-`
+app(state, actions, view, mD)\n`
   libString += createMagic
 
   if (process.env.NODE_ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
