@@ -12,7 +12,7 @@ module.exports = [
   },
   {
     fn: config.DIR.PUBLIC,
-    expect: path.join(process.cwd(), '.tmp'),
+    expect: path.join(process.cwd(), 'public'),
     info: 'config.DIR.PUBLIC has the expected value',
   },
   {
