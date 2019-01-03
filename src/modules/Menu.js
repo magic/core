@@ -34,13 +34,13 @@ const Menu = {
     return nav({ class: 'Menu' }, [
       ul(
         state[name].map(item => [
-          li({ class: state.url === item.to ? 'active' : '' }, [
-            a({ href: item.to, onclick: actions.go }, item.text),
-          ]),
+          li({ class: state.url === item.to ? 'active' : '' }, [Menu.Link(item)]),
         ]),
       ),
     ])
   },
+
+  Link: ({ to, text }) => (_, actions) => a({ href: to, onclick: actions.go }, text),
 }
 
 module.exports = Menu
