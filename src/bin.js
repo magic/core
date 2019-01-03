@@ -32,7 +32,6 @@ tasks
   })
 
 if (process.argv.includes('dev') || process.argv.includes('development')) {
-  cmds.build = true
   cmds.serve = true
 }
 

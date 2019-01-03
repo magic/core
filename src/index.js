@@ -36,7 +36,9 @@ const run = async cmds => {
     app.lib.bundle = bundle
     app.css = css
 
-    await runCmd('write', app)
+    if (cmds.build) {
+      await runCmd('write', app)
+    }
 
     console.timeEnd('render app')
 
