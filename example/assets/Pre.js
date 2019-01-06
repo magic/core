@@ -1,3 +1,13 @@
+/* TODO:
+  - multiline comments
+  - if an object contains a bare variable:
+    const arg = ''
+    const o = {
+      arg,
+    }
+    the arg does not get highlighted as object arg
+*/
+
 module.exports = {
   style: {
     '.Pre': {
@@ -13,19 +23,22 @@ module.exports = {
         color: 'purple',
       },
       '.builtin': {
-        color: 'yellow',
+        color: 'cadetblue',
       },
       '.string': {
         color: '#dd8f00 !important',
       },
       '.colon': {
-        color: 'turquoise',
+        color: 'darkgreen',
       },
       '.boolean': {
         color: 'blue',
       },
-      '.hyper': {
+      '.actions': {
         color: 'blueviolet',
+      },
+      '.state': {
+        color: 'cornflowerblue',
       },
       '.comment': {
         color: 'grey',
@@ -63,6 +76,8 @@ in return for get const char
       const builtins = `
 Array Object String Number RegExp Null Symbol
 Set WeakSet Map WeakMap
+setInterval setTimeout
+Promise
 JSON
 Int8Array Uint8Array Uint8ClampedArray
 Int16Array Uint16Array
@@ -95,8 +110,10 @@ Float32Array Float64Array
             cl = 'keyword'
           } else if (builtins.includes(word)) {
             cl = 'builtin'
-          } else if (hyperWords.includes(word)) {
-            cl = 'hyper'
+          } else if (word === 'state') {
+            cl = 'state'
+          } else if (word === 'actions') {
+            cl = 'actions'
           } else if (booleans.includes(word)) {
             cl = 'boolean'
           }
@@ -140,7 +157,7 @@ Float32Array Float64Array
           return div({ class: 'line comment' }, line)
         }
 
-        const cleaned = line.replace(/("|')/g, "'")
+        const cleaned = line.replace(/("|')q/g, "'")
         const [start, str, end] = cleaned.split("'")
         let words = []
         if (typeof str !== 'undefined') {

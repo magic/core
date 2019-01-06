@@ -2,19 +2,27 @@ module.exports = {
   Body: () => {
     const component = {
       state: `
+// state variables can be anything you can JSON.stringify()
 state: {
   variable: true,
   args: 'none',
 }`,
       actions: `
+// actions are an object containing functions.
+// if an action returns an object, this object gets merged into the state
 actions: {
-  changeVariable: args => ({ variable: !state.variable, args }),
-  callActionInAction: () => (state, actions) => {
-    let args = 'arg passed to function'
-    if (!state.variable) {
-      args = ''
-    }
-    actions.changeVariable(args)
+  changeVariable: args => state => ({
+    variable: !state.variable,
+    args,
+  }),
+  callActionInAction: () => async (state, actions) => {
+    // just await something inside an action to create an async action
+    await new Promise(resolve => {
+      setTimeout(resolve, 200)
+    })
+
+    // actions can call other actions
+    actions.changeVariable(state.variable ? 'arg passed to function' : '')
   },
 }`,
       global: `

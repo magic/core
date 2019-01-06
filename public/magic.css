@@ -3,11 +3,12 @@
  .Pre { display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
  .Pre .tag { color: green; }
  .Pre .keyword { color: purple; }
- .Pre .builtin { color: yellow; }
+ .Pre .builtin { color: cadetblue; }
  .Pre .string { color: #dd8f00 !important; }
- .Pre .colon { color: turquoise; }
+ .Pre .colon { color: darkgreen; }
  .Pre .boolean { color: blue; }
- .Pre .hyper { color: blueviolet; }
+ .Pre .actions { color: blueviolet; }
+ .Pre .state { color: cornflowerblue; }
  .Pre .comment { color: grey; font-style: italic; }
  h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
