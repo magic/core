@@ -8,6 +8,7 @@
  .Pre .colon { color: turquoise; }
  .Pre .boolean { color: blue; }
  .Pre .hyper { color: blueviolet; }
+ .Pre .comment { color: grey; font-style: italic; }
  h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
