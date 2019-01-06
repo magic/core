@@ -7,7 +7,7 @@ module.exports = {
     menu: [
       { to: '/', text: 'home' },
       { to: '/deep/', text: 'deep' },
-      { to: '/docs', text: 'docs' },
+      { to: '/docs/', text: 'docs' },
     ],
     logo: '/logo.png',
   },
