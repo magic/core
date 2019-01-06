@@ -34,13 +34,17 @@ const Menu = {
     return nav({ class: 'Menu' }, [
       ul(
         state[name].map(item => [
-          li({ class: state.url === item.to ? 'active' : '' }, [Menu.Link(item)]),
+          li({ class: state.url === item.to ? 'active' : '' }, [Link.View(item)]),
         ]),
       ),
     ])
   },
 
-  Link: ({ to, text }) => (_, actions) => a({ href: to, onclick: actions.go }, text),
+  global: {
+    actions: {
+      go: true,
+    },
+  },
 }
 
 module.exports = Menu
