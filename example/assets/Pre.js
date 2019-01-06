@@ -1,6 +1,6 @@
 /*
-adds 2459 bytes to magic.js
-adds 994 bytes to magic.js.gz
+adds 2.5kb to magic.js
+adds around 1kb to magic.js.gz
 
 TODO:
   - multiline comments
