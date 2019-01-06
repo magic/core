@@ -77,7 +77,8 @@ let app = {
       { id: 'magic' },
       div({ class: 'wrapper' }, [
         header({ class: 'main' }, [
-          state.logo && img({ class: 'logo', src: state.logo, role: 'presentation' }),
+          state.logo &&
+            img({ class: 'logo', src: state.logo, height: 100, width: 200, role: 'presentation' }),
           state.menu && Menu.View(state, actions),
         ]),
         page ? page(state, actions) : div('404 - not found'),
