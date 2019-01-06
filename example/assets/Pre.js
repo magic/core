@@ -94,11 +94,17 @@ Float32Array Float64Array
         }
       }
 
-      content = content.split(/('|")(.*?)\1/g)
+      content = content.split(/'(.*?)\1/g)
 
       content = content.map((string, i) => {
+        if (typeof string === 'undefined') {
+          return
+        }
         if (i % 2) {
-          return span({ class: 'string' }, `'${string}'`)
+          const s = span({ class: 'string' }, `'${string}${content[i + 1]}${content[i + 2]}'`)
+          content[i+1] = undefined
+          content[i+2] = undefined
+          return s
         }
 
         if (typeof string === 'string') {
