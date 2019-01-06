@@ -15,6 +15,7 @@ if (fs.existsSync(configPath)) {
 const PAGES = path.join(config.ROOT, 'pages')
 const PUBLIC = path.join(process.cwd(), 'public')
 const ASSETS = path.join(config.ROOT, 'assets')
+const MODULES = path.join(config.ROOT, 'modules')
 const STATIC = path.join(config.ROOT, 'static')
 
 config = {
@@ -23,6 +24,7 @@ config = {
     PAGES,
     PUBLIC,
     ASSETS,
+    MODULES,
     STATIC,
   },
 }
