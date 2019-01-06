@@ -11,7 +11,7 @@ const presets = [
       forceAllTransforms: true,
       ignoreBrowserslistConfig: true,
       modules: false,
-      debug: isProd,
+      debug: !isProd,
     },
   ],
 ]
