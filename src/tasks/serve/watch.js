@@ -10,7 +10,7 @@ const isProd = process.env.NODE_ENV === 'production'
 const prepare = require('../prepare')
 const transpile = require('../transpile')
 
-let watchTime = 100
+let watchTime = 300
 
 const calculateWatchTime = end => {
   const hundredths = Math.ceil((end + 99) / 100)
@@ -23,7 +23,7 @@ const calculateWatchTime = end => {
   }
 
   if (newWatchTime !== watchTime) {
-    console.log(`setting watch time to ${watchTime}ms`)
+    log.info(`setting watch time to ${watchTime}ms`)
     return newWatchTime
   }
 

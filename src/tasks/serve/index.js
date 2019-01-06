@@ -47,11 +47,23 @@ const serve = app => {
     }
 
     const addedSlashUrl = addTrailingSlash(url)
-    if (url !== addedSlashUrl && pages[addedSlashUrl]) {
+    const isWebRoot = addedSlashUrl === WEB_ROOT
+
+    let redirect = ''
+    if (isWebRoot || (url !== addedSlashUrl && pages[addedSlashUrl])) {
+      redirect = addedSlashUrl
+    } else if (req.url === '/' && WEB_ROOT !== '/') {
+      if (isProd) {
+        redirect = WEB_ROOT
+      }
+    }
+
+    if (redirect) {
       res.writeHead(302, {
-        Location: addedSlashUrl,
+        Location: redirect,
       })
       res.end()
+      return
     }
 
     // fall back to 404 page
@@ -64,7 +76,9 @@ const serve = app => {
     res.end(pages[url])
   }
 
-  http.createServer(handler).listen(3000)
+  http.createServer(handler).listen(3000, () => {
+    console.log('listening to http://localhost:3000')
+  })
 }
 
 module.exports = serve
