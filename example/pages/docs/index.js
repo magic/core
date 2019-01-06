@@ -2,7 +2,7 @@ module.exports = {
   state: {
     title: '@magic/core docs',
     description: '@magic/core documentation directory.',
-    docMenu: [{ to: '/docs/concepts', text: 'concepts' }],
+    docMenu: [{ to: '/docs/concepts/', text: 'concepts' }],
   },
 
   Body: (state, actions) => [
