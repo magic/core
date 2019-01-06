@@ -33,34 +33,34 @@ module.exports = {
   View: content => {
     const format = content => {
       const keywords = `
-        let this long package float
-        goto private class if short
-        while protected with debugger case
-        continue volatile interface
+let this long package float
+goto private class if short
+while protected with debugger case
+continue volatile interface
 
-        instanceof super synchronized throw
-        extends final export throws
-        try import double enum
+instanceof super synchronized throw
+extends final export throws
+try import double enum
 
-        boolean abstract function
-        implements typeof transient break
-        void static default do
+boolean abstract function
+implements typeof transient break
+void static default do
 
-        switch int new async native
-        else delete null public var
-        in return for get const char
-        finally catch await byte
-      `
+switch int new async native
+else delete null public var
+in return for get const char
+finally catch await byte
+`
 
       const builtins = `
-        Array Object String Number RegExp Null Symbol
-        Set WeakSet Map WeakMap
-        JSON
-        Int8Array Uint8Array Uint8ClampedArray
-        Int16Array Uint16Array
-        Int32Array Uint32Array
-        Float32Array Float64Array
-      `
+Array Object String Number RegExp Null Symbol
+Set WeakSet Map WeakMap
+JSON
+Int8Array Uint8Array Uint8ClampedArray
+Int16Array Uint16Array
+Int32Array Uint32Array
+Float32Array Float64Array
+`
 
       const booleans = `true false`
 

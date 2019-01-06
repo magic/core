@@ -50,8 +50,7 @@ const actions = {
         Pre.View(`
 const view = (state, actions) => (
   div({ onclick: actions.callActionInAction }, state.variable)
-
-        `),
+`),
       ]),
     ]),
   ],
