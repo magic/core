@@ -143,11 +143,11 @@ Float32Array Float64Array
           return div({ class: 'line comment' }, line)
         }
 
-        const cleaned = line.replace(/(")q/g, "'")
+        const cleaned = line.replace(/"/g, "'")
         const [start, str, ...rest] = cleaned.split("'")
         let end = rest
         if (end.length === 1) {
-          end = wrapWords(end[0])
+          end = end[0]
         } else if (end.length > 1) {
           end = wordsByLine(end.join("'"))
         }

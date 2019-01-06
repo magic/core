@@ -1,8 +1,5 @@
-const path = require('path')
-const fs = require('fs')
 const http = require('http')
-const { addTrailingSlash, getContentType, requireNow } = require('../../lib/')
-const is = require('@magic/types')
+const { addTrailingSlash, getContentType } = require('../../lib/')
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -25,32 +22,33 @@ const serve = app => {
     const js = lib.bundle.code
 
     const WEB_ROOT = addTrailingSlash(config.WEB_ROOT || '/')
-    let url = req.url.replace(WEB_ROOT, '/')
+    let url = req.url//.replace(WEB_ROOT, '/')
+    const rawUrl = url.replace(config.WEB_ROOT, '/')
 
-    if (url === '/magic.css') {
+    if (rawUrl === '/magic.css') {
       res.writeHead(200, 'text/css')
       res.end(style)
       return
     }
 
-    if (url === '/magic.js' || url === '/magic.min.js') {
+    if (rawUrl === '/magic.js') {
       res.writeHead(200, 'application/javascript')
       res.end(js)
       return
     }
 
-    if (static[url]) {
-      const contentType = getContentType(url)
+    if (static[rawUrl]) {
+      const contentType = getContentType(rawUrl)
       res.writeHead(200, contentType)
-      res.end(static[url])
+      res.end(static[rawUrl])
       return
     }
 
-    const addedSlashUrl = addTrailingSlash(url)
+    const addedSlashUrl = addTrailingSlash(rawUrl)
     const isWebRoot = addedSlashUrl === WEB_ROOT
 
     let redirect = ''
-    if (isWebRoot || (url !== addedSlashUrl && pages[addedSlashUrl])) {
+    if (isWebRoot || (rawUrl !== addedSlashUrl && pages[addedSlashUrl])) {
       redirect = addedSlashUrl
     } else if (req.url === '/' && WEB_ROOT !== '/') {
       if (isProd) {

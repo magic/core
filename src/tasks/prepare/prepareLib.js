@@ -27,9 +27,7 @@ const prepareLib = app => {
   let pageString = 'const pages = {\n'
 
   app.pages.forEach(page => {
-    let view = page.Body.toString()
-
-    pageString += `\n  '${page.name}': ${view},`
+    pageString += `\n  '${page.name}': ${page.Body.toString()},`
   })
 
   pageString += '\n}\n'
@@ -39,6 +37,7 @@ const prepareLib = app => {
   libString += stateString
 
   const urlString = `\nstate.url = window.location.pathname\n`
+
   libString += urlString
 
   const actionString = `const actions = ${stringifyObject(app.actions)}\n`
@@ -84,8 +83,9 @@ app(state, actions, view, mD)\n`
   if (process.env.NODE_ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
     libString = libString
       // replace urls
-      .replace(/'\//gm, `'${config.WEB_ROOT}`)
-      .replace(/"\//gm, `"${config.WEB_ROOT}`)
+      .replace(/ '\//gm, `'${config.WEB_ROOT}`)
+      .replace(/ "\//gm, `"${config.WEB_ROOT}`)
+    console.log(libString)
   }
 
   return libString
