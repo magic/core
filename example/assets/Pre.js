@@ -140,15 +140,11 @@ Float32Array Float64Array
           return div({ class: 'line comment' }, line)
         }
 
-        const cleaned = line.replace(/"/g, "'")
+        const cleaned = line.replace(/("|')/g, "'")
         const [start, str, end] = cleaned.split("'")
         let words = []
         if (typeof str !== 'undefined') {
-          words = [
-            wrapWords(start),
-            span({ class: 'string' }, `'${str}'`),
-            wrapWords(end),
-          ]
+          words = [wrapWords(start), span({ class: 'string' }, `'${str}'`), wrapWords(end)]
         } else {
           words = wrapWords(line)
         }
