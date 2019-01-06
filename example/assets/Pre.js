@@ -27,6 +27,10 @@ module.exports = {
       '.hyper': {
         color: 'blueviolet',
       },
+      '.comment': {
+        color: 'grey',
+        fontStyle: 'italic',
+      },
     },
   },
 
@@ -70,6 +74,43 @@ Float32Array Float64Array
 
       const hyperWords = `state actions`
 
+      const wrapWords = string => {
+        if (typeof string !== 'string') {
+          return string
+        }
+
+        const matched = string.split(/\b/)
+
+        string = matched.map((word, i) => {
+          if (word === '') {
+            return
+          }
+
+          let cl = ''
+          if (matched[i + 1] && matched[i + 1].includes(':')) {
+            cl = 'colon'
+          } else if (isTag(word)) {
+            cl = 'tag'
+          } else if (keywords.includes(word)) {
+            cl = 'keyword'
+          } else if (builtins.includes(word)) {
+            cl = 'builtin'
+          } else if (hyperWords.includes(word)) {
+            cl = 'hyper'
+          } else if (booleans.includes(word)) {
+            cl = 'boolean'
+          }
+
+          if (cl) {
+            word = span({ class: cl }, word)
+          }
+
+          return word
+        })
+
+        return string
+      }
+
       const known = '[object HTMLDivElement]'
       const tags = {
         canvas: 1,
@@ -94,47 +135,28 @@ Float32Array Float64Array
         }
       }
 
-      content = content.split(/'(.*?)\1/g)
-
-      content = content.map((string, i) => {
-        if (typeof string === 'undefined') {
-          return
-        }
-        if (i % 2) {
-          const s = span({ class: 'string' }, `'${string}${content[i + 1]}${content[i + 2]}'`)
-          content[i+1] = undefined
-          content[i+2] = undefined
-          return s
+      const lines = content.split('\n').map(line => {
+        if (line.trim().startsWith('//')) {
+          return div({ class: 'line comment' }, line)
         }
 
-        if (typeof string === 'string') {
-          string = string.split(/\b/g).map(word => {
-            let cl = ''
-            if (isTag(word)) {
-              cl = 'tag'
-            } else if (keywords.includes(word)) {
-              cl = 'keyword'
-            } else if (builtins.includes(word)) {
-              cl = 'builtin'
-            } else if (hyperWords.includes(word)) {
-              cl = 'hyper'
-            } else if (booleans.includes(word)) {
-              cl = 'boolean'
-            } else if (word.endsWith(':')) {
-              cl = 'colon'
-            }
-
-            if (cl) {
-              word = span({ class: cl }, word)
-            }
-
-            return word
-          })
+        const cleaned = line.replace(/"/g, "'")
+        const [start, str, end] = cleaned.split("'")
+        let words = []
+        if (typeof str !== 'undefined') {
+          words = [
+            wrapWords(start),
+            span({ class: 'string' }, `'${str}'`),
+            wrapWords(end),
+          ]
+        } else {
+          words = wrapWords(line)
         }
-        return string
+
+        return div({ class: 'line' }, words)
       })
 
-      return content
+      return lines
     }
 
     return div({ class: 'Pre' }, format(content))
