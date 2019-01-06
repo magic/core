@@ -1,4 +1,8 @@
-/* TODO:
+/*
+adds 2459 bytes to magic.js
+adds 994 bytes to magic.js.gz
+
+TODO:
   - multiline comments
   - if an object contains a bare variable:
     const arg = ''
