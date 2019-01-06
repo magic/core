@@ -84,7 +84,6 @@ app(state, actions, view, mD)\n`
   if (process.env.NODE_ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
     libString = libString
       // replace urls
-      .replace(/'\//gm, `'${config.WEB_ROOT}`)
       .replace(/"\//gm, `"${config.WEB_ROOT}`)
   }
 
