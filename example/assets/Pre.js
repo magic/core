@@ -139,11 +139,17 @@ Float32Array Float64Array
       }
 
       const wordsByLine = line => {
-        const cleaned = line.replace(/("|')q/g, "'")
-        const [start, str, ...end] = cleaned.split("'")
+        const cleaned = line.replace(/(")q/g, "'")
+        const [start, str, ...rest] = cleaned.split("'")
+        let end = rest
+        if (end.length === 1) {
+          end = wrapWords(end[0])
+        } else if (end.length > 1) {
+          end = wordsByLine(end.join("'"))
+        }
         let words = []
         if (typeof str !== 'undefined') {
-          words = [wrapWords(start), span({ class: 'string' }, `'${str}'`), wordsByLine(end.join("'"))]
+          words = [wrapWords(start), span({ class: 'string' }, `'${str}'`), end]
         } else {
           words = wrapWords(line)
         }
