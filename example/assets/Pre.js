@@ -46,10 +46,14 @@ boolean abstract function
 implements typeof transient break
 void static default do
 
-switch int new async native
+boolean abstract implements
+typeof function do break
+void static default transient
+
+int new async native switch
 else delete null public var
+await byte finally catch
 in return for get const char
-finally catch await byte
 `
 
       const builtins = `
@@ -90,7 +94,7 @@ Float32Array Float64Array
         }
       }
 
-      content = content.split(/'(.*?)'/g)
+      content = content.split(/('|")(.*?)\1/g)
 
       content = content.map((string, i) => {
         if (i % 2) {
