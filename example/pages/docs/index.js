@@ -12,6 +12,6 @@ module.exports = {
       p('The goal of this document is to give you a rough @magical overview.'),
     ]),
     h3('Contents:'),
-    Menu.View({ name: 'docMenu' })(state, actions),
+    Menu.View({ name: 'docMenu' }),
   ],
 }
