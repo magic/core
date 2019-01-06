@@ -1,1 +1,18 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"/><link rel="icon" href="/ast-playground/favicon.ico"/><link rel="stylesheet" href="/ast-playground/magic.css"/></head><body><div id="magic"><div class="wrapper"><header class="main"><img class="logo" src="/ast-playground/logo.png" role="presentation"/><nav class="Menu"><ul><li class="active"><a href="/ast-playground/">home</a></li><li><a href="/ast-playground/deep/">deep</a></li></ul></nav></header><h1>concepts</h1><div><div><h3>state</h3><div><p>state is a javascript object.</p><p>state can only be mutated by actions.</p></div></div><div><h3>actions</h3></div><div><h3>views</h3></div></div></div></div><script type="text/javascript" src="/ast-playground/magic.js"></script></body></html>
+<!DOCTYPE html><html><head><meta charset="utf-8"/><link rel="icon" href="/ast-playground/favicon.ico"/><link rel="stylesheet" href="/ast-playground/magic.css"/></head><body><div id="magic"><div class="wrapper"><header class="main"><img class="logo" src="/ast-playground/logo.png" height="100" width="200" role="presentation"/><nav class="Menu"><ul><li class="active"><a href="/ast-playground/">home</a></li><li><a href="/ast-playground/deep/">deep</a></li><li><a href="/ast-playground/docs">docs</a></li></ul></nav></header><h1>concepts</h1><div><div><h3>components</h3><p>components are the main building block of magic.</p><p>components can include state, actions, style and multiple Views</p></div><div><h3>state</h3><div><p>state is a javascript object.</p><p>state can be mutated by actions.</p><p>every rendering step, the state determines the output of the view</p><h4>example state:</h4><div class="Pre"><span class="keyword">
+</span><span class="keyword">const</span><span class="keyword"> </span><span class="hyper">state</span> = {
+  variable: <span class="boolean">true</span>,
+  args: <span class="string">&#39;&#39;</span>,
+}</div></div></div><div><h3>actions</h3><p>actions are an object of functions</p><p>those functions get passed a state object and return a new partial state</p><h4>example functions</h4><div class="Pre"><span class="keyword">
+</span><span class="keyword">const</span><span class="keyword"> </span><span class="hyper">actions</span> = {
+  changeVariable: args =&gt; ({ variable: !<span class="hyper">state</span>.variable, args }),
+  callActionInAction: () =&gt; (<span class="hyper">state</span>, <span class="hyper">actions</span>) =&gt; {
+    <span class="keyword">let</span><span class="keyword"> </span>args = <span class="string">&#39;arg passed to function&#39;</span>
+    <span class="keyword">if</span> (!<span class="hyper">state</span>.variable) {
+      args = <span class="string">&#39;&#39;</span>
+    }
+    <span class="hyper">actions</span>.changeVariable(args)
+  },
+}</div></div><div><h3>views</h3><p>views render the state to html</p><p>whenever an action triggers a statechange, this statechange then triggers a view change.</p><div class="Pre"><span class="keyword">
+</span><span class="keyword">const</span><span class="keyword"> </span>view = (<span class="hyper">state</span>, <span class="hyper">actions</span>) =&gt; (
+  <span class="tag">div</span>({ onclick: <span class="hyper">actions</span>.callActionInAction }, <span class="hyper">state</span>.variable)
+</div></div></div></div></div><script type="text/javascript" src="/ast-playground/magic.js"></script></body></html>
