@@ -1,9 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const deep = require('@magic/deep')
-const is = require('@magic/types')
-
-const { getFiles, isTagUsed, isUpperCase, getDependencies, applyWebRoot } = require('../../lib/')
 
 const { stringifyObject, handleDeps } = require('./lib/')
 
@@ -61,15 +57,11 @@ function view(state, actions) {
 
   const pageState = state.pages[state.url]
   for (let key in pageState) {
-    if (pageState.hasOwnProperty(key)) {
-      state[key] = pageState[key]
-    }
+    state[key] = pageState[key]
   }
   const pageActions = actions.pages[state.url]
   for (let key in pageActions) {
-    if (pageActions.hasOwnProperty(key)) {
-      actions[key] = pageActions[key]
-    }
+    actions[key] = pageActions[key]
   }
 
   return ${wrapper}
