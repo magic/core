@@ -138,6 +138,18 @@ Float32Array Float64Array
         video: 1,
       }
 
+      const wordsByLine = line => {
+        const cleaned = line.replace(/("|')q/g, "'")
+        const [start, str, ...end] = cleaned.split("'")
+        let words = []
+        if (typeof str !== 'undefined') {
+          words = [wrapWords(start), span({ class: 'string' }, `'${str}'`), wordsByLine(end.join("'"))]
+        } else {
+          words = wrapWords(line)
+        }
+        return words
+      }
+
       const isTag = word => {
         if (tags.hasOwnProperty(word)) {
           return true
@@ -161,14 +173,7 @@ Float32Array Float64Array
           return div({ class: 'line comment' }, line)
         }
 
-        const cleaned = line.replace(/("|')q/g, "'")
-        const [start, str, end] = cleaned.split("'")
-        let words = []
-        if (typeof str !== 'undefined') {
-          words = [wrapWords(start), span({ class: 'string' }, `'${str}'`), wrapWords(end)]
-        } else {
-          words = wrapWords(line)
-        }
+        const words = wordsByLine(line)
 
         return div({ class: 'line' }, words)
       })
