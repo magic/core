@@ -139,6 +139,10 @@ Float32Array Float64Array
       }
 
       const wordsByLine = line => {
+        if (line.trim().startsWith('//')) {
+          return div({ class: 'line comment' }, line)
+        }
+
         const cleaned = line.replace(/(")q/g, "'")
         const [start, str, ...rest] = cleaned.split("'")
         let end = rest
@@ -147,6 +151,7 @@ Float32Array Float64Array
         } else if (end.length > 1) {
           end = wordsByLine(end.join("'"))
         }
+
         let words = []
         if (typeof str !== 'undefined') {
           words = [wrapWords(start), span({ class: 'string' }, `'${str}'`), end]
@@ -175,10 +180,6 @@ Float32Array Float64Array
       }
 
       const lines = content.split('\n').map(line => {
-        if (line.trim().startsWith('//')) {
-          return div({ class: 'line comment' }, line)
-        }
-
         const words = wordsByLine(line)
 
         return div({ class: 'line' }, words)
