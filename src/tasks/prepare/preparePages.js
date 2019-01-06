@@ -1,7 +1,8 @@
 const path = require('path')
 const deep = require('@magic/deep')
 const is = require('@magic/types')
-const { getDependencies, requireNow } = require('../../lib')
+
+const { isUpperCase, getDependencies, requireNow } = require('../../lib')
 
 const requirePage = p => {
   return requireNow(p)
@@ -49,6 +50,15 @@ const preparePages = files => {
       if (c.style) {
         page.style = deep.merge(c.style, page.style)
       }
+
+      const views = Object.entries(c)
+        .filter(([k]) => isUpperCase(k))
+        .map(([_, v]) => v.toString())
+
+      const dependencies = {}
+      views.forEach(view => {
+        page.dependencies = deep.merge(getDependencies(view), page.dependencies)
+      })
     })
 
     return page
