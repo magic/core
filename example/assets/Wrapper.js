@@ -3,6 +3,7 @@ const Inside = require('./Inside')
 module.exports = {
   state: {
     wrapperStateVar: false,
+    buttonText: 'click me!',
   },
 
   actions: {
@@ -14,7 +15,7 @@ module.exports = {
       {
         class: `Wrapper${state.wrapperStateVar ? ' Test' : ''}`,
       },
-      [Inside(state, actions), button({ onclick: actions.wrapperAction }, 'click me')],
+      [Inside(state, actions), button({ onclick: actions.wrapperAction }, state.buttonText)],
     ),
 
   style: {
