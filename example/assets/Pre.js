@@ -90,7 +90,7 @@ Float32Array Float64Array
         }
       }
 
-      content = content.split(/'(.*?)'/g).map((string, i) => {
+      content = content.split(/('|")(.*?)\1/g).map((string, i) => {
         if (i % 2) {
           return span({ class: 'string' }, `'${string}'`)
         }
