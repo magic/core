@@ -2,7 +2,6 @@ module.exports = {
   state: {
     title: 'h1 deep/index',
     htmlTitle: 'testing the html title tag',
-    url: '/deep/',
   },
 
   actions: {
