@@ -1,10 +1,10 @@
 module.exports = {
   View: ({ to, text, nofollow, noreferrer }, children) => (_, actions) => {
     const props = {
-      href: to,
+      href: to || '',
     }
 
-    if (to.startsWith('/') && !to.startsWith(`//`)) {
+    if (to && to.startsWith('/') && !to.startsWith(`//`)) {
       props.onclick = actions.go
     } else {
       props.rel = 'noopener'
