@@ -1,9 +1,8 @@
-const fs = require('fs')
 const path = require('path')
 const is = require('@magic/types')
 const deep = require('@magic/deep')
 let components = require('../../modules')
-const { getFiles, getDependencies, isUpperCase, requireNow } = require('../../lib')
+const { getFiles, getPages, getDependencies, mkdirp, isUpperCase, requireNow, fs } = require('../../lib')
 const prepareLib = require('./prepareLib')
 const preparePages = require('./preparePages')
 
@@ -14,7 +13,7 @@ const prepare = async app => {
   global.config = requireNow(require.resolve('../../config'))
 
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
-  if (exists || fs.existsSync(maybeAssetFile)) {
+  if (exists || await fs.exists(maybeAssetFile)) {
     exists = true
     const assets = require(maybeAssetFile)
     components = deep.merge(components, assets)
@@ -25,7 +24,7 @@ const prepare = async app => {
     global[key] = value
   })
 
-  const files = await getFiles(config.DIR.PAGES)
+  const files = await getPages()
 
   app.files = files
 
@@ -82,13 +81,17 @@ const prepare = async app => {
   })
 
   app.static = {}
-  const staticFiles = await getFiles(config.DIR.STATIC)
-  await Promise.all(
-    staticFiles.map(async f => {
-      const name = f.replace(config.DIR.STATIC, '')
-      app.static[name] = fs.readFileSync(f)
-    }),
-  )
+  if (await fs.exists(config.DIR.STATIC)) {
+    const staticFiles = await getFiles(config.DIR.STATIC)
+    if (staticFiles) {
+      await Promise.all(
+        staticFiles.map(async f => {
+          const name = f.replace(config.DIR.STATIC, '')
+          app.static[name] = await fs.readFile(f)
+        }),
+      )
+    }
+  }
 
   app.lib = {
     str: prepareLib(app),
