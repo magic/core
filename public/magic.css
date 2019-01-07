@@ -33,10 +33,12 @@ footer, header, hgroup, menu, nav, section { display: block; }
  header.main .logo { float: left; }
  header.main .Menu { float: right; margin: 2em 0 0; }
  header.main .Menu li { float: left; margin: 0 0.5em 0 0; }
- h1,h2,h3 { margin: 0.5em 0; }
+ h1,h2,h3,h4,h5 { margin: .5em 0; }
  h1 { font-size: 1.3em; }
  h2 { font-size: 1.2em; font-weight: bold; }
  h3 { font-size: 1.2em; }
+ h4 { font-weight: 600; }
+ h5 { font-weight: 600; }
  a { text-decoration: none; color: blue; outline: none; }
  a:hover { color: orange; }
  .Menu .active { text-decoration: underline; }
