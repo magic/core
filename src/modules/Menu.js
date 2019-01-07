@@ -1,6 +1,9 @@
 const Menu = {
   actions: {
     go: e => state => {
+      if (e.target.href.startsWith('#')) {
+        return
+      }
       e.preventDefault()
       let url = state.url
       if (e.target && e.target.href) {
