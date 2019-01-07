@@ -14,16 +14,24 @@ magic - static and serverless page generator
 usage:
 magic [TASKS]...
 
+production tests:
+NODE_ENV=production magic [...TASKS]
+
 available tasks:
-start   - starts magic dev env:
-dev     - (build watch serve and NODE_ENV === development)
+start   - starts magic dev env, same as npm run dev
+dev     - run BUILD and SERVE
+build   - builds the bundle.
+serve   - build and serve the bundle
+clean   - delete public dir
+connect - connect to github (only needs to be done once)
+publish - publish to github
 
 help    - this help text
-  `)
+`)
   process.exit()
 }
 
-const tasks = ['clean', 'watch', 'build', 'serve', 'zip', 'connect', 'publish']
+const tasks = ['clean', 'connect', 'publish', 'build', 'serve']
 const cmds = {}
 tasks
   .filter(task => process.argv.includes(task))
