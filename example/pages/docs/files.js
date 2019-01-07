@@ -63,6 +63,8 @@ module.exports = {
     }
 
     return [
+      DocHeader.View,
+
       h1(state.title),
       p('There are multiple magic files and directories.'),
       ul([

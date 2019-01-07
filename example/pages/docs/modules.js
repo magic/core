@@ -5,6 +5,7 @@ module.exports = {
   },
 
   Body: state => [
+    DocHeader.View,
     h1(state.title),
     p('magic modules are predefined components for webapps.'),
     h3('list of magic modules'),

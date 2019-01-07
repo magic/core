@@ -5,6 +5,8 @@ module.exports = {
   },
 
   Body: state => [
+    DocHeader.View,
+
     h1(state.title),
     p('magic themes are themes for magic apps.'),
     h3('list of magic themes'),

@@ -82,16 +82,18 @@ const component = {
 }`
 
     return [
+      DocHeader.View,
+
       h1('concepts'),
       div([
         div([
-          h3('components'),
+          h2('components'),
           p('components are the main building block of magic.'),
           p('components can include state, actions, style and multiple Views'),
         ]),
 
         div([
-          h3('state'),
+          h2('state'),
           div([
             p('state is a javascript object.'),
             p('state can be mutated by actions.'),
@@ -102,7 +104,7 @@ const component = {
         ]),
 
         div([
-          h3('actions'),
+          h2('actions'),
           p('actions are an object of functions'),
           p('those functions get passed a state object and return a new partial state'),
           h4('example functions'),
@@ -110,7 +112,7 @@ const component = {
         ]),
 
         div([
-          h3('views'),
+          h2('views'),
           p('views render the state to html'),
           p(
             'whenever an action triggers a statechange, this statechange then triggers a view change.',
@@ -119,7 +121,7 @@ const component = {
         ]),
 
         div([
-          h3('styles'),
+          h2('styles'),
           p('every component can have a style object attached to it.'),
           p('magic will automagically merge all styles into one global css file.'),
           p('in the future, it will also remove unused styles for you.'),
@@ -127,13 +129,13 @@ const component = {
         ]),
 
         div([
-          h3('global'),
+          h2('global'),
           p('every component can set a global object, containing state and action properties.'),
           Pre.View(component.global),
         ]),
 
         div([
-          h3('Full component'),
+          h2('Full component'),
           p('If we assemble those pieces, we get the following:'),
           Pre.View(combined),
         ]),
