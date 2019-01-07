@@ -16,8 +16,8 @@ const theme = {
       },
     },
   },
-  'h1,h2,h3': {
-    margin: '0.5em 0',
+  'h1,h2,h3,h4,h5': {
+    margin: '.5em 0',
   },
   h1: {
     fontSize: '1.3em',
@@ -28,6 +28,12 @@ const theme = {
   },
   h3: {
     fontSize: '1.2em',
+  },
+  h4: {
+    fontWeight: 600,
+  },
+  h5: {
+    fontWeight: 600,
   },
   a: {
     textDecoration: 'none',
