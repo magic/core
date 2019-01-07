@@ -65,7 +65,7 @@ const Menu = {
 
           return [
             pre && li(pre),
-            li(props, Link.View(item)),
+            li(props, Link(item)),
             between && i < state[name].length - 1 ? li(' - ') : '',
             post && li(post),
           ]

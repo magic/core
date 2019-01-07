@@ -10,10 +10,6 @@ module.exports = {
     h1(state.title),
     p('magic themes are themes for magic apps.'),
     h3('list of magic themes'),
-    ul([
-      li([
-        Link.View({ to: 'https://github.com/magic-themes/blue' }, '@magic-themes/blue'),
-      ]),
-    ]),
+    ul([li([Link({ to: 'https://github.com/magic-themes/blue' }, '@magic-themes/blue')])]),
   ],
 }
