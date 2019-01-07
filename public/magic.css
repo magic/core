@@ -1,5 +1,8 @@
 .Wrapper { color: orange; }
  .Wrapper.Test { color: green; }
+ .Menu li { float: left; margin: 0 .5em 0 0; }
+ .Menu.block li { clear: both; margin: 0.5em 0 0; }
+ .Menu .active { text-decoration: underline; }
  .Pre { display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
  .Pre .tag { color: green; }
  .Pre .keyword { color: purple; }
@@ -24,21 +27,19 @@ menu, nav, output, ruby, section, summary,
 time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline; }
  article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section { display: block; }
- body { line-height: 1; margin: 0; padding: 0; }
+ body { line-height: 1; margin: 0; padding: 0; overflow-y: scroll; }
  ol, ul { list-style: none; }
  blockquote, q { quotes: none; }
  blockquote:before, blockquote:after, q:before, q:after { content: none; }
  table { border-collapse: collapse; border-spacing: 0; }
- header.main { display: inline-block; width: 90%; }
+ a { outline: none; text-decoration: none; color: blue; }
+ a:hover { color: orange; }
+ header { display: inline-block; width: 90%; }
  header.main .logo { float: left; }
  header.main .Menu { float: right; margin: 2em 0 0; }
- header.main .Menu li { float: left; margin: 0 0.5em 0 0; }
  h1,h2,h3,h4,h5 { margin: .5em 0; }
  h1 { font-size: 1.3em; }
  h2 { font-size: 1.2em; font-weight: bold; }
  h3 { font-size: 1.2em; }
  h4 { font-weight: 600; }
  h5 { font-weight: 600; }
- a { text-decoration: none; color: blue; outline: none; }
- a:hover { color: orange; }
- .Menu .active { text-decoration: underline; }
