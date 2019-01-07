@@ -15,7 +15,7 @@ module.exports = {
       {
         class: `Wrapper${state.wrapperStateVar ? ' Test' : ''}`,
       },
-      [Inside(state, actions), button({ onclick: actions.wrapperAction }, state.buttonText)],
+      [Inside, button({ onclick: actions.wrapperAction }, state.buttonText)],
     ),
 
   style: {
