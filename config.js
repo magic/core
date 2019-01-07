@@ -1,5 +1,5 @@
 module.exports = {
   ROOT: 'example',
   THEME: 'blue',
-  WEB_ROOT: '/ast-playground/',
+  WEB_ROOT: '/core/',
 }
