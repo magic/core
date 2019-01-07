@@ -75,7 +75,8 @@ int new async native switch
 else delete null public var
 await byte finally catch
 in return for get const char
-`
+module exports
+`.replace(' ', '').replace('\n', '')
 
       const builtins = `
 Array Object String Number RegExp Null Symbol
@@ -87,7 +88,7 @@ Int8Array Uint8Array Uint8ClampedArray
 Int16Array Uint16Array
 Int32Array Uint32Array
 Float32Array Float64Array
-`
+`.replace(' ', '').replace('\n', '')
 
       const booleans = `true false`
 
@@ -168,7 +169,7 @@ Float32Array Float64Array
           try {
             const ele =
               typeof global !== 'undefined'
-                ? Array.from(global.keys).includes(word)
+                ? Object.keys(app.dependencies).includes(word)
                 : document.createElement(word).toString() === known
 
             if (ele) {
