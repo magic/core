@@ -1,12 +1,15 @@
 const fs = require('fs')
 const path = require('path')
+const deep = require('@magic/deep')
 
 const configPath = path.join(process.cwd(), 'config.js')
 let config = {}
 if (fs.existsSync(configPath)) {
   config = require(configPath)
   if (config.ROOT) {
-    config.ROOT = path.resolve(process.cwd(), config.ROOT)
+    if (!config.ROOT.startsWith(process.cwd())) {
+      config.ROOT = path.resolve(process.cwd(), config.ROOT)
+    }
   } else {
     config.ROOT = process.cwd()
   }
@@ -18,8 +21,7 @@ const ASSETS = path.join(config.ROOT, 'assets')
 const MODULES = path.join(config.ROOT, 'modules')
 const STATIC = path.join(config.ROOT, 'static')
 
-config = {
-  ...config,
+config = deep.merge(config, {
   DIR: {
     PAGES,
     PUBLIC,
@@ -27,6 +29,6 @@ config = {
     MODULES,
     STATIC,
   },
-}
+})
 
 module.exports = config
