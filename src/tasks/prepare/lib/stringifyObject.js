@@ -1,23 +1,23 @@
 const is = require('@magic/types')
 
-const stringifyObject = (object, indent = '') => {
+const stringifyObject = (obj, indent = '') => {
   indent = indent + '  '
 
-  if (is.string(object)) {
-    object = `"${object}"`
-  } else if (is.array(object)) {
-    object = `[${object.map(o => stringifyObject(o, indent)).join(',')}]`
-  } else if (is.fn(object)) {
-    object = object.toString()
-  } else if (is.object(object)) {
-    let str = Object.entries(object)
+  if (is.string(obj)) {
+    obj = `"${obj}"`
+  } else if (is.array(obj)) {
+    obj = `[${obj.map(o => stringifyObject(o, indent)).join(',')}]`
+  } else if (is.fn(obj)) {
+    obj = obj.toString()
+  } else if (is.obj(obj)) {
+    let str = Object.entries(obj)
       .map(([k, o]) => `${indent}"${k}": ${stringifyObject(o, indent)}`)
       .join(',\n')
 
-    object = `${indent}{\n${str}\n${indent}}\n`
+    obj = `${indent}{\n${str}\n${indent}}\n`
   }
 
-  return object
+  return obj
 }
 
 module.exports = stringifyObject
