@@ -42,13 +42,15 @@ module.exports = {
 }`,
       config: `
 module.exports = {
-  // theme dir must exist in /themes and must include /themes/index.js
-  THEME: 'blue',
-  // set if your page root starts with a path, eg yourname.github.io/repository-name/
-  WEB_ROOT: '/repository-name/',
-  // the root directory of your magic dir.
-  // usually this can be omitted.
   ROOT: 'example',
+  THEME: 'blue',
+  WEB_ROOT: '/core/',
+
+  // this option adds the
+  // 'X-Clacks-Overhead', 'GNU Terry Pratchet'
+  // http header
+  // see http://www.gnuterrypratchett.com/
+  FOR_DEATH_CAN_NOT_HAVE_HIM: true,
 }`,
       theme: `
 module.exports = {
