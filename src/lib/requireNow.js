@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 const requireNow = file => {
-  if (fs.existsSync(file)) {
+  if (!fs.existsSync(file)) {
     throw new Error(`requireNow: file does not exist ${file}`)
   }
   const content = fs.readFileSync(file, 'utf8')
