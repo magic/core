@@ -14,5 +14,6 @@ module.exports = {
   getGitConfig: require('./getGitConfig'),
   xc: require('./xc'),
   requireNow: require('./requireNow'),
+  getPages: require('./getPages'),
   fs: require('./fs'),
 }
