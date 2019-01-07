@@ -15,7 +15,7 @@ module.exports = {
     },
   },
 
-  // headers
+  // html header tags
   'h1,h2,h3,h4,h5': {
     margin: '.5em 0',
   },

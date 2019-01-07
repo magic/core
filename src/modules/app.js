@@ -1,44 +1,47 @@
-const fs = require('fs')
 const path = require('path')
-const is = require('@magic/types')
 
+const is = require('@magic/types')
 const deep = require('@magic/deep')
 const { h } = require('hyperapp')
 
+const { fs, requireNow } = require('../lib/')
 const config = require('../config')
-const { requireNow } = require('../lib/')
 
-const isProd = process.env.NODE_ENV === 'production'
+let style = {}
 
-let reset = {}
+const libResetCssFile = path.join(__dirname, '..', 'themes', 'reset.css.js')
+style = deep.merge(style, requireNow(libResetCssFile))
+
 const maybeResetCssFile = path.join(config.ROOT, 'themes', 'reset.css.js')
 if (fs.existsSync(maybeResetCssFile)) {
-  reset = {
-    ...reset,
-    ...requireNow(maybeResetCssFile),
-  }
+  style = deep.merge(style, requireNow(maybeResetCssFile))
 }
 
-reset = {
-  ...reset,
-  ...requireNow(path.join(__dirname, '..', 'modules', 'reset.css.js')),
+const existingLayoutCssFile = path.join(__dirname, '..', 'themes', 'layout.css.js')
+style = deep.merge(style, requireNow(existingLayoutCssFile))
+
+const maybeLayoutCssFile = path.join(config.ROOT, 'themes', 'layout.css.js')
+if (fs.existsSync(maybeLayoutCssFile)) {
+  style = deep.merge(style, requireNow(maybeLayoutCssFile))
+}
+
+
+if (config.THEME) {
+  const libThemeFile = path.join(__dirname, '..', 'themes', config.THEME, 'index.js')
+  if(fs.existsSync(libThemeFile)) {
+    style = deep.merge(style, requireNow(libThemeFile))
+  }
+
+  const maybeThemeFile = path.join(config.ROOT, 'themes', config.THEME, 'index.js')
+  if (fs.existsSync(maybeThemeFile)) {
+    style = deep.merge(style, requireNow(maybeThemeFile))
+  }
 }
 
 let Menu = requireNow(path.join(__dirname, '..', 'modules', 'Menu.js'))
 const maybeMenuFile = path.join(config.ROOT, 'assets', 'Menu.js')
 if (fs.existsSync(maybeMenuFile)) {
   Menu = deep.merge(Menu, requireNow(maybeMenuFile))
-}
-
-let style = {
-  ...reset,
-}
-
-if (config.THEME) {
-  const themeFile = path.join(config.ROOT, 'themes', config.THEME, 'css.js')
-  if (fs.existsSync(themeFile)) {
-    style = deep.merge(style, requireNow(themeFile))
-  }
 }
 
 let app = {

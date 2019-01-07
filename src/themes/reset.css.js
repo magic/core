@@ -31,6 +31,8 @@ const reset = {
     lineHeight: 1,
     margin: 0,
     padding: 0,
+    // always show scrollbar to prevent layout glitch if page resizes
+    overflowY: 'scroll',
   },
   'ol, ul': {
     listStyle: 'none',
@@ -45,6 +47,11 @@ const reset = {
   table: {
     borderCollapse: 'collapse',
     borderSpacing: 0,
+  },
+
+  // remove outlines from links
+  a: {
+    outline: 'none',
   },
 }
 

@@ -15,6 +15,7 @@ const fs = {
   rmDir: rmdir,
   rmdir,
   unlink: util.promisify(fso.unlink),
+  existsSync: fso.existsSync,
 }
 
 module.exports = fs
