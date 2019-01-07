@@ -85,7 +85,6 @@ app(state, actions, view, mD)\n`
       // replace urls
       .replace(/ '\//gm, `'${config.WEB_ROOT}`)
       .replace(/ "\//gm, `"${config.WEB_ROOT}`)
-    console.log(libString)
   }
 
   return libString
