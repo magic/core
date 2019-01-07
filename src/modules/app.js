@@ -24,12 +24,10 @@ reset = {
   ...requireNow(path.join(__dirname, '..', 'modules', 'reset.css.js')),
 }
 
-let Menu
+let Menu = requireNow(path.join(__dirname, '..', 'modules', 'Menu.js'))
 const maybeMenuFile = path.join(config.ROOT, 'assets', 'Menu.js')
 if (fs.existsSync(maybeMenuFile)) {
-  Menu = requireNow(maybeMenuFile)
-} else {
-  Menu = requireNow(path.join(__dirname, '..', 'modules', 'Menu.js'))
+  Menu = deep.merge(Menu, requireNow(maybeMenuFile))
 }
 
 let style = {
