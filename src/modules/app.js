@@ -25,10 +25,9 @@ if (fs.existsSync(maybeLayoutCssFile)) {
   style = deep.merge(style, requireNow(maybeLayoutCssFile))
 }
 
-
 if (config.THEME) {
   const libThemeFile = path.join(__dirname, '..', 'themes', config.THEME, 'index.js')
-  if(fs.existsSync(libThemeFile)) {
+  if (fs.existsSync(libThemeFile)) {
     style = deep.merge(style, requireNow(libThemeFile))
   }
 
@@ -36,12 +35,6 @@ if (config.THEME) {
   if (fs.existsSync(maybeThemeFile)) {
     style = deep.merge(style, requireNow(maybeThemeFile))
   }
-}
-
-let Menu = requireNow(path.join(__dirname, '..', 'modules', 'Menu.js'))
-const maybeMenuFile = path.join(config.ROOT, 'assets', 'Menu.js')
-if (fs.existsSync(maybeMenuFile)) {
-  Menu = deep.merge(Menu, requireNow(maybeMenuFile))
 }
 
 let app = {
@@ -80,9 +73,12 @@ let app = {
         header({ class: 'main' }, [
           state.logo &&
             img({ class: 'logo', src: state.logo, height: 100, width: 200, role: 'presentation' }),
-          state.menu && Menu.View(state, actions),
+          state.menu && Menu.View,
         ]),
-        page ? page(state, actions) : div('404 - not found'),
+        page
+          ? div({ class: 'page' }, page(state, actions))
+          : div({ class: 'page' }, '404 - not found'),
+        Footer.View,
       ]),
     ),
 }
