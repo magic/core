@@ -19,7 +19,7 @@ module.exports = app => page => {
       ...page,
       rendered,
     }
-  } catch(e) {
+  } catch (e) {
     log.error('tasks/transpile/page.js', page.name, e)
     process.exit(1)
   }

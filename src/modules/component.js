@@ -6,8 +6,8 @@ const component = name => (attributes = {}, children = false) => {
   if (!children) {
     if (
       is(attributes, 'string', 'number') ||
-      Array.isArray(attributes)
-      || is(attributes, 'function')
+      Array.isArray(attributes) ||
+      is(attributes, 'function')
     ) {
       children = attributes
       attributes = {}
