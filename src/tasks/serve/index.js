@@ -22,7 +22,7 @@ const serve = app => {
     const js = lib.bundle.code
 
     const WEB_ROOT = addTrailingSlash(config.WEB_ROOT || '/')
-    let url = req.url 
+    let url = req.url
     const rawUrl = url.replace(config.WEB_ROOT, '/')
 
     if (rawUrl === '/magic.css') {

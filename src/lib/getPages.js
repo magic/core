@@ -11,7 +11,7 @@ const getPages = async () => {
       throw new Error('no files')
     }
     return files
-  } catch(e) {
+  } catch (e) {
     if (config.DIR.PAGES.startsWith(process.cwd())) {
       log.warn('NOEXIST', `${config.DIR.PAGES} does not exist or does not contain pages`)
       const indexPage = "module.exports = {\n  Body: () => div('hello world'),\n}"
