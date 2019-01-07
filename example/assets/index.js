@@ -2,5 +2,5 @@ module.exports = {
   Inside: require('./Inside'),
   Wrapper: require('./Wrapper'),
   Count: require('./Count'),
-  Pre: require('./Pre'),
+  Pre: require('@magic-modules/pre'),
 }
