@@ -1,30 +1,13 @@
 const path = require('path')
 const deep = require('@magic/deep')
-const is = require('@magic/types')
 
 const { isUpperCase, getDependencies, requireNow } = require('../../lib')
 
-const requirePage = p => {
-  return requireNow(p)
-}
-
-const mapObject = (o, key, c) => ([k, v]) => {
-  const isGlobal = c.global && c.global[key] && Object.keys(c.global[key]).includes(k)
-  if (!isGlobal) {
-    if (!is.defined(o[key])) {
-      o[key] = {
-        [k]: v,
-      }
-    } else if (is.undefined(o[key][k])) {
-      o[key][k] = v
-    }
-  }
-  return o
-}
+const { mapPageObject } = require('./lib/')
 
 const preparePages = files => {
   const pages = files.map(file => {
-    const page = requirePage(file)
+    const page = requireNow(file)
     page.file = file
     page.name = file
       .replace(config.DIR.PAGES, '')
@@ -40,11 +23,11 @@ const preparePages = files => {
 
     Object.entries(page.dependencies).forEach(([k, c]) => {
       if (c.state) {
-        Object.entries(c.state).forEach(mapObject(page, 'state', c))
+        Object.entries(c.state).forEach(mapPageObject(page, 'state', c))
       }
 
       if (c.actions) {
-        Object.entries(c.actions).forEach(mapObject(page, 'actions', c))
+        Object.entries(c.actions).forEach(mapPageObject(page, 'actions', c))
       }
 
       if (c.style) {
