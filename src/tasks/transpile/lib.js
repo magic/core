@@ -18,7 +18,7 @@ const presets = [
 
 const plugins = ['@babel/plugin-transform-arrow-functions']
 if (isProd) {
-  plugins.push('minify-mangle-names')
+  plugins.push(['minify-mangle-names', { topLevel: true }])
   plugins.push('minify-dead-code-elimination')
 }
 
