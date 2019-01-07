@@ -25,21 +25,25 @@ const serve = app => {
     let url = req.url
     const rawUrl = url.replace(config.WEB_ROOT, '/')
 
+    if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {
+      res.setHeader('X-Clacks-Overhead', 'GNU Terry Pratchet')
+    }
+
     if (rawUrl === '/magic.css') {
-      res.writeHead(200, 'text/css')
+      res.writeHead(200, { 'Content-Type': 'text/css' })
       res.end(style)
       return
     }
 
     if (rawUrl === '/magic.js') {
-      res.writeHead(200, 'application/javascript')
+      res.writeHead(200, { 'Content-Type': 'application/javascript' })
       res.end(js)
       return
     }
 
     if (static[rawUrl]) {
       const contentType = getContentType(rawUrl)
-      res.writeHead(200, contentType)
+      res.writeHead(200, { 'Content-Type': contentType })
       res.end(static[rawUrl])
       return
     }
@@ -70,7 +74,7 @@ const serve = app => {
       url = '/404/'
     }
 
-    res.writeHead(200, 'text/html')
+    res.writeHead(200, { 'Content-Type': 'text/html' })
     res.end(pages[url])
   }
 
