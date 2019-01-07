@@ -22,6 +22,26 @@ const Menu = {
     },
   },
 
+  style: {
+    '.Menu': {
+      'li': {
+        float: 'left',
+        margin: '0 .5em 0 0',
+      },
+
+      '&.block': {
+        'li': {
+          clear: 'both',
+          margin: '0.5em 0 0',
+        },
+      },
+
+      '.active': {
+        textDecoration: 'underline',
+      },
+    },
+  },
+
   View: ({ name = 'menu' }) => (state, actions) => {
     if (!state[name] || !state[name].length) {
       return
