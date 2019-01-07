@@ -1,5 +1,4 @@
 const path = require('path')
-const { parse } = require('@babel/parser')
 const zip = require('node-zopfli-es')
 const log = require('@magic/log')
 
@@ -9,6 +8,8 @@ const isProd = process.env.NODE_ENV === 'production'
 
 const minifyImages = require('./images')
 
+const writeFile = require('./writeFile')
+
 const write = async app => {
   try {
     const { css, lib, pages, static } = app
@@ -16,11 +17,7 @@ const write = async app => {
 
     // write static first to make sure all other files below get written
     // even if there is a name clash
-    await Promise.all(
-      Object.entries(static).map(async ([name, content]) => {
-        return await fs.writeFile(path.join(config.DIR.PUBLIC, name), content)
-      }),
-    )
+    await Promise.all(Object.entries(static).map(writeFile))
 
     pages.forEach(async page => {
       const dir = path.dirname(page.path)
