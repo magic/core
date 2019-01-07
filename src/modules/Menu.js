@@ -56,7 +56,7 @@ const Menu = {
         state[name].map((item, i) => {
           const props = {}
           const isEqual = item.to === state.url
-          const isActive = item.to !== `/` && state.url.startsWith(item.to)
+          const isActive = item.to !== '/' && state.url.startsWith(item.to)
           if (isEqual || isActive) {
             props.class = 'active'
           } else {
