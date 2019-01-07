@@ -66,22 +66,13 @@ module.exports = {
       h1(state.title),
       p('There are multiple magic files and directories.'),
       ul([
-        li([a({ href: '#pages' }, '/pages'), ' - directory maps to urls in your app']),
-        li([a({ href: '#static' }, '/static'), ' - static files']),
-        li([
-          a({ href: '#assets' }, '/assets'),
-          ' - custom components, @magic-modules get imported here',
-        ]),
-        li([
-          a({ href: '#themes' }, '/themes'),
-          '- theme directory, @magic-themes get imported here',
-        ]),
-        li([
-          a({ href: '#appinfo' }, '/app.js'),
-          '- gets merged into the app, can set state, actions, style here',
-        ]),
-        li([a({ href: '#config' }, '/config.js'), '- custom config for your app']),
-        li([a({ href: '#menu' }, '/assets/Menu.js'), '- custom Menu for your app']),
+        li('/pages - directory maps to urls in your app'),
+        li('/static - static files'),
+        li('/assets - custom components, @magic-modules get imported here'),
+        li('/themes - theme directory, @magic-themes get imported here'),
+        li('/app.js - gets merged into the app, can set state, actions, style here'),
+        li('/config.js - custom config for your app'),
+        li('/assets/Menu.js - custom Menu for your app'),
       ]),
 
       div({ id: 'pages' }, [
@@ -94,11 +85,15 @@ module.exports = {
         h5('example page:'),
         Pre.View(examples.page),
       ]),
+
       div({ id: 'static' }, [
         h2('/static'),
         p('the static dir contains all of your static assets.'),
         p('every file in this directory gets copied to the app'),
+        p('image and svg files get minified using imagemin'),
+        p('text and binary files get compressed using zopfli'),
       ]),
+
       div({ id: 'assets' }, [
         h2('/assets'),
         p('the assets dir contains custom components of your app.'),
@@ -106,6 +101,7 @@ module.exports = {
         h5('example /assets/index.js'),
         Pre.View(examples.assets),
       ]),
+
       div({ id: 'themes' }, [
         h2('/themes'),
         p('the themes directory contains... themes.'),
@@ -116,18 +112,21 @@ module.exports = {
         h5('example /themes/blue/index.js'),
         Pre.View(examples.theme),
       ]),
+
       div({ id: 'appinfo' }, [
         h2('/app.js'),
         p('the /app.js file allows you to set global state, actions, and styles'),
         h5('example /app.js'),
         Pre.View(examples.app),
       ]),
+
       div({ id: 'config' }, [
         h2('/config.js'),
         p('the /config.js file allows you to set the theme, root and web_root of your app'),
         h5('example /config.js'),
         Pre.View(examples.config),
       ]),
+
       div({ id: 'menu' }, [
         h2('/assets/Menu.js'),
         p('the /assets/Menu.js file allows you to replace the default Menu component'),
