@@ -1,11 +1,6 @@
 const path = require('path')
-const fs = require('fs')
-const http = require('http')
-const { addTrailingSlash, getContentType, requireNow } = require('../../lib/')
-const is = require('@magic/types')
+const { requireNow } = require('../../lib/')
 const log = require('@magic/log')
-
-const isProd = process.env.NODE_ENV === 'production'
 
 const prepare = require('../prepare')
 const transpile = require('../transpile')
@@ -33,7 +28,9 @@ const calculateWatchTime = end => {
 const watch = async () => {
   const start = new Date().getTime()
 
-  const newApp = requireNow(path.join(process.cwd(), 'src', 'modules', 'app.js'))
+  const appPath = path.join(__dirname, '..', '..', 'modules', 'app.js')
+  const newApp = requireNow(appPath)
+
   const prep = await prepare(newApp)
 
   const { pages, css, bundle } = transpile(prep)
