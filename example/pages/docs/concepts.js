@@ -82,7 +82,7 @@ const component = {
 }`
 
     return [
-      DocHeader.View,
+      DocHeader,
 
       h1('concepts'),
       div([

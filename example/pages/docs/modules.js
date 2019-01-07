@@ -5,14 +5,15 @@ module.exports = {
   },
 
   Body: state => [
-    DocHeader.View,
+    DocHeader,
+
     h1(state.title),
     p('magic modules are predefined components for webapps.'),
     h3('list of magic modules'),
     ul([
       li([
-        a(
-          { href: 'https://github.com/magic-modules/pre', target: '_blank', rel: 'noopener' },
+        Link.View(
+          { to: 'https://github.com/magic-modules/pre' },
           '@magic-modules/pre',
         ),
       ]),
