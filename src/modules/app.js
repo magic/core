@@ -21,7 +21,7 @@ if (fs.existsSync(maybeResetCssFile)) {
 
 reset = {
   ...reset,
-  ...requireNow(path.join(process.cwd(), 'src', 'modules', 'reset.css.js')),
+  ...requireNow(path.join(__dirname, '..', 'modules', 'reset.css.js')),
 }
 
 let Menu
@@ -29,7 +29,7 @@ const maybeMenuFile = path.join(config.ROOT, 'assets', 'Menu.js')
 if (fs.existsSync(maybeMenuFile)) {
   Menu = requireNow(maybeMenuFile)
 } else {
-  Menu = requireNow(path.join(process.cwd(), 'src', 'modules', 'Menu.js'))
+  Menu = requireNow(path.join(__dirname, '..', 'modules', 'Menu.js'))
 }
 
 let style = {
