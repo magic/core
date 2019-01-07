@@ -1,6 +1,10 @@
 module.exports = {
+  body: {
+    minHeight: '100%',
+  },
+
   // header and menu in header
-  'header': {
+  header: {
     display: 'inline-block',
     width: '90%',
 
@@ -12,6 +16,28 @@ module.exports = {
         float: 'right',
         margin: '2em 0 0',
       },
+    },
+  },
+
+  '.page': {
+    header: {
+      margin: '0 0 .5em',
+    },
+
+    h1: {
+      margin: '1em 0 .7em',
+    },
+  },
+
+  footer: {
+    width: '100%',
+
+    '&.main': {
+      position: 'absolute',
+      bottom: 0,
+      top: 'auto',
+      textAlign: 'center',
+      padding: '0 0 .5em',
     },
   },
 
