@@ -12,12 +12,12 @@ const minifyImages = require('./images')
 const write = async app => {
   try {
     const { css, lib, pages, static } = app
+    await mkdirp(config.DIR.PUBLIC)
 
     // write static first to make sure all other files below get written
     // even if there is a name clash
     await Promise.all(
       Object.entries(static).map(async ([name, content]) => {
-        await mkdirp(config.DIR.PUBLIC)
         return await fs.writeFile(path.join(config.DIR.PUBLIC, name), content)
       }),
     )
