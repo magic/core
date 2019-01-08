@@ -1,4 +1,13 @@
 const Footer = {
+  style: {
+    'footer.main': {
+      position: 'relative',
+      bottom: 0,
+      top: 'auto',
+      textAlign: 'center',
+      padding: '0 0 .5em',
+    },
+  },
   View: () =>
     footer({ class: 'main' }, [
       div({ class: 'wrapper' }, [

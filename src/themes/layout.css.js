@@ -31,14 +31,6 @@ module.exports = {
 
   footer: {
     width: '100%',
-
-    '&.main': {
-      position: 'absolute',
-      bottom: 0,
-      top: 'auto',
-      textAlign: 'center',
-      padding: '0 0 .5em',
-    },
   },
 
   // html header tags
