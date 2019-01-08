@@ -9,7 +9,7 @@ const Footer = {
   View: () =>
     footer({ class: 'main' }, [
       div({ class: 'wrapper' }, [
-        `made with a few bits of `,
+        'made with a few bits of ',
         Link({ href: 'https://github.com/magic/core', target: '_blank', rel: 'noopener' }, 'magic'),
       ]),
     ]),
