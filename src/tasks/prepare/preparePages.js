@@ -38,7 +38,6 @@ const preparePages = files => {
         .filter(([k]) => isUpperCase(k))
         .map(([_, v]) => v.toString())
 
-      const dependencies = {}
       views.forEach(view => {
         page.dependencies = deep.merge(getDependencies(view), page.dependencies)
       })
