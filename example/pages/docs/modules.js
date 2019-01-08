@@ -30,7 +30,7 @@ module.exports = {
 
     p('then, in a page or module'),
     Pre.View(`
-module.exports = () => Menu.View('menuName')
+module.exports = () => Menu.View({ name: 'menuName' })
 
 // outputs:
 <nav class="Menu">
