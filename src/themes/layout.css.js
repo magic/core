@@ -3,6 +3,11 @@ module.exports = {
     minHeight: '100%',
   },
 
+  '#magic': {
+    margin: '0 auto',
+    width: '90%',
+  },
+
   // header and menu in header
   header: {
     display: 'inline-block',
