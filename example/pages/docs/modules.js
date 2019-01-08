@@ -8,7 +8,7 @@ module.exports = {
     DocHeader,
 
     h1(state.title),
-    p('magic modules are predefined components for webapps.'),
+    p('magic modules are predefined modules for webapps.'),
     h3('preinstalled magic modules'),
     p('magic has some preinstalled modules that will be useful in most pages.'),
     h4('menu'),
@@ -51,7 +51,7 @@ module.exports = () => Menu.View({ name: 'menuName' })
     h3('link'),
     p('the link allows you to link to things.'),
     Pre.View(`
-// in any page or component View
+// in any page or module View
 module.exports = () => [
   Link({ to: '/page', text: 'page' }),
   // outputs <a href="/page" onclick="actions.go">page</a>
@@ -64,6 +64,34 @@ module.exports = () => [
   Link({ to: '/' }, 'home')
 `),
 
+    h3('footer'),
+    p('the footer module contains an info message about using magic.'),
+    p('to overwrite this behaviour, just place a Footer.js file in your assets and require it in /assets/index.js'),
+    Pre.View(`
+// /assets/Footer.js:
+const Footer = {
+  style: {
+    'footer.main': {
+      position: 'relative',
+      textAlign: 'center',
+      padding: '5em 0 .5em',
+    },
+  },
+  View: () =>
+    footer({ class: 'main' }, [
+      div({ class: 'wrapper' }, [
+        'made with a few bits of ',
+        Link({ href: 'https://github.com/magic/core0', target: '_blank', rel: 'noopener' }, 'magic'),
+      ]),
+    ]),
+}
+
+// /assets/indexjs
+module.exports = {
+  // ...other assets
+  Footer: require('./Footer'),
+}
+`),
 
     h3('list of installable magic modules'),
     ul([li([Link({ to: 'https://github.com/magic-modules/pre' }, '@magic-modules/pre')])]),
