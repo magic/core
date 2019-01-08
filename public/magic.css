@@ -13,6 +13,7 @@
  .Pre .actions { color: blueviolet; }
  .Pre .state { color: cornflowerblue; }
  .Pre .comment { color: grey; font-style: italic; }
+ footer.main { position: relative; text-align: center; padding: 5em 0 .5em; }
  h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
@@ -34,13 +35,13 @@ footer, header, hgroup, menu, nav, section { display: block; }
  table { border-collapse: collapse; border-spacing: 0; }
  a { outline: none; text-decoration: none; color: blue; }
  a:hover { color: orange; }
+ #magic { margin: 0 auto; width: 90%; }
  header { display: inline-block; width: 90%; }
  header.main .logo { float: left; }
  header.main .Menu { float: right; margin: 2em 0 0; }
  .page header { margin: 0 0 .5em; }
  .page h1 { margin: 1em 0 .7em; }
  footer { width: 100%; }
- footer.main { position: absolute; bottom: 0; top: auto; text-align: center; padding: 0 0 .5em; }
  h1,h2,h3,h4,h5 { margin: .5em 0; }
  h1 { font-size: 1.3em; }
  h2 { font-size: 1.2em; font-weight: bold; }
