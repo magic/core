@@ -1,7 +1,7 @@
 const { is } = require('@magic/test')
 
 const css = require('@magic/css')
-const reset = require('../../src/modules/reset.css.js')
+const reset = require('../../src/themes/reset.css.js')
 
 const string = css(reset)
 // console.log(string)
