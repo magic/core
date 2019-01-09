@@ -37,6 +37,6 @@ module.exports = {
       li('imagemin-pngquant: 6.0.1,'),
       li('imagemin-svgo: 7.0.0,'),
       li('node-zopfli-es: 1.0.0'),
-    ])
+    ]),
   ],
 }

@@ -96,8 +96,12 @@ const exampleModule = {
         div([
           h2('modules'),
           p('modules are the main building block of magic.'),
-          p('modules can include state, actions, style and multiple components (which we call Views).'),
-          p('View names have to start with an uppercased character. Every module can export multiple components that share state, actions and styles.'),
+          p(
+            'modules can include state, actions, style and multiple components (which we call Views).',
+          ),
+          p(
+            'View names have to start with an uppercased character. Every module can export multiple components that share state, actions and styles.',
+          ),
         ]),
 
         div([
@@ -145,7 +149,9 @@ const exampleModule = {
         div([
           h2('global'),
           p('every module can set a global object, containing state and action properties.'),
-          p('every key in the mod.global object that is set to true gets merged into the main app state/actions.'),
+          p(
+            'every key in the mod.global object that is set to true gets merged into the main app state/actions.',
+          ),
 
           h3('example globals'),
           Pre.View(example.global),
