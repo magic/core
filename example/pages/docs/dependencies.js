@@ -11,16 +11,15 @@ module.exports = {
     p('this is a list of all magic dependencies.'),
 
     h2('production'),
-    p('those dependencies get included into your magic app.'),
+    p('those dependencies get included into your magic app production client bundle.'),
     ul([
       li([
-        h4('hyperapp, <1kb.'),
+        h4('hyperapp, ~1kb.'),
         Link({ to: 'https://github.com/jorgebucaran/hyperapp' }, 'hyperapp@1.2.9'),
       ]),
     ]),
 
     h2('development'),
-
     ul([
       li('@babel/core: 7.2.2'),
       li('@babel/plugin-transform-arrow-functions: 7.2.0'),
