@@ -14,6 +14,7 @@ module.exports = {
       { to: '/docs/files/', text: 'files & directories' },
       { to: '/docs/modules/', text: 'modules' },
       { to: '/docs/themes/', text: 'themes' },
+      { to: '/docs/dependencies/', text: 'dependencies' },
     ],
     logo: '/logo.png',
   },

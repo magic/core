@@ -1,7 +1,7 @@
 module.exports = {
   state: {
     title: '@magic-modules',
-    description: '@magic-modules docs.',
+    description: '@magic-modules documentation.',
   },
 
   Body: state => [
@@ -9,9 +9,31 @@ module.exports = {
 
     h1(state.title),
     p('magic modules are predefined modules for webapps.'),
-    h3('preinstalled magic modules'),
-    p('magic has some preinstalled modules that will be useful in most pages.'),
-    h4('menu'),
+
+    h2('preinstalled magic modules'),
+    p('magic has some preinstalled modules that will be used in most pages.'),
+
+    h2('app'),
+    p('this is the main app module. it has magically inherited properties and all of it is customizable.'),
+    p('to add actions/state/style to the app you can just create an /asset/app.js file. The contents of this file get deep.merged into the app'),
+    Pre.View(`
+// /assets/app.js
+module.exports = {
+  state: {
+    merge: 'gets merged into state',
+  },
+  actions: {
+    mergedActions: () => ({ merge: 'merged action executed' }),
+  },
+  style: {
+    body: {
+      backgroundColor: 'white',
+    },
+  },
+}
+`),
+
+    h2('menu'),
     p('the Menu module provides... menus.'),
     p('just pass it a string which is the state key of the menu, add that menu to the /assets/app.js file.'),
     Pre.View(`
@@ -48,7 +70,7 @@ module.exports = () => Menu.View({ name: 'menuName' })
 </nav>
 }`),
 
-    h3('link'),
+    h2('link'),
     p('the link allows you to link to things.'),
     Pre.View(`
 // in any page or module View
@@ -64,7 +86,7 @@ module.exports = () => [
   Link({ to: '/' }, 'home')
 `),
 
-    h3('footer'),
+    h2('footer'),
     p('the footer module contains an info message about using magic.'),
     p('to overwrite this behaviour, just place a Footer.js file in your assets and require it in /assets/index.js'),
     Pre.View(`
@@ -93,7 +115,7 @@ module.exports = {
 }
 `),
 
-    h3('list of installable magic modules'),
+    h2('list of installable magic modules'),
     ul([li([Link({ to: 'https://github.com/magic-modules/pre' }, '@magic-modules/pre')])]),
   ],
 }

@@ -86,7 +86,7 @@ module.exports = {
           "each page has it's own state and actions, ",
           "but also inherits the global state and actions from the app and it's dependencies",
         ]),
-        h5('example page:'),
+        h3('example page:'),
         Pre.View(examples.page),
       ]),
 
@@ -102,7 +102,7 @@ module.exports = {
         h2('/assets'),
         p('the assets dir contains custom components of your app.'),
         p('you can additionally import @magic-modules here'),
-        h5('example /assets/index.js'),
+        h3('example /assets/index.js'),
         Pre.View(examples.assets),
       ]),
 
@@ -113,28 +113,28 @@ module.exports = {
           'at the moment this is file based, which means you have to manually import themes there.',
         ),
         p('TODO: handle themes as we handle assets. maybe move them into assets.'),
-        h5('example /themes/blue/index.js'),
+        h3('example /themes/blue/index.js'),
         Pre.View(examples.theme),
       ]),
 
       div({ id: 'appinfo' }, [
         h2('/app.js'),
         p('the /app.js file allows you to set global state, actions, and styles'),
-        h5('example /app.js'),
+        h3('example /app.js'),
         Pre.View(examples.app),
       ]),
 
       div({ id: 'config' }, [
         h2('/config.js'),
         p('the /config.js file allows you to set the theme, root and web_root of your app'),
-        h5('example /config.js'),
+        h3('example /config.js'),
         Pre.View(examples.config),
       ]),
 
       div({ id: 'menu' }, [
         h2('/assets/Menu.js'),
         p('the /assets/Menu.js file allows you to replace the default Menu component'),
-        h5('example /assets/Menu.js'),
+        h3('example /assets/Menu.js'),
         p('which changes nothing'),
         Pre.View(examples.menu),
       ]),

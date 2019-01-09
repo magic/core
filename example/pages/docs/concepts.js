@@ -1,6 +1,11 @@
 module.exports = {
-  Body: () => {
-    const component = {
+  state: {
+    title: '@magic/core concepts',
+    description: '@magic/core conceptual information.',
+  },
+
+  Body: state => {
+    const example = {
       state: `
 // state variables can be anything you can JSON.stringify()
 state: {
@@ -73,23 +78,26 @@ style: {
         .join('\n')
 
     const combined = `
-const component = {
-  ${indent(component.state)},
-  ${indent(component.actions)},
-  ${indent(component.style)},
-  ${indent(component.view)},
-  ${indent(component.global)},
+const exampleModule = {
+  ${indent(example.state)},
+  ${indent(example.actions)},
+  ${indent(example.style)},
+  ${indent(example.view)},
+  ${indent(example.global)},
 }`
 
     return [
       DocHeader,
 
-      h1('concepts'),
+      h1(state.title),
+      p('magic concepts. These are the building blocks of every module in a magic app'),
+
       div([
         div([
-          h2('components'),
-          p('components are the main building block of magic.'),
-          p('components can include state, actions, style and multiple Views'),
+          h2('modules'),
+          p('modules are the main building block of magic.'),
+          p('modules can include state, actions, style and multiple components (which we call Views).'),
+          p('View names have to start with an uppercased character. Every module can export multiple components that share state, actions and styles.'),
         ]),
 
         div([
@@ -98,8 +106,9 @@ const component = {
             p('state is a javascript object.'),
             p('state can be mutated by actions.'),
             p('every rendering step, the state determines the output of the view'),
-            h4('example state:'),
-            Pre.View(component.state),
+
+            h3('example state:'),
+            Pre.View(example.state),
           ]),
         ]),
 
@@ -107,8 +116,9 @@ const component = {
           h2('actions'),
           p('actions are an object of functions'),
           p('those functions get passed a state object and return a new partial state'),
-          h4('example functions'),
-          Pre.View(component.actions),
+
+          h3('example actions'),
+          Pre.View(example.actions),
         ]),
 
         div([
@@ -117,25 +127,32 @@ const component = {
           p(
             'whenever an action triggers a statechange, this statechange then triggers a view change.',
           ),
-          Pre.View(component.view),
+
+          h3('example view'),
+          Pre.View(example.view),
         ]),
 
         div([
           h2('styles'),
-          p('every component can have a style object attached to it.'),
+          p('every module can have a style object attached to it.'),
           p('magic will automagically merge all styles into one global css file.'),
           p('in the future, it will also remove unused styles for you.'),
-          Pre.View(component.style),
+
+          h3('example styles'),
+          Pre.View(example.style),
         ]),
 
         div([
           h2('global'),
-          p('every component can set a global object, containing state and action properties.'),
-          Pre.View(component.global),
+          p('every module can set a global object, containing state and action properties.'),
+          p('every key in the mod.global object that is set to true gets merged into the main app state/actions.'),
+
+          h3('example globals'),
+          Pre.View(example.global),
         ]),
 
         div([
-          h2('Full component'),
+          h2('Full example'),
           p('If we assemble those pieces, we get the following:'),
           Pre.View(combined),
         ]),
