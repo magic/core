@@ -1,6 +1,6 @@
 module.exports = {
   body: {
-    minHeight: '100%',
+    minHeight: '100vh',
   },
 
   '#magic': {

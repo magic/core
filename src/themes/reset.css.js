@@ -28,7 +28,7 @@ const reset = {
     display: 'block',
   },
   body: {
-    lineHeight: 1,
+    lineHeight: 1.5,
     margin: 0,
     padding: 0,
     // always show scrollbar to prevent layout glitch if page resizes
