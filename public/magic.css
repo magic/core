@@ -3,16 +3,37 @@
  .Menu li { float: left; margin: 0 .5em 0 0; }
  .Menu.block li { clear: both; margin: 0.5em 0 0; }
  .Menu .active { text-decoration: underline; }
- .Pre { display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
- .Pre .tag { color: green; }
- .Pre .keyword { color: purple; }
- .Pre .builtin { color: cadetblue; }
- .Pre .string { color: #dd8f00 !important; }
- .Pre .colon { color: darkgreen; }
- .Pre .boolean { color: blue; }
- .Pre .actions { color: blueviolet; }
- .Pre .state { color: cornflowerblue; }
- .Pre .comment { color: grey; font-style: italic; }
+ .Pre { display: block; font-family: monospace; white-space: pre; margin: 1em 0; line-height: 1.3; border: 1px solid #666; padding: 1em; border-radius: 5px; counter-reset: line; }
+ .Pre > code { display: block; counter-increment: line; }
+ .Pre > code:before { content: counter(line); user-select: none; padding: 0 .5em 0 0; }
+ .Pre .menu { float: right; margin-top: -.7em; }
+ .Pre button { padding: 0; }
+ .Pre.light { background-color: #eee; }
+ .Pre.light > code:before { color: #666; }
+ .Pre.light .html { color: #008800; }
+ .Pre.light .keyword { color: purple; }
+ .Pre.light .builtin { color: cadetblue; }
+ .Pre.light .string { color: #d15100; }
+ .Pre.light .colon { color: #016301; }
+ .Pre.light .boolean { color: blue; }
+ .Pre.light .actions { color: blueviolet; }
+ .Pre.light .state { color: cornflowerblue; }
+ .Pre.light .comment { color: #555; font-style: italic; }
+ .Pre.light .object { color: #016301; }
+ .Pre.light .property { color: #2a952a; }
+ .Pre.dark { color: #eee; background-color: #222; }
+ .Pre.dark > code:before { color: #666; }
+ .Pre.dark .html { color: #008800; }
+ .Pre.dark .keyword { color: violet; }
+ .Pre.dark .builtin { color: cadetblue; }
+ .Pre.dark .string { color: #dd8f00; }
+ .Pre.dark .colon { color: #8eef8e; }
+ .Pre.dark .boolean { color: blue; }
+ .Pre.dark .actions { color: blueviolet; }
+ .Pre.dark .state { color: cornflowerblue; }
+ .Pre.dark .comment { color: #999; font-style: italic; }
+ .Pre.dark .object { color: #00ff00; }
+ .Pre.dark .property { color: #8eef8e; }
  footer.main { position: relative; text-align: center; padding: 5em 0 .5em; }
  h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
