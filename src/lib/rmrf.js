@@ -7,6 +7,10 @@ const rmrf = async dir => {
       throw new Error('rmrf: expecting a string argument.')
     }
 
+    if (!dir.startsWith(process.cwd())) {
+      throw new Error('rmrf will not work outside the cwd.')
+    }
+
     const exists = await fs.exists(dir)
     if (!exists) {
       return
