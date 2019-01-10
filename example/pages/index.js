@@ -4,7 +4,7 @@ module.exports = {
     description: 'custom description',
   },
 
-  Body: (state, actions) => [
+  View: (state, actions) => [
     h1(state.title),
     div([
       p('index page content'),

@@ -68,7 +68,7 @@ const flattenDeps = deps => {
 
 const getPageDependencies = page => ({
   ...page,
-  dependencies: getComponentDependencies(page.Body.toString()),
+  dependencies: getComponentDependencies(page.View.toString()),
 })
 
 const getDependencies = ({ pages, app }) => {

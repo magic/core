@@ -4,7 +4,7 @@ module.exports = {
     description: '@magic/core conceptual information.',
   },
 
-  Body: state => {
+  View: state => {
     const example = {
       state: `
 // state variables can be anything you can JSON.stringify()

@@ -4,7 +4,7 @@ module.exports = {
     description: '@magic/core directory docs.',
   },
 
-  Body: state => {
+  View: state => {
     const examples = {
       page: `
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
       color: 'green',
     },
   },
-  Body: state => div({ class: 'cl' }, ['this is the page content.', state.variable]),
+  View: state => div({ class: 'cl' }, ['this is the page content.', state.variable]),
 }`,
       assets: `
 module.exports = {

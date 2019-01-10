@@ -60,7 +60,7 @@ const prepare = async app => {
       app.actions.pages[page.name] = page.actions
     }
 
-    const dependencies = getDependencies(page.Body.toString())
+    const dependencies = getDependencies(page.View.toString())
     Object.entries(dependencies).forEach(([name, component]) => {
       if (is.object(component) && isUpperCase(name)) {
         if (component.global) {

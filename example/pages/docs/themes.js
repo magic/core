@@ -4,7 +4,7 @@ module.exports = {
     description: '@magic-theme docs.',
   },
 
-  Body: state => [
+  View: state => [
     DocHeader,
 
     h1(state.title),

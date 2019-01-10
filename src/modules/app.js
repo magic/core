@@ -72,7 +72,7 @@ let app = {
         page.Head && page.Head(state, actions),
       ]),
       body([
-        app.Body(page.Body, state, actions),
+        app.Body(page.View, state, actions),
         script({ type: 'text/javascript', src: '/magic.js' }),
       ]),
     ]),

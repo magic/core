@@ -4,7 +4,7 @@ module.exports = {
     description: '@magic/core documentation directory.',
   },
 
-  Body: state => [
+  View: state => [
     DocHeader,
 
     h1(state.title),

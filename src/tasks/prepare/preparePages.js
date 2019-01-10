@@ -19,7 +19,7 @@ const preparePages = files => {
       page.path = path.join(page.path, 'index.html')
     }
 
-    page.dependencies = getDependencies(page.Body.toString())
+    page.dependencies = getDependencies(page.View.toString())
 
     Object.entries(page.dependencies).forEach(([k, c]) => {
       if (c.state) {
@@ -51,9 +51,9 @@ const preparePages = files => {
     const page404 = {
       name: '/404/',
       path: path.join(config.DIR.PUBLIC, '404', 'index.html'),
-      Body: (state, actions) => div('404 - not found'),
+      View: (state, actions) => div('404 - not found'),
     }
-    page404.dependencies = getDependencies(page404.Body.toString())
+    page404.dependencies = getDependencies(page404.View.toString())
     pages.push(page404)
   }
 

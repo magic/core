@@ -27,7 +27,7 @@ const prepareLib = app => {
   let pageString = 'const pages = {\n'
 
   app.pages.forEach(page => {
-    pageString += `\n  '${page.name}': ${page.Body.toString()},`
+    pageString += `\n  '${page.name}': ${page.View.toString()},`
   })
 
   pageString += '\n}\n'
