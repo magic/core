@@ -9,34 +9,44 @@ const config = require('../config')
 
 let style = {}
 
+// merge default reset css into styles
 const libResetCssFile = path.join(__dirname, '..', 'themes', 'reset.css.js')
 style = deep.merge(style, requireNow(libResetCssFile))
 
-const maybeResetCssFile = path.join(config.ROOT, 'themes', 'reset.css.js')
+// merge user created custom layout into styles, if it exists
+const maybeResetCssFile = path.join(config.DIR.THEMES, 'reset.css.js')
 if (fs.existsSync(maybeResetCssFile)) {
   style = deep.merge(style, requireNow(maybeResetCssFile))
 }
 
+
+// merge default layout into styles
 const existingLayoutCssFile = path.join(__dirname, '..', 'themes', 'layout.css.js')
 style = deep.merge(style, requireNow(existingLayoutCssFile))
 
-const maybeLayoutCssFile = path.join(config.ROOT, 'themes', 'layout.css.js')
+// merge user created custom layout into styles, if it exists
+const maybeLayoutCssFile = path.join(config.DIR.THEMES, 'layout.css.js')
 if (fs.existsSync(maybeLayoutCssFile)) {
   style = deep.merge(style, requireNow(maybeLayoutCssFile))
 }
 
+// load user's chosen theme, if it is set and exists, and merge it over the styles
 if (config.THEME) {
+  // first look if we have this theme preinstalled, if so, merge it into the styles
   const libThemeFile = path.join(__dirname, '..', 'themes', config.THEME, 'index.js')
   if (fs.existsSync(libThemeFile)) {
     style = deep.merge(style, requireNow(libThemeFile))
   }
 
-  const maybeThemeFile = path.join(config.ROOT, 'themes', config.THEME, 'index.js')
+  // load user's custom theme.
+  const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.js')
   if (fs.existsSync(maybeThemeFile)) {
     style = deep.merge(style, requireNow(maybeThemeFile))
   }
 }
 
+// default app state. gets merged with /assets/app.js if it exists.
+// /assets/app.js overwrites the values defined here.
 let app = {
   state: {
     app: {
@@ -49,6 +59,7 @@ let app = {
   // default app style
   style,
 
+  // this View gets server rendered.
   View: page => (state, actions) => [
     h('', { innerHTML: '<!DOCTYPE html>' }),
     html([

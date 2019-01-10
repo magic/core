@@ -19,7 +19,8 @@ const PAGES = path.join(config.ROOT, 'pages')
 const PUBLIC = path.join(process.cwd(), 'public')
 const ASSETS = path.join(config.ROOT, 'assets')
 const MODULES = path.join(config.ROOT, 'modules')
-const STATIC = path.join(config.ROOT, 'static')
+const STATIC = path.join(ASSETS, 'static')
+const THEMES = path.join(ASSETS, 'themes')
 
 config = deep.merge(config, {
   DIR: {
@@ -28,6 +29,7 @@ config = deep.merge(config, {
     ASSETS,
     MODULES,
     STATIC,
+    THEMES,
   },
 })
 
