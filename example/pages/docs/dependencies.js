@@ -4,7 +4,7 @@ module.exports = {
     description: '@magic/core app dependency information.',
   },
 
-  View: state => [
+  View: () => [
     DocHeader,
 
     h1('dependencies'),

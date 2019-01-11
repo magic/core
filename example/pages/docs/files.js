@@ -58,10 +58,6 @@ module.exports = {
     color: 'blue',
   },
 }`,
-      menu: `
-module.exports = {
-  View: ${Menu.View.toString()},
-}`,
     }
 
     return [
@@ -70,10 +66,10 @@ module.exports = {
       h1(state.title),
       p('There are multiple magic files and directories.'),
       ul([
-        li('/pages - directory maps to urls in your app'),
-        li('/static - static files'),
+        li([Link({ to: '#pages' }, '/pages'), '- directory maps to urls in your app']),
         li('/assets - custom components, @magic-modules get imported here'),
-        li('/themes - theme directory, @magic-themes get imported here'),
+        li('/assets/static - static files'),
+        li('/assets/themes - theme directory, @magic-themes get imported here'),
         li('/app.js - gets merged into the app, can set state, actions, style here'),
         li('/config.js - custom config for your app'),
         li('/assets/Menu.js - custom Menu for your app'),
@@ -91,7 +87,7 @@ module.exports = {
       ]),
 
       div({ id: 'static' }, [
-        h2('/static'),
+        h2('/assets/static'),
         p('the static dir contains all of your static assets.'),
         p('every file in this directory gets copied to the app'),
         p('image and svg files get minified using imagemin'),
@@ -107,7 +103,7 @@ module.exports = {
       ]),
 
       div({ id: 'themes' }, [
-        h2('/themes'),
+        h2('/assets/themes'),
         p('the themes directory contains... themes.'),
         p(
           'at the moment this is file based, which means you have to manually import themes there.',
@@ -135,8 +131,7 @@ module.exports = {
         h2('/assets/Menu.js'),
         p('the /assets/Menu.js file allows you to replace the default Menu component'),
         h3('example /assets/Menu.js'),
-        p('which changes nothing'),
-        Pre.View(examples.menu),
+        Link({ to: 'https://github.com/magic/core/blob/master/src/modules/Menu.js'}, 'Menu.js on github'),
       ]),
     ]
   },
