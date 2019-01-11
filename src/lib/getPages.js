@@ -20,6 +20,8 @@ const getPages = async () => {
       await fs.writeFile(pagePath, indexPage)
       return await getPages()
     }
+
+    throw e
   }
 }
 

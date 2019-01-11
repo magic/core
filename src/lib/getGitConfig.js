@@ -10,20 +10,16 @@ const getGitConfig = async () => {
   log.info('config.GIT missing ORIGIN')
   const git = config.GIT || {}
 
-  try {
-    const data = await xc('git remote -v')
-    if (data.stdout) {
-      git.ORIGIN = data.stdout
-        .split('\n')[1]
-        .split('\t')[1]
-        .replace('(push)', '')
-        .trim()
+  const data = await xc('git remote -v')
+  if (data.stdout) {
+    git.ORIGIN = data.stdout
+      .split('\n')[1]
+      .split('\t')[1]
+      .replace('(push)', '')
+      .trim()
 
-      git.BRANCH = git.BRANCH || 'gh-pages'
-      return git
-    }
-  } catch (e) {
-    throw e
+    git.BRANCH = git.BRANCH || 'gh-pages'
+    return git
   }
 }
 

@@ -12,13 +12,9 @@ const connect = async () => {
   const cmdArgv = `${cmdPrefix} ${cmdOnto}`
   const cmd = `git subtree push ${cmdArgv}`
 
-  try {
-    console.time(cmd)
-    await xc(cmd)
-    console.timeEnd(cmd)
-  } catch (e) {
-    throw e
-  }
+  console.time(cmd)
+  await xc(cmd)
+  console.timeEnd(cmd)
 }
 
 module.exports = connect
