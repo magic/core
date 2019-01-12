@@ -18,8 +18,6 @@ global.keys = new Set()
 
 let exists = false
 const prepare = async app => {
-  global.config = requireNow(require.resolve('../../config'))
-
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
   if (exists || (await fs.exists(maybeAssetFile))) {
     exists = true
