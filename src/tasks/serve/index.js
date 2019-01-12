@@ -3,11 +3,8 @@ const { addTrailingSlash, getContentType } = require('../../lib/')
 
 const isProd = process.env.NODE_ENV === 'production'
 
-const watch = require('./watch')
-
 const serve = app => {
   global.app = app
-  watch()
 
   const handler = (req, res) => {
     const { css, lib, static } = global.app
