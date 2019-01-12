@@ -1,8 +1,7 @@
 const path = require('path')
 const fs = require('fs')
-const { is } = require('@magic/test')
 
-const { mkdirp, getFiles } = require('../../src/lib')
+const { mkdirp } = require('../../src/lib')
 
 const dirName = path.join(__dirname, '.__test__')
 
