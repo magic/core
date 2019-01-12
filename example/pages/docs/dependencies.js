@@ -35,7 +35,6 @@ module.exports = {
       li('@babel/core'),
       li('@babel/plugin-transform-arrow-functions'),
       li('@babel/preset-env'),
-      li('@magic-modules/pre'),
       li('@magic/css'),
       li('@magic/deep'),
       li('@magic/log'),
