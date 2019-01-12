@@ -19,7 +19,18 @@ module.exports = {
       ]),
     ]),
 
+    h2('production (server)'),
+    p([
+      'the production server has not been written yet. will generate a couple of ',
+      Link({ to: 'https://en.wikipedia.org/wiki/Function_as_a_service'}, 'faas functions'),
+      ', derived from the ',
+      Link({ to: 'https://github.com/magic-modules' }, '@magic-modules'),
+      ' you are using in your bundle, then host your app using ',
+      Link({ to: 'https://now.sh' }, 'now.sh'),
+    ]),
+
     h2('development'),
+    p('these packages are used in the development server / build process'),
     ul([
       li('@babel/core: 7.2.2'),
       li('@babel/plugin-transform-arrow-functions: 7.2.0'),
