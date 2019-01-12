@@ -37,7 +37,12 @@ config = deep.merge(config, {
   FILETYPES: {
     ZIPPABLE,
     IMAGES,
-  }
+  },
+  IMAGEMIN: {
+    PNG: '60-80',
+    JPG: 70,
+  },
+  ENV: process.env.MAGIC_ENV || process.env.NODE_ENV,
 })
 
 module.exports = config
