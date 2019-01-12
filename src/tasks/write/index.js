@@ -9,6 +9,10 @@ const minifyImages = require('./images')
 
 const writeFile = require('./writeFile')
 const compress = require('./compress')
+const { getFileType } = require('../../lib/')
+
+const zippable = config.FILETYPES.ZIPPABLE
+const images = config.FILETYPES.IMAGES
 
 const write = async app => {
   const { css, lib, pages, static } = app
@@ -16,7 +20,10 @@ const write = async app => {
 
   // write static first to make sure all other files below get written
   // even if there is a name clash
-  await Promise.all(Object.entries(static).map(async file => await writeFile(file)))
+  await Promise.all(Object.entries(static)
+    .filter(([name]) => !images.includes(getFileType(name)))
+    .map(async file => await writeFile(file))
+  )
 
   pages.forEach(async page => {
     const dir = path.dirname(page.path)
@@ -30,8 +37,8 @@ const write = async app => {
   await fs.writeFile(path.join(config.DIR.PUBLIC, 'magic.css'), isProd ? css.css : css.minified)
 
   if (isProd) {
-    await compress()
-    await minifyImages()
+    await compress(zippable, images)
+    await minifyImages(images)
   }
 }
 

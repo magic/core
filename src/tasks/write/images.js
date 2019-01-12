@@ -1,20 +1,24 @@
 const path = require('path')
 const imagemin = require('imagemin')
-const imageminJpegtran = require('imagemin-jpegtran')
 const imageminPngquant = require('imagemin-pngquant')
 const imageminSvgo = require('imagemin-svgo')
+const imageminMozjpeg = require('imagemin-mozjpeg')
+const imageminGifsicle = require('imagemin-gifsicle')
 
-const minifyImages = async () => {
-  const imageGlob = path.join(config.DIR.PUBLIC, '*.{jpg,png,svg,gif}')
-  return await imagemin([imageGlob], config.DIR.PUBLIC, {
+const minifyImages = async images => {
+  const imageGlob = `**/*.{${images.join(',')}}`
+  const input = [path.join(config.DIR.STATIC, imageGlob)]
+  const output = config.DIR.PUBLIC
+
+  await imagemin(input, output, {
     plugins: [
-      imageminJpegtran(),
-      imageminPngquant({ quality: '65-80' }),
+      imageminMozjpeg({ quality: 70 }),
+      imageminPngquant({ quality: '60-75' }),
+      imageminGifsicle({ optimizationLevel: 3 }),
       imageminSvgo({
         plugins: [{ removeViewBox: false }],
       }),
     ],
   })
 }
-
 module.exports = minifyImages
