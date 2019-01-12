@@ -49,9 +49,11 @@ const run = async (App, cmds) => {
     if (cmds.serve) {
       tasks.serve(app)
       tasks.watch()
-    } else {
-      process.exit()
     }
+  }
+
+  if (!cmds.serve){
+    process.exit()
   }
 }
 
