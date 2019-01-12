@@ -142,6 +142,9 @@ const exampleModule = {
           p('magic will automagically merge all styles into one global css file.'),
           p('in the future, it will also remove unused styles for you.'),
 
+          p('style merge order from lowest to highest:'),
+          p('module.style < page.style < app.style < theme.style'),
+
           h3('example styles'),
           Pre.View(example.style),
         ]),
