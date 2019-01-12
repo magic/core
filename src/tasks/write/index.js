@@ -11,10 +11,11 @@ const writeFile = require('./writeFile')
 const compress = require('./compress')
 const { getFileType } = require('../../lib/')
 
-const zippable = config.FILETYPES.ZIPPABLE
-const images = config.FILETYPES.IMAGES
 
 const write = async app => {
+  const zippable = config.FILETYPES.ZIPPABLE
+  const images = config.FILETYPES.IMAGES
+
   const { css, lib, pages, static } = app
   await mkdirp(config.DIR.PUBLIC)
 
