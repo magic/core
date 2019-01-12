@@ -30,7 +30,7 @@ module.exports = {
     },
 
     h1: {
-      margin: '1em 0 .7em',
+      margin: '1em 0 .2em',
     },
   },
 
@@ -39,8 +39,8 @@ module.exports = {
   },
 
   // html header tags
-  'h1,h2,h3,h4,h5': {
-    margin: '.5em 0',
+  'h1, h2, h3, h4, h5': {
+    margin: '1em 0 .2em',
   },
   h1: {
     fontSize: '1.3em',
