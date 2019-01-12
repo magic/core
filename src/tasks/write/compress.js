@@ -9,7 +9,6 @@ const compress = async (zippable, images) =>
       .filter(file => zippable.includes(getFileType(file)))
       .filter(file => !images.includes(getFileType(file)))
       .map(async file => {
-        console.log(file)
         const fileContent = await fs.readFile(file)
         const zipped = await zip.gzip(fileContent)
         await fs.writeFile(`${file}.gz`, zipped)
