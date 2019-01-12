@@ -13,7 +13,6 @@ module.exports = {
   applyWebRoot: require('./applyWebRoot'),
   getGitConfig: require('./getGitConfig'),
   xc: require('./xc'),
-  requireNow: require('./requireNow'),
   getPages: require('./getPages'),
   fs: require('./fs'),
 }

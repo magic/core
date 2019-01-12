@@ -1,17 +1,18 @@
+const util = require('util')
 const fs = require('fs')
+const babel = require('@babel/core')
 
 const requireNow = file => {
   if (!fs.existsSync(file)) {
     throw new Error(`requireNow: file does not exist ${file}`)
   }
-  const content = fs.readFileSync(file, 'utf8')
 
-  if (content.length === 0) {
-    throw new Error(`requireNow: required file is empty ${file}`)
+  try {
+    // const cnt = babel.transformFileSync(file)
+    return require(file)
+  } catch(e) {
+    console.log('eval error', e)
   }
-
-  const e = eval(content)
-  return e
 }
 
 module.exports = requireNow

@@ -1,51 +1,42 @@
-const config = require('./config')
-const tasks = require('./tasks')
+const cluster = require('cluster')
+
+global.config = require('./config')
+const run = require('./tasks')
 
 const App = require('./modules/app')
 
-const runCmd = async (cmd, ...args) => {
-  console.time(cmd)
-  const result = await tasks[cmd](...args)
-  console.timeEnd(cmd)
-  return result
-}
+let currentWorker = null
+const runCluster = (cmds) => {
+  if (cluster.isMaster) {
+    currentWorker = cluster.fork()
 
-const run = async cmds => {
-  console.time('render app')
-  console.log(`render app ${Object.keys(cmds).join(' ')}`)
+    cluster.on('message', (worker, msg) => {
+      if (msg.evt === 'change') {
+        // files have changed, restart worker
+        currentWorker.kill(1)
+        currentWorker = cluster.fork()
+      }
+    })
 
-  global.config = require('./config')
+    cluster.on('exit', (worker, code, signal) => {
+      console.log('exit', code)
+    })
+  } else if (cluster.isWorker) {
+    run(App, cmds)
 
-  if (cmds.clean) {
-    await runCmd('clean')
-  }
-
-  if (cmds.connect) {
-    await runCmd('connect')
-  }
-
-  if (cmds.publish) {
-    await runCmd('publish')
-  }
-
-  if (cmds.build || cmds.serve) {
-    const app = await runCmd('prepare', App)
-
-    const { pages, bundle, css } = await runCmd('transpile', app)
-    app.pages = pages
-    app.lib.bundle = bundle
-    app.css = css
-
-    if (cmds.build) {
-      await runCmd('write', app)
-    }
-
-    console.timeEnd('render app')
-
-    if (cmds.serve) {
-      tasks.serve(app)
-    }
+    process
+      .on('unhandledRejection', (...args) => {
+        console.log('unhandledRejection', ...args)
+      })
+      .on('uncaughtException', (...args) => {
+        console.log('uncaughtException', ...args)
+      })
   }
 }
 
-module.exports = run
+process
+  .on('unhandledRejection', (...args) => {
+    console.log('unhandledRejection', ...args)
+  })
+
+module.exports = runCluster

@@ -6,9 +6,7 @@ const {
   getFiles,
   getPages,
   getDependencies,
-  mkdirp,
   isUpperCase,
-  requireNow,
   fs,
 } = require('../../lib')
 const prepareLib = require('./prepareLib')

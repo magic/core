@@ -1,13 +1,13 @@
 const path = require('path')
 const deep = require('@magic/deep')
 
-const { isUpperCase, getDependencies, requireNow } = require('../../lib')
+const { isUpperCase, getDependencies } = require('../../lib')
 
 const { mapPageObject } = require('./lib/')
 
 const preparePages = files => {
   const pages = files.map(file => {
-    const page = requireNow(file)
+    const page = require(file)
     page.file = file
     page.name = file
       .replace(config.DIR.PAGES, '')
