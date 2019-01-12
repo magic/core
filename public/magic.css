@@ -61,9 +61,9 @@ footer, header, hgroup, menu, nav, section { display: block; }
  header.main .logo { float: left; }
  header.main .Menu { float: right; margin: 2em 0 0; }
  .page header { margin: 0 0 .5em; }
- .page h1 { margin: 1em 0 .7em; }
+ .page h1 { margin: 1em 0 .2em; }
  footer { width: 100%; }
- h1,h2,h3,h4,h5 { margin: .5em 0; }
+ h1, h2, h3, h4, h5 { margin: 1em 0 .2em; }
  h1 { font-size: 1.3em; }
  h2 { font-size: 1.2em; font-weight: bold; }
  h3 { font-size: 1.2em; }
