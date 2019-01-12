@@ -1,6 +1,6 @@
-module.exports = ({ to, text, nofollow, noreferrer }, children) => (_, actions) => {
+module.exports = ({ to, href, text, nofollow, noreferrer }, children) => (_, actions) => {
   const props = {
-    href: to || '',
+    href: to || href || '',
   }
 
   if (to && to.startsWith('/') && !to.startsWith(`//`)) {
