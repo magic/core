@@ -34,9 +34,4 @@ const runCluster = (cmds) => {
   }
 }
 
-process
-  .on('unhandledRejection', (...args) => {
-    console.log('unhandledRejection', ...args)
-  })
-
 module.exports = runCluster
