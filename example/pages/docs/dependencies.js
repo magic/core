@@ -10,8 +10,8 @@ module.exports = {
     h1('dependencies'),
     p('this is a list of all magic dependencies.'),
 
-    h2('production'),
-    p('those dependencies get included into your magic app production client bundle.'),
+    h2('production (client)'),
+    p('those dependencies get included into your magic app client bundle.'),
     ul([
       li([
         h4('hyperapp, ~1kb.'),
