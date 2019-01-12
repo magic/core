@@ -68,6 +68,7 @@ const htmlTags = [
   'output',
   'p',
   'param',
+  'picture',
   'pre',
   'progress',
   'q',
