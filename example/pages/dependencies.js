@@ -5,8 +5,6 @@ module.exports = {
   },
 
   View: () => [
-    DocHeader,
-
     h1('dependencies'),
     p('this is a list of all magic dependencies.'),
 

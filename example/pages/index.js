@@ -1,17 +1,14 @@
 module.exports = {
   state: {
-    title: 'h1 indexpage',
-    description: 'custom description',
+    title: '@magic/core docs',
+    description: '@magic/core documentation directory.',
   },
 
-  View: (state, actions) => [
+  View: state => [
     h1(state.title),
     div([
-      p('index page content'),
-      p('can stretch multiple lines'),
-      ul([li('and contain'), li('lists of content')]),
+      p('Welcome to the magic docs.'),
+      p('The goal of this document is to give you a rough @magical overview.'),
     ]),
-    Count.View(state, actions),
-    Wrapper.View(state, actions),
   ],
 }

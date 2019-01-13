@@ -1,6 +1,4 @@
-.Wrapper { color: orange; }
- .Wrapper.Test { color: green; }
- .Pre { display: block; font-family: monospace; white-space: pre; margin: 1em 0; line-height: 1.3; border: 1px solid #666; padding: 1em .5em 1em .2em; border-radius: 5px; counter-reset: line; }
+.Pre { display: block; font-family: monospace; white-space: pre; margin: 1em 0; line-height: 1.3; border: 1px solid #666; padding: 1em .5em 1em .2em; border-radius: 5px; counter-reset: line; }
  .Pre > code { display: block; counter-increment: line; }
  .Pre > code:before { content: counter(line); user-select: none; padding: 0 .5em 0 0; width: 3ch; text-align: right; display: inline-block; }
  .Pre .menu { float: right; margin-top: -.7em; }

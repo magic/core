@@ -5,8 +5,6 @@ module.exports = {
   },
 
   View: state => [
-    DocHeader,
-
     h1(state.title),
     p('magic modules are predefined modules for webapps.'),
 

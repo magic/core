@@ -5,8 +5,6 @@ module.exports = {
   },
 
   View: state => [
-    DocHeader,
-
     h1(state.title),
     p(
       'magic themes are themes for magic apps. you decide which theme to load by specifying the theme name in config.THEME',

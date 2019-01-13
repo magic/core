@@ -87,8 +87,6 @@ const exampleModule = {
 }`
 
     return [
-      DocHeader,
-
       h1(state.title),
       p('magic concepts. These are the building blocks of every module in a magic app'),
 
