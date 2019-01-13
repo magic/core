@@ -14,6 +14,12 @@ time, mark, audio, video`
 const html5Reset = `article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section`
 
+const mozButton = `button,
+input[type="reset"],
+input[type="button"],
+input[type="submit"],
+input[type="file"] > input[type="button"]`
+
 const reset = {
   [all]: {
     margin: 0,
@@ -52,6 +58,13 @@ const reset = {
   // remove outlines from links
   a: {
     outline: 'none',
+  },
+
+  [mozButton]: {
+    '&::-moz-focus-inner': {
+      padding: '0',
+      border: '0 none',
+    },
   },
 }
 
