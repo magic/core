@@ -19,7 +19,10 @@ module.exports = {
       color: 'green',
     },
   },
-  View: state => div({ class: 'cl' }, ['this is the page content.', state.variable]),
+  View: state => div({ class: 'cl' }, [
+    'this is the page content.',
+    state.variable,
+  ]),
 }`,
       assets: `
 module.exports = {
@@ -66,7 +69,7 @@ module.exports = {
       h1(state.title),
       p('There are multiple magic files and directories.'),
       ul([
-        li([Link({ to: '#pages' }, '/pages'), '- directory maps to urls in your app']),
+        li('/pages - files in the page directory map to urls in your app.'),
         li('/assets - custom components, @magic-modules get imported here'),
         li('/assets/static - static files'),
         li('/assets/themes - theme directory, @magic-themes get imported here'),
@@ -82,6 +85,17 @@ module.exports = {
           "each page has it's own state and actions, ",
           "but also inherits the global state and actions from the app and it's dependencies",
         ]),
+
+        h4('page to url map:'),
+        ul([
+          li('/pages/index.js === /'),
+          li('/pages/pageName.js === /pageName/'),
+          li('/pages/page-name.js === /page-name/'),
+          li('/pages/page_name.js === /page_name/'),
+          li('/pages/dir/index.js === /dir/'),
+          li('/pages/dir/name.js === /dir/name/'),
+        ]),
+
         h3('example page:'),
         Pre.View(examples.page),
       ]),
