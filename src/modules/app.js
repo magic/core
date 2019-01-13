@@ -19,7 +19,6 @@ if (fs.existsSync(maybeResetCssFile)) {
   style = deep.merge(style, require(maybeResetCssFile))
 }
 
-
 // merge default layout into styles
 const existingLayoutCssFile = path.join(__dirname, '..', 'themes', 'layout.css.js')
 style = deep.merge(style, require(existingLayoutCssFile))
@@ -34,8 +33,16 @@ if (fs.existsSync(maybeLayoutCssFile)) {
 if (config.THEME) {
   // first look if we have this theme preinstalled, if so, merge it into the styles
   const libThemeFile = path.join(__dirname, '..', 'themes', config.THEME, 'index.js')
+
   if (fs.existsSync(libThemeFile)) {
     style = deep.merge(style, require(libThemeFile))
+  }
+
+  // now look if it exists in node_modules
+  try {
+    style = deep.merge(style, require(`@magic-themes/${config.THEME}`))
+  } catch (e) {
+    // theme does not exist in node_modules, continue happily.
   }
 
   // load user's custom theme.
