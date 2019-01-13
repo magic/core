@@ -100,20 +100,20 @@ module.exports = {
         Pre.View(examples.page),
       ]),
 
-      div({ id: 'static' }, [
-        h2('/assets/static'),
-        p('the static dir contains all of your static assets.'),
-        p('every file in this directory gets copied to the app'),
-        p('image and svg files get minified using imagemin'),
-        p('text and binary files get compressed using zopfli'),
-      ]),
-
       div({ id: 'assets' }, [
         h2('/assets'),
         p('the assets dir contains custom components of your app.'),
         p('you can additionally import @magic-modules here'),
         h3('example /assets/index.js'),
         Pre.View(examples.assets),
+      ]),
+
+      div({ id: 'static' }, [
+        h2('/assets/static'),
+        p('the static dir contains all of your static assets.'),
+        p('every file in this directory gets copied to the app'),
+        p('image and svg files get minified using imagemin'),
+        p('text and binary files get compressed using zopfli'),
       ]),
 
       div({ id: 'themes' }, [
