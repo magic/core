@@ -131,7 +131,10 @@ module.exports = {
         h2('/assets/Menu.js'),
         p('the /assets/Menu.js file allows you to replace the default Menu component'),
         h3('example /assets/Menu.js'),
-        Link({ to: 'https://github.com/magic/core/blob/master/src/modules/Menu.js'}, 'Menu.js on github'),
+        Link(
+          { to: 'https://github.com/magic/core/blob/master/src/modules/Menu.js' },
+          'Menu.js on github',
+        ),
       ]),
     ]
   },
