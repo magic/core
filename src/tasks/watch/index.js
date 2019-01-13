@@ -5,20 +5,19 @@ const deep = require('@magic/deep')
 
 const watched = {}
 
-const getDirs = (dir) =>
-  fs.readdirSync(dir).map(file => {
-    const filePath = path.join(dir, file)
-    const stat = fs.statSync(filePath)
-    if (stat.isDirectory()) {
-      return [
-        filePath,
-        getDirs(filePath),
-      ]
-    } else {
-      watched[filePath] = stat.mtimeMs
-    }
-  }).filter(a => a)
-
+const getDirs = dir =>
+  fs
+    .readdirSync(dir)
+    .map(file => {
+      const filePath = path.join(dir, file)
+      const stat = fs.statSync(filePath)
+      if (stat.isDirectory()) {
+        return [filePath, getDirs(filePath)]
+      } else {
+        watched[filePath] = stat.mtimeMs
+      }
+    })
+    .filter(a => a)
 
 const watch = async () => {
   const dir = config.ROOT

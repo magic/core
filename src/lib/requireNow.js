@@ -10,7 +10,7 @@ const requireNow = file => {
   try {
     // const cnt = babel.transformFileSync(file)
     return require(file)
-  } catch(e) {
+  } catch (e) {
     console.log('eval error', e)
   }
 }

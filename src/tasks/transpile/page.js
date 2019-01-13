@@ -1,7 +1,6 @@
 const { renderToString } = require('hyperapp-render')
 
 const deep = require('@magic/deep')
-const log = require('@magic/log')
 
 const { applyWebRoot } = require('../../lib')
 

@@ -2,13 +2,7 @@ const path = require('path')
 const is = require('@magic/types')
 const deep = require('@magic/deep')
 let components = require('../../modules')
-const {
-  getFiles,
-  getPages,
-  getDependencies,
-  isUpperCase,
-  fs,
-} = require('../../lib')
+const { getFiles, getPages, getDependencies, isUpperCase, fs } = require('../../lib')
 const prepareLib = require('./prepareLib')
 const preparePages = require('./preparePages')
 

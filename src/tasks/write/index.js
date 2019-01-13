@@ -11,7 +11,6 @@ const writeFile = require('./writeFile')
 const compress = require('./compress')
 const { getFileType } = require('../../lib/')
 
-
 const write = async app => {
   const zippable = config.FILETYPES.ZIPPABLE
   const images = config.FILETYPES.IMAGES
@@ -21,9 +20,10 @@ const write = async app => {
 
   // write static first to make sure all other files below get written
   // even if there is a name clash
-  await Promise.all(Object.entries(static)
-    .filter(([name]) => !images.includes(getFileType(name)))
-    .map(async file => await writeFile(file))
+  await Promise.all(
+    Object.entries(static)
+      .filter(([name]) => !images.includes(getFileType(name)))
+      .map(async file => await writeFile(file)),
   )
 
   pages.forEach(async page => {

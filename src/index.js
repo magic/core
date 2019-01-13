@@ -6,7 +6,7 @@ const run = require('./tasks')
 const App = require('./modules/app')
 
 let currentWorker = null
-const runCluster = (cmds) => {
+const runCluster = cmds => {
   if (cluster.isMaster) {
     currentWorker = cluster.fork()
 

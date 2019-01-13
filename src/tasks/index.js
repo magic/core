@@ -52,7 +52,7 @@ const run = async (App, cmds) => {
     }
   }
 
-  if (!cmds.serve){
+  if (!cmds.serve) {
     process.exit()
   }
 }
