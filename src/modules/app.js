@@ -6,6 +6,8 @@ const { h } = require('hyperapp')
 
 const { fs } = require('../lib/')
 const config = require('../config')
+// const { ENV } = config
+const Magic = require('./admin')
 
 let style = {}
 
@@ -84,21 +86,7 @@ let app = {
       ]),
     ]),
   ],
-  Body: (page, state, actions) =>
-    div(
-      { id: 'magic' },
-      div({ class: 'wrapper' }, [
-        header({ class: 'main' }, [
-          state.logo &&
-            img({ class: 'logo', src: state.logo, height: 100, width: 200, role: 'presentation' }),
-          state.menu && Menu.View,
-        ]),
-        page
-          ? div({ class: 'page' }, page(state, actions))
-          : div({ class: 'page' }, '404 - not found'),
-        Footer.View,
-      ]),
-    ),
+  Body: Magic.View,
 }
 
 const maybeAppFile = path.join(config.ROOT, 'app.js')
@@ -109,6 +97,12 @@ if (maybeAppFile !== __filename && fs.existsSync(maybeAppFile)) {
     app.actions = deep.merge(app.actions, maybeApp.actions)
     app.style = deep.merge(app.style, maybeApp.style)
   }
+}
+
+if (config.ENV === 'development') {
+  app.state = deep.merge(Magic.state, app.state)
+  app.actions = deep.merge(Magic.actions, app.actions)
+  app.style = deep.merge(Magic.style, app.style)
 }
 
 module.exports = app

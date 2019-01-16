@@ -43,12 +43,10 @@ const prepareLib = app => {
   const actionString = `const actions = ${stringifyObject(app.actions)}\n`
   libString += actionString
 
-  const b = app.Body.toString()
-    .split("{ id: 'magic' },")[1]
-    .split('    )')[0]
-    .trim()
+  let b = app.Body.toString().split("{ id: 'magic' },\n")[1]
 
-  const wrapper = b.substr(0, b.length - 1)
+  b = b.substr(0, b.length - 1).trim()
+  b = b.substr(0, b.length - 1).trim()
 
   const viewString = `
 function view(state, actions) {
@@ -63,7 +61,7 @@ function view(state, actions) {
     actions[key] = pageActions[key]
   }
 
-  return ${wrapper}
+  return ${b}
 }
 `
 
