@@ -1,8 +1,10 @@
-.Pre { display: block; font-family: monospace; white-space: pre; margin: 1em 0; line-height: 1.3; border: 1px solid #666; padding: 1em .5em 1em .2em; border-radius: 5px; counter-reset: line; }
- .Pre > code { display: block; counter-increment: line; }
- .Pre > code:before { content: counter(line); user-select: none; padding: 0 .5em 0 0; width: 3ch; text-align: right; display: inline-block; }
- .Pre .menu { float: right; margin-top: -.7em; }
- .Pre button { padding: 1px 3px; margin: 0 .2em; background-color: #666; border-radius: 3px; color: #fefefe; }
+.Pre { border: 1px solid #666; border-radius: 5px; display: block; font-family: monospace; margin: 1em 0; line-height: 1.3; padding: 1em .5em 0 .2em; position: relative; white-space: pre; counter-reset: line; }
+ .Pre pre { overflow-x: auto; }
+ .Pre pre > code { counter-increment: line; display: block; }
+ .Pre pre > code:before { content: counter(line); display: inline-block; padding: 0 .5em 0 0; text-align: right; user-select: none; width: 3ch; }
+ .Pre pre > code:last-child { padding: 0 0 1em; }
+ .Pre .menu { position: absolute; margin-top: -2em; right: 0; }
+ .Pre button { background-color: #666; border-radius: 3px; color: #fefefe; margin: 0 .2em; padding: 1px 3px; }
  .Pre.light { background-color: #eee; }
  .Pre.light > code:before { color: #666; }
  .Pre.light .html { color: #008800; }
@@ -16,7 +18,7 @@
  .Pre.light .comment { color: #555; font-style: italic; }
  .Pre.light .object { color: #016301; }
  .Pre.light .property { color: #2a952a; }
- .Pre.dark { color: #eee; background-color: #222; }
+ .Pre.dark { background-color: #222; color: #eee; }
  .Pre.dark > code:before { color: #666; }
  .Pre.dark .html { color: #008800; }
  .Pre.dark .keyword { color: violet; }
