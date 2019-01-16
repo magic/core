@@ -42,7 +42,7 @@ const Menu = {
     },
   },
 
-  View: ({ name = 'menu', between = false, pre = false, post = false }) => (state, actions) => {
+  View: ({ name = 'menu', between = false }) => (state, actions) => {
     if (!state[name] || !state[name].length) {
       return
     }
@@ -59,15 +59,11 @@ const Menu = {
           const isActive = item.to !== '/' && state.url.startsWith(item.to)
           if (isEqual || isActive) {
             props.class = 'active'
-          } else {
-            props.class = null
           }
 
           return [
-            pre && li(pre),
             li(props, Link(item)),
             between && i < state[name].length - 1 ? li(' - ') : '',
-            post && li(post),
           ]
         }),
       ),
