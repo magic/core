@@ -60,7 +60,7 @@ config = deep.merge(config, {
     PNG: '60-80',
     JPG: 70,
   },
-  ENV: process.env.MAGIC_ENV || process.env.NODE_ENV,
+  ENV: process.env.MAGIC_ENV || process.env.NODE_ENV || 'development',
 })
 
 module.exports = config
