@@ -1,10 +1,16 @@
 module.exports = {
   state: {
     isAdminActive: false,
+    adminMenu: [
+      { to: 'home', text: 'home' },
+      { to: 'state', text: 'state' },
+    ],
+    adminUrl: 'home',
   },
 
   actions: {
     toggleAdmin: () => state => ({ isAdminActive: !state.isAdminActive }),
+    goAdmin: adminUrl => ({ adminUrl }),
   },
 
   style: {
@@ -21,7 +27,10 @@ module.exports = {
         height: '100vh',
         width: '50%',
         minWidth: '500px',
-      }
+      },
+      '.toggle': {
+        float: 'right',
+      },
     },
   },
 
@@ -29,11 +38,19 @@ module.exports = {
     div(
       { id: 'magic' },
       div({ class: 'wrapper' }, [
-        div({ class: `admin ${state.isAdminActive ? ' active' : ''}` }, [
-          button({ onclick: actions.toggleAdmin }, 'toggle'),
+        div({ class: `admin${state.isAdminActive ? ' active' : ''}` }, [
+          button({ class: 'toggle', onclick: actions.toggleAdmin }, 'toggle'),
           state.isAdminActive && div({ class: 'ui' }, [
-            h4('admin'),
-            pre(JSON.stringify(state, null, 2)),
+            ul(state.adminMenu.map(link => [
+              li([
+                a({ onclick: () => actions.goAdmin(link.to) }, link.text),
+              ]),
+            ])),
+
+            h4(`admin ${state.adminUrl}`),
+
+            state.adminUrl === 'home' && div('admin home'),
+            state.adminUrl === 'state' && pre(JSON.stringify(state, null, 2)),
           ]),
         ]),
 
@@ -52,9 +69,12 @@ module.exports = {
   global: {
     state: {
       isAdminActive: true,
+      adminMenu: true,
+      adminUrl: true,
     },
     actions: {
       toggleAdmin: true,
+      goAdmin: true,
     },
   },
 }
