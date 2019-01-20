@@ -54,8 +54,13 @@ footer, header, hgroup, menu, nav, section { display: block; }
  blockquote, q { quotes: none; }
  blockquote:before, blockquote:after, q:before, q:after { content: none; }
  table { border-collapse: collapse; border-spacing: 0; }
- a { outline: none; text-decoration: none; color: blue; }
+ a { outline: none; cursor: pointer; text-decoration: none; color: blue; }
  a:hover { color: orange; }
+ button,
+input[type="reset"],
+input[type="button"],
+input[type="submit"],
+input[type="file"] > input[type="button"] { cursor: pointer; }
  button,
 input[type="reset"],
 input[type="button"],
