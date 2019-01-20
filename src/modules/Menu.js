@@ -61,10 +61,7 @@ const Menu = {
             props.class = 'active'
           }
 
-          return [
-            li(props, Link(item)),
-            between && i < state[name].length - 1 ? li(' - ') : '',
-          ]
+          return [li(props, Link(item)), between && i < state[name].length - 1 ? li(' - ') : '']
         }),
       ),
     ])
