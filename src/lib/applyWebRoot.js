@@ -1,5 +1,5 @@
 const applyWebRoot = str => {
-  if (config.WEB_ROOT === '/' || process.env.NODE_ENV !== 'production') {
+  if (!config.WEB_ROOT || config.WEB_ROOT === '/' || process.env.NODE_ENV !== 'production') {
     return str
   }
 
