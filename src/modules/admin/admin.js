@@ -1,9 +1,12 @@
+const { Admin } = require('./modules/')
+
 module.exports = {
   state: {
     isAdminActive: false,
     adminMenu: [
       { to: 'home', text: 'home' },
       { to: 'state', text: 'state' },
+      { to: 'config', text: 'config' },
     ],
     adminUrl: 'home',
   },
@@ -38,21 +41,7 @@ module.exports = {
     div(
       { id: 'magic' },
       div({ class: 'wrapper' }, [
-        div({ class: `admin${state.isAdminActive ? ' active' : ''}` }, [
-          button({ class: 'toggle', onclick: actions.toggleAdmin }, 'toggle'),
-          state.isAdminActive && div({ class: 'ui' }, [
-            ul(state.adminMenu.map(link => [
-              li([
-                a({ onclick: () => actions.goAdmin(link.to) }, link.text),
-              ]),
-            ])),
-
-            h4(`admin ${state.adminUrl}`),
-
-            state.adminUrl === 'home' && div('admin home'),
-            state.adminUrl === 'state' && pre(JSON.stringify(state, null, 2)),
-          ]),
-        ]),
+        Admin,
 
         header({ class: 'main' }, [
           state.logo &&

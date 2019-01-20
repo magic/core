@@ -1,7 +1,8 @@
 const path = require('path')
 const is = require('@magic/types')
 const deep = require('@magic/deep')
-let components = require('../../modules')
+let modules = require('../../modules')
+const adminModules = require('../../modules/admin/modules')
 const { getFiles, getPages, getDependencies, isUpperCase, fs } = require('../../lib')
 const prepareLib = require('./prepareLib')
 const preparePages = require('./preparePages')
@@ -14,10 +15,10 @@ const prepare = async app => {
   if (exists || (await fs.exists(maybeAssetFile))) {
     exists = true
     const assets = require(maybeAssetFile)
-    components = deep.merge(components, assets)
+    modules = deep.merge(modules, assets)
   }
 
-  Object.entries(components).forEach(([key, value]) => {
+  Object.entries(modules).forEach(([key, value]) => {
     keys.add(key)
     global[key] = value
   })
@@ -29,6 +30,11 @@ const prepare = async app => {
   app.state = deep.merge(app.state, { pages: {} })
   app.actions = deep.merge(app.actions, { pages: {} })
   app.dependencies = getDependencies(app.Body.toString())
+
+  if (config.ENV === 'development') {
+    app.dependencies = deep.merge(app.dependencies, adminModules)
+    app.state.config = global.config
+  }
 
   Object.entries(app.dependencies).forEach(([k, dep]) => {
     if (dep.state) {
