@@ -6,13 +6,15 @@ const configPath = path.join(process.cwd(), 'config.js')
 let config = {}
 if (fs.existsSync(configPath)) {
   config = require(configPath)
-  if (config.ROOT) {
-    if (!config.ROOT.startsWith(process.cwd())) {
-      config.ROOT = path.resolve(process.cwd(), config.ROOT)
-    }
-  } else {
+  if (!config.ROOT) {
     config.ROOT = process.cwd()
+  } else if (!config.ROOT.startsWith(process.cwd())) {
+    config.ROOT = path.resolve(process.cwd(), config.ROOT)
   }
+}
+
+if (!config.ROOT) {
+  config.ROOT = process.cwd()
 }
 
 const PAGES = path.join(config.ROOT, 'pages')
