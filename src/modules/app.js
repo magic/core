@@ -58,10 +58,6 @@ if (config.THEME) {
 // /assets/app.js overwrites the values defined here.
 let app = {
   state: {
-    app: {
-      title: 'App Title',
-      description: 'App Description',
-    },
     url: '/',
   },
 
@@ -76,7 +72,9 @@ let app = {
         meta({ charset: 'utf-8' }),
         link({ rel: 'icon', href: '/favicon.ico' }),
         state.title && title(state.title),
-        state.description && description(state.description),
+        state.description && meta({ name: 'description', content: state.description.join(' ') }),
+        state.keywords && meta({ name: 'keywords', content: state.keywords }),
+        state.author && meta({ name: 'author', content: state.author }),
         link({ rel: 'stylesheet', href: '/magic.css' }),
         page.Head && page.Head(state, actions),
       ]),
