@@ -7,10 +7,8 @@ module.exports = (state, actions) =>
 
         h4(state.adminUrl),
 
-        state.adminUrl === 'home' && div([
-          h3('admin home'),
-          div('will enable you to edit pages, config, css etc.'),
-        ]),
+        state.adminUrl === 'home' &&
+          div([h3('admin home'), div('will enable you to edit pages, config, css etc.')]),
         state.adminUrl === 'state' && pre(JSON.stringify(state, null, 2)),
         state.adminUrl === 'config' && pre(JSON.stringify(state.config, null, 2)),
       ]),

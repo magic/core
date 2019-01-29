@@ -1,4 +1,4 @@
-const { Admin, PageHead } = require('./modules/')
+const { Admin } = require('./modules/')
 
 module.exports = {
   state: {

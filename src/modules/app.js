@@ -13,7 +13,6 @@ let style = {}
 
 const variables = config.THEME_VARS || {}
 
-
 // merge user created custom layout into styles, if it exists
 const maybeResetCssFile = path.join(config.DIR.THEMES, 'reset.css.js')
 if (fs.existsSync(maybeResetCssFile)) {
@@ -23,7 +22,6 @@ if (fs.existsSync(maybeResetCssFile)) {
   const libResetCssFile = path.join(__dirname, '..', 'themes', 'reset.css.js')
   style = deep.merge(style, require(libResetCssFile))
 }
-
 
 // merge user created custom layout into styles, if it exists
 const maybeLayoutCssFile = path.join(config.DIR.THEMES, 'layout.css.js')

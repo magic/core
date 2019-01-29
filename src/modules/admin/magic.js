@@ -1,5 +1,3 @@
-const { PageHead } = require('./modules')
-
 module.exports = {
   View: page => (state, actions) =>
     div(

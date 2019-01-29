@@ -12,5 +12,8 @@ module.exports = {
   },
 
   View: ({ menu, action }) => () =>
-    ul({ class: 'admin-nav' }, menu.map(link => [li([a({ onclick: () => action(link.to) }, link.text)])])),
+    ul(
+      { class: 'admin-nav' },
+      menu.map(link => [li([a({ onclick: () => action(link.to) }, link.text)])]),
+    ),
 }
