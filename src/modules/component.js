@@ -1,7 +1,7 @@
 const { h } = require('hyperapp')
 
 const component = name => (attributes = {}, children = false) => {
-  const is = (a, ...t) => t.some(tt => tt === typeof a)
+  const is = (ele, ...types) => types.some(type => type === typeof ele)
 
   if (!children) {
     if (
