@@ -10,10 +10,10 @@ module.exports = {
 
   // header and menu in header
   header: {
-    display: 'inline-block',
-    width: '90%',
-
     '&.main': {
+      display: 'inline-block',
+      width: '90%',
+
       '.logo': {
         float: 'left',
       },
