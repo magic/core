@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const deep = require('@magic/deep')
 
 const { stringifyObject, handleDeps } = require('./lib/')
 
@@ -17,6 +18,10 @@ const prepareLib = app => {
     .replace(/attributes/gm, 'a')
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
+
+  if (process.env.NODE_ENV !== 'production') {
+    app.dependencies = deep.merge(global.tags.body, app.dependencies)
+  }
 
   const depString = Object.entries(app.dependencies)
     .map(handleDeps)
