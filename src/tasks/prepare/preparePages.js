@@ -47,6 +47,7 @@ const preparePages = files => {
   })
 
   const has404 = pages.some(p => p.name === '/404/')
+
   if (!has404) {
     const page404 = {
       name: '/404/',
