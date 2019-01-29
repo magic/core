@@ -86,7 +86,11 @@ let app = {
         meta({ charset: 'utf-8' }),
         link({ rel: 'icon', href: '/favicon.ico' }),
         state.title && title(state.title),
-        state.description && meta({ name: 'description', content: state.description.join(' ') }),
+        state.description &&
+          meta({
+            name: 'description',
+            content: is.array(state.description) ? state.description.join(' ') : state.description,
+          }),
         state.keywords && meta({ name: 'keywords', content: state.keywords }),
         state.author && meta({ name: 'author', content: state.author }),
         link({ rel: 'stylesheet', href: '/magic.css' }),
