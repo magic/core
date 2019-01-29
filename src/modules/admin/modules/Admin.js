@@ -1,6 +1,6 @@
 module.exports = (state, actions) =>
   div({ class: `admin${state.isAdminActive ? ' active' : ''}` }, [
-    button({ class: 'toggle', onclick: actions.toggleAdmin }, 'toggle'),
+    button({ class: 'toggle', onclick: actions.toggleAdmin }, 'Admin'),
     state.isAdminActive &&
       div({ class: 'ui' }, [
         AdminMenu.View({ menu: state.adminMenu, action: actions.goAdmin }),
