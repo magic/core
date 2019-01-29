@@ -91,7 +91,7 @@ module.exports = () => [
 `),
 
     h2('footer'),
-    p('the footer module contains an info message about using magic.'),
+    p('the footer module contains a small info text and a link to the magic github repository.'),
     p(
       'to overwrite this behaviour, just place a Footer.js file in your assets and require it in /assets/index.js',
     ),
@@ -114,7 +114,7 @@ const Footer = {
     ]),
 }
 
-// /assets/indexjs
+// /assets/index.js
 module.exports = {
   // ...other assets
   Footer: require('./Footer'),

@@ -116,8 +116,9 @@ const exampleModule = {
 
         div([
           h2('actions'),
-          p('actions are an object of functions'),
-          p('those functions get passed a state object and return a new partial state'),
+          p('actions are an object containing functions'),
+          p('those functions get the state and actions and may return a new partial state.'),
+          p('alternatively, you can call any action any other action.'),
 
           h3('example actions'),
           Pre.View(example.actions),
