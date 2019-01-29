@@ -55,13 +55,14 @@ const prepareLib = app => {
 
   const viewString = `
 function view(state, actions) {
-  const page = pages[state.url]
+  const url = pages[state.url] ? state.url : '/404/'
+  const page = pages[url]
 
-  const pageState = state.pages[state.url]
+  const pageState = state.pages[url]
   for (let key in pageState) {
     state[key] = pageState[key]
   }
-  const pageActions = actions.pages[state.url]
+  const pageActions = actions.pages[url]
   for (let key in pageActions) {
     actions[key] = pageActions[key]
   }
