@@ -47,15 +47,8 @@ module.exports = {
   },
   h2: {
     fontSize: '1.2em',
-    fontWeight: 'bold',
   },
   h3: {
-    fontSize: '1.2em',
-  },
-  h4: {
-    fontWeight: 600,
-  },
-  h5: {
-    fontWeight: 600,
+    fontSize: '1.1em',
   },
 }
