@@ -12,6 +12,6 @@ module.exports = {
       { to: '/dependencies/', text: 'dependencies' },
     ],
     logo: '/logo.png',
-    logotext: '@magic'
+    logotext: '@magic',
   },
 }
