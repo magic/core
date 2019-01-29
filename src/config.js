@@ -63,9 +63,11 @@ config = deep.merge(config, {
     JPG: { quality: 95 },
     GIF: { optimizationLevel: 3 },
     SVGO: {
-      plugins: [{
-        removeViewBox: false
-      }],
+      plugins: [
+        {
+          removeViewBox: false,
+        },
+      ],
     },
   },
   ENV: process.env.MAGIC_ENV || process.env.NODE_ENV || 'development',

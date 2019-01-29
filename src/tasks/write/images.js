@@ -11,18 +11,20 @@ const minifyImages = async images => {
   const imageGlob = `*.{${images.join(',')}}`
   const dirs = getDirectories(config.DIR.STATIC)
 
-  await Promise.all(dirs.map(async dir => {
-    const input = [path.join(dir, imageGlob)]
-    const output = dir.replace(config.DIR.STATIC, config.DIR.PUBLIC)
+  await Promise.all(
+    dirs.map(async dir => {
+      const input = [path.join(dir, imageGlob)]
+      const output = dir.replace(config.DIR.STATIC, config.DIR.PUBLIC)
 
-    return await imagemin(input, output, {
-      plugins: [
-        imageminMozjpeg(config.IMAGEMIN.JPG),
-        imageminPngquant(config.IMAGEMIN.PNG),
-        imageminGifsicle(config.IMAGEMIN.GIF),
-        imageminSvgo(config.IMAGEMIN.SVGO),
-      ],
-    })
-  }))
+      return await imagemin(input, output, {
+        plugins: [
+          imageminMozjpeg(config.IMAGEMIN.JPG),
+          imageminPngquant(config.IMAGEMIN.PNG),
+          imageminGifsicle(config.IMAGEMIN.GIF),
+          imageminSvgo(config.IMAGEMIN.SVGO),
+        ],
+      })
+    }),
+  )
 }
 module.exports = minifyImages
