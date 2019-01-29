@@ -1,3 +1,3 @@
 const css = require('@magic/css')
 
-module.exports = style => css(style)
+module.exports = async style => await css(style)

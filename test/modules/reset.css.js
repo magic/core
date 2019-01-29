@@ -10,8 +10,8 @@ module.exports = [
   { fn: reset, expect: is.object, info: 'reset.css style is an object' },
   { fn: css(reset), expect: is.object, info: 'reset.css can be transpiled' },
   {
-    fn: css(reset).minified,
-    expect: t => t.includes('h3,h4,h5,h6,p,blockquote,pre,a,abbr'),
+    fn: css(reset),
+    expect: t => t.minified.includes('h3,h4,h5,h6,p,blockquote,pre,a,abbr'),
     info: 'reset contains expected css',
   },
 ]
