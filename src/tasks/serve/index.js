@@ -49,7 +49,7 @@ const serve = app => {
     const isWebRoot = addedSlashUrl === WEB_ROOT
 
     let redirect = ''
-    if (isWebRoot || (rawUrl !== addedSlashUrl && pages[addedSlashUrl])) {
+    if (!isWebRoot && (rawUrl !== addedSlashUrl && pages[addedSlashUrl])) {
       redirect = addedSlashUrl
     } else if (req.url === '/' && WEB_ROOT !== '/') {
       if (isProd) {
