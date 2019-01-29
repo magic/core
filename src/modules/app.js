@@ -11,6 +11,8 @@ const Magic = require('./admin')
 
 let style = {}
 
+const variables = config.THEME_VARS || {}
+
 // merge default reset css into styles
 const libResetCssFile = path.join(__dirname, '..', 'themes', 'reset.css.js')
 style = deep.merge(style, require(libResetCssFile))
@@ -37,20 +39,32 @@ if (config.THEME) {
   const libThemeFile = path.join(__dirname, '..', 'themes', config.THEME, 'index.js')
 
   if (fs.existsSync(libThemeFile)) {
-    style = deep.merge(style, require(libThemeFile))
+    let theme = require(libThemeFile)
+    if (is.function(theme)) {
+      theme = theme(variables)
+    }
+    style = deep.merge(style, theme)
   }
 
   // now look if it exists in node_modules
   try {
-    style = deep.merge(style, require(`@magic-themes/${config.THEME}`))
+    let theme = require(`@magic-themes/${config.THEME}`)
+    if (is.function(theme)) {
+      theme = theme(variables)
+    }
+    style = deep.merge(style, theme)
   } catch (e) {
     // theme does not exist in node_modules, continue happily.
   }
 
-  // load user's custom theme.
+  // load user's custom theme, overwriting both preinstalled and node_modules themes
   const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.js')
   if (fs.existsSync(maybeThemeFile)) {
-    style = deep.merge(style, require(maybeThemeFile))
+    let theme = require(maybeThemeFile)
+    if (is.function(theme)) {
+      theme = theme(variables)
+    }
+    style = deep.merge(style, theme)
   }
 }
 
