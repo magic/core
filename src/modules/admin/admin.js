@@ -23,7 +23,8 @@ module.exports = {
       right: 0,
 
       '&.active': {
-        backgroundColor: 'white',
+        color: '#000',
+        backgroundColor: '#fff',
         zIndex: 1000,
         borderLeft: '3px solid grey',
         overflowY: 'auto',
@@ -31,8 +32,21 @@ module.exports = {
         width: '50%',
         minWidth: '500px',
       },
+
       '.toggle': {
         float: 'right',
+      },
+
+      a: {
+        color: '#000',
+        textShadow: 'none',
+        boxShadow: 'none',
+        textDecoration: 'underline',
+        cursor: 'pointer',
+
+        '&:hover': {
+          color: '#444',
+        },
       },
     },
   },

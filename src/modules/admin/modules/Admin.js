@@ -3,7 +3,7 @@ module.exports = (state, actions) =>
     button({ class: 'toggle', onclick: actions.toggleAdmin }, 'toggle'),
     state.isAdminActive &&
       div({ class: 'ui' }, [
-        AdminMenu({ menu: state.adminMenu, action: actions.goAdmin }),
+        AdminMenu.View({ menu: state.adminMenu, action: actions.goAdmin }),
 
         h4(state.adminUrl),
 
