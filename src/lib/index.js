@@ -1,5 +1,6 @@
 module.exports = {
   getFiles: require('./getFiles'),
+  getDirectories: require('./getDirectories'),
   isUpperCase: require('./isUpperCase'),
   mkdirp: require('./mkdirp'),
   isTagUsed: require('./isTagUsed'),
