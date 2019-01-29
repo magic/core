@@ -13,24 +13,26 @@ let style = {}
 
 const variables = config.THEME_VARS || {}
 
-// merge default reset css into styles
-const libResetCssFile = path.join(__dirname, '..', 'themes', 'reset.css.js')
-style = deep.merge(style, require(libResetCssFile))
 
 // merge user created custom layout into styles, if it exists
 const maybeResetCssFile = path.join(config.DIR.THEMES, 'reset.css.js')
 if (fs.existsSync(maybeResetCssFile)) {
   style = deep.merge(style, require(maybeResetCssFile))
+} else {
+  // merge default reset css into styles if no custom reset file exists
+  const libResetCssFile = path.join(__dirname, '..', 'themes', 'reset.css.js')
+  style = deep.merge(style, require(libResetCssFile))
 }
 
-// merge default layout into styles
-const existingLayoutCssFile = path.join(__dirname, '..', 'themes', 'layout.css.js')
-style = deep.merge(style, require(existingLayoutCssFile))
 
 // merge user created custom layout into styles, if it exists
 const maybeLayoutCssFile = path.join(config.DIR.THEMES, 'layout.css.js')
 if (fs.existsSync(maybeLayoutCssFile)) {
   style = deep.merge(style, require(maybeLayoutCssFile))
+} else {
+  // merge default layout into styles if no custom layout file exists
+  const existingLayoutCssFile = path.join(__dirname, '..', 'themes', 'layout.css.js')
+  style = deep.merge(style, require(existingLayoutCssFile))
 }
 
 // load user's chosen theme, if it is set and exists, and merge it over the styles
