@@ -75,7 +75,5 @@ input[type="file"] > input[type="button"]::-moz-focus-inner { padding: 0; border
  footer { width: 100%; }
  h1, h2, h3, h4, h5 { margin: 1em 0 .2em; }
  h1 { font-size: 1.3em; }
- h2 { font-size: 1.2em; font-weight: bold; }
- h3 { font-size: 1.2em; }
- h4 { font-weight: 600; }
- h5 { font-weight: 600; }
+ h2 { font-size: 1.2em; }
+ h3 { font-size: 1.1em; }
