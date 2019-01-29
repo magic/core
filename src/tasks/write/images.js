@@ -17,12 +17,10 @@ const minifyImages = async images => {
 
     return await imagemin(input, output, {
       plugins: [
-        imageminMozjpeg({ quality: 90 }),
-        imageminPngquant({ quality: [0.85, 0.9] }),
-        imageminGifsicle({ optimizationLevel: 3 }),
-        imageminSvgo({
-          plugins: [{ removeViewBox: false }],
-        }),
+        imageminMozjpeg(config.IMAGEMIN.JPG),
+        imageminPngquant(config.IMAGEMIN.PNG),
+        imageminGifsicle(config.IMAGEMIN.GIF),
+        imageminSvgo(config.IMAGEMIN.SVGO),
       ],
     })
   }))
