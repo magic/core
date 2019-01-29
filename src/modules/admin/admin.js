@@ -1,4 +1,4 @@
-const { Admin } = require('./modules/')
+const { Admin, PageHead } = require('./modules/')
 
 module.exports = {
   state: {
@@ -56,11 +56,7 @@ module.exports = {
       { id: 'magic' },
       div({ class: 'wrapper' }, [
         Admin,
-        (state.logo || state.menu) && header({ class: 'main' }, [
-          state.logo &&
-            img({ class: 'logo', src: state.logo, height: 100, width: 200, role: 'presentation' }),
-          state.menu && Menu.View,
-        ]),
+        PageHead,
         page
           ? div({ class: 'page' }, page(state, actions))
           : div({ class: 'page' }, '404 - not found'),

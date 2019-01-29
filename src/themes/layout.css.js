@@ -17,9 +17,14 @@ module.exports = {
       '.logo': {
         float: 'left',
       },
+      '.logo-text': {
+        float: 'left',
+        fontSize: '1.5em',
+        margin: '.7em .2em',
+      },
       '.Menu': {
         float: 'right',
-        margin: '2em 0 0',
+        margin: '1.5em 0 0',
       },
     },
   },
