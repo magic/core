@@ -4,5 +4,6 @@ module.exports = {
   Footer: require('./Footer'),
   Magic: require('./admin'),
   PageHead: require('./PageHead'),
+  Img: require('./Img'),
   ...require('./tags'),
 }
