@@ -42,8 +42,7 @@ module.exports = {
       { id: 'magic' },
       div({ class: 'wrapper' }, [
         Admin,
-
-        header({ class: 'main' }, [
+        (state.logo || state.menu) && header({ class: 'main' }, [
           state.logo &&
             img({ class: 'logo', src: state.logo, height: 100, width: 200, role: 'presentation' }),
           state.menu && Menu.View,
