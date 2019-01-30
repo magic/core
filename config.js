@@ -3,6 +3,10 @@ module.exports = {
   THEME: 'blue',
   WEB_ROOT: '/core/',
 
+  DIR: {
+    PUBLIC: 'docs',
+  },
+
   // this option adds the
   // 'X-Clacks-Overhead', 'GNU Terry Pratchet'
   // http header
