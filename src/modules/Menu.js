@@ -1,28 +1,4 @@
 const Menu = {
-  actions: {
-    go: to => e => state => {
-      e.preventDefault()
-      let url = state.url
-
-      if (to) {
-        url = to.replace(window.location.origin, '')
-        if (url !== state.url) {
-          window.history && window.history.pushState({ urlPath: url }, '', url)
-        }
-      } else {
-        if (e.state) {
-          url = e.state.urlPath
-        } else {
-          url = '/'
-        }
-      }
-      return {
-        url,
-        prev: state.url,
-      }
-    },
-  },
-
   style: {
     '.Menu': {
       li: {
@@ -66,12 +42,6 @@ const Menu = {
         }),
       ),
     ])
-  },
-
-  global: {
-    actions: {
-      go: true,
-    },
   },
 }
 
