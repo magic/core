@@ -4,6 +4,9 @@ const xc = require('../lib/xc')
 
 const getGitConfig = async () => {
   if (config.GIT && config.GIT.ORIGIN) {
+    if (!config.GIT.BRANCH) {
+      config.GIT.BRANCH = 'gh-pages'
+    }
     return config.GIT
   }
 
