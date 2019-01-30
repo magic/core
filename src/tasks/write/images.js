@@ -9,6 +9,11 @@ const getDirectories = require('../../lib/getDirectories')
 
 const minifyImages = async images => {
   const imageGlob = `*.{${images.join(',')}}`
+  const staticExists = await fs.exists(config.DIR.STATIC)
+  if (!staticExists) {
+    return
+  }
+
   const dirs = getDirectories(config.DIR.STATIC)
 
   await Promise.all(
