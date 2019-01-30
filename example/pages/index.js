@@ -7,8 +7,45 @@ module.exports = {
   View: state => [
     h1(state.title),
     div([
-      p('Welcome to the magic docs.'),
+      h2('Welcome to the magic docs.'),
       p('The goal of this document is to give you a rough @magical overview.'),
+
+      h2('Features'),
+
+      h3('client app'),
+      p([
+        'magic uses ',
+        Link({ to: 'https://github.com/jorgebucaran/hyperapp/' }, 'hyperapp'),
+        ' to generate a client side webapp.',
+      ]),
+      p([
+        'since hyperapp is awesomely small, the minimal client bundle size hovers around 3-4kb (gzipped),',
+        ' this includes all of magic and greatly dependes on the variety of html elements in use as well as the amount of pages.',
+      ]),
+
+      h3('static file hosting:'),
+      p([
+        'publishes to ',
+        Link({ to: 'https://github.com' }, 'github'),
+        ', ',
+        Link({ to: 'https://gitlab.com' }, 'gitlab'),
+        ' and any other git enabled hosting service.',
+      ]),
+      p('SOON: publish static files to now.sh'),
+      p(
+        'did i mention that all of this is FREE (as in beer)? if your page is smaller than 1 gigabyte, then it is.',
+      ),
+
+      h3('serverless / faas'),
+      p([
+        'SOON: automagically generates ',
+        Link({ to: 'https://now.sh' }, 'now.sh'),
+        ' lambdas, derived from the ',
+        Link({ to: 'https://github.com/magic-modules/' }, '@magic-modules'),
+        ' you use in your pages.',
+        ' this will make visitor statistics, user authentication and authorization, chat, and all other server side goodies possible.',
+      ]),
+      p('now.sh offers 1000 free daily interactions with the serverless functions.'),
     ]),
   ],
 }
