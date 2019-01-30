@@ -18,7 +18,7 @@ if (!config.ROOT) {
 }
 
 const PAGES = path.join(config.ROOT, 'pages')
-const PUBLIC = path.join(process.cwd(), config.DIR.PUBLIC || 'public')
+const PUBLIC = path.join(process.cwd(), config.PUBLIC || 'public')
 const ASSETS = path.join(config.ROOT, 'assets')
 const MODULES = path.join(config.ROOT, 'modules')
 const STATIC = path.join(ASSETS, 'static')
