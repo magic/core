@@ -1,10 +1,11 @@
 const Menu = {
   actions: {
-    go: e => state => {
+    go: to => e => state => {
       e.preventDefault()
       let url = state.url
-      if (e.target && e.target.href) {
-        url = e.target.href.replace(window.location.origin, '')
+
+      if (to) {
+        url = to.replace(window.location.origin, '')
         if (url !== state.url) {
           window.history && window.history.pushState({ urlPath: url }, '', url)
         }
