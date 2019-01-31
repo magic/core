@@ -23,6 +23,9 @@ const Link = ({ to, href, text, nofollow, noreferrer }, children) => (_, actions
 Link.actions = {
   go: ({ e, to }) => state => {
     e.preventDefault()
+    if(typeof document !== 'undefined') {
+      document.getElementsByTagName('html')[0].scrollTop = 0
+    }
     let url = state.url
 
     if (to) {
