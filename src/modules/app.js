@@ -87,14 +87,14 @@ let app = {
       head([
         meta({ charset: 'utf-8' }),
         link({ rel: 'icon', href: '/favicon.ico' }),
-        state.title && title(state.title),
-        state.description &&
+        !is.empty(state.title) && title(state.title),
+        !is.empty(state.description) &&
           meta({
             name: 'description',
             content: is.array(state.description) ? state.description.join(' ') : state.description,
           }),
-        state.keywords && meta({ name: 'keywords', content: state.keywords }),
-        state.author && meta({ name: 'author', content: state.author }),
+        !is.empty(state.keywords) && meta({ name: 'keywords', content: is.array(state.keywords) ? state.keywords.join(' ') : state.keywords }),
+        !is.empty(state.author) && meta({ name: 'author', content: state.author }),
         link({ rel: 'stylesheet', href: '/magic.css' }),
         page.Head && page.Head(state, actions),
       ]),
