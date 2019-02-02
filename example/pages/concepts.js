@@ -27,7 +27,7 @@ actions: {
     })
 
     // actions can call other actions
-    actions.changeVariable(state.variable ? 'arg passed to function' : '')
+    actions.changeVariable('arg passed to function')
   },
 }`,
       global: `
@@ -118,7 +118,7 @@ const exampleModule = {
           h2('actions'),
           p('actions are an object containing functions'),
           p('those functions get the state and actions and may return a new partial state.'),
-          p('alternatively, you can call any action any other action.'),
+          p('alternatively, you can call any action from within any other action.'),
 
           h3('example actions'),
           Pre.View(example.actions),

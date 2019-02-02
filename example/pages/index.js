@@ -31,10 +31,6 @@ module.exports = {
         Link({ to: 'https://gitlab.com' }, 'gitlab'),
         ' and any other git enabled hosting service.',
       ]),
-      p('SOON: publish static files to now.sh'),
-      p(
-        'did i mention that all of this is FREE (as in beer)? if your page is smaller than 1 gigabyte, then it is.',
-      ),
 
       h3('serverless / faas'),
       p([
@@ -45,7 +41,6 @@ module.exports = {
         ' you use in your pages.',
         ' this will make visitor statistics, user authentication and authorization, chat, and all other server side goodies possible.',
       ]),
-      p('now.sh offers 1000 free daily interactions with the serverless functions.'),
     ]),
   ],
 }
