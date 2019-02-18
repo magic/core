@@ -93,7 +93,11 @@ let app = {
             name: 'description',
             content: is.array(state.description) ? state.description.join(' ') : state.description,
           }),
-        !is.empty(state.keywords) && meta({ name: 'keywords', content: is.array(state.keywords) ? state.keywords.join(' ') : state.keywords }),
+        !is.empty(state.keywords) &&
+          meta({
+            name: 'keywords',
+            content: is.array(state.keywords) ? state.keywords.join(' ') : state.keywords,
+          }),
         !is.empty(state.author) && meta({ name: 'author', content: state.author }),
         link({ rel: 'stylesheet', href: '/magic.css' }),
         page.Head && page.Head(state, actions),

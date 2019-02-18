@@ -24,13 +24,13 @@ Link.actions = {
   go: props => state => {
     const { to } = props
     let { e } = props
-    if(!props.e) {
+    if (!props.e) {
       e = props
     }
 
     e.preventDefault()
 
-    if(typeof document !== 'undefined') {
+    if (typeof document !== 'undefined') {
       document.getElementsByTagName('html')[0].scrollTop = 0
     }
     let url = state.url

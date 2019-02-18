@@ -6,7 +6,7 @@ const { is } = require('@magic/test')
 const { mkdirp, rmrf, getFiles, getDirectories } = require('../../src/lib')
 const dirName = path.join(__dirname, '.__test__')
 
-const before = (id) => async () => {
+const before = id => async () => {
   const dir = `${dirName}${id}`
 
   const files = [
@@ -14,6 +14,7 @@ const before = (id) => async () => {
     path.join(dir, 'test2', 'deep', 'test2.js'),
     path.join(dir, 'test.js'),
   ]
+
   await mkdirp(path.join(dir, 'test', 'deep'))
   await mkdirp(path.join(dir, 'test2', 'deep'))
 

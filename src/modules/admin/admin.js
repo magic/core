@@ -54,21 +54,24 @@ module.exports = {
   View: page => (state, actions) =>
     div(
       { id: 'magic' },
-      div({
-        class: 'wrapper',
-        oncreate: () => {
-          if (typeof window !== 'undefined' && actions.go) {
-            window.addEventListener('popstate', actions.go)
-          }
+      div(
+        {
+          class: 'wrapper',
+          oncreate: () => {
+            if (typeof window !== 'undefined' && actions.go) {
+              window.addEventListener('popstate', actions.go)
+            }
+          },
         },
-      }, [
-        Admin,
-        PageHead,
-        page
-          ? div({ class: 'page' }, page(state, actions))
-          : div({ class: 'page' }, '404 - not found'),
-        Footer.View,
-      ]),
+        [
+          Admin,
+          PageHead,
+          page
+            ? div({ class: 'page' }, page(state, actions))
+            : div({ class: 'page' }, '404 - not found'),
+          Footer.View,
+        ],
+      ),
     ),
 
   global: {
