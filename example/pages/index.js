@@ -20,7 +20,7 @@ module.exports = {
       ]),
       p([
         'since hyperapp is awesomely small, the minimal client bundle size hovers around 3-4kb (gzipped),',
-        ' this includes all of magic and greatly dependes on the variety of html elements in use as well as the amount of pages.',
+        ' this includes all of @magic and depends on the variety of html elements in use as well as the amount and content length of the pages.',
       ]),
 
       h3('static file hosting:'),
