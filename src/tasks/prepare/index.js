@@ -6,6 +6,7 @@ const adminModules = require('../../modules/admin/modules')
 const { getFiles, getPages, getDependencies, isUpperCase, fs } = require('../../lib')
 const prepareLib = require('./prepareLib')
 const preparePages = require('./preparePages')
+const isGlobal = require('./lib/isGlobal')
 
 global.keys = new Set()
 
@@ -62,15 +63,15 @@ const prepare = async app => {
         if (component.global) {
           if (component.global.state) {
             Object.entries(component.global.state)
-              .filter(s => s[1] === true)
-              .forEach(([key, val]) => {
+              .filter(isGlobal)
+              .forEach(([key]) => {
                 app.state[key] = component.state[key]
               })
           }
 
           if (component.global.actions) {
             Object.entries(component.global.actions)
-              .filter(s => s[1] === true)
+              .filter(isGlobal)
               .forEach(([key, val]) => {
                 app.actions[key] = component.actions[key]
               })
