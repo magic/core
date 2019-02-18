@@ -24,6 +24,6 @@ module.exports = [
   {
     fn: async () => await rmrf(path.join(__dirname, 'non', 'existent', 'dir')),
     expect: undefined,
-    info: 'rmrf returns undefined if the directory/file does no exist',
+    info: 'rmrf returns undefined if the directory/file does not exist',
   },
 ]
