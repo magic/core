@@ -55,32 +55,6 @@ const getComponentDependencies = str => {
   return components
 }
 
-const flattenDeps = deps => {
-  const dependencies = {}
-  deps = deep.flatten(deps).map(f => {
-    Object.entries(f).forEach(([k, f]) => {
-      dependencies[k] = f
-    })
-  })
-
-  return dependencies
-}
-
-const getPageDependencies = page => ({
-  ...page,
-  dependencies: getComponentDependencies(page.View.toString()),
-})
-
-const getDependencies = ({ pages, app }) => {
-  pages = pages.map(getPageDependencies)
-
-  app.dependencies = getComponentDependencies(app.Body.toString())
-
-  const dependencies = flattenDeps([...pages.map(p => p.dependencies), app.dependencies])
-
-  return { pages, app, dependencies }
-}
-
 const getDeps = props => {
   const deps = {}
   getComponentDependencies(props).forEach(o => {
