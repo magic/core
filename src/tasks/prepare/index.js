@@ -11,6 +11,7 @@ const isGlobal = require('./lib/isGlobal')
 global.keys = new Set()
 
 let exists = false
+
 const prepare = async app => {
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
   if (exists || (await fs.exists(maybeAssetFile))) {
@@ -37,7 +38,7 @@ const prepare = async app => {
     app.state.config = global.config
   }
 
-  Object.entries(app.dependencies).forEach(([k, dep]) => {
+  Object.entries(app.dependencies).forEach(([_, dep]) => {
     if (dep.state) {
       app.state = deep.merge(dep.state, app.state)
     }
