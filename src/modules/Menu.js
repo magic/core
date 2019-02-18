@@ -24,10 +24,6 @@ const Menu = {
       return
     }
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('popstate', actions.go)
-    }
-
     return nav({ class: 'Menu' }, [
       ul(
         state[name].map((item, i) => {

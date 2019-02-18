@@ -54,7 +54,14 @@ module.exports = {
   View: page => (state, actions) =>
     div(
       { id: 'magic' },
-      div({ class: 'wrapper' }, [
+      div({
+        class: 'wrapper',
+        oncreate: () => {
+          if (typeof window !== 'undefined' && actions.go) {
+            window.addEventListener('popstate', actions.go)
+          }
+        },
+      }, [
         Admin,
         PageHead,
         page

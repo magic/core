@@ -21,8 +21,15 @@ const Link = ({ to, href, text, nofollow, noreferrer }, children) => (_, actions
 }
 
 Link.actions = {
-  go: ({ e, to }) => state => {
+  go: props => state => {
+    const { to } = props
+    let { e } = props
+    if(!props.e) {
+      e = props
+    }
+
     e.preventDefault()
+
     if(typeof document !== 'undefined') {
       document.getElementsByTagName('html')[0].scrollTop = 0
     }
@@ -40,6 +47,7 @@ Link.actions = {
         url = '/'
       }
     }
+
     return {
       url,
       prev: state.url,
