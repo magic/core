@@ -1,36 +1,43 @@
 const path = require('path')
 const fs = require('fs')
 
-const { mkdirp } = require('../../src/lib')
+const { is } = require('@magic/test')
 
+const { mkdirp, rmrf, getFiles, getDirectories } = require('../../src/lib')
 const dirName = path.join(__dirname, '.__test__')
 
-const files = [
-  path.join(dirName, 'test', 'deep', 'test.js'),
-  path.join(dirName, 'test2', 'deep', 'test2.js'),
-  path.join(dirName, 'test.js'),
-]
+const before = (id) => async () => {
+  const dir = `${dirName}${id}`
 
-const before = () => {
-  mkdirp(path.join(dirName, 'test', 'deep'))
-  mkdirp(path.join(dirName, 'test2', 'deep'))
+  const files = [
+    path.join(dir, 'test', 'deep', 'test.js'),
+    path.join(dir, 'test2', 'deep', 'test2.js'),
+    path.join(dir, 'test.js'),
+  ]
+  await mkdirp(path.join(dir, 'test', 'deep'))
+  await mkdirp(path.join(dir, 'test2', 'deep'))
 
   files.map(f => {
     // console.log(f)
     return fs.writeFileSync(f, 't')
   })
 
-  return () => {
-    fs.rmSync(dirName)
+  return async () => {
+    await rmrf(dir)
   }
 }
 
 module.exports = [
-  { fn: true, expect: true },
-  // {
-  //   fn: getFiles(dirName),
-  //   before,
-  //   expect: is.length.equal(3),
-  //   info: 'finds all files in directory. recursively.',
-  // },
+  {
+    fn: async () => await getFiles(`${dirName}1`),
+    before: before(1),
+    expect: is.length.equal(3),
+    info: 'finds all files in directory. recursively.',
+  },
+  {
+    fn: async () => await getDirectories(`${dirName}2`),
+    before: before(2),
+    expect: is.length.equal(5),
+    info: 'finds all directories in directory. recursively',
+  },
 ]

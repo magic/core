@@ -10,7 +10,7 @@ const testDir = path.join(testDirRoot, 'deep', 'deeper')
 const before = async () => {
   await mkdirp(testDir)
   const touchFile = path.join(testDir, 'touched.js')
-  fs.writeFileSync(touchFile, 'test')
+  fs.writeFileSync(touchFile, 'true')
 }
 
 module.exports = [
