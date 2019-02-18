@@ -13,8 +13,8 @@ const handleDeps = ([name, component]) => {
 
   const views = Object.entries(component)
     .filter(([k]) => isUpperCase(k))
-    .map(([n, view]) => {
-      return { name: n, view }
+    .map(([name, view]) => {
+      return { name, view }
     })
 
   if (views.length) {
