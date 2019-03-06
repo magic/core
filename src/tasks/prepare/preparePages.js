@@ -3,8 +3,6 @@ const deep = require('@magic/deep')
 
 const { isUpperCase, getDependencies } = require('../../lib')
 
-const { mapPageObject } = require('./lib/')
-
 const preparePages = files => {
   const pages = files.map(file => {
     const page = require(file)
@@ -22,14 +20,6 @@ const preparePages = files => {
     page.dependencies = getDependencies(page.View.toString())
 
     Object.entries(page.dependencies).forEach(([k, c]) => {
-      if (c.state) {
-        Object.entries(c.state).forEach(mapPageObject(page, 'state', c))
-      }
-
-      if (c.actions) {
-        Object.entries(c.actions).forEach(mapPageObject(page, 'actions', c))
-      }
-
       if (c.style) {
         page.style = deep.merge(c.style, page.style)
       }
