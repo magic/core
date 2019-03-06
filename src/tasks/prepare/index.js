@@ -6,7 +6,6 @@ const adminModules = require('../../modules/admin/modules')
 const { getFiles, getPages, getDependencies, isUpperCase, fs } = require('../../lib')
 const prepareLib = require('./prepareLib')
 const preparePages = require('./preparePages')
-const isGlobal = require('./lib/isGlobal')
 
 global.keys = new Set()
 
@@ -29,8 +28,6 @@ const prepare = async app => {
 
   app.files = files
 
-  app.state = deep.merge(app.state, { pages: {} })
-  app.actions = deep.merge(app.actions, { pages: {} })
   app.dependencies = getDependencies(app.Body.toString())
 
   if (config.ENV === 'development') {
@@ -38,17 +35,8 @@ const prepare = async app => {
     app.state.config = global.config
   }
 
-  Object.entries(app.dependencies).forEach(([_, dep]) => {
-    if (dep.state) {
-      app.state = deep.merge(dep.state, app.state)
-    }
-    if (dep.actions) {
-      app.actions = deep.merge(dep.actions, app.actions)
-    }
-    if (dep.style) {
-      app.style = deep.merge(dep.style, app.style)
-    }
-  })
+  app.state.pages = {}
+  app.actions.pages = {}
 
   app.pages = preparePages(files).map(page => {
     if (!is.empty(page.state)) {
@@ -58,31 +46,9 @@ const prepare = async app => {
       app.actions.pages[page.name] = page.actions
     }
 
-    const dependencies = getDependencies(page.View.toString())
-    Object.entries(dependencies).forEach(([name, component]) => {
-      if (is.object(component) && isUpperCase(name)) {
-        if (component.global) {
-          if (component.global.state) {
-            Object.entries(component.global.state)
-              .filter(isGlobal)
-              .forEach(([key]) => {
-                app.state[key] = component.state[key]
-              })
-          }
-
-          if (component.global.actions) {
-            Object.entries(component.global.actions)
-              .filter(isGlobal)
-              .forEach(([key, val]) => {
-                app.actions[key] = component.actions[key]
-              })
-          }
-        }
-      }
-    })
-
     app.dependencies = deep.merge(page.dependencies, app.dependencies)
     app.style = deep.merge(page.style, app.style)
+
     return page
   })
 
@@ -98,6 +64,35 @@ const prepare = async app => {
       )
     }
   }
+
+  Object.entries(app.dependencies)
+    .filter(([name]) => isUpperCase(name))
+    .forEach(([name, component]) => {
+      const lowerName = name.toLowerCase()
+      const { state = {}, actions = {} } = component.global || {}
+
+      if (component.state) {
+        Object.entries(component.state).forEach(([key, val]) => {
+          if (state[key] === true) {
+            app.state[key] = val
+          } else {
+            app.state[lowerName] = app.state[lowerName] || {}
+            app.state[lowerName][key] = val
+          }
+        })
+      }
+
+      if (component.actions) {
+        Object.entries(component.actions).forEach(([key, val]) => {
+          if (actions[key] === true) {
+            app.actions[key] = val
+          } else {
+            app.actions[lowerName] = app.actions[lowerName] || {}
+            app.actions[lowerName][key] = val
+          }
+        })
+      }
+    })
 
   app.lib = {
     str: prepareLib(app),
