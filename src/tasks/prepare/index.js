@@ -98,6 +98,13 @@ const prepare = async app => {
     str: prepareLib(app),
   }
 
+  app.lambdas = {}
+  Object.entries(app.dependencies)
+    .filter(([_, dep]) => dep.server)
+    .forEach(([name, dep]) => {
+      app.lambdas[name.toLowerCase()] = dep.server
+    })
+
   return app
 }
 
