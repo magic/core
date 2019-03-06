@@ -2,6 +2,8 @@ const fs = require('fs')
 const path = require('path')
 const deep = require('@magic/deep')
 
+require('now-env')
+
 const configPath = path.join(process.cwd(), 'config.js')
 let config = {}
 if (fs.existsSync(configPath)) {
