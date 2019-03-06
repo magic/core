@@ -35,8 +35,9 @@ const prepare = async app => {
     app.state.config = global.config
   }
 
-  app.state.pages = {}
-  app.actions.pages = {}
+  // using merge here to make sure app.state and app.actions are being set if undefined
+  app.state = deep.merge(app.state, { pages: {} })
+  app.actions = deep.merge(app.actions, { pages: {} })
 
   app.pages = preparePages(files).map(page => {
     if (!is.empty(page.state)) {
