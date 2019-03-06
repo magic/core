@@ -1,13 +1,20 @@
-const applyWebRoot = str => {
-  if (!config.WEB_ROOT || config.WEB_ROOT === '/' || process.env.NODE_ENV !== 'production') {
+const applyWebRoot = ({ ENV, WEB_ROOT }, str) => {
+  if (!WEB_ROOT || WEB_ROOT === '/' || ENV !== 'production') {
     return str
   }
 
+  if (!WEB_ROOT.startsWith('/')) {
+    WEB_ROOT = `/${WEB_ROOT}`
+  }
+  if (!WEB_ROOT.endsWith('/')) {
+    WEB_ROOT = `${WEB_ROOT}/`
+  }
+
   return str
-    .replace(/href="\//gm, `href="${config.WEB_ROOT}`)
-    .replace(/href='\//gm, `href='${config.WEB_ROOT}`)
-    .replace(/src="\//gm, `src="${config.WEB_ROOT}`)
-    .replace(/src='\//gm, `src='${config.WEB_ROOT}`)
+    .replace(/href="\//gm, `href="${WEB_ROOT}`)
+    .replace(/href='\//gm, `href='${WEB_ROOT}`)
+    .replace(/src="\//gm, `src="${WEB_ROOT}`)
+    .replace(/src='\//gm, `src='${WEB_ROOT}`)
 }
 
 module.exports = applyWebRoot

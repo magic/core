@@ -11,7 +11,7 @@ module.exports = app => page => {
   // page url must overwrite app url to get .active class assigned correctly on menu items
   state.url = page.name
 
-  const rendered = applyWebRoot(renderToString(app.View(page), state, actions))
+  const rendered = applyWebRoot(config, renderToString(app.View(page), state, actions))
 
   return {
     ...page,
