@@ -33,6 +33,7 @@ Link.actions = {
     if (typeof document !== 'undefined') {
       document.getElementsByTagName('html')[0].scrollTop = 0
     }
+
     let url = state.url
 
     if (to) {
