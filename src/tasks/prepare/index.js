@@ -7,6 +7,8 @@ const { getFiles, getPages, getDependencies, isUpperCase, fs } = require('../../
 const prepareLib = require('./prepareLib')
 const preparePages = require('./preparePages')
 
+const { isGlobal } = require('./lib')
+
 global.keys = new Set()
 
 let exists = false
@@ -39,6 +41,7 @@ const prepare = async app => {
   app.state = deep.merge(app.state, { pages: {} })
   app.actions = deep.merge(app.actions, { pages: {} })
 
+  // collect the pages, create their states
   app.pages = preparePages(files).map(page => {
     if (!is.empty(page.state)) {
       app.state.pages[page.name] = page.state
@@ -47,12 +50,15 @@ const prepare = async app => {
       app.actions.pages[page.name] = page.actions
     }
 
+    // make sure app.dependencies contains all recursive dependencies
     app.dependencies = deep.merge(page.dependencies, app.dependencies)
     app.style = deep.merge(page.style, app.style)
 
     return page
   })
 
+  // collet all static files,
+  // write their buffers into app.static
   app.static = {}
   if (await fs.exists(config.DIR.STATIC)) {
     const staticFiles = await getFiles(config.DIR.STATIC)
@@ -60,21 +66,24 @@ const prepare = async app => {
       await Promise.all(
         staticFiles.map(async f => {
           const name = f.replace(config.DIR.STATIC, '')
+          // TODO: use streams here
           app.static[name] = await fs.readFile(f)
         }),
       )
     }
   }
 
+  // merge component states and actions into app.state[componentName].
+  // this makes all identical components share their state and actions.
+  // this means that this loop should be changed to
   Object.entries(app.dependencies)
     .filter(([name]) => isUpperCase(name))
     .forEach(([name, component]) => {
       const lowerName = name.toLowerCase()
-      const { state = {}, actions = {} } = component.global || {}
 
       if (component.state) {
         Object.entries(component.state).forEach(([key, val]) => {
-          if (state[key] === true) {
+          if (isGlobal(component.global.state, key)) {
             app.state[key] = val
           } else {
             app.state[lowerName] = app.state[lowerName] || {}
@@ -85,7 +94,7 @@ const prepare = async app => {
 
       if (component.actions) {
         Object.entries(component.actions).forEach(([key, val]) => {
-          if (actions[key] === true) {
+          if (isGlobal(component.global.actions, key)) {
             app.actions[key] = val
           } else {
             app.actions[lowerName] = app.actions[lowerName] || {}
