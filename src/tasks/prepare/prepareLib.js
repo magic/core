@@ -7,9 +7,11 @@ const { stringifyObject, handleDeps } = require('./lib/')
 const prepareLib = app => {
   let libString = ''
 
+  // read original hyperapp from nodemodules
   const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
   const hyperappContent = fs
     .readFileSync(hyperappFile, 'utf8')
+    // declare functions globally instead of exporting them
     .replace(/export function (.*)\(/gm, (_, $1) => `function ${$1}(`)
 
   libString += hyperappContent
@@ -48,14 +50,17 @@ const prepareLib = app => {
   const actionString = `const actions = ${stringifyObject(app.actions)}\n`
   libString += actionString
 
+  // get inner View from app
   let b = app.Body.toString().split("{ id: 'magic' },\n")[1]
 
+  // remove last two commas
   b = b.substr(0, b.length - 1).trim()
   b = b.substr(0, b.length - 1).trim()
 
   const viewString = `
-function view(state, actions) {
+const view = (state, actions) => {
   const url = pages[state.url] ? state.url : '/404/'
+  // used below, is kind of a global!
   const page = pages[url]
 
   const pageState = state.pages[url]
