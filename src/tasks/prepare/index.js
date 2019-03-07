@@ -81,9 +81,11 @@ const prepare = async app => {
     .forEach(([name, component]) => {
       const lowerName = name.toLowerCase()
 
+      const glob = component.global || {}
+
       if (component.state) {
         Object.entries(component.state).forEach(([key, val]) => {
-          if (isGlobal(component.global.state, key)) {
+          if (isGlobal(glob.state, key)) {
             app.state[key] = val
           } else {
             app.state[lowerName] = app.state[lowerName] || {}
@@ -94,7 +96,7 @@ const prepare = async app => {
 
       if (component.actions) {
         Object.entries(component.actions).forEach(([key, val]) => {
-          if (isGlobal(component.global.actions, key)) {
+          if (isGlobal(glob.actions, key)) {
             app.actions[key] = val
           } else {
             app.actions[lowerName] = app.actions[lowerName] || {}
