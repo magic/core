@@ -13,7 +13,7 @@ const handler = app => (req, res) => {
     const action = rawUrl.replace('/api/', '').replace('/', '')
     if (typeof lambdas[action] === 'function') {
       req.body = ''
-      req.on('data', chunk => req.body += chunk)
+      req.on('data', chunk => (req.body += chunk))
 
       req.on('end', (...args) => lambdas[action](req, res, ...args))
       return
