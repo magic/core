@@ -19,6 +19,8 @@ if (!config.ROOT) {
   config.ROOT = process.cwd()
 }
 
+config.DIR = config.DIR || {}
+
 const PAGES = path.join(config.ROOT, 'pages')
 const PUBLIC = path.join(process.cwd(), config.PUBLIC || config.DIR.PUBLIC || 'public')
 const ASSETS = path.join(config.ROOT, 'assets')
