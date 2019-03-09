@@ -1,5 +1,4 @@
 const path = require('path')
-const log = require('@magic/log')
 
 const { mkdirp, fs } = require('../../lib')
 
@@ -10,6 +9,7 @@ const minifyImages = require('./images')
 const writeFile = require('./writeFile')
 const compress = require('./compress')
 const { getFileType } = require('../../lib/')
+const writeServer = require('./writeServer')
 
 const write = async app => {
   const zippable = config.FILETYPES.ZIPPABLE
@@ -42,6 +42,8 @@ const write = async app => {
     await compress(zippable, images)
     await minifyImages(images)
   }
+
+  await writeServer(app)
 }
 
 module.exports = write
