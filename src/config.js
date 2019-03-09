@@ -20,11 +20,12 @@ if (!config.ROOT) {
 }
 
 const PAGES = path.join(config.ROOT, 'pages')
-const PUBLIC = path.join(process.cwd(), config.PUBLIC || 'public')
+const PUBLIC = path.join(process.cwd(), config.PUBLIC || config.DIR.PUBLIC || 'public')
 const ASSETS = path.join(config.ROOT, 'assets')
 const MODULES = path.join(config.ROOT, 'modules')
 const STATIC = path.join(ASSETS, 'static')
 const THEMES = path.join(ASSETS, 'themes')
+const API = path.join(process.cwd(), config.DIR.API || 'api')
 
 const ZIPPABLE = [
   'css',
@@ -55,6 +56,7 @@ config = deep.merge(config, {
     MODULES,
     STATIC,
     THEMES,
+    API,
   },
   FILETYPES: {
     ZIPPABLE,
