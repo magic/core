@@ -47,13 +47,28 @@ const handler = async app => {
     }
 
     if (hasStatic) {
-      const content = static[pathname] || static[`${pathname}index.html`]
-      if (content) {
-        let contentType = getContentType(pathname)
-        if (!static[pathname]) {
-          contentType = 'text/html'
+      let name
+      if (static[pathname]) {
+        name = pathname
+      } else if (static[`${pathname}index.html`]) {
+        name = `${pathname}index.html`
+      }
+
+      const headers = {
+        'content-type': getContentType(name),
+      }
+
+
+      if (static[`${name}.gz`]) {
+        if (req.headers['accept-encoding'].includes('gzip')) {
+          name = `${name}.gz`
+          headers['content-encoding'] = 'gzip'
         }
-        res.writeHead(200, contentType)
+      }
+
+      const content = static[name]
+      if (content) {
+        res.writeHead(200, headers)
         res.end(content)
         return
       }
