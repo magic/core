@@ -7,7 +7,12 @@ const serve = async app => {
   const server = http.createServer(handle)
 
   server.listen(3000, () => {
-    console.log('listening to http://localhost:3000')
+    let { address, port } = server.address()
+    if (address === '::') {
+      address = 'localhost'
+    }
+
+    console.log(`listening to ${address}:${port}`)
   })
 
   return server
