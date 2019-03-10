@@ -63,7 +63,7 @@ const handler = async app => {
       if (hasApi && pathname.startsWith('/api')) {
         const action = pathname.replace('/api', '')
         if (typeof lambdas[action] === 'function') {
-          return lambdas[action](req, res)
+          return await lambdas[action](req, res)
         }
       }
     }
