@@ -15,9 +15,10 @@ const maybeGetFiles = async dir => {
 }
 
 const handler = async app => {
-  const publicFiles = await maybeGetFiles(config.DIR.PUBLIC)
-  const apiFiles = await maybeGetFiles(config.DIR.API)
+  // only gets executed once on server start
 
+  // first find public files, if there are any
+  const publicFiles = await maybeGetFiles(config.DIR.PUBLIC)
   const static = {}
   if (publicFiles.length) {
     await Promise.all(
@@ -29,6 +30,8 @@ const handler = async app => {
   }
   const hasStatic = Object.keys(static).length > 0
 
+  // find lambda files, if there are any
+  const apiFiles = await maybeGetFiles(config.DIR.API)
   const lambdas = {}
   if (apiFiles.length) {
     apiFiles.forEach(name => {
@@ -38,12 +41,13 @@ const handler = async app => {
   }
   const hasApi = Object.keys(static).length > 0
 
+  // handle the actual request
   return async (req, res) => {
     const url = parse(req.url.replace(config.WEB_ROOT, '/'))
     const { pathname } = url
 
     if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {
-      res.setHeader('X-Clacks-Overhead', 'GNU Terry Pratchet')
+      res.setHeader('x-clacks-overhead', 'GNU Terry Pratchet')
     }
 
     if (hasStatic) {
@@ -54,35 +58,40 @@ const handler = async app => {
         name = `${pathname}index.html`
       }
 
-      const headers = {
-        'content-type': getContentType(name),
-      }
+      res.setHeader('content-type', getContentType(name))
 
       if (static[`${name}.gz`]) {
         if (req.headers['accept-encoding'].includes('gzip')) {
           name = `${name}.gz`
-          headers['content-encoding'] = 'gzip'
+          res.setHeader('content-encoding', 'gzip')
         }
       }
 
       const content = static[name]
       if (content) {
-        res.writeHead(200, headers)
+        res.writeHead(200)
         res.end(content)
         return
       }
     }
 
-    if (req.method === 'POST') {
-      if (hasApi && pathname.startsWith('/api')) {
-        const action = pathname.replace('/api', '')
-        if (typeof lambdas[action] === 'function') {
-          return await lambdas[action](req, res)
+    if (hasApi) {
+      if (pathname.startsWith('/api')) {
+        if (req.method === 'POST') {
+          const action = pathname.replace('/api', '')
+          if (typeof lambdas[action] === 'function') {
+            return await lambdas[action](req, res)
+          }
         }
+
+        // TODO: add api docs
+        // if (req.method === 'GET') {
+
+        // }
       }
     }
 
-    res.writeHead(404, { 'Content-Type': 'text/html' })
+    res.writeHead(404, { 'content-type': 'text/html' })
     res.end(static['/404/index.html'])
   }
 }
