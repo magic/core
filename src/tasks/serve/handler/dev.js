@@ -1,4 +1,4 @@
-const { addTrailingSlash, getContentType } = require('../../lib/')
+const { addTrailingSlash, getContentType } = require('../../../lib/')
 
 const isProd = process.env.NODE_ENV === 'production'
 
