@@ -20,10 +20,12 @@ const handler = async app => {
 
   const static = {}
   if (publicFiles.length) {
-    await Promise.all(publicFiles.map(async name => {
-      const rootName = name.replace(config.DIR.PUBLIC, '')
-      static[rootName] = await fs.readFile(name)
-    }))
+    await Promise.all(
+      publicFiles.map(async name => {
+        const rootName = name.replace(config.DIR.PUBLIC, '')
+        static[rootName] = await fs.readFile(name)
+      }),
+    )
   }
   const hasStatic = Object.keys(static).length > 0
 
