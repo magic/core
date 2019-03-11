@@ -69,6 +69,25 @@ style: {
     color: 'black',
   },
 }`,
+
+      server: `
+server: (req, res) => {
+  const { name } = req.body
+  res.writeHead(200, { 'content-type': 'text/plain' })
+  res.end(\`hello, \${name}\`)
+}`,
+
+      complexServer: `
+server: {
+  index: (req, res) => {
+    res.writeHead(200, { 'content-type': 'text/plain' })
+    res.end('index route')
+  },
+  route: (req, res) => {
+    res.writeHead(200, { 'content-type': 'text/plain' })
+    res.end('api route')
+  },
+}`,
     }
 
     const indent = str =>
@@ -84,6 +103,7 @@ const exampleModule = {
   ${indent(example.style)},
   ${indent(example.view)},
   ${indent(example.global)},
+  ${indent(example.server)},
 }`
 
     return [
@@ -157,6 +177,20 @@ const exampleModule = {
 
           h3('example globals'),
           Pre.View(example.global),
+        ]),
+
+        div([
+          h2('server lambdas'),
+          p('this is the serverside magic.'),
+          p('you can define functions that will turn into serverside lambdas.'),
+          p('server side lambdas will be available for POST requests.'),
+          p('the server side function signature is (req, res) => {}, as in any nodejs http server, with the addition of req.body being set.'),
+
+          h3('example server lambda'),
+          Pre.View(example.server),
+
+          h3('example server multi function'),
+          Pre.View(example.complexServer),
         ]),
 
         div([
