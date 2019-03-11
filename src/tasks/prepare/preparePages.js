@@ -19,6 +19,7 @@ const preparePages = files => {
 
     page.dependencies = getDependencies(page.View.toString())
 
+    // merge dependency styles and dependencies into page dependencies
     Object.entries(page.dependencies).forEach(([k, c]) => {
       if (c.style) {
         page.style = deep.merge(c.style, page.style)

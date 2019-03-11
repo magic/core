@@ -57,7 +57,7 @@ const prepare = async app => {
     return page
   })
 
-  // collet all static files,
+  // collect all static files,
   // write their buffers into app.static
   app.static = {}
   if (await fs.exists(config.DIR.STATIC)) {
@@ -75,7 +75,6 @@ const prepare = async app => {
 
   // merge component states and actions into app.state[componentName].
   // this makes all identical components share their state and actions.
-  // this means that this loop should be changed to
   Object.entries(app.dependencies)
     .filter(([name]) => isUpperCase(name))
     .forEach(([name, component]) => {
