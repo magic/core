@@ -7,6 +7,7 @@ module.exports = {
       { to: 'home', text: 'home' },
       { to: 'state', text: 'state' },
       { to: 'config', text: 'config' },
+      { to: 'publish', text: 'publish' },
     ],
     adminUrl: 'home',
   },
