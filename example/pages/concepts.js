@@ -184,7 +184,9 @@ const exampleModule = {
           p('this is the serverside magic.'),
           p('you can define functions that will turn into serverside lambdas.'),
           p('server side lambdas will be available for POST requests.'),
-          p('the server side function signature is (req, res) => {}, as in any nodejs http server, with the addition of req.body being set.'),
+          p(
+            'the server side function signature is (req, res) => {}, as in any nodejs http server, with the addition of req.body being set.',
+          ),
 
           h3('example server lambda'),
           Pre.View(example.server),
