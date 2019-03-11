@@ -1,22 +1,21 @@
 const { h } = require('hyperapp')
 
-const component = name => (attributes = {}, children = false) => {
+const component = name => (props = {}, children = false) => {
   const is = (ele, ...types) => types.some(type => type === typeof ele)
 
   if (!children) {
     if (
-      is(attributes, 'string', 'number') ||
-      Array.isArray(attributes) ||
-      is(attributes, 'function')
+      is(props, 'string', 'number', 'function') ||
+      Array.isArray(props)
     ) {
-      children = attributes
-      attributes = {}
-    } else if (is(attributes.View, 'function')) {
-      children = attributes.View
-      attributes = {}
+      children = props
+      props = {}
+    } else if (is(props.View, 'function')) {
+      children = props.View
+      props = {}
     }
   }
-  return h(name, attributes, children)
+  return h(name, props, children)
 }
 
 module.exports = component
