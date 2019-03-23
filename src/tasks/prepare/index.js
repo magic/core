@@ -106,32 +106,12 @@ const prepare = async app => {
       }
     })
 
-  const libIndex = path.join(config.DIR.ASSETS, 'lib.js')
-  if (fs.existsSync(libIndex)) {
-    const libFiles = require(libIndex)
-    app.lib = libFiles
-    Object.entries(libFiles).forEach(([name, file]) => {
-      if (typeof global[name] !== 'undefined') {
-        throw new Error(`Name clash: global.${name} would be overwritten by lib import`)
-      }
-
-      const localLibFile = path.join(config.DIR.ASSETS, file)
-      try {
-        if (fs.existsSync(localLibFile)) {
-          global[name] = require(localLibFile)
-        } else {
-          global[name] = require(file)
-        }
-      } catch (e) {
-        throw new Error(`Error in assets/lib.js: Could not find imported lib '${name}' in ${file}`)
-      }
-    })
-  }
-
+  // create client magic.js file
   app.client = {
     str: prepareClient(app),
   }
 
+  // extract lambdas and prepare them
   app.lambdas = {}
   Object.entries(app.dependencies)
     .filter(([_, dep]) => dep.server)
