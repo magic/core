@@ -87,7 +87,6 @@ const htmlTags = [
   'sub',
   'summary',
   'sup',
-  'svg',
   'table',
   'tbody',
   'td',
@@ -102,6 +101,19 @@ const htmlTags = [
   'ul',
   'video',
   'wbr',
+
+  // svg tags
+  'svg',
+  'g',
+  'circle',
+  'ellipse',
+  'rect',
+  'polygon',
+  'path',
+  'defs',
+  'linearGradient',
+  'stop',
+  'text',
 ]
 
 const headTags = ['html', 'head', 'title', 'meta', 'link', 'body', 'script']
