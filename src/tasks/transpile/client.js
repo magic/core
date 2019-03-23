@@ -1,6 +1,9 @@
-const babel = require('@babel/core')
+const path = require('path')
+const fs = require('fs')
+const browserify = require('browserify')
 
 const isProd = process.env.NODE_ENV === 'production'
+const isDev = !isProd
 
 const presets = [
   [
@@ -11,7 +14,7 @@ const presets = [
       forceAllTransforms: true,
       ignoreBrowserslistConfig: true,
       modules: false,
-      debug: !isProd,
+      debug: isDev,
     },
   ],
 ]
@@ -25,11 +28,28 @@ if (isProd) {
 const babelOpts = {
   filename: 'magic.js',
   minified: isProd,
-  comments: !isProd,
+  comments: isDev,
   configFile: false,
   sourceMaps: false,
   presets: isProd ? presets : [],
   plugins: isProd ? plugins : [],
 }
 
-module.exports = ({ str }) => babel.transformSync(str, babelOpts)
+module.exports = ({ str }) => {
+  const filePath = path.join(process.cwd(), '.__browserify_empty.js')
+  fs.writeFileSync(filePath, str)
+
+  return new Promise((res, rej) =>
+    browserify(filePath)
+      .transform('babelify', babelOpts)
+      .bundle((err, src) => {
+        fs.unlinkSync(filePath)
+
+        if (err) {
+          rej(err)
+        } else {
+         res(src.toString())
+        }
+      })
+  )
+}

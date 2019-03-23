@@ -4,7 +4,7 @@ const style = require('./css')
 
 const transpile = async app => ({
   pages: html(app),
-  bundle: client(app.client),
+  bundle: await client(app.client),
   css: await style(app.style),
 })
 
