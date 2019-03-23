@@ -20,7 +20,7 @@ module.exports = {
   style: {
     '.admin': {
       position: 'fixed',
-      top: 0,
+      bottom: 0,
       right: 0,
 
       '&.active': {
@@ -35,7 +35,10 @@ module.exports = {
       },
 
       '.toggle': {
-        float: 'right',
+        position: 'absolute',
+        top: 'auto',
+        bottom: 0,
+        right: 0,
       },
 
       a: {
