@@ -117,11 +117,14 @@ const prepare = async app => {
       }
 
       const localLibFile = path.join(config.DIR.ASSETS, file)
-
-      if (fs.existsSync(localLibFile)) {
-        global[name] = require(localLibFile)
-      } else {
-        global[name] = require(file)
+      try {
+        if (fs.existsSync(localLibFile)) {
+          global[name] = require(localLibFile)
+        } else {
+          global[name] = require(file)
+        }
+      } catch (e) {
+        throw new Error(`Error in assets/lib.js: Could not find imported lib '${name}' in ${file}`)
       }
     })
   }
