@@ -1,6 +1,6 @@
 const path = require('path')
 
-const { mkdirp, fs } = require('../../lib')
+const { mkdirp, fs, getFileType } = require('../../lib')
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -8,7 +8,6 @@ const minifyImages = require('./images')
 
 const writeFile = require('./writeFile')
 const compress = require('./compress')
-const { getFileType } = require('../../lib/')
 const writeServer = require('./writeServer')
 
 const write = async app => {
