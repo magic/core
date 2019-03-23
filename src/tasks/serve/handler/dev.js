@@ -3,7 +3,7 @@ const { addTrailingSlash, getContentType } = require('../../../lib/')
 const isProd = process.env.NODE_ENV === 'production'
 
 const handler = app => (req, res) => {
-  const { css, lib, static, lambdas } = app
+  const { css, client, static, lambdas } = app
 
   const WEB_ROOT = addTrailingSlash(config.WEB_ROOT || '/')
   let url = req.url
@@ -27,7 +27,7 @@ const handler = app => (req, res) => {
 
   const style = isProd ? css.minified : css.css
 
-  const js = lib.bundle.code
+  const js = client.bundle.code
 
   if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {
     res.setHeader('X-Clacks-Overhead', 'GNU Terry Pratchet')
