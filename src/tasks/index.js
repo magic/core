@@ -37,7 +37,7 @@ const run = async (App, cmds) => {
 
     const { pages, bundle, css } = await runCmd('transpile', app)
     app.pages = pages
-    app.lib.bundle = bundle
+    app.client.bundle = bundle
     app.css = css
 
     if (cmds.build) {

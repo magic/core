@@ -1,10 +1,10 @@
 const html = require('./html')
-const lib = require('./lib')
+const client = require('./client')
 const style = require('./css')
 
 const transpile = async app => ({
   pages: html(app),
-  bundle: lib(app.lib),
+  bundle: client(app.client),
   css: await style(app.style),
 })
 

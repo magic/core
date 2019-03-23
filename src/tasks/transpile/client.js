@@ -32,7 +32,4 @@ const babelOpts = {
   plugins: isProd ? plugins : [],
 }
 
-module.exports = lib => {
-  const str = lib.str
-  return babel.transformSync(str, babelOpts)
-}
+module.exports = ({ str }) => babel.transformSync(str, babelOpts)

@@ -15,7 +15,7 @@ const write = async app => {
   const zippable = config.FILETYPES.ZIPPABLE
   const images = config.FILETYPES.IMAGES
 
-  const { css, lib, pages, static } = app
+  const { css, client, pages, static } = app
   await mkdirp(config.DIR.PUBLIC)
 
   // write static first to make sure all other files below get written
@@ -33,7 +33,7 @@ const write = async app => {
   })
 
   const jsFile = path.join(config.DIR.PUBLIC, 'magic.js')
-  await fs.writeFile(jsFile, lib.bundle.code)
+  await fs.writeFile(jsFile, client.bundle.code)
 
   const usedCss = isProd ? css.minified : css.css
   await fs.writeFile(path.join(config.DIR.PUBLIC, 'magic.css'), usedCss)

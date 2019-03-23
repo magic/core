@@ -2,10 +2,10 @@ const fs = require('fs')
 const path = require('path')
 const deep = require('@magic/deep')
 
-const { stringifyObject, handleDeps } = require('./lib/')
+const { stringifyObject, handleDeps } = require('./lib')
 
-const prepareLib = app => {
-  let libString = ''
+const prepareClient = app => {
+  let clientString = ''
 
   // read original hyperapp from nodemodules
   const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
@@ -14,9 +14,15 @@ const prepareLib = app => {
     // declare functions globally instead of exporting them
     .replace(/export function (.*)\(/gm, (_, $1) => `function ${$1}(`)
 
-  libString += hyperappContent
+  clientString += hyperappContent
 
-  libString += `const C = ${global.component.toString()}\n`
+  const libFile = path.join(config.DIR.ASSETS, 'lib.js')
+  if (fs.existsSync(libFile)) {
+    const libs = require(libFile)
+    console.log({ libs })
+  }
+
+  clientString += `const C = ${global.component.toString()}\n`
     .replace(/attributes/gm, 'a')
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
@@ -29,7 +35,7 @@ const prepareLib = app => {
     .map(handleDeps)
     .join('')
 
-  libString += depString
+  clientString += depString
 
   let pageString = 'const pages = {\n'
 
@@ -38,17 +44,17 @@ const prepareLib = app => {
   })
 
   pageString += '\n}\n'
-  libString += pageString
+  clientString += pageString
 
   const stateString = `const state = ${stringifyObject(app.state)}\n`
-  libString += stateString
+  clientString += stateString
 
   const urlString = `\nstate.url = window.location.pathname\n`
 
-  libString += urlString
+  clientString += urlString
 
   const actionString = `const actions = ${stringifyObject(app.actions)}\n`
-  libString += actionString
+  clientString += actionString
 
   // get inner View from app
   let b = app.Body.toString().split("{ id: 'magic' },\n")[1]
@@ -76,7 +82,7 @@ const view = (state, actions) => {
 }
 `
 
-  libString += viewString
+  clientString += viewString
 
   const createMagic = `
 const d = document
@@ -87,16 +93,16 @@ if (!mD) {
   d.body.appendChild(mD)
 }
 app(state, actions, view, mD)\n`
-  libString += createMagic
+  clientString += createMagic
 
   if (process.env.NODE_ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
-    libString = libString
+    clientString = clientString
       // replace urls
       .replace(/ '\//gm, `'${config.WEB_ROOT}`)
       .replace(/ "\//gm, `"${config.WEB_ROOT}`)
   }
 
-  return libString
+  return clientString
 }
 
-module.exports = prepareLib
+module.exports = prepareClient

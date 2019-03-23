@@ -4,7 +4,7 @@ const deep = require('@magic/deep')
 let modules = require('../../modules')
 const adminModules = require('../../modules/admin/modules')
 const { getFiles, getPages, getDependencies, isUpperCase, fs } = require('../../lib')
-const prepareLib = require('./prepareLib')
+const prepareClient = require('./prepareClient')
 const preparePages = require('./preparePages')
 
 const { isGlobal } = require('./lib')
@@ -75,6 +75,7 @@ const prepare = async app => {
 
   // merge component states and actions into app.state[componentName].
   // this makes all identical components share their state and actions.
+  // this means that this loop should be changed to
   Object.entries(app.dependencies)
     .filter(([name]) => isUpperCase(name))
     .forEach(([name, component]) => {
@@ -105,8 +106,8 @@ const prepare = async app => {
       }
     })
 
-  app.lib = {
-    str: prepareLib(app),
+  app.client = {
+    str: prepareClient(app),
   }
 
   app.lambdas = {}
