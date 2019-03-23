@@ -114,8 +114,7 @@ let app = {
 const libIndex = path.join(config.DIR.ASSETS, 'lib.js')
 if (fs.existsSync(libIndex)) {
   const libFiles = require(libIndex)
-  app.lib = libFiles
-  Object.entries(libFiles).forEach(([name, file]) => {
+  app.lib = Object.entries(libFiles).map(([name, file]) => {
     if (typeof global[name] !== 'undefined') {
       throw new Error(`Name clash: global.${name} would be overwritten by lib import`)
     }
@@ -124,10 +123,12 @@ if (fs.existsSync(libIndex)) {
     try {
       if (fs.existsSync(localLibFile)) {
         global[name] = require(localLibFile)
+        file = localLibFile
       } else {
-        console.log(name)
         global[name] = require(file)
       }
+
+      return [name, file]
     } catch (e) {
       throw new Error(`Error in assets/lib.js: Could not find imported lib '${name}' in ${file}`)
     }
