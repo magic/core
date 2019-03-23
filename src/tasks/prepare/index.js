@@ -106,7 +106,6 @@ const prepare = async app => {
       }
     })
 
-
   const libIndex = path.join(config.DIR.ASSETS, 'lib.js')
   if (fs.existsSync(libIndex)) {
     const libFiles = require(libIndex)

@@ -58,7 +58,6 @@ const handler = async app => {
         'content-type': getContentType(name),
       }
 
-
       if (static[`${name}.gz`]) {
         if (req.headers['accept-encoding'].includes('gzip')) {
           name = `${name}.gz`

@@ -48,8 +48,8 @@ module.exports = ({ str }) => {
         if (err) {
           rej(err)
         } else {
-         res(src.toString())
+          res(src.toString())
         }
-      })
+      }),
   )
 }

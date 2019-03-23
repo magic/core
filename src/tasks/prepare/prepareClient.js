@@ -8,7 +8,7 @@ const prepareClient = app => {
   let clientString = ''
 
   // importing hyperapp
-  clientString += 'const { app, h } = require(\'hyperapp\')\n'
+  clientString += "const { app, h } = require('hyperapp')\n"
 
   // define every lib import at the top of magic.js
   if (app.lib) {
