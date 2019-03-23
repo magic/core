@@ -7,19 +7,14 @@ const { stringifyObject, handleDeps } = require('./lib')
 const prepareClient = app => {
   let clientString = ''
 
-  // read original hyperapp from nodemodules
-  const hyperappFile = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
-  const hyperappContent = fs
-    .readFileSync(hyperappFile, 'utf8')
-    // declare functions globally instead of exporting them
-    .replace(/export function (.*)\(/gm, (_, $1) => `function ${$1}(`)
+  clientString += 'const { app, h } = require(\'hyperapp\')\n'
 
-  clientString += hyperappContent
-
-  const libFile = path.join(config.DIR.ASSETS, 'lib.js')
-  if (fs.existsSync(libFile)) {
-    const libs = require(libFile)
-    console.log({ libs })
+  const libIndex = path.join(config.DIR.ASSETS, 'lib.js')
+  if (fs.existsSync(libIndex)) {
+    const libFiles = require(libIndex)
+    Object.entries(libFiles).forEach(([name, res]) => {
+      clientString += `const ${name} = require('${res}')\n`
+    })
   }
 
   clientString += `const C = ${global.component.toString()}\n`
