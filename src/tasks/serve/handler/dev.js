@@ -27,7 +27,7 @@ const handler = app => (req, res) => {
 
   const style = isProd ? css.minified : css.css
 
-  const js = client.bundle.code
+  const js = client.bundle
 
   if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {
     res.setHeader('X-Clacks-Overhead', 'GNU Terry Pratchet')

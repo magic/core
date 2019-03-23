@@ -32,7 +32,8 @@ const write = async app => {
   })
 
   const jsFile = path.join(config.DIR.PUBLIC, 'magic.js')
-  await fs.writeFile(jsFile, client.bundle.code)
+
+  await fs.writeFile(jsFile, client.bundle)
 
   const usedCss = isProd ? css.minified : css.css
   await fs.writeFile(path.join(config.DIR.PUBLIC, 'magic.css'), usedCss)
