@@ -32,6 +32,8 @@
     "@magic/types": "0.0.3",
     "babel-plugin-minify-dead-code-elimination": "0.5.0",
     "babel-plugin-minify-mangle-names": "0.5.0",
+    "babelify": "10.0.0",
+    "browserify": "16.2.3",
     "hyperapp": "1.2.9",
     "hyperapp-render": "3.0.0",
     "imagemin": "6.1.0",
