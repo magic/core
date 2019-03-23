@@ -106,6 +106,26 @@ const prepare = async app => {
       }
     })
 
+
+  const libIndex = path.join(config.DIR.ASSETS, 'lib.js')
+  if (fs.existsSync(libIndex)) {
+    const libFiles = require(libIndex)
+    app.lib = libFiles
+    Object.entries(libFiles).forEach(([name, file]) => {
+      if (typeof global[name] !== 'undefined') {
+        throw new Error(`Name clash: global.${name} would be overwritten by lib import`)
+      }
+
+      const localLibFile = path.join(config.DIR.ASSETS, file)
+
+      if (fs.existsSync(localLibFile)) {
+        global[name] = require(localLibFile)
+      } else {
+        global[name] = require(file)
+      }
+    })
+  }
+
   app.client = {
     str: prepareClient(app),
   }

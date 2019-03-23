@@ -9,10 +9,8 @@ const prepareClient = app => {
 
   clientString += 'const { app, h } = require(\'hyperapp\')\n'
 
-  const libIndex = path.join(config.DIR.ASSETS, 'lib.js')
-  if (fs.existsSync(libIndex)) {
-    const libFiles = require(libIndex)
-    Object.entries(libFiles).forEach(([name, res]) => {
+  if (app.lib) {
+    Object.entries(app.lib).forEach(([name, res]) => {
       clientString += `const ${name} = require('${res}')\n`
     })
   }
