@@ -4,8 +4,9 @@ const deep = require('@magic/deep')
 let modules = require('../../modules')
 const adminModules = require('../../modules/admin/modules')
 const { getFiles, getPages, getDependencies, isUpperCase, fs } = require('../../lib')
-const prepareClient = require('./prepareClient')
-const preparePages = require('./preparePages')
+const prepareClient = require('./client')
+const preparePages = require('./pages')
+const prepareStyle = require('./style')
 
 const { isGlobal } = require('./lib')
 
@@ -49,12 +50,12 @@ const prepare = async app => {
     if (!is.empty(page.actions)) {
       app.actions.pages[page.name] = page.actions
     }
+    return page
+  })
 
+  app.pages.forEach(page => {
     // make sure app.dependencies contains all recursive dependencies
     app.dependencies = deep.merge(page.dependencies, app.dependencies)
-    app.style = deep.merge(page.style, app.style)
-
-    return page
   })
 
   // collect all static files,
@@ -72,6 +73,8 @@ const prepare = async app => {
       )
     }
   }
+
+  app.style = await prepareStyle(app)
 
   // merge component states and actions into app.state[componentName].
   // this makes all identical components share their state and actions.
