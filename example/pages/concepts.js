@@ -164,6 +164,11 @@ const exampleModule = {
           p('style merge order from lowest to highest:'),
           p('module.style < page.style < app.style < theme.style'),
 
+          h3('@magic/css'),
+          p('internally, magic uses it\'s own css-in-js library.'),
+          p('to find out more, click the following link:'),
+          Link({ to: 'https://github.com/magic/css' }, '@magic/css'),
+
           h3('example styles'),
           Pre.View(example.style),
         ]),
