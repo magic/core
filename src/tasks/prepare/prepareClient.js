@@ -11,7 +11,7 @@ const prepareClient = app => {
   clientString += "const { app, h } = require('hyperapp')\n"
 
   // define every lib import at the top of magic.js
-  if (app.lib.length) {
+  if (app.lib && app.lib.length) {
     app.lib.forEach(([name, res]) => {
       clientString += `const ${name} = require('${res}')\n`
     })
