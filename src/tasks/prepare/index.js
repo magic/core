@@ -12,12 +12,9 @@ const { isGlobal } = require('./lib')
 
 global.keys = new Set()
 
-let exists = false
-
 const prepare = async app => {
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
-  if (exists || (await fs.exists(maybeAssetFile))) {
-    exists = true
+  if (await fs.exists(maybeAssetFile)) {
     const assets = require(maybeAssetFile)
     modules = deep.merge(modules, assets)
   }
@@ -78,7 +75,6 @@ const prepare = async app => {
 
   // merge component states and actions into app.state[componentName].
   // this makes all identical components share their state and actions.
-  // this means that this loop should be changed to
   Object.entries(app.dependencies)
     .filter(([name]) => isUpperCase(name))
     .forEach(([name, component]) => {
