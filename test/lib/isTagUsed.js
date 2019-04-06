@@ -2,7 +2,7 @@ const isTagUsed = require('../../src/lib/isTagUsed')
 
 module.exports = [
   {
-    fn: () => isTagUsed('string including,tag.View')('tag'),
+    fn: () => isTagUsed('string including tag.View')('tag'),
     expect: true,
     info: 'expect true if tag exists',
   },
@@ -13,6 +13,16 @@ module.exports = [
   },
   {
     fn: () => isTagUsed('string including(tag)')('tag'),
+    expect: true,
+    info: 'expect true if tag exists',
+  },
+  {
+    fn: () => isTagUsed('string including tag.')('tag'),
+    expect: false,
+    info: 'expect false if this is the end of a sentence',
+  },
+  {
+    fn: () => isTagUsed('string including tag.Component')('tag'),
     expect: true,
     info: 'expect true if tag exists',
   },
