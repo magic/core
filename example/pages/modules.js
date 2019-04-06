@@ -122,6 +122,12 @@ module.exports = {
 `),
 
     h2('list of installable magic modules'),
-    ul([li([Link({ to: 'https://github.com/magic-modules/pre' }, '@magic-modules/pre')])]),
+    ul([
+      li([
+        h3('pre'),
+        div('the pre magic module allows you to display javascript code with syntax highlighting. it is used throughout this documentation.'),
+        Link({ to: 'https://github.com/magic-modules/pre' }, '@magic-modules/pre'),
+      ]),
+    ]),
   ],
 }
