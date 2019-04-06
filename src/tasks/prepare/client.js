@@ -1,5 +1,3 @@
-const fs = require('fs')
-const path = require('path')
 const deep = require('@magic/deep')
 
 const { stringifyObject, handleDeps } = require('./lib')
