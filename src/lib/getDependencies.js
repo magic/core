@@ -1,5 +1,3 @@
-const deep = require('@magic/deep')
-const { prepare } = require('../tasks/')
 const is = require('@magic/types')
 
 const isUpperCase = require('./isUpperCase')
@@ -11,12 +9,14 @@ const getComponentDependencies = str => {
   const components = getUsedComponents(str).map(name => {
     const component = global[name]
     if (is.fn(component)) {
+      // this component is a standard html tag
       if (global.tags.body[name]) {
         return {
           [name]: component,
         }
       }
 
+      // get all sub dependencies
       const deps = {}
       getComponentDependencies(component.toString()).forEach(dep => {
         Object.entries(dep).forEach(([name, comp]) => {
@@ -55,7 +55,7 @@ const getComponentDependencies = str => {
   return components
 }
 
-const getDeps = props => {
+const getDependencies = props => {
   const deps = {}
   getComponentDependencies(props).forEach(o => {
     Object.entries(o).forEach(([k, v]) => {
@@ -66,4 +66,4 @@ const getDeps = props => {
   return deps
 }
 
-module.exports = getDeps
+module.exports = getDependencies
