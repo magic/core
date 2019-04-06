@@ -1,21 +1,21 @@
 const is = require('@magic/types')
 const { isUpperCase } = require('../../../lib/')
 
-const handleDeps = ([name, component]) => {
+const handleDependencies = ([name, component]) => {
   if (is.fn(component)) {
     if (global.tags.body[name]) {
-      component = `const ${name} = C('${name}')\n`
-    } else {
-      component = `const ${name} = ${component.toString()}\n`
+      return `const ${name} = C('${name}')\n`
     }
-    return component
+
+    return `const ${name} = ${component.toString()}\n`
   }
 
   const views = Object.entries(component)
-    .filter(([k]) => isUpperCase(k))
-    .map(([name, view]) => {
-      return { name, view }
-    })
+    .filter(([name]) => isUpperCase(name))
+    .map(([name, view]) => ({
+      name,
+      view,
+    }))
 
   if (views.length) {
     component = `const ${name} = {`
@@ -30,4 +30,4 @@ const handleDeps = ([name, component]) => {
   return component
 }
 
-module.exports = handleDeps
+module.exports = handleDependencies
