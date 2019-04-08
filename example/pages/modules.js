@@ -11,7 +11,9 @@ module.exports = {
     h2('module definition:'),
     p('the minimal module is a function that returns some html.'),
     Pre.View(`
-// /assets/LocalModule.js
+// /assets/ModuleName.js
+
+// simplest module
 module.exports = () => div('hello, world')
 
 // complete signature
@@ -25,13 +27,27 @@ module.exports = (props, children) => (state, actions) => div('hello, world')
 module.exports = {
   // ...otherModules
 
-  // load module from /assets/LocalModule.js
-  LocalModule: require('./LocalModule'),
+  // load module from /assets/Mod.js
+  Mod: require('./Mod'),
 
   // load module from node_modules
   NpmModule: require('@magic-modules/npm-module'),
 }`),
     p('after this, the module will be a global in your app and can be used like any other component.'),
+
+    Pre.View(`
+// any page or module
+module.exports = () => div([
+  'modules that do not need props can be used without calling them as a function ',
+  Mod.View,
+  'modules that need props: ',
+  Mod.View(propObject),
+`),
+
+    h2('Mod.View and Mod.Component:'),
+
+    Mod.View,
+    Mod.Component,
 
     h2('preinstalled magic modules'),
     p('magic has some preinstalled modules that will be used in most pages.'),
@@ -43,7 +59,7 @@ module.exports = {
     p([
       'to add actions/state/style to the app you can just create an /assets/app.js file.',
       'the contents of this file get ',
-      Link({ to: 'https://github.com/magic/deep' }, 'deep.merged'),
+      Link({ to: 'https://github.com/magic/deep', text: 'deep .merged' }),
       ' into the app',
     ]),
     Pre.View(`
