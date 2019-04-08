@@ -33,7 +33,9 @@ module.exports = {
   // load module from node_modules
   NpmModule: require('@magic-modules/npm-module'),
 }`),
-    p('after this, the module will be a global in your app and can be used like any other component.'),
+    p(
+      'after this, the module will be a global in your app and can be used like any other component.',
+    ),
 
     Pre.View(`
 // any page or module
