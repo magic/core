@@ -7,6 +7,9 @@ const theme = {
       color: 'orange',
     },
   },
+  '.page': {
+    marginBottom: '3em',
+  },
 }
 
 module.exports = theme
