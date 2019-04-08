@@ -34,12 +34,11 @@ module.exports = {
 
       h3('serverless / faas'),
       p([
-        'SOON: automagically generates ',
-        Link({ to: 'https://now.sh' }, 'now.sh'),
-        ' lambdas, derived from the ',
+        'automagically generates ',
+        ' serverless lambdas, derived from the ',
         Link({ to: 'https://github.com/magic-modules/' }, '@magic-modules'),
         ' you use in your pages.',
-        ' this will make visitor statistics, user authentication and authorization, chat, and all other server side goodies possible.',
+        ' this makes visitor statistics, user authentication and authorization, chat, and all other server side services possible.',
       ]),
     ]),
   ],
