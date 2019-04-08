@@ -8,6 +8,31 @@ module.exports = {
     h1(state.title),
     p('magic modules are predefined modules for webapps.'),
 
+    h2('module definition:'),
+    p('the minimal module is a function that returns some html.'),
+    Pre.View(`
+// /assets/LocalModule.js
+module.exports = () => div('hello, world')
+
+// complete signature
+module.exports = (props, children) => (state, actions) => div('hello, world')
+`),
+
+    h2('usage:'),
+    p('to use a module in your app it has to be imported using /assets/index.js. '),
+    Pre.View(`
+// /assets/index.js
+module.exports = {
+  // ...otherModules
+
+  // load module from /assets/LocalModule.js
+  LocalModule: require('./LocalModule'),
+
+  // load module from node_modules
+  NpmModule: require('@magic-modules/npm-module'),
+}`),
+    p('after this, the module will be a global in your app and can be used like any other component.'),
+
     h2('preinstalled magic modules'),
     p('magic has some preinstalled modules that will be used in most pages.'),
 
@@ -15,9 +40,12 @@ module.exports = {
     p(
       'this is the main app module. it has magically inherited properties and all of it is customizable.',
     ),
-    p(
-      'to add actions/state/style to the app you can just create an /asset/app.js file. The contents of this file get deep.merged into the app',
-    ),
+    p([
+      'to add actions/state/style to the app you can just create an /assets/app.js file.',
+      'the contents of this file get ',
+      Link({ to: 'https://github.com/magic/deep' }, 'deep.merged'),
+      ' into the app',
+    ]),
     Pre.View(`
 // /assets/app.js
 module.exports = {
@@ -75,7 +103,7 @@ module.exports = () => Menu.View({ name: 'menuName' })
 }`),
 
     h2('link'),
-    p('the link allows you to link to things.'),
+    p('the link element allows you to link to things.'),
     Pre.View(`
 // in any page or module View
 module.exports = () => [
@@ -86,7 +114,7 @@ module.exports = () => [
   Link({ to: '/page', text: 'page', nofollow: true, noreferrer: true }),
   // outputs <a href="https://example.com" target="_blank" rel="nofollow noreferrer noopener">page</a>
 
-  // you can also use children instead of the text prop:
+  // you can also use children syntax instead of the text prop:
   Link({ to: '/' }, 'home')
 `),
 
