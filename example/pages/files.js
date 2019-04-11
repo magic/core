@@ -84,14 +84,14 @@ module.exports = {
           "but also inherits the global state and actions from the app and it's dependencies",
         ]),
 
-        h4('page to url map:'),
+        h4('page to url map, for the domain mag.ic:'),
         ul([
-          li('/pages/index.js === /'),
-          li('/pages/pageName.js === /pageName/'),
-          li('/pages/page-name.js === /page-name/'),
-          li('/pages/page_name.js === /page_name/'),
-          li('/pages/dir/index.js === /dir/'),
-          li('/pages/dir/name.js === /dir/name/'),
+          li('/pages/index.js === http://mag.ic/'),
+          li('/pages/pageName.js === http://mag.ic/pageName/'),
+          li('/pages/page-name.js === http://mag.ic/page-name/'),
+          li('/pages/page_name.js === http://mag.ic/page_name/'),
+          li('/pages/dir/index.js === http://mag.ic/dir/'),
+          li('/pages/dir/name.js === http://mag.ic/dir/name/'),
         ]),
 
         h3('example page:'),
