@@ -1,5 +1,5 @@
 const path = require('path')
-const { mkdirp, fs } = require('../../lib')
+const { mkdirp, fs } = require('../../../lib')
 
 const writeLambda = async ([name, fn]) => {
   const content = `const lambda = ${fn.toString()}

@@ -4,11 +4,9 @@ const { mkdirp, fs, getFileType } = require('../../lib')
 
 const isProd = process.env.NODE_ENV === 'production'
 
-const minifyImages = require('./images')
+const minifyImages = require('./lib/minifyImages')
 
-const writeFile = require('./writeFile')
-const compress = require('./compress')
-const writeServer = require('./writeServer')
+const { compress, writeFile, writeServer } = require('./lib')
 
 const write = async app => {
   const zippable = config.FILETYPES.ZIPPABLE

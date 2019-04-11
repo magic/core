@@ -5,7 +5,7 @@ const imageminSvgo = require('imagemin-svgo')
 const imageminMozjpeg = require('imagemin-mozjpeg')
 const imageminGifsicle = require('imagemin-gifsicle')
 
-const { getDirectories, fs } = require('../../lib/')
+const { getDirectories, fs } = require('../../../lib/')
 
 const minifyImages = async images => {
   const imageGlob = `*.{${images.join(',')}}`
