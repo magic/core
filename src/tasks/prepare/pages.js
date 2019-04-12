@@ -17,7 +17,7 @@ const preparePages = files => {
       page.path = path.join(page.path, 'index.html')
     }
 
-    page.dependencies = getDependencies(page.View.toString())
+    page.dependencies = getDependencies(page.View.toString(), global.keys)
 
     // merge dependency styles and dependencies into page dependencies
     Object.entries(page.dependencies).forEach(([k, c]) => {
@@ -30,7 +30,7 @@ const preparePages = files => {
         .map(([_, v]) => v.toString())
 
       views.forEach(view => {
-        page.dependencies = deep.merge(getDependencies(view), page.dependencies)
+        page.dependencies = deep.merge(getDependencies(view, global.keys), page.dependencies)
       })
     })
 
@@ -45,7 +45,7 @@ const preparePages = files => {
       path: path.join(config.DIR.PUBLIC, '404', 'index.html'),
       View: (state, actions) => div('404 - not found'),
     }
-    page404.dependencies = getDependencies(page404.View.toString())
+    page404.dependencies = getDependencies(page404.View.toString(), global.keys)
     pages.push(page404)
   }
 
