@@ -19,10 +19,20 @@ const presets = [
   ],
 ]
 
-const plugins = ['@babel/plugin-transform-arrow-functions']
+const plugins = [
+  '@babel/plugin-transform-arrow-functions',
+  '@babel/plugin-proposal-object-rest-spread',
+]
+
 if (isProd) {
   plugins.push(['minify-mangle-names', { topLevel: true }])
   plugins.push('minify-dead-code-elimination')
+  plugins.push('transform-remove-console')
+  plugins.push('transform-remove-debugger')
+  plugins.push('minify-simplify')
+  plugins.push('minify-type-constructors')
+  plugins.push('minify-builtins')
+  plugins.push('transform-minify-booleans')
 }
 
 const babelOpts = {
@@ -32,7 +42,7 @@ const babelOpts = {
   configFile: false,
   sourceMaps: false,
   presets: isProd ? presets : [],
-  plugins: isProd ? plugins : [],
+  plugins,
 }
 
 module.exports = ({ str }) => {
