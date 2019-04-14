@@ -165,7 +165,7 @@ module.exports = {
     Pre.View(`
 module.exports = () => Menu.View({ name: 'menuName' })
 
-// outputs:
+// output:
 <nav class="Menu">
   <ul>
     <li>
@@ -182,20 +182,35 @@ module.exports = () => Menu.View({ name: 'menuName' })
 }`),
 
     h2('link'),
-    p('the link element allows you to link to things.'),
+    p('the link module allows you to link to things.'),
     Pre.View(`
 // in any page or module View
 module.exports = () => [
   Link({ to: '/page', text: 'page' }),
-  // outputs <a href="/page" onclick="actions.go">page</a>
+  // output: <a href="/page" onclick="actions.go">page</a>
   Link({ to: 'https://example.com', text: 'page' }),
-  // outputs <a href="https://example.com" target="_blank" rel="noopener">page</a>
+  // output: <a href="https://example.com" target="_blank" rel="noopener">page</a>
   Link({ to: '/page', text: 'page', nofollow: true, noreferrer: true }),
-  // outputs <a href="https://example.com" target="_blank" rel="nofollow noreferrer noopener">page</a>
+  // output: <a href="https://example.com" target="_blank" rel="nofollow noreferrer noopener">page</a>
 
   // you can also use children syntax instead of the text prop:
-  Link({ to: '/' }, 'home')
-`),
+  Link({ to: '/' }, 'home'),
+]`),
+
+    h2('img'),
+    p('the img module adds some sane default values to your images.'),
+    Pre.View(`
+// in any page or module View
+module.exports = () => [
+  Img('/image.png'),
+  // output: <img src="/image.png" alt="" role="presentation"/>
+  Img({ src: '/image.png }),
+  // output: <img src="/image.png" alt="" role="presentation"/>
+  Img({ src: '/image.png', alt: 'image description' }),
+  // output: <img src="/image.png alt="image description" />
+  Img({ src: '/image.png', title: 'image title', }),
+  // output: <img src="/image.png" />
+]`),
 
     h2('footer'),
     p('the footer module contains a small info text and a link to the magic github repository.'),
