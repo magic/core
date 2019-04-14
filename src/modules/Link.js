@@ -23,11 +23,7 @@ const Link = ({ to, href, text, nofollow, noreferrer }, children) => (_, actions
 Link.actions = {
   go: props => state => {
     const { to } = props
-    let { e } = props
-    if (!props.e) {
-      e = props
-    }
-
+    const e = props.e ? props.e : props
     e.preventDefault()
 
     if (typeof document !== 'undefined') {
