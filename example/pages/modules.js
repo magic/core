@@ -209,7 +209,9 @@ module.exports = () => [
   Img({ src: '/image.png', alt: 'image description' }),
   // output: <img src="/image.png alt="image description" />
   Img({ src: '/image.png', title: 'image title', }),
-  // output: <img src="/image.png" />
+  // output: <img src="/image.png" title="image title" alt="image title"/>
+  Img({ src: '/image.png', title: 'image title', alt: 'image alt' }),
+  // output: <img src="/image.png" title="image title" alt="image alt"/>
 ]`),
 
     h2('footer'),
