@@ -54,6 +54,9 @@ module.exports = {
   // http header
   // see http://www.gnuterrypratchett.com/
   FOR_DEATH_CAN_NOT_HAVE_HIM: true,
+
+  // default LIB_NAME, overwrite to change names of transpiled css and js files
+  LIB_NAME: 'magic',
 }`,
       theme: `
 module.exports = {
@@ -134,7 +137,7 @@ module.exports = {
 
       div({ id: 'config' }, [
         h2('/config.js'),
-        p('the /config.js file allows you to set the theme, root and web_root of your app'),
+        p('the /config.js file allows you to set various aspects of your app'),
         h3('example /config.js'),
         Pre.View(examples.config),
       ]),

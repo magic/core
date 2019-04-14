@@ -1,7 +1,6 @@
-const path = require('path')
-const { getFiles, getContentType, fs } = require('../../../lib')
+const URL = require('url')
 
-const { parse } = require('url')
+const { getFiles, getContentType, fs } = require('../../../lib')
 
 const maybeGetFiles = async dir => {
   try {
@@ -39,7 +38,7 @@ const handler = async app => {
   const hasApi = Object.keys(static).length > 0
 
   return async (req, res) => {
-    const url = parse(req.url.replace(config.WEB_ROOT, '/'))
+    const url = URL.parse(req.url.replace(config.WEB_ROOT, '/'))
     const { pathname } = url
 
     if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {

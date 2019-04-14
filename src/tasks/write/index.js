@@ -29,12 +29,12 @@ const write = async app => {
     await fs.writeFile(page.path, page.rendered)
   })
 
-  const jsFile = path.join(config.DIR.PUBLIC, 'magic.js')
+  const jsFile = path.join(config.DIR.PUBLIC, `${config.LIB_NAME}.js`)
 
   await fs.writeFile(jsFile, client.bundle)
 
   const usedCss = isProd ? css.minified : css.css
-  await fs.writeFile(path.join(config.DIR.PUBLIC, 'magic.css'), usedCss)
+  await fs.writeFile(path.join(config.DIR.PUBLIC, `${config.LIB_NAME}.css`), usedCss)
 
   if (isProd) {
     await compress(zippable, images)

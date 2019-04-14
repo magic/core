@@ -33,13 +33,16 @@ const handler = app => (req, res) => {
     res.setHeader('X-Clacks-Overhead', 'GNU Terry Pratchet')
   }
 
-  if (rawUrl === '/magic.css') {
+  const cssUrl = `/${config.LIB_NAME}.css`
+
+  if (rawUrl === cssUrl) {
     res.writeHead(200, { 'Content-Type': 'text/css' })
     res.end(style)
     return
   }
 
-  if (rawUrl === '/magic.js') {
+  const jsUrl = `/${config.LIB_NAME}.js`
+  if (rawUrl === jsUrl) {
     res.writeHead(200, { 'Content-Type': 'application/javascript' })
     res.end(js)
     return
@@ -73,7 +76,7 @@ const handler = app => (req, res) => {
   }
 
   // fall back to 404 page
-  // which got added automatically.
+  // which got added automatically if it did not exist.
   if (!pages[url]) {
     url = '/404/'
   }
