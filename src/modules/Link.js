@@ -1,12 +1,11 @@
-const Link = ({ to, href, text, nofollow, noreferrer }, children) => (_, actions) => {
+const Link = ({ to, href, text, nofollow, noreferrer, ...props }, children) => (_, actions) => {
   to = to || href || ''
-  const props = {
-    href: to,
-  }
+  props.href = to
 
   if (to && to.startsWith('/') && !to.startsWith(`//`)) {
     props.onclick = e => actions.go({ e, to })
   } else {
+    props.target = '_blank'
     props.rel = 'noopener'
     if (nofollow) {
       props.rel += ' nofollow'
@@ -14,7 +13,6 @@ const Link = ({ to, href, text, nofollow, noreferrer }, children) => (_, actions
     if (noreferrer) {
       props.rel += ' noreferrer'
     }
-    props.target = '_blank'
   }
 
   return a(props, text || children)
