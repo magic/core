@@ -1,6 +1,6 @@
 module.exports = {
   ROOT: 'example',
-  THEME: 'blue',
+  THEME: 'docs',
   WEB_ROOT: '/core/',
 
   PUBLIC: 'docs',
