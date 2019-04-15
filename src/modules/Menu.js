@@ -28,13 +28,13 @@ const Menu = {
       ul(
         state[name].map((item, i) => {
           const props = {}
-          const isEqual = item.to === state.url
-          const isActive = item.to !== '/' && state.url.startsWith(item.to)
-          if (isEqual || isActive) {
+          const hash = state.hash ? `#${state.hash}` : ''
+          const url = state.url + hash
+          if (item.to === url) {
             props.class = 'active'
           }
 
-          return [li(props, Link(item)), between && i < state[name].length - 1 ? li(' - ') : '']
+          return [li(props, Link(item)), between && i < state[name].length - 1 ? li(between) : '']
         }),
       ),
     ])

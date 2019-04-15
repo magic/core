@@ -15,36 +15,57 @@ const Link = ({ to, href, text, nofollow, noreferrer, ...props }, children) => (
     }
   }
 
-  return a(props, text || children)
+  return a(props, [text, children])
 }
 
 Link.actions = {
   go: props => state => {
+    // trigger event if history api does not exist
+    if (!window.history) {
+      return true
+    }
     const { to } = props
     const e = props.e ? props.e : props
     e.preventDefault()
 
-    if (typeof document !== 'undefined') {
-      document.getElementsByTagName('html')[0].scrollTop = 0
-    }
-
     let url = state.url
+    let [uri, hash = ''] = url.split('#')
 
     if (to) {
       url = to.replace(window.location.origin, '')
-      if (url !== state.url) {
-        window.history && window.history.pushState({ urlPath: url }, '', url)
+      const [u, h = ''] = url.split('#')
+      uri = u
+      hash = h
+      const stateHash = state.hash ? `#${state.hash}` : ''
+      const stateUrl = state.url + stateHash
+      if (url !== stateUrl) {
+        window.history && window.history.pushState({ uri }, '', url)
+        if (!hash) {
+          window.scrollTo(0,0)
+        }
       }
     } else {
       if (e.state) {
-        url = e.state.urlPath
+        url = e.state.uri
       } else {
         url = '/'
       }
     }
 
+    if (hash) {
+      // try to make sure the page has changed by the time we scroll
+      // if not, we simply lose the scroll
+      window.setTimeout(() => {
+        const ele = document.getElementById(hash)
+        if (ele) {
+          window.scrollTo(0, ele.offsetTop)
+        }
+      }, 10)
+    }
+
     return {
-      url,
+      url: uri,
+      hash,
       prev: state.url,
     }
   },
