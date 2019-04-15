@@ -195,6 +195,9 @@ module.exports = () => [
 
   // you can also use children syntax instead of the text prop:
   Link({ to: '/' }, 'home'),
+
+  // Link also supports # hash links
+  Link({ to: '/#hash' }, 'home with hash'),
 ]`),
 
     h2('img'),
