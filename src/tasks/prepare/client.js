@@ -37,8 +37,15 @@ const prepareClient = app => {
 
   // create pages object, each Page is a html View
   let pageString = 'const pages = {\n'
+  let ROOT = ''
+  if (process.env.NODE_ENV) {
+    ROOT = config.WEB_ROOT.endsWith('/')
+      ? config.WEB_ROOT.substring(0, config.WEB_ROOT.length - 1)
+      : config.WEB_ROOT
+  }
+
   app.pages.forEach(page => {
-    pageString += `\n  '${page.name}': ${page.View.toString()},`
+    pageString += `\n  '${ROOT}${page.name}': ${page.View.toString()},`
   })
   pageString += '\n}\n'
   clientString += pageString
@@ -108,8 +115,27 @@ app(state, actions, view, mD)\n`
   // this allows, for example, username.github.io/packagename
   if (process.env.NODE_ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
     clientString = clientString
-      .replace(/ '\//gm, `'${config.WEB_ROOT}`)
-      .replace(/ "\//gm, `"${config.WEB_ROOT}`)
+      // find all links, callback gets match, key, delimiter, link
+      .replace(
+        /('|")?(src|href|to|action|logo)('|")?\:\s*('|")(.*?)\4/gm,
+        (match, d1, key, d2, d, link) => {
+          if (link.startsWith(config.WEB_ROOT)) {
+            return `${key}: '${link}'`
+          }
+
+          const isPageLink = app.pages.some(page => page.name === link)
+          const isStaticLink = Object.keys(app.static).some(key => key === link)
+
+          if (isPageLink || isStaticLink) {
+            link = config.WEB_ROOT + (link.startsWith('/') ? link.substr(1, link.length) : link)
+            const str = `${key}: '${link}'`
+            return str
+          }
+
+          // no matches, return unchanged string
+          return match
+        },
+      )
   }
 
   return clientString
