@@ -41,7 +41,7 @@ Link.actions = {
       if (url !== stateUrl) {
         window.history && window.history.pushState({ uri }, '', url)
         if (!hash) {
-          window.scrollTo(0,0)
+          window.scrollTo(0, 0)
         }
       }
     } else {
