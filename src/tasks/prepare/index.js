@@ -36,15 +36,21 @@ const prepare = async app => {
   }
 
   // using merge here to make sure app.state and app.actions are being set if undefined
-  app.state = deep.merge(app.state, { pages: {} })
-  app.actions = deep.merge(app.actions, { pages: {} })
+  app.state = deep.merge({}, app.state)
+  app.actions = deep.merge({}, app.actions)
 
   // collect the pages, create their states
   app.pages = preparePages(files).map(page => {
     if (!is.empty(page.state)) {
+      if (!app.state.pages) {
+        app.state.pages = {}
+      }
       app.state.pages[page.name] = page.state
     }
     if (!is.empty(page.actions)) {
+      if (!app.actions.pages) {
+        app.actions.pages = {}
+      }
       app.actions.pages[page.name] = page.actions
     }
     return page

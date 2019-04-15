@@ -70,15 +70,19 @@ const view = (state, actions) => {
   const page = pages[url]
 
   // map pageState into state
-  const pageState = state.pages[url]
-  for (let key in pageState) {
-    state[key] = pageState[key]
+  if (state.pages) {
+    const pageState = state.pages[url]
+    for (let key in pageState) {
+      state[key] = pageState[key]
+    }
   }
 
   // map pageActions into actions
-  const pageActions = actions.pages[url]
-  for (let key in pageActions) {
-    actions[key] = pageActions[key]
+  if (actions.pages) {
+    const pageActions = actions.pages[url]
+    for (let key in pageActions) {
+      actions[key] = pageActions[key]
+    }
   }
 
   return ${b}
@@ -97,6 +101,7 @@ if (!mD) {
   d.body.appendChild(mD)
 }
 app(state, actions, view, mD)\n`
+
   clientString += createMagic
 
   // prepend client urls with WEB_ROOT url in production,
