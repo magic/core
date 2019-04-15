@@ -38,7 +38,7 @@ const prepareClient = app => {
   // create pages object, each Page is a html View
   let pageString = 'const pages = {\n'
   let ROOT = ''
-  if (process.env.NODE_ENV) {
+  if (process.env.NODE_ENV && config.WEB_ROOT) {
     ROOT = config.WEB_ROOT.endsWith('/')
       ? config.WEB_ROOT.substring(0, config.WEB_ROOT.length - 1)
       : config.WEB_ROOT
