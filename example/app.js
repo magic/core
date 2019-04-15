@@ -9,7 +9,6 @@ module.exports = {
       { to: '/files/', text: 'files & directories' },
       { to: '/modules/', text: 'modules' },
       { to: '/themes/', text: 'themes' },
-      { to: '/dependencies/', text: 'dependencies' },
     ],
     logo: '/logo.png',
     logotext: '@magic',
