@@ -2,6 +2,9 @@ const fs = require('./fs')
 const path = require('path')
 const deep = require('@magic/deep')
 
+// recursively find all files in a directory.
+// returns array of paths relative to dir
+
 const getFilePath = dir => async file => {
   const filePath = path.join(dir, file)
 

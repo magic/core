@@ -1,20 +1,25 @@
-const fs = require('fs')
+const fs = require('./fs')
 const path = require('path')
 const deep = require('@magic/deep')
 
-const isDirectory = source => fs.statSync(source).isDirectory()
+// recursively find all directories in a directory.
+// returns array of paths relative to dir
 
-const getDirectories = source =>
-  fs
-    .readdirSync(source)
-    .map(name => path.join(source, name))
-    .filter(isDirectory)
+const getFilePath = dir => async file => {
+  const filePath = path.join(dir, file)
 
-const getDirectoriesRecursive = source => [
-  source,
-  ...getDirectories(source)
-    .map(getDirectoriesRecursive)
-    .reduce((a, b) => a.concat(b), []),
-]
+  const stat = await fs.stat(filePath)
+  if (stat.isDirectory(filePath)) {
+    return await getDirectories(filePath)
+  }
+}
 
-module.exports = getDirectoriesRecursive
+const getDirectories = async dir => {
+  const dirContent = await fs.readdir(dir)
+  const dirs = await Promise.all(dirContent.map(getFilePath(dir)))
+
+  const flattened = deep.flatten(dirs).filter(a => a)
+  return flattened
+}
+
+module.exports = getDirectories

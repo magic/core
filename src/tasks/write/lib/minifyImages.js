@@ -14,7 +14,7 @@ const minifyImages = async images => {
     return
   }
 
-  const dirs = getDirectories(config.DIR.STATIC)
+  const dirs = await getDirectories(config.DIR.STATIC)
 
   await Promise.all(
     dirs.map(async dir => {
