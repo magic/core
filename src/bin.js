@@ -43,5 +43,5 @@ if (process.argv.includes('dev') || process.argv.includes('development')) {
   cmds.serve = true
 }
 
-const run = require('./index.js')
+const run = require('./cluster.js')
 run(cmds)
