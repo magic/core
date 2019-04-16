@@ -17,7 +17,21 @@ const preparePages = files => {
       page.path = path.join(page.path, 'index.html')
     }
 
-    page.dependencies = getDependencies(page.View.toString(), global.keys)
+    let view = false
+    if (typeof page === 'function') {
+      view = page
+      page.View = view
+    } else if (typeof page.View === 'function') {
+      view = page.View
+    }
+
+    if (!view || typeof view.toString !== 'function') {
+      throw new Error(`
+${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(/\//g, '')}.js
+does not export a view function or page.View key.`)
+    }
+
+    page.dependencies = getDependencies(view.toString(), global.keys)
 
     // merge dependency styles and subdependencies into page dependencies
     Object.entries(page.dependencies).forEach(([k, c]) => {
