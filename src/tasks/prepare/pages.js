@@ -31,7 +31,7 @@ ${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(/\//g, '')}.j
 does not export a view function or page.View key.`)
     }
 
-    page.dependencies = getDependencies(view.toString(), global.keys)
+    page.dependencies = getDependencies(view, global.keys)
 
     // merge dependency styles and subdependencies into page dependencies
     Object.entries(page.dependencies).forEach(([k, c]) => {
@@ -59,7 +59,7 @@ does not export a view function or page.View key.`)
       path: path.join(config.DIR.PUBLIC, '404', 'index.html'),
       View: () => div('404 - not found'),
     }
-    page404.dependencies = getDependencies(page404.View.toString(), global.keys)
+    page404.dependencies = getDependencies(page404.View, global.keys)
     pages.push(page404)
   }
 

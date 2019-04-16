@@ -28,7 +28,7 @@ const prepare = async app => {
 
   app.files = files
 
-  app.dependencies = getDependencies(app.Body.toString(), global.keys)
+  app.dependencies = getDependencies(app.Body, global.keys)
 
   if (config.ENV === 'development') {
     app.dependencies = deep.merge(app.dependencies, adminModules)
