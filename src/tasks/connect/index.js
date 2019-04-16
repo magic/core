@@ -1,6 +1,5 @@
 // git subtree push --prefix example/public origin gh-pages
-const log = require('@magic/log')
-const { getGitConfig, xc } = require('../lib/')
+const { getGitConfig, xc } = require('../../lib/')
 
 const connect = async () => {
   const git = await getGitConfig()

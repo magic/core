@@ -1,6 +1,6 @@
 const log = require('@magic/log')
 
-const { getGitConfig, xc } = require('../lib/')
+const { getGitConfig, xc } = require('../../lib/')
 
 const publish = async () => {
   const git = await getGitConfig()
