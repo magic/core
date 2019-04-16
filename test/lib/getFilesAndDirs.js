@@ -1,9 +1,8 @@
 const path = require('path')
-const fs = require('fs')
 
 const { is } = require('@magic/test')
 
-const { mkdirp, rmrf, getFiles, getDirectories } = require('../../src/lib')
+const { fs, mkdirp, rmrf, getFiles, getDirectories } = require('../../src/lib')
 const dirName = path.join(__dirname, '.__test__')
 
 const before = id => async () => {
@@ -18,10 +17,7 @@ const before = id => async () => {
   await mkdirp(path.join(dir, 'test', 'deep'))
   await mkdirp(path.join(dir, 'test2', 'deep'))
 
-  files.map(f => {
-    // console.log(f)
-    return fs.writeFileSync(f, 't')
-  })
+  await Promise.all(files.map(async f => await fs.writeFile(f, 't')))
 
   return async () => {
     await rmrf(dir)
