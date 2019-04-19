@@ -1,16 +1,16 @@
 const Menu = {
   style: {
     '.Menu': {
+      float: 'right',
+      margin: '1.5em 0 0',
+
       li: {
         float: 'left',
         margin: '0 .5em 0 0',
       },
 
       '&.right': {
-        li: {
-          float: 'right',
-          margin: '0 0 0 .5em',
-        },
+        float: 'right',
       },
 
       '&.block': {
