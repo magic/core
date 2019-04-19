@@ -53,6 +53,6 @@
   },
   "devDependencies": {
     "@magic-modules/pre": "github:magic-modules/pre",
-    "@magic/test": "0.0.6"
+    "@magic/test": "0.0.7"
   }
 }
