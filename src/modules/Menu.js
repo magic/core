@@ -6,6 +6,13 @@ const Menu = {
         margin: '0 .5em 0 0',
       },
 
+      '&.right': {
+        li: {
+          float: 'right',
+          margin: '0 0 0 .5em',
+        },
+      },
+
       '&.block': {
         li: {
           clear: 'both',
