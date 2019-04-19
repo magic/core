@@ -21,7 +21,7 @@ if (!config.ROOT) {
 
 config.DIR = config.DIR || {}
 
-config.LIB_NAME = config.LIB_NAME || 'magic'
+config.CLIENT_LIB_NAME = config.CLIENT_LIB_NAME || 'magic'
 
 const PAGES = path.join(config.ROOT, 'pages')
 const PUBLIC = path.join(process.cwd(), config.PUBLIC || config.DIR.PUBLIC || 'public')

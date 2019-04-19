@@ -55,8 +55,8 @@ module.exports = {
   // see http://www.gnuterrypratchett.com/
   FOR_DEATH_CAN_NOT_HAVE_HIM: true,
 
-  // default LIB_NAME, overwrite to change names of transpiled css and js files
-  LIB_NAME: 'magic',
+  // default CLIENT_LIB_NAME, overwrite to change names of transpiled css and js files
+  CLIENT_LIB_NAME: 'magic',
 }`,
       theme: `
 module.exports = {
