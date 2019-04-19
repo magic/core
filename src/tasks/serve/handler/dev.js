@@ -29,28 +29,35 @@ const handler = app => (req, res) => {
 
   const js = client.bundle
 
-  if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {
-    res.setHeader('X-Clacks-Overhead', 'GNU Terry Pratchet')
+  const expiryTime = new Date(new Date().getTime() - 1000).toUTCString()
+  const headers = {
+    'Expires': expiryTime,
+    'Cache-Control': 'no-cache, must-revalidate',
+    'Pragma': 'no-cache',
   }
 
-  const cssUrl = `/${config.LIB_NAME}.css`
+  if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {
+    headers['X-Clacks-Overhead'] = 'GNU Terry Pratchet'
+  }
+
+  const cssUrl = `/${config.CLIENT_LIB_NAME}.css`
 
   if (rawUrl === cssUrl) {
-    res.writeHead(200, { 'Content-Type': 'text/css' })
+    res.writeHead(200, { ...headers, 'Content-Type': 'text/css' })
     res.end(style)
     return
   }
 
-  const jsUrl = `/${config.LIB_NAME}.js`
+  const jsUrl = `/${config.CLIENT_LIB_NAME}.js`
   if (rawUrl === jsUrl) {
-    res.writeHead(200, { 'Content-Type': 'application/javascript' })
+    res.writeHead(200, { ...headers, 'Content-Type': 'application/javascript' })
     res.end(js)
     return
   }
 
   if (static[rawUrl]) {
     const contentType = getContentType(rawUrl)
-    res.writeHead(200, { 'Content-Type': contentType })
+    res.writeHead(200, { ...headers, 'Content-Type': contentType })
     res.end(static[rawUrl])
     return
   }
@@ -69,6 +76,7 @@ const handler = app => (req, res) => {
 
   if (redirect) {
     res.writeHead(302, {
+      ...headers,
       Location: redirect,
     })
     res.end()
@@ -81,7 +89,7 @@ const handler = app => (req, res) => {
     url = '/404/'
   }
 
-  res.writeHead(200, { 'Content-Type': 'text/html' })
+  res.writeHead(200, { ...headers, 'Content-Type': 'text/html' })
   res.end(pages[url])
 }
 
