@@ -1,55 +1,110 @@
 const cluster = require('cluster')
 
-global.config = require('./config')
-const run = require('./tasks')
+const log = require('@magic/log')
 
+global.config = require('./config')
+const tasks = require('./tasks')
 const App = require('./modules/app')
 
-let lastArgs
-let currentWorker = null
-const runCluster = cmds => {
-  if (cluster.isMaster) {
-    currentWorker = cluster.fork()
+const runCmd = async (cmd, ...args) => {
+  console.time(cmd)
+  const result = await tasks[cmd](...args)
+  console.timeEnd(cmd)
+  return result
+}
 
+const bailEarly = async (cmds) => {
+  if (cmds.clean) {
+    await runCmd('clean')
+  }
+
+  if (cmds.connect) {
+    await runCmd('connect')
+  }
+
+  if (cmds.publish) {
+    await runCmd('publish')
+  }
+
+  const bail = !cmds.build && !cmds.serve
+  return bail
+}
+
+const runCluster = async cmds => {
+  if (cluster.isMaster) {
+    const bail = await bailEarly(cmds)
+    if (bail) {
+      return
+    }
+    let watchWorker
+    if (cmds.serve) {
+      watchWorker = cluster.fork()
+    }
+    let buildWorker = cluster.fork()
+    buildWorker.send('run')
+
+    let hasTimeout = false
+    let lastCall = new Date().getTime()
     cluster.on('message', (worker, msg) => {
-      if (msg.evt === 'change') {
-        // files have changed, restart worker
-        currentWorker.kill(1)
-        currentWorker = cluster.fork()
-      } else if (msg.evt === 'error') {
-        console.log('error', msg.error)
-        setTimeout(() => {
-          currentWorker = cluster.fork()
-        }, 1000)
+      if (watchWorker && worker.id === watchWorker.id) {
+        if (msg.evt === 'change') {
+          const now = new Date().getTime()
+          const delay = now - lastCall
+          console.log({ delay })
+          if (delay > 10) {
+            // files have changed, restart build worker
+            buildWorker.kill(1)
+            buildWorker = cluster.fork()
+          }
+        } else {
+          log.warn('Unexpected message from watch worker', msg)
+        }
+      } else if (worker.id === buildWorker.id) {
+        if (msg.evt === 'quit') {
+          process.exit()
+        } else {
+          log.warn('Unexpected message from build worker', msg)
+        }
+      }
+
+      if (msg.evt === 'error') {
+        log.error(msg.error)
       }
     })
 
     cluster.on('exit', (worker, code, signal) => {
-      console.log('exit', code)
-    })
-    cluster.on('death', worker => {
-      console.log('Worker ' + worker.pid + ' died.');
+      if (code !== null && code !== 0) {
+        console.log('exit', code)
+      }
     })
   } else if (cluster.isWorker) {
-    run(App, cmds)
+    if (cmds.serve && cluster.worker.id === 1) {
+      tasks.watch(config.ROOT)
+    } else {
+      const app = await runCmd('prepare', App)
+
+      const { pages, bundle, css } = await runCmd('transpile', app)
+      app.pages = pages
+      app.client.bundle = bundle
+      app.css = css
+
+      if (cmds.build) {
+        await runCmd('write', app)
+      }
+
+      if (cmds.serve) {
+        tasks.serve(app)
+      } else {
+        process.send({ evt: 'quit' })
+      }
+    }
 
     process
-      .on('unhandledRejection', (a) => {
-        console.log({ a })
-        // if (lastArgs !== args) {
-        //   console.log('unhandledRejection', args)
-        //   lastArgs = args
-        // }
-
-        process.send({ evt: 'error', error: a })
+      .on('unhandledRejection', error => {
+        process.send({ evt: 'error', error: error.toString() })
       })
-      .on('uncaughtException', (...args) => {
-        if (lastArgs !== args) {
-          console.log('uncaughtException', ...args)
-          lastArgs = args
-        }
-
-        process.send({ evt: 'error' })
+      .on('uncaughtException', error => {
+        process.send({ evt: 'error', error: error.toString() })
       })
   }
 }
