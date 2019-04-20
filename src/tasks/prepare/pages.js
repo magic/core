@@ -1,3 +1,4 @@
+const is = require('@magic/types')
 const path = require('path')
 const deep = require('@magic/deep')
 
@@ -33,9 +34,18 @@ does not export a view function or page.View key.`)
 
     page.dependencies = getDependencies(view, global.keys)
 
+    const { THEME_VARS = {} } = config
+
+    if (is.fn(page.style)) {
+      page.style = page.style(THEME_VARS)
+    }
+
     // merge dependency styles and subdependencies into page dependencies
     Object.entries(page.dependencies).forEach(([k, c]) => {
       if (c.style) {
+        if (is.fn(c.style)) {
+          c.style = c.style(THEME_VARS)
+        }
         page.style = deep.merge(c.style, page.style)
       }
 
