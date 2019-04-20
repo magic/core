@@ -10,7 +10,7 @@ const isTagUsed = str => fn => {
     .replace(/`.*`/, '')
 
   const beforeFn = '(\\s+|\\,|\\n|\\[|\\()'
-  const afterFn = '(\\(|\\)|\\,|.[A-Z][a-zA-Z0-9]*)'
+  const afterFn = '(\\(|\\)|\\,|\\]|.[A-Z][a-zA-Z0-9]*)'
 
   const tag = new RegExp(`${beforeFn}${fn}${afterFn}`, 'gm')
   const includes = str.match(tag)
