@@ -23,6 +23,12 @@ const Menu = {
       '.active': {
         textDecoration: 'underline',
       },
+
+      ul: {
+        ul: {
+          position: 'absolute',
+        },
+      },
     },
   },
 
@@ -33,7 +39,8 @@ const Menu = {
 
     return nav({ class: 'Menu' }, [
       ul(
-        state[name].map((item, i) => {
+        state[name].map((menuItem, i) => {
+          const { items, ...item } = menuItem
           const props = {}
           const hash = state.hash ? `#${state.hash}` : ''
           const url = state.url + hash
@@ -41,7 +48,15 @@ const Menu = {
             props.class = 'active'
           }
 
-          return [li(props, Link(item)), between && i < state[name].length - 1 ? li(between) : '']
+          let children
+          if (items && url.startsWith(item.to)) {
+            children = ul(items.map(item => li([Link(item)])))
+          }
+
+          return [
+            li(props, [Link(item), children]),
+            between && i < state[name].length - 1 ? li(between) : '',
+          ]
         }),
       ),
     ])
