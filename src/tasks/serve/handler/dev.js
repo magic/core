@@ -31,9 +31,9 @@ const handler = app => (req, res) => {
 
   const expiryTime = new Date(new Date().getTime() - 1000).toUTCString()
   const headers = {
-    'Expires': expiryTime,
+    Expires: expiryTime,
     'Cache-Control': 'no-cache, must-revalidate',
-    'Pragma': 'no-cache',
+    Pragma: 'no-cache',
   }
 
   if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {

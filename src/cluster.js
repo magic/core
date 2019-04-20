@@ -13,7 +13,7 @@ const runCmd = async (cmd, ...args) => {
   return result
 }
 
-const bailEarly = async (cmds) => {
+const bailEarly = async cmds => {
   if (cmds.clean) {
     await runCmd('clean')
   }
