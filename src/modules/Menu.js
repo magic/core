@@ -32,14 +32,18 @@ const Menu = {
     },
   },
 
-  View: ({ name = 'menu', between = false }) => (state, actions) => {
-    if (!state[name] || !state[name].length) {
+  View: ({ name = 'menu', between = false, items = [] }) => (state, actions) => {
+    if (!items.length && (!state[name] || !state[name].length)) {
       return
+    }
+
+    if (!items.length) {
+      items = state[name]
     }
 
     return nav({ class: 'Menu' }, [
       ul(
-        state[name].map((menuItem, i) => {
+        items.map((menuItem, i) => {
           const { items, ...item } = menuItem
           const props = {}
           const hash = state.hash ? `#${state.hash}` : ''
@@ -50,7 +54,7 @@ const Menu = {
 
           let children
           if (items && url.startsWith(item.to)) {
-            children = ul(items.map(item => li([Link(item)])))
+            children = ul(items.map(itm => li([Link(itm)])))
           }
 
           return [
