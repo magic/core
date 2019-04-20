@@ -37,16 +37,11 @@ const prepareClient = app => {
 
   // create pages object, each Page is a html View
   let pageString = 'const pages = {\n'
-  let ROOT = ''
-  if (process.env.NODE_ENV && config.WEB_ROOT) {
-    ROOT = config.WEB_ROOT.endsWith('/')
-      ? config.WEB_ROOT.substring(0, config.WEB_ROOT.length - 1)
-      : config.WEB_ROOT
-  }
 
   app.pages.forEach(page => {
-    pageString += `\n  '${ROOT}${page.name}': ${page.View.toString()},`
+    pageString += `\n  '${page.name}': ${page.View.toString()},`
   })
+
   pageString += '\n}\n'
   clientString += pageString
 
@@ -123,7 +118,7 @@ app(state, actions, view, mD)\n`
             return `${key}: '${link}'`
           }
 
-          const isPageLink = app.pages.some(page => link.startsWith(page.name))
+          const isPageLink = app.pages.some(page => link.startsWith(page.name.replace(config.WEB_ROOT, '/')))
           const isStaticLink = Object.keys(app.static).some(key => key === link)
 
           if (isPageLink || isStaticLink) {

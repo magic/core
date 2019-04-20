@@ -15,12 +15,22 @@ const preparePages = files => {
     }
 
     page.file = file
-    page.name = file
+    const pageName = file
       .replace(config.DIR.PAGES, '')
       .replace(/index.js/gm, '')
       .replace('.js', '/')
 
-    page.path = path.join(config.DIR.PUBLIC, page.name)
+    if (process.env.NODE_ENV === 'production' && config.WEB_ROOT !== '/') {
+      let ROOT = config.WEB_ROOT
+      if (config.WEB_ROOT.endsWith('/')) {
+        ROOT = config.WEB_ROOT.substring(0, config.WEB_ROOT.length - 1)
+      }
+      page.name = `${ROOT}${pageName}`
+    } else {
+      page.name = pageName
+    }
+
+    page.path = path.join(config.DIR.PUBLIC, pageName)
     if (page.path.endsWith('/')) {
       page.path = path.join(page.path, 'index.html')
     }
