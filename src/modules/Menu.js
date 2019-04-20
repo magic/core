@@ -3,6 +3,7 @@ const Menu = {
     '.Menu': {
       float: 'right',
       margin: '1.5em 0 0',
+      position: 'relative',
 
       li: {
         float: 'left',
@@ -27,12 +28,13 @@ const Menu = {
       ul: {
         ul: {
           position: 'absolute',
+          left: 0,
         },
       },
     },
   },
 
-  View: ({ name = 'menu', between = false, items = [] }) => (state, actions) => {
+  View: ({ name = 'menu', between = false, items = [] }) => state => {
     if (!items.length && (!state[name] || !state[name].length)) {
       return
     }
