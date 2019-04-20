@@ -9,6 +9,7 @@ const preparePages = files => {
     let page = require(file)
     if (is.function(page)) {
       page = {
+        ...page,
         View: page,
       }
     }
@@ -24,7 +25,7 @@ const preparePages = files => {
       page.path = path.join(page.path, 'index.html')
     }
 
-    if (!page.View || typeof page.View.toString !== 'function') {
+    if (!page.View || !is.function(page.View.toString)) {
       throw new Error(`
 ${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(/\//g, '')}.js
 does not export a view function or page.View key.`)
