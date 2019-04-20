@@ -6,7 +6,13 @@ const { isUpperCase, getDependencies } = require('../../lib')
 
 const preparePages = files => {
   const pages = files.map(file => {
-    const page = require(file)
+    let page = require(file)
+    if (is.function(page)) {
+      page = {
+        View: page,
+      }
+    }
+
     page.file = file
     page.name = file
       .replace(config.DIR.PAGES, '')
@@ -18,21 +24,13 @@ const preparePages = files => {
       page.path = path.join(page.path, 'index.html')
     }
 
-    let view = false
-    if (typeof page === 'function') {
-      view = page
-      page.View = view
-    } else if (typeof page.View === 'function') {
-      view = page.View
-    }
-
-    if (!view || typeof view.toString !== 'function') {
+    if (!page.View || typeof page.View.toString !== 'function') {
       throw new Error(`
 ${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(/\//g, '')}.js
 does not export a view function or page.View key.`)
     }
 
-    page.dependencies = getDependencies(view, global.keys)
+    page.dependencies = getDependencies(page.View, global.keys)
 
     const { THEME_VARS = {} } = config
 
