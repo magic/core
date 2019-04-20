@@ -8,7 +8,7 @@ module.exports = {
     h1(state.title),
     p('magic modules are predefined modules for webapps.'),
 
-    h2('module definition:'),
+    h2({ id: 'definition' }, 'module definition:'),
     p('the minimal module is a function that returns some html.'),
     Pre.View(`
 // /assets/ModuleName.js
@@ -20,7 +20,7 @@ module.exports = () => div('hello, world')
 module.exports = (props, children) => (state, actions) => div('hello, world')
 `),
 
-    h2('usage:'),
+    h2({ id: 'usage' }, 'usage'),
     p('to use a module in your app it has to be imported using /assets/index.js. '),
     Pre.View(`
 // /assets/index.js
@@ -46,7 +46,7 @@ module.exports = () => div([
   Mod.View(propObject),
 `),
 
-    h2('Mod.View and Mod.Component:'),
+    h2({ id: 'custom-module' }, 'Mod.View and Mod.Component:'),
 
     Mod.View,
 
@@ -60,7 +60,7 @@ module.exports = () => div([
       h3('Mod.View'),
       p([
         'this is Mod.View. it gets loaded from ',
-        Link({ to: 'https://github.com/magic/core/example/assets/module.js' }, '/assets/module.js'),
+        Link({ to: 'https://github.com/magic/core/blob/master/example/assets/Mod.js' }, '/assets/Mod.js'),
       ]),
       p([
         'and imported in ',
@@ -74,7 +74,7 @@ module.exports = () => div([
       h3('Mod.Component'),
       p([
         'Mod.Component, a second component in ',
-        Link({ to: 'https://github.com/magic/core/example/assets/module.js' }, '/assets/module.js'),
+        Link({ to: 'https://github.com/magic/core/example/assets/Mod.js' }, '/assets/Mod.js'),
       ]),
     ]),
 
@@ -112,10 +112,10 @@ module.exports = () => div([
 
 module.exports = Mod`),
 
-    h2('preinstalled magic modules'),
+    h2({ id: 'preinstalled' }, 'preinstalled magic modules'),
     p('magic has some preinstalled modules that will be used in most pages.'),
 
-    h2('app'),
+    h2({ id: 'app' }, 'app'),
     p(
       'this is the main app module. it has magically inherited properties and all of it is customizable.',
     ),
@@ -142,7 +142,7 @@ module.exports = {
 }
 `),
 
-    h2('menu'),
+    h2({ id: 'menu' }, 'menu'),
     p('the Menu module provides... menus.'),
     p(
       'just pass it a string which is the state key of the menu, add that menu to the /assets/app.js file.',
@@ -181,7 +181,26 @@ module.exports = () => Menu.View({ name: 'menuName' })
 </nav>
 }`),
 
-    h2('link'),
+    h3({ id: 'sub-menus' }, 'sub menus'),
+    p('to define a submenu, simply defined a .items array on the menu item'),
+    Pre.View(`
+// assets/app.js
+module.exports = {
+  state: {
+    // ...state
+    menuName: [
+      {
+        to: '/example-page',
+        text: 'example page',
+        items: [
+          { to: '/example-page/#sub', text: 'example sub page' },
+      ] },
+    ],
+  },
+  // ... rest of app.js
+}`),
+
+    h2({ id: 'link' }, 'link'),
     p('the link module allows you to link to things.'),
     Pre.View(`
 // in any page or module View
@@ -200,7 +219,7 @@ module.exports = () => [
   Link({ to: '/#hash' }, 'home with hash'),
 ]`),
 
-    h2('img'),
+    h2({ id: 'img' }, 'img'),
     p('the img module adds some sane default values to your images.'),
     Pre.View(`
 // in any page or module View
@@ -217,7 +236,7 @@ module.exports = () => [
   // output: <img src="/image.png" title="image title" alt="image alt"/>
 ]`),
 
-    h2('footer'),
+    h2({ id: 'footer' }, 'footer'),
     p('the footer module contains a small info text and a link to the magic github repository.'),
     p(
       'to overwrite this behaviour, just place a Footer.js file in your assets and require it in /assets/index.js',
@@ -248,7 +267,7 @@ module.exports = {
 }
 `),
 
-    h2('list of installable magic modules'),
+    h2({ id: 'magic-modules' }, 'list of installable magic modules'),
     ul([
       li([
         h3('pre'),
