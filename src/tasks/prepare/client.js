@@ -123,7 +123,7 @@ app(state, actions, view, mD)\n`
             return `${key}: '${link}'`
           }
 
-          const isPageLink = app.pages.some(page => page.name === link)
+          const isPageLink = app.pages.some(page => link.startsWith(page.name))
           const isStaticLink = Object.keys(app.static).some(key => key === link)
 
           if (isPageLink || isStaticLink) {
