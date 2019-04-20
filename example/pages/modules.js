@@ -64,7 +64,7 @@ module.exports = () => div([
       ]),
       p([
         'and imported in ',
-        Link({ to: 'https://github.com/magic/core/example/assets/index.js' }, '/assets/index.js'),
+        Link({ to: 'https://github.com/magic/core/blob/master/example/assets/index.js' }, '/assets/index.js'),
       ]),
       p(['the state of this module: ', JSON.stringify(state.module)]),
     ]),
@@ -74,7 +74,7 @@ module.exports = () => div([
       h3('Mod.Component'),
       p([
         'Mod.Component, a second component in ',
-        Link({ to: 'https://github.com/magic/core/example/assets/Mod.js' }, '/assets/Mod.js'),
+        Link({ to: 'https://github.com/magic/core/blob/master/example/assets/Mod.js' }, '/assets/Mod.js'),
       ]),
     ]),
 
