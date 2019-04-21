@@ -20,10 +20,10 @@ const preparePages = files => {
       .replace(/index.js/gm, '')
       .replace('.js', '/')
 
-    if (process.env.NODE_ENV === 'production' && config.WEB_ROOT !== '/') {
+    if (process.env.NODE_ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
       let ROOT = config.WEB_ROOT
-      if (config.WEB_ROOT && config.WEB_ROOT.endsWith('/')) {
-        ROOT = config.WEB_ROOT.substring(0, config.WEB_ROOT.length - 1)
+      if (ROOT && ROOT.endsWith('/')) {
+        ROOT = ROOT.slice(0, -1)
       }
       page.name = `${ROOT}${pageName}`
     } else {
