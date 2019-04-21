@@ -22,7 +22,7 @@ const preparePages = files => {
 
     if (process.env.NODE_ENV === 'production' && config.WEB_ROOT !== '/') {
       let ROOT = config.WEB_ROOT
-      if (config.WEB_ROOT.endsWith('/')) {
+      if (config.WEB_ROOT && config.WEB_ROOT.endsWith('/')) {
         ROOT = config.WEB_ROOT.substring(0, config.WEB_ROOT.length - 1)
       }
       page.name = `${ROOT}${pageName}`
