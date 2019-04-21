@@ -118,7 +118,9 @@ app(state, actions, view, mD)\n`
             return `${key}: '${link}'`
           }
 
-          const isPageLink = app.pages.some(page => link.startsWith(page.name.replace(config.WEB_ROOT, '/')))
+          const isPageLink = app.pages.some(page =>
+            link.startsWith(page.name.replace(config.WEB_ROOT, '/')),
+          )
           const isStaticLink = Object.keys(app.static).some(key => key === link)
 
           if (isPageLink || isStaticLink) {
