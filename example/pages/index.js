@@ -10,6 +10,11 @@ module.exports = {
       h2('Welcome to the magic docs.'),
       p('The goal of this document is to give you a rough @magical overview.'),
 
+      GitBadges({
+        project: 'magic/core',
+        appveyor: 'jaeh/core',
+      }),
+
       h2('Features'),
 
       h3('client app'),

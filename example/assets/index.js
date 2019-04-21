@@ -1,4 +1,5 @@
 module.exports = {
-  Pre: require('@magic-modules/pre'),
   Mod: require('./Mod'),
+  Pre: require('@magic-modules/pre'),
+  GitBadges: require('@magic-modules/gitbadges'),
 }
