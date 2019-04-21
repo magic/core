@@ -32,7 +32,11 @@ const preparePages = files => {
 
     page.path = path.join(config.DIR.PUBLIC, pageName)
     if (page.path.endsWith('/')) {
-      page.path = path.join(page.path, 'index.html')
+      if (page.path.slice(0, -1) === config.DIR.PUBLIC) {
+        page.path = path.join(page.path, 'index.html')
+      } else {
+        page.path = path.resolve(`${page.path.slice(0, -1)}.html`)
+      }
     }
 
     if (!page.View || !is.function(page.View.toString)) {
