@@ -32,10 +32,10 @@ const preparePages = files => {
 
     page.path = path.join(config.DIR.PUBLIC, pageName)
     if (page.path.endsWith('/')) {
-      if (page.path.slice(0, -1) === config.DIR.PUBLIC) {
-        page.path = path.join(page.path, 'index.html')
+      if (page.name === '/404/') {
+        page.path = `${page.path.slice(0, -1)}.html`
       } else {
-        page.path = path.resolve(`${page.path.slice(0, -1)}.html`)
+        page.path = path.join(page.path, 'index.html')
       }
     }
 
@@ -79,7 +79,7 @@ does not export a view function or page.View key.`)
   if (!has404) {
     const page404 = {
       name: '/404/',
-      path: path.join(config.DIR.PUBLIC, '404', 'index.html'),
+      path: path.join(config.DIR.PUBLIC, '404.html'),
       View: () => div('404 - not found'),
     }
     page404.dependencies = getDependencies(page404.View, global.keys)
