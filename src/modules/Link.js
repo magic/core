@@ -63,8 +63,6 @@ Link.actions = {
       }, 10)
     }
 
-    console.log('returning', uri)
-
     return {
       url: uri,
       hash,
