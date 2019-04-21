@@ -46,9 +46,9 @@ Link.actions = {
       }
     } else {
       if (e.state) {
-        url = e.state.uri
+        uri = e.state.uri
       } else {
-        url = '/'
+        uri = '/'
       }
     }
 
@@ -62,6 +62,8 @@ Link.actions = {
         }
       }, 10)
     }
+
+    console.log('returning', uri)
 
     return {
       url: uri,
