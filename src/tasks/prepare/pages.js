@@ -20,7 +20,7 @@ const preparePages = files => {
       .replace(/index.js/gm, '')
       .replace('.js', '/')
 
-    if (process.env.NODE_ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
+    if (config.ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
       let ROOT = config.WEB_ROOT
       if (ROOT && ROOT.endsWith('/')) {
         ROOT = ROOT.slice(0, -1)
@@ -53,13 +53,15 @@ does not export a view function or page.View key.`)
       page.style = page.style(THEME_VARS)
     }
 
+    page.dependencyStyles = {}
+
     // merge dependency styles and subdependencies into page dependencies
     Object.entries(page.dependencies).forEach(([k, c]) => {
       if (c.style) {
         if (is.fn(c.style)) {
           c.style = c.style(THEME_VARS)
         }
-        page.style = deep.merge(c.style, page.style)
+        page.dependencyStyles = deep.merge(c.style, page.dependencyStyles)
       }
 
       const views = Object.entries(c)

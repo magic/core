@@ -33,8 +33,24 @@ module.exports = app => {
     resetStyle = deep.merge(resetStyle, require(existingLayoutCssFile))
   }
 
+
+  app.pages.forEach(page => {
+    style = deep.merge(style, page.dendencyStyle)
+  })
+
   // load user's chosen theme, if it is set and exists, and merge it over the styles
   if (config.THEME) {
+    // look if it exists in node_modules
+    try {
+      let theme = require(`@magic-themes/${config.THEME}`)
+      if (is.function(theme)) {
+        theme = theme(variables)
+      }
+      style = deep.merge(style, theme)
+    } catch (e) {
+      // theme does not exist in node_modules, continue happily.
+    }
+
     // first look if we have this theme preinstalled, if so, merge it into the styles
     const libThemeFile = path.join(__dirname, '..', '..', 'themes', config.THEME, 'index.js')
 
@@ -44,17 +60,6 @@ module.exports = app => {
         theme = theme(variables)
       }
       style = deep.merge(style, theme)
-    }
-
-    // now look if it exists in node_modules
-    try {
-      let theme = require(`@magic-themes/${config.THEME}`)
-      if (is.function(theme)) {
-        theme = theme(variables)
-      }
-      style = deep.merge(style, theme)
-    } catch (e) {
-      // theme does not exist in node_modules, continue happily.
     }
 
     // load user's custom theme, overwriting both preinstalled and node_modules themes
