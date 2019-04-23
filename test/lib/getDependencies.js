@@ -27,19 +27,19 @@ module.exports = [
   {
     before,
     fn: tryCatch(getDependencies, '() => Module()', new Set(['Module'])),
-    expect: ({ Module }) => is.fn(Module),
+    expect: res => is.fn(res[0].Module),
     info: 'getDependencies finds Module if it is a function',
   },
   {
     before,
     fn: tryCatch(getDependencies, '() => ObjectModule.View()', new Set(['ObjectModule'])),
-    expect: ({ ObjectModule }) => is.fn(ObjectModule.View),
+    expect: (res) => is.fn(res[0].ObjectModule.View),
     info: 'getDependencies finds ObjectModule',
   },
   {
     before,
     fn: tryCatch(getDependencies, '() => ObjectModule.View()', new Set(['ObjectModule'])),
-    expect: ({ ObjectModule }) => is.object(ObjectModule),
+    expect: res => is.object(res[0].ObjectModule),
     info: 'getDependencies finds ObjectModule.View',
   },
 ]

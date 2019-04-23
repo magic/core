@@ -33,10 +33,11 @@ module.exports = app => {
     resetStyle = deep.merge(resetStyle, require(existingLayoutCssFile))
   }
 
-
-  app.pages.forEach(page => {
-    style = deep.merge(style, page.dendencyStyle)
-  })
+  app.pages
+    .filter(p => p.dependencyStyles)
+    .forEach(page => {
+      style = deep.merge(style, page.dependencyStyles)
+    })
 
   // load user's chosen theme, if it is set and exists, and merge it over the styles
   if (config.THEME) {

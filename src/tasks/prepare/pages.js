@@ -56,20 +56,23 @@ does not export a view function or page.View key.`)
     page.dependencyStyles = {}
 
     // merge dependency styles and subdependencies into page dependencies
-    Object.entries(page.dependencies).forEach(([k, c]) => {
-      if (c.style) {
-        if (is.fn(c.style)) {
-          c.style = c.style(THEME_VARS)
+    page.dependencies.forEach(dep => {
+      Object.entries(dep).forEach(([k, c]) => {
+        // console.log(c)
+        if (c.style) {
+          if (is.fn(c.style)) {
+            c.style = c.style(THEME_VARS)
+          }
+          page.dependencyStyles = deep.merge(c.style, page.dependencyStyles)
         }
-        page.dependencyStyles = deep.merge(c.style, page.dependencyStyles)
-      }
 
-      const views = Object.entries(c)
-        .filter(([k]) => isUpperCase(k))
-        .map(([_, v]) => v.toString())
+        const views = Object.entries(c)
+          .filter(([k]) => isUpperCase(k))
+          .map(([_, v]) => v.toString())
 
-      views.forEach(view => {
-        page.dependencies = deep.merge(getDependencies(view, global.keys), page.dependencies)
+        views.forEach(view => {
+          page.dependencies = deep.merge(getDependencies(view, global.keys), page.dependencies)
+        })
       })
     })
 

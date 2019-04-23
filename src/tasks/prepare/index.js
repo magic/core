@@ -28,10 +28,10 @@ const prepare = async app => {
 
   app.files = files
 
-  app.dependencies = getDependencies(app.Body, global.keys)
+  let dependencies = getDependencies(app.Body, global.keys)
 
   if (config.ENV === 'development') {
-    app.dependencies = deep.merge(app.dependencies, adminModules)
+    dependencies = deep.merge(dependencies, adminModules)
     app.state.config = global.config
   }
 
@@ -57,8 +57,15 @@ const prepare = async app => {
   })
 
   app.pages.forEach(page => {
-    // make sure app.dependencies contains all recursive dependencies
-    app.dependencies = deep.merge(page.dependencies, app.dependencies)
+    // make sure dependencies contains all recursive dependencies
+    dependencies = deep.merge(page.dependencies, dependencies)
+  })
+
+  app.dependencies = {}
+  dependencies.forEach(dep => {
+    Object.entries(dep).forEach(([ key, val]) => {
+      app.dependencies[key] = val
+    })
   })
 
   // collect all static files,
