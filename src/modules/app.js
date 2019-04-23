@@ -9,11 +9,13 @@ const config = require('../config')
 // const { ENV } = config
 const Magic = require('./admin')
 
+const { WEB_ROOT = '/' } = config
+
 // default app state. gets merged with /assets/app.js if it exists.
 // /assets/app.js overwrites the values defined here.
 let app = {
   state: {
-    url: '/',
+    url: WEB_ROOT,
   },
 
   // this View gets server rendered.
