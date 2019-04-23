@@ -22,7 +22,9 @@ const Menu = {
       },
 
       '.active': {
-        textDecoration: 'underline',
+        '> a': {
+          textDecoration: 'underline',
+        },
       },
 
       ul: {
@@ -34,7 +36,7 @@ const Menu = {
     },
   },
 
-  View: ({ name = 'menu', between = false, items = [] }) => state => {
+  View: ({ name = 'menu', class: cl = '', between = false, items = [] }) => state => {
     if (!items.length && (!state[name] || !state[name].length)) {
       return
     }
@@ -43,7 +45,7 @@ const Menu = {
       items = state[name]
     }
 
-    return nav({ class: 'Menu' }, [
+    return nav({ class: `Menu ${cl}` }, [
       ul(
         items.map((menuItem, i) => {
           const { items, ...item } = menuItem
@@ -56,7 +58,13 @@ const Menu = {
 
           let children
           if (items && url.startsWith(item.to)) {
-            children = ul(items.map(itm => li([Link(itm)])))
+            children = ul(items.map(itm => {
+              const p = {}
+              if (itm.to === url) {
+                p.class = 'active'
+              }
+              return li(p, Link(itm))
+            }))
           }
 
           return [
