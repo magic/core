@@ -29,6 +29,7 @@ const prepareClient = app => {
   }
 
   // create string of required dependent modules
+
   const depString = Object.entries(app.dependencies)
     .map(handleDeps)
     .join('')
