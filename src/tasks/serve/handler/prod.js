@@ -26,6 +26,7 @@ const handler = async app => {
       }),
     )
   }
+
   const hasStatic = Object.keys(static).length > 0
 
   const lambdas = {}
@@ -38,8 +39,19 @@ const handler = async app => {
   const hasApi = Object.keys(static).length > 0
 
   return async (req, res) => {
-    const url = URL.parse(req.url.replace(config.WEB_ROOT, '/'))
-    const { pathname } = url
+    const url = URL.parse(req.url)
+    let { pathname } = url
+
+    const { WEB_ROOT = '/' } = config
+    const fullPathname = WEB_ROOT + pathname.slice(1)
+
+    if (!pathname.startsWith(WEB_ROOT)) {
+      res.writeHead(301, { 'Location': fullPathname})
+      res.end()
+      return
+    } else {
+      pathname = pathname.replace(WEB_ROOT, '/')
+    }
 
     if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {
       res.setHeader('X-Clacks-Overhead', 'GNU Terry Pratchet')
