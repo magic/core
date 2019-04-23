@@ -16,8 +16,8 @@
     "clean": "node src/bin.js clean",
     "serve": "node src/bin.js serve",
     "dev": "node src/bin.js dev",
-    "format": "f -w",
-    "test": "t",
+    "format": "f -w --exclude docs example",
+    "test": "t --exclude docs example",
     "calls": "calls"
   },
   "dependencies": {
@@ -52,6 +52,6 @@
   "devDependencies": {
     "@magic-modules/gitbadges": "github:magic-modules/gitbadges",
     "@magic-modules/pre": "github:magic-modules/pre",
-    "@magic/test": "0.0.7"
+    "@magic/test": "0.0.8"
   }
 }
