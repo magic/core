@@ -22,7 +22,7 @@ const prepareClient = app => {
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (config.ENV !== 'production') {
     // add all html tags to development bundle.
     // this will allow easier usage of wysiwyg editors
     app.dependencies = deep.merge(global.tags.body, app.dependencies)
@@ -108,7 +108,7 @@ app(state, actions, view, mD)\n`
 
   // prepend client urls with WEB_ROOT url in production,
   // this allows, for example, username.github.io/packagename
-  if (process.env.NODE_ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
+  if (config.ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
     clientString = clientString
       // find all links, callback gets match, key, delimiter, link
       .replace(

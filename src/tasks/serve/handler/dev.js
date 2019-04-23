@@ -1,6 +1,6 @@
 const { addTrailingSlash, getContentType } = require('../../../lib/')
 
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = config.ENV === 'production'
 
 const handler = app => (req, res) => {
   const { css, client, static, lambdas } = app

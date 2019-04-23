@@ -2,7 +2,7 @@ const path = require('path')
 
 const { mkdirp, fs, getFileType } = require('../../lib')
 
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = config.ENV === 'production'
 
 const minifyImages = require('./lib/minifyImages')
 
