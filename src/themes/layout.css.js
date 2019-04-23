@@ -22,6 +22,9 @@ module.exports = {
         fontSize: '1.5em',
         margin: '.7em .2em',
       },
+      '.logo-wrapper': {
+        display: 'inline-block',
+      },
     },
   },
 
