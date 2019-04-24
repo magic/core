@@ -46,7 +46,7 @@ const handler = async app => {
     const fullPathname = WEB_ROOT + pathname.slice(1)
 
     if (!pathname.startsWith(WEB_ROOT)) {
-      res.writeHead(301, { 'Location': fullPathname})
+      res.writeHead(301, { Location: fullPathname })
       res.end()
       return
     } else {

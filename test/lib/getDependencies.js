@@ -33,7 +33,7 @@ module.exports = [
   {
     before,
     fn: tryCatch(getDependencies, '() => ObjectModule.View()', new Set(['ObjectModule'])),
-    expect: (res) => is.fn(res[0].ObjectModule.View),
+    expect: res => is.fn(res[0].ObjectModule.View),
     info: 'getDependencies finds ObjectModule',
   },
   {

@@ -58,13 +58,15 @@ const Menu = {
 
           let children
           if (items && url.startsWith(item.to)) {
-            children = ul(items.map(itm => {
-              const p = {}
-              if (itm.to === url) {
-                p.class = 'active'
-              }
-              return li(p, Link(itm))
-            }))
+            children = ul(
+              items.map(itm => {
+                const p = {}
+                if (itm.to === url) {
+                  p.class = 'active'
+                }
+                return li(p, Link(itm))
+              }),
+            )
           }
 
           return [

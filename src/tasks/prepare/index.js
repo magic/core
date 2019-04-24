@@ -63,7 +63,7 @@ const prepare = async app => {
 
   app.dependencies = {}
   dependencies.forEach(dep => {
-    Object.entries(dep).forEach(([ key, val]) => {
+    Object.entries(dep).forEach(([key, val]) => {
       app.dependencies[key] = val
     })
   })
