@@ -9,7 +9,7 @@ const config = require('../config')
 // const { ENV } = config
 const Magic = require('./admin')
 
-const { WEB_ROOT = '/' } = config
+const { WEB_ROOT = '/', LANG = 'en' } = config
 
 // default app state. gets merged with /assets/app.js if it exists.
 // /assets/app.js overwrites the values defined here.
@@ -21,7 +21,7 @@ let app = {
   // this View gets server rendered.
   View: page => (state, actions) => [
     h('', { innerHTML: '<!DOCTYPE html>' }),
-    html([
+    html({ lang: state.lang || LANG }, [
       head([
         meta({ charset: 'utf-8' }),
         link({ rel: 'icon', href: '/favicon.ico' }),
