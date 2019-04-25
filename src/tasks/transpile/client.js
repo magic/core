@@ -41,7 +41,7 @@ if (isProd) {
     plugins.push('transform-remove-debugger')
   }
 
-  if (!process.argv.includes('--no-simplify')) {
+  if (!process.argv.includes('--no-minify')) {
     plugins.push('minify-simplify')
     plugins.push('minify-type-constructors')
     plugins.push('minify-builtins')
