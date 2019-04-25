@@ -22,6 +22,26 @@ if (devAliases.some(arg => process.argv.includes(arg))) {
   cmds.serve = true
 }
 
+// first index in nested flag array is the default,
+// all following items are aliases
+const flags = [
+  ['--no-mangle-names'],
+  ['--keep-dead-code', '--keep-dead'],
+  ['--keep-console'],
+  ['--keep-debugger', '--keep-debug'],
+  ['--no-minify'],
+]
+
+process.argv = process.argv.map(arg => {
+  flags
+    .filter(flag => arg !== flag[0] && flag.some(f => f === arg))
+    .forEach(flag => {
+      arg = flag[0]
+    })
+
+  return arg
+})
+
 if (hasArgv() || is.empty(cmds)) {
   console.log(`
 magic - static and serverless page generator
@@ -29,7 +49,7 @@ magic - static and serverless page generator
 usage:
 magic [TASKS]...
 
-production tests:
+production:
 NODE_ENV=production magic [...TASKS]
 
 available tasks:
@@ -40,6 +60,14 @@ serve   - build and serve the bundle
 clean   - delete public dir
 connect - connect to github (only needs to be done once)
 publish - publish to github
+
+command line flags:
+--keep-console    - keep console.log in production javascript
+--no-mangle-names - do not mangle names of variables and functions
+--keep-dead-code  - do not remove dead code
+--keep-debugger   - do not remove debugger statements from js
+--no-minify       - do not minify js
+
 
 help    - this help text
 `)

@@ -25,14 +25,28 @@ const plugins = [
 ]
 
 if (isProd) {
-  plugins.push(['minify-mangle-names', { topLevel: true }])
-  plugins.push('minify-dead-code-elimination')
-  plugins.push('transform-remove-console')
-  plugins.push('transform-remove-debugger')
-  plugins.push('minify-simplify')
-  plugins.push('minify-type-constructors')
-  plugins.push('minify-builtins')
-  plugins.push('transform-minify-booleans')
+  if (!process.argv.includes('--no-mangle-names')) {
+    plugins.push(['minify-mangle-names', { topLevel: true }])
+  }
+
+  if (!process.argv.includes('--keep-dead-code')) {
+    plugins.push('minify-dead-code-elimination')
+  }
+
+  if (!process.argv.includes('--keep-console')) {
+    plugins.push('transform-remove-console')
+  }
+
+  if (!process.argv.includes('--keep-debugger')) {
+    plugins.push('transform-remove-debugger')
+  }
+
+  if (!process.argv.includes('--no-simplify')) {
+    plugins.push('minify-simplify')
+    plugins.push('minify-type-constructors')
+    plugins.push('minify-builtins')
+    plugins.push('transform-minify-booleans')
+  }
 }
 
 const babelOpts = {
