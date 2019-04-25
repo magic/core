@@ -14,6 +14,7 @@ module.exports = {
           { to: '/files/#assets', text: 'assets' },
           { to: '/files/#static', text: 'static' },
           { to: '/files/#themes', text: 'themes' },
+          { to: '/files/#app', text: 'app' },
           { to: '/files/#config', text: 'config.js' },
         ],
       },
