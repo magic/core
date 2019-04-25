@@ -32,7 +32,9 @@ let app = {
           !is.empty(state.description) &&
             meta({
               name: 'description',
-              content: is.array(state.description) ? state.description.join(' ') : state.description,
+              content: is.array(state.description)
+                ? state.description.join(' ')
+                : state.description,
             }),
           !is.empty(state.keywords) &&
             meta({

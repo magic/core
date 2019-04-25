@@ -1,4 +1,5 @@
-const Link = ({ to, href, text, nofollow, noreferrer, onclick, ...props }, children) => (_, actions) => {
+const Link = ({ to, ...p }, children) => (_, actions) => {
+  const { href, text, nofollow, noreferrer, onclick, ...props } = p
   to = to || href || ''
   props.href = to
 
@@ -50,7 +51,7 @@ Link.actions = {
           window.scrollTo(0, 0)
         }
       }
-    // in case of popstate events firing, we do not have props.to
+      // in case of popstate events firing, we do not have props.to
     } else {
       // but instead the e is a history event
       if (e.state) {
