@@ -6,8 +6,8 @@ const { fs } = require('../../lib')
 const Magic = require('../../modules/admin')
 
 module.exports = app => {
-  let resetStyle = {}
-  let style = {}
+  let resetStyles = []
+  let styles = []
 
   const variables = config.THEME_VARS || {}
 
@@ -16,27 +16,31 @@ module.exports = app => {
   // merge user created custom layout into styles, if it exists
   const maybeResetCssFile = path.join(config.DIR.THEMES, theme, 'reset.css.js')
   if (fs.existsSync(maybeResetCssFile)) {
-    resetStyle = deep.merge(require(maybeResetCssFile), resetStyle)
+    const maybeResetCssStyles = require(maybeResetCssFile)
+    resetStyles = [maybeResetCssStyles, ...resetStyles]
   } else {
     // merge default reset css into styles if no custom reset file exists
     const libResetCssFile = path.join(__dirname, '..', '..', 'themes', 'reset.css.js')
-    resetStyle = deep.merge(require(libResetCssFile), resetStyle)
+    const libResetCssStyles = require(libResetCssFile)
+    resetStyles = [libResetCssStyles, ...resetStyles]
   }
 
   // merge user created custom layout into styles, if it exists
   const maybeLayoutCssFile = path.join(config.DIR.THEMES, theme, 'layout.css.js')
   if (fs.existsSync(maybeLayoutCssFile)) {
-    resetStyle = deep.merge(resetStyle, require(maybeLayoutCssFile))
+    const maybeLayoutCssStyles = require(maybeLayoutCssFile)
+    resetStyles.push(maybeLayoutCssStyles)
   } else {
     // merge default layout into styles if no custom layout file exists
     const existingLayoutCssFile = path.join(__dirname, '..', '..', 'themes', 'layout.css.js')
-    resetStyle = deep.merge(resetStyle, require(existingLayoutCssFile))
+    const existingLayoutCssStyles = require(existingLayoutCssFile)
+    resetStyles.push(existingLayoutCssStyles)
   }
 
   app.pages
     .filter(p => p.dependencyStyles)
     .forEach(page => {
-      style = deep.merge(style, page.dependencyStyles)
+      styles.push(page.dependencyStyles)
     })
 
   // load user's chosen theme, if it is set and exists, and merge it over the styles
@@ -47,7 +51,7 @@ module.exports = app => {
       if (is.function(theme)) {
         theme = theme(variables)
       }
-      style = deep.merge(style, theme)
+      styles.push(theme)
     } catch (e) {
       // theme does not exist in node_modules, continue happily.
     }
@@ -60,7 +64,7 @@ module.exports = app => {
       if (is.function(theme)) {
         theme = theme(variables)
       }
-      style = deep.merge(style, theme)
+      styles.push(theme)
     }
 
     // load user's custom theme, overwriting both preinstalled and node_modules themes
@@ -70,25 +74,37 @@ module.exports = app => {
       if (is.function(theme)) {
         theme = theme(variables)
       }
-      style = deep.merge(style, theme)
+      styles.push(theme)
     }
   }
 
-  app.pages.forEach(page => {
-    style = deep.merge(style, page.style)
-  })
+  app.pages
+    .filter(p => p.style)
+    .forEach(page => {
+      styles.push(page.style)
+    })
 
   const maybeAppFile = path.join(config.ROOT, 'app.js')
   if (maybeAppFile !== __filename && fs.existsSync(maybeAppFile)) {
     const maybeApp = require(maybeAppFile)
-    if (is.object(maybeApp) && !is.empty(maybeApp)) {
-      style = deep.merge(style, maybeApp.style)
+    if (is.object(maybeApp) && !is.empty(maybeApp) && maybeApp.style) {
+      styles.push(maybeApp.style)
     }
   }
 
   if (config.ENV === 'development') {
-    style = deep.merge(Magic.style, style)
+    styles = [Magic.style, ...styles]
   }
 
-  return [resetStyle, style]
+  let resetStyleObject = {}
+  resetStyles.map(style => {
+    resetStyleObject = deep.merge(resetStyleObject, style)
+  })
+  let styleObject = {}
+  styles.map(style => {
+    styleObject = deep.merge(styleObject, style)
+  })
+
+  const finalStyles = [resetStyleObject, styleObject]
+  return finalStyles
 }
