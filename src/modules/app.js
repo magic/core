@@ -19,33 +19,37 @@ let app = {
   },
 
   // this View gets server rendered.
-  View: page => (state, actions) => [
-    h('', { innerHTML: '<!DOCTYPE html>' }),
-    html({ lang: state.lang || LANG }, [
-      head([
-        meta({ charset: 'utf-8' }),
-        link({ rel: 'icon', href: '/favicon.ico' }),
-        !is.empty(state.title) && title(state.title),
-        !is.empty(state.description) &&
-          meta({
-            name: 'description',
-            content: is.array(state.description) ? state.description.join(' ') : state.description,
-          }),
-        !is.empty(state.keywords) &&
-          meta({
-            name: 'keywords',
-            content: is.array(state.keywords) ? state.keywords.join(' ') : state.keywords,
-          }),
-        !is.empty(state.author) && meta({ name: 'author', content: state.author }),
-        link({ rel: 'stylesheet', href: '/' + config.CLIENT_LIB_NAME + '.css' }),
-        page.Head && page.Head(state, actions),
+  View: page => (state, actions) => {
+    state.url = page.name
+
+    return [
+      h('', { innerHTML: '<!DOCTYPE html>' }),
+      html({ lang: state.lang || LANG }, [
+        head([
+          meta({ charset: 'utf-8' }),
+          link({ rel: 'icon', href: '/favicon.ico' }),
+          !is.empty(state.title) && title(state.title),
+          !is.empty(state.description) &&
+            meta({
+              name: 'description',
+              content: is.array(state.description) ? state.description.join(' ') : state.description,
+            }),
+          !is.empty(state.keywords) &&
+            meta({
+              name: 'keywords',
+              content: is.array(state.keywords) ? state.keywords.join(' ') : state.keywords,
+            }),
+          !is.empty(state.author) && meta({ name: 'author', content: state.author }),
+          link({ rel: 'stylesheet', href: '/' + config.CLIENT_LIB_NAME + '.css' }),
+          page.Head && page.Head(state, actions),
+        ]),
+        body([
+          app.Body(page.View, state, actions),
+          script({ type: 'text/javascript', src: '/' + config.CLIENT_LIB_NAME + '.js' }),
+        ]),
       ]),
-      body([
-        app.Body(page.View, state, actions),
-        script({ type: 'text/javascript', src: '/' + config.CLIENT_LIB_NAME + '.js' }),
-      ]),
-    ]),
-  ],
+    ]
+  },
   Body: Magic.View,
 }
 
