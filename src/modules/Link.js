@@ -31,6 +31,7 @@ Link.actions = {
     let url = state.url
     let [uri, hash = ''] = url.split('#')
 
+    // if we have clicked a link, we have a to
     if (to) {
       url = to.replace(window.location.origin, '')
       const [u, h = ''] = url.split('#')
@@ -44,7 +45,9 @@ Link.actions = {
           window.scrollTo(0, 0)
         }
       }
+    // in case of popstate events firing, we do not have props.to
     } else {
+      // but instead the e is a history event
       if (e.state) {
         uri = e.state.uri
       } else {
