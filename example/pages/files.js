@@ -128,8 +128,8 @@ module.exports = {
         Pre.View(examples.theme),
       ]),
 
-      div({ id: 'appinfo' }, [
-        h2('/app.js'),
+      div({ id: 'app' }, [
+        h2('/assets/app.js'),
         p('the /app.js file allows you to set global state, actions, and styles'),
         h3('example /app.js'),
         Pre.View(examples.app),
