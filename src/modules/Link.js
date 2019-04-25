@@ -26,7 +26,7 @@ const Link = ({ to, href, text, nofollow, noreferrer, onclick, ...props }, child
 Link.actions = {
   go: props => state => {
     // trigger event if history api does not exist
-    if (!window.history) {
+    if (typeof window === 'undefined' || !window.history) {
       return true
     }
     const { to } = props
@@ -60,15 +60,9 @@ Link.actions = {
       }
     }
 
-    if (hash) {
-      // try to make sure the page has changed by the time we scroll
-      // if not, we simply lose the scroll
-      window.setTimeout(() => {
-        const ele = document.getElementById(hash)
-        if (ele) {
-          window.scrollTo(0, ele.offsetTop)
-        }
-      }, 10)
+    // window exists for sure, but make sure window.location also does
+    if (hash && window.location) {
+      window.location.hash = hash
     }
 
     return {
