@@ -20,7 +20,7 @@ const preparePages = files => {
       .replace(/index.js/gm, '')
       .replace('.js', '/')
 
-    if (config.ENV === 'production' && config.WEB_ROOT && config.WEB_ROOT !== '/') {
+    if (config.ENV === 'production' && config.WEB_ROOT !== '/') {
       let ROOT = config.WEB_ROOT
       if (ROOT && ROOT.endsWith('/')) {
         ROOT = ROOT.slice(0, -1)
