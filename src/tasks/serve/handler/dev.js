@@ -5,7 +5,7 @@ const isProd = config.ENV === 'production'
 const handler = app => (req, res) => {
   const { css, client, static, lambdas } = app
 
-  const WEB_ROOT = addTrailingSlash(config.WEB_ROOT || '/')
+  const WEB_ROOT = addTrailingSlash(config.WEB_ROOT)
   let url = req.url
   const rawUrl = req.url.replace(config.WEB_ROOT, '/')
 
