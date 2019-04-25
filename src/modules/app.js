@@ -16,6 +16,7 @@ const { WEB_ROOT = '/', LANG = 'en' } = config
 let app = {
   state: {
     url: WEB_ROOT,
+    root: WEB_ROOT,
   },
 
   // this View gets server rendered.
