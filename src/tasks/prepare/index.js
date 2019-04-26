@@ -13,6 +13,7 @@ const { isGlobal } = require('./lib')
 global.keys = new Set()
 
 const prepare = async app => {
+  app.lib = app.lib || {}
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
   if (await fs.exists(maybeAssetFile)) {
     const assets = require(maybeAssetFile)
@@ -53,6 +54,11 @@ const prepare = async app => {
       }
       app.actions.pages[page.name] = page.actions
     }
+
+    if (!is.empty(page.lib)) {
+      app.lib = deep.merge(page.lib, app.lib)
+    }
+
     return page
   })
 
@@ -95,7 +101,7 @@ const prepare = async app => {
 
       const glob = component.global || {}
 
-      if (component.state) {
+      if (!is.empty(component.state)) {
         Object.entries(component.state).forEach(([key, val]) => {
           if (isGlobal(glob.state, key)) {
             app.state[key] = val
@@ -106,7 +112,7 @@ const prepare = async app => {
         })
       }
 
-      if (component.actions) {
+      if (!is.empty(component.actions)) {
         Object.entries(component.actions).forEach(([key, val]) => {
           if (isGlobal(glob.actions, key)) {
             app.actions[key] = val
@@ -115,6 +121,10 @@ const prepare = async app => {
             app.actions[lowerName][key] = val
           }
         })
+      }
+
+      if (!is.empty(component.lib)) {
+        app.lib = deep.merge(component.lib, app.lib)
       }
     })
 

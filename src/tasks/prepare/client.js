@@ -1,3 +1,4 @@
+const is = require('@magic/types')
 const deep = require('@magic/deep')
 
 const { stringifyObject, handleDeps } = require('./lib')
@@ -9,10 +10,21 @@ const prepareClient = app => {
   clientString += "const { app, h } = require('hyperapp')\n"
 
   // define every lib import at the top of magic.js
-  if (app.lib && app.lib.length) {
-    app.lib.forEach(([name, res]) => {
-      clientString += `const ${name} = require('${res}')\n`
+  if (!is.empty(app.lib)) {
+    if (!is.object(app.lib)) {
+      throw new Error(`Expected app.lib to be an object, received ${typeof app.lib}, ${app.lib}`)
+    }
+
+    let libString = 'window.LIB = {'
+
+    Object.entries(app.lib).forEach(([name, res]) => {
+      const str = `\n  ${name}: require('${res}',)`
+      libString += str
     })
+
+    libString += '\n}\n'
+
+    clientString += libString
   }
 
   // add the Component module that wraps all other html tags
