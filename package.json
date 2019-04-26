@@ -10,7 +10,7 @@
     "serve": "node src/bin.js serve",
     "dev": "node src/bin.js dev",
     "format": "f -w --exclude docs",
-    "test": "t --exclude docs example",
+    "test": "t --exclude docs example config.js",
     "calls": "calls"
   },
   "main": "src/index.js",
