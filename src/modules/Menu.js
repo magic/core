@@ -3,55 +3,43 @@ const View = (props = 'menu') => state => {
     props = { name: props }
   }
 
-  const { name = 'menu', between = false } = props
-  let { class: cl = 'Menu', items = [] } = props
-  items = !items.length && state[name] ? state[name] : items
-
-  const hash = state.hash ? `#${state.hash}` : ''
-  const url = state.url + hash
-
-  if (!cl) {
-    cl = 'Menu'
-  } else if (!cl.includes('Menu')) {
-    cl = `Menu ${cl}`
-  }
+  let { name = 'menu', class: cl = 'Menu', items = [] } = props
+  let { url, [name]: maybeItems = [] } = state
+  items = !items.length ? maybeItems : items
 
   if (!items.length) {
     return
   }
 
+  if (state.hash) {
+    url += `#${state.hash}`
+  }
+
+  const Item = ({ text, items = [], ...item }) =>  {
+    // if the item has no values, we quit
+    if (!item.to && !text) {
+      return
+    }
+
+    const p = {}
+    if (item.to === url) {
+      p.class = 'active'
+    }
+
+    let children
+    if (items && url.startsWith(item.to)) {
+      children = ul(items.map(i => Item(i)))
+    }
+
+    return li(p, [
+      item.to ? Link(item, text) : span(item, text),
+      children,
+    ])
+  }
+
   return nav(
-    { class: cl },
-    ul(
-      items.map(({ items = [], ...item }, i) => {
-        // if the item has no values, we quit
-        if (!item.to && !item.text) {
-          return
-        }
-        const props = {}
-        if (item.to === url) {
-          props.class = 'active'
-        }
-
-        let children
-        if (items && url.startsWith(item.to)) {
-          children = ul(
-            items.map(itm => {
-              const p = {}
-              if (itm.to === url) {
-                p.class += 'active'
-              }
-              return li(p, Link(itm))
-            }),
-          )
-        }
-
-        return [
-          li(props, [item.to ? Link(item) : span(item.text), children]),
-          between && i < items.length - 1 ? li(between) : '',
-        ]
-      }),
-    ),
+    { class: !cl.includes('Menu') ? `Menu ${cl}` : cl },
+    ul(items.map(i => Item(i))),
   )
 }
 
@@ -68,17 +56,6 @@ const style = {
       '> a': {
         textDecoration: 'underline',
       },
-    },
-  },
-
-  '&.right': {
-    float: 'right',
-  },
-
-  '&.block': {
-    li: {
-      clear: 'both',
-      margin: '0.5em 0 0',
     },
   },
 
