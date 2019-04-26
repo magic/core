@@ -15,7 +15,7 @@ const View = (props = 'menu') => state => {
     url += `#${state.hash}`
   }
 
-  const Item = ({ text, items = [], ...item }) =>  {
+  const Item = ({ text, items = [], ...item }) => {
     // if the item has no values, we quit
     if (!item.to && !text) {
       return
@@ -31,16 +31,10 @@ const View = (props = 'menu') => state => {
       children = ul(items.map(i => Item(i)))
     }
 
-    return li(p, [
-      item.to ? Link(item, text) : span(item, text),
-      children,
-    ])
+    return li(p, [item.to ? Link(item, text) : span(item, text), children])
   }
 
-  return nav(
-    { class: !cl.includes('Menu') ? `Menu ${cl}` : cl },
-    ul(items.map(i => Item(i))),
-  )
+  return nav({ class: !cl.includes('Menu') ? `Menu ${cl}` : cl }, ul(items.map(i => Item(i))))
 }
 
 const style = {
