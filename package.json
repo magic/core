@@ -1,7 +1,6 @@
 {
   "name": "@magic/core",
   "version": "0.0.1",
-  "description": "",
   "main": "src/index.js",
   "bin": {
     "magic": "src/bin.js"
@@ -56,5 +55,44 @@
     "@magic-modules/pre": "github:magic-modules/pre",
     "@magic-themes/docs": "github:magic-themes/docs",
     "@magic/test": "0.0.10"
-  }
+  },
+
+  "author": "Wizards & Witches",
+  "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
+  "keywords": ["magic", "static", "page", "generator", "serverless"],
+  "license": "AGPL-3.0",
+  "contributors": [
+    {
+      "name": "jascha ehrenreich",
+      "github": "jaeh"
+    },
+    {
+      "name": "philipp tiefenbacher",
+      "github": "wizard23"
+    },
+    {
+      "name": "tom peak",
+      "github": "tompeak"
+    },
+    {
+      "name": "phileas lebada",
+      "github": "norpol"
+    },
+    {
+      "name": "litto",
+      "github": "mslitto"
+    },
+    {
+      "name": "daniel safar",
+      "github": "n1c3"
+    },
+    {
+      "name": "jay vaughan",
+      "github": "seclorum"
+    },
+    {
+      "name": "alexander weiss",
+      "github": "ylem235"
+    }
+  ]
 }
