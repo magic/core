@@ -50,7 +50,6 @@ const runCluster = async cmds => {
         if (msg.evt === 'change') {
           const now = new Date().getTime()
           const delay = now - lastCall
-          console.log({ delay })
           if (delay > 10) {
             // files have changed, restart build worker
             buildWorker.kill(1)
