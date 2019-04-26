@@ -1,2 +1,3 @@
 node_modules
 .nyc_output
+.__browserify_empty.js
