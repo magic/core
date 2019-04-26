@@ -30,6 +30,7 @@ const flags = [
   ['--keep-console'],
   ['--keep-debugger', '--keep-debug'],
   ['--no-minify'],
+  ['--keep-client'],
 ]
 
 process.argv = process.argv.map(arg => {
@@ -67,7 +68,7 @@ command line flags:
 --keep-dead-code  - do not remove dead code
 --keep-debugger   - do not remove debugger statements from js
 --no-minify       - do not minify js
-
+--keep-client     - keeps the unminifed .__browserify_empty
 
 help    - this help text
 `)

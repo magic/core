@@ -67,7 +67,7 @@ module.exports = ({ str }) => {
     browserify(filePath)
       .transform('babelify', babelOpts)
       .bundle((err, src) => {
-        if (!config.KEEP_CLIENT) {
+        if (!config.KEEP_CLIENT && !process.argv.includes('--keep-client')) {
           fs.unlinkSync(filePath)
         }
         if (err) {
