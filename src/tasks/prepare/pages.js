@@ -55,17 +55,9 @@ does not export a view function or page.View key.`)
 
     page.dependencyStyles = {}
 
-    // merge dependency styles and subdependencies into page dependencies
+    // merge subdependencies into page dependencies
     page.dependencies.forEach(dep => {
       Object.entries(dep).forEach(([k, c]) => {
-        // console.log(c)
-        if (c.style) {
-          if (is.fn(c.style)) {
-            c.style = c.style(THEME_VARS)
-          }
-          page.dependencyStyles = deep.merge(c.style, page.dependencyStyles)
-        }
-
         const views = Object.entries(c)
           .filter(([k]) => isUpperCase(k))
           .map(([_, v]) => v.toString())
@@ -73,6 +65,27 @@ does not export a view function or page.View key.`)
         views.forEach(view => {
           page.dependencies = deep.merge(getDependencies(view, global.keys), page.dependencies)
         })
+      })
+    })
+
+    // merge dependency styles into page dependencies
+    page.dependencies.forEach(dep => {
+      Object.entries(dep).forEach(([k, c]) => {
+        if (c.style) {
+          // wrap styles in a html/css class if they are not yet.
+          // this allows us to omit css classes in ALL modules,
+          // as long as we pass the props downwards ...
+          const keys = Object.keys(c.style)
+          if (!keys.includes(`.${k}`)) {
+            c.style = {
+              [`.${k}`]: c.style,
+            }
+          }
+          if (is.fn(c.style)) {
+            c.style = c.style(THEME_VARS)
+          }
+          page.dependencyStyles = deep.merge(c.style, page.dependencyStyles)
+        }
       })
     })
 
