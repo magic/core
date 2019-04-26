@@ -9,7 +9,7 @@
     "clean": "node src/bin.js clean",
     "serve": "node src/bin.js serve",
     "dev": "node src/bin.js dev",
-    "format": "f -w --exclude docs example",
+    "format": "f -w --exclude docs",
     "test": "t --exclude docs example",
     "calls": "calls"
   },
