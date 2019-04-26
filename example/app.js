@@ -29,8 +29,8 @@ module.exports = {
             to: '/concepts/#styles',
             text: 'styles',
             items: [
-              { to: '/concepts/#styles-magic-css', text: '@magic/css' },
               { to: '/concepts/#styles-example', text: 'example styles' },
+              { to: '/concepts/#styles-magic-css', text: '@magic/css' },
             ],
           },
           {
