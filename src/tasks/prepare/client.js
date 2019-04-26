@@ -54,7 +54,7 @@ const prepareClient = app => {
   const urlString = `\nstate.url = window.location.pathname\n`
   clientString += urlString
 
-  const rootString = `\nstate.root = ${config.WEB_ROOT}\n`
+  const rootString = `\nstate.root = '${config.WEB_ROOT}'\n`
   clientString += rootString
 
   // create global actions object
