@@ -1,13 +1,7 @@
 {
   "name": "@magic/core",
   "version": "0.0.1",
-  "main": "src/index.js",
-  "bin": {
-    "magic": "src/bin.js"
-  },
-  "files": [
-    "src"
-  ],
+  "homepage": "https://magic.github.io/core",
   "scripts": {
     "start": "t -p",
     "build": "NODE_ENV=production node src/bin.js build",
@@ -19,6 +13,13 @@
     "test": "t --exclude docs example",
     "calls": "calls"
   },
+  "main": "src/index.js",
+  "bin": {
+    "magic": "src/bin.js"
+  },
+  "files": [
+    "src"
+  ],
   "dependencies": {
     "@babel/core": "7.4.3",
     "@babel/plugin-proposal-object-rest-spread": "7.4.3",
@@ -56,10 +57,15 @@
     "@magic-themes/docs": "github:magic-themes/docs",
     "@magic/test": "0.0.10"
   },
-
   "author": "Wizards & Witches",
   "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
-  "keywords": ["magic", "static", "page", "generator", "serverless"],
+  "keywords": [
+    "magic",
+    "static",
+    "page",
+    "generator",
+    "serverless"
+  ],
   "license": "AGPL-3.0",
   "contributors": [
     {
