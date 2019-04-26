@@ -1,38 +1,3 @@
-const style = {
-  float: 'right',
-  margin: '1.5em 0 0',
-  position: 'relative',
-
-  li: {
-    float: 'left',
-    margin: '0 .5em 0 0',
-
-    '&.active': {
-      '> a': {
-        textDecoration: 'underline',
-      },
-    },
-  },
-
-  '&.right': {
-    float: 'right',
-  },
-
-  '&.block': {
-    li: {
-      clear: 'both',
-      margin: '0.5em 0 0',
-    },
-  },
-
-  ul: {
-    ul: {
-      position: 'absolute',
-      left: 0,
-    },
-  },
-}
-
 const View = (props = 'menu') => state => {
   if (typeof props === 'string') {
     props = { name: props }
@@ -81,10 +46,48 @@ const View = (props = 'menu') => state => {
           )
         }
 
-        return [li(props, [item.to ? Link(item) : span(item.text), children]), between && i < items.length - 1 ? li(between) : '']
+        return [
+          li(props, [item.to ? Link(item) : span(item.text), children]),
+          between && i < items.length - 1 ? li(between) : '',
+        ]
       }),
     ),
   )
+}
+
+const style = {
+  float: 'right',
+  margin: '1.5em 0 0',
+  position: 'relative',
+
+  li: {
+    float: 'left',
+    margin: '0 .5em 0 0',
+
+    '&.active': {
+      '> a': {
+        textDecoration: 'underline',
+      },
+    },
+  },
+
+  '&.right': {
+    float: 'right',
+  },
+
+  '&.block': {
+    li: {
+      clear: 'both',
+      margin: '0.5em 0 0',
+    },
+  },
+
+  ul: {
+    ul: {
+      position: 'absolute',
+      left: 0,
+    },
+  },
 }
 
 module.exports = {
