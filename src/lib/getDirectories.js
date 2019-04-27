@@ -1,5 +1,7 @@
 const fs = require('./fs')
 const path = require('path')
+
+const is = require('@magic/types')
 const deep = require('@magic/deep')
 
 // recursively find all directories in a directory.
@@ -14,10 +16,15 @@ const getFilePath = async (dir, file) => {
   }
 }
 
-const getDirectories = async dir => {
-  const dirContent = await fs.readdir(dir)
-  const dirs = await Promise.all(dirContent.map(async file => await getFilePath(dir, file)))
-  const flattened = deep.flatten(dir, dirs).filter(a => a)
+const getDirectories = async directories => {
+  if (is.array(directories)) {
+    const dirs = await Promise.all(directories.map(getDirectory))
+    return deep.flatten(...dirs)
+  }
+
+  const dirContent = await fs.readdir(directories)
+  const dirs = await Promise.all(dirContent.map(async file => await getFilePath(directories, file)))
+  const flattened = deep.flatten(directories, dirs).filter(a => a)
   return flattened
 }
 
