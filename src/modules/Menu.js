@@ -3,7 +3,7 @@ const View = (props = 'menu') => state => {
     props = { name: props }
   }
 
-  let { name = 'menu', class: cl = 'Menu', items = [] } = props
+  let { name = 'menu', class: cl = 'Menu', items = [], collapse = true } = props
   let { url, [name]: maybeItems = [] } = state
   items = !items.length ? maybeItems : items
 
@@ -27,7 +27,7 @@ const View = (props = 'menu') => state => {
     }
 
     let children
-    if (items && url.startsWith(item.to)) {
+    if (items && (url.startsWith(item.to) || !collapse)) {
       children = ul(items.map(i => Item(i)))
     }
 
