@@ -140,7 +140,11 @@ const prepare = async app => {
 
         const [name, fd] = lib
         if (is.string(name) && is.string(fd)) {
-          global.LIB[name] = fd
+          try {
+            global.LIB[name] = require(fd)
+          } catch(e) {
+            throw new Error(`LIB.[name] with fd = ${fd} can not be found`)
+          }
         }
       })
 
