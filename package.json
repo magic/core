@@ -25,6 +25,7 @@
     "@babel/plugin-proposal-object-rest-spread": "7.4.4",
     "@babel/plugin-transform-arrow-functions": "7.2.0",
     "@babel/preset-env": "7.4.4",
+    "@magic/cli": "0.0.1",
     "@magic/css": "0.4.4",
     "@magic/deep": "0.0.1",
     "@magic/log": "0.0.2",
@@ -55,7 +56,7 @@
     "@magic-modules/gitbadges": "github:magic-modules/gitbadges",
     "@magic-modules/pre": "github:magic-modules/pre",
     "@magic-themes/docs": "github:magic-themes/docs",
-    "@magic/test": "0.0.10"
+    "@magic/test": "0.0.11"
   },
   "author": "Wizards & Witches",
   "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
