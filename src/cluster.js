@@ -30,7 +30,7 @@ const bailEarly = async cmds => {
   return bail
 }
 
-const runCluster = async cmds => {
+const runCluster = async ({ cmds }) => {
   if (cluster.isMaster) {
     const bail = await bailEarly(cmds)
     if (bail) {
@@ -43,7 +43,6 @@ const runCluster = async cmds => {
     let buildWorker = cluster.fork()
     buildWorker.send('run')
 
-    let hasTimeout = false
     let lastCall = new Date().getTime()
     cluster.on('message', (worker, msg) => {
       if (watchWorker && worker.id === watchWorker.id) {
