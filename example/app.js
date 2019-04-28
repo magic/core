@@ -9,7 +9,7 @@ module.exports = {
         to: '/concepts/',
         text: 'concepts',
         items: [
-          { to: '/concepts/#philosophy', text: 'modules' },
+          { to: '/concepts/#philosophy', text: 'philosophy' },
           { to: '/concepts/#modules', text: 'modules' },
           {
             to: '/concepts/#state',
