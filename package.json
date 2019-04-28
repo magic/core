@@ -56,7 +56,7 @@
     "@magic-modules/gitbadges": "github:magic-modules/gitbadges",
     "@magic-modules/pre": "github:magic-modules/pre",
     "@magic-themes/docs": "github:magic-themes/docs",
-    "@magic/test": "0.0.11"
+    "@magic/test": "0.0.12"
   },
   "author": "Wizards & Witches",
   "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
