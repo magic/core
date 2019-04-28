@@ -1,4 +1,5 @@
 const cluster = require('cluster')
+const path = require('path')
 
 const log = require('@magic/log')
 const is = require('@magic/types')
@@ -83,6 +84,8 @@ const runCluster = async ({ cmds, argv }) => {
       if (is.array(watchDirs) && !is.empty(watchDirs)) {
         dirs = [...dirs, ...watchDirs]
       }
+      const cwd = process.cwd()
+      dirs = dirs.map(dir => dir.startsWith(cwd) ? dir : path.join(cwd, dir))
       tasks.watch(dirs)
     } else {
       const app = await runCmd('prepare', App)
