@@ -9,6 +9,7 @@ module.exports = {
         to: '/concepts/',
         text: 'concepts',
         items: [
+          { to: '/concepts/#philosophy', text: 'modules' },
           { to: '/concepts/#modules', text: 'modules' },
           {
             to: '/concepts/#state',
@@ -56,19 +57,47 @@ module.exports = {
               { to: '/concepts/#libs-module', text: 'module.lib' },
             ],
           },
-          { to: '/concepts/#full-example', text: 'full example' },
+          { to: '/concepts/#full-example', text: 'example' },
         ],
       },
       {
         to: '/files/',
         text: 'files & directories',
         items: [
-          { to: '/files/#pages', text: 'pages' },
-          { to: '/files/#assets', text: 'assets' },
-          { to: '/files/#static', text: 'static' },
-          { to: '/files/#themes', text: 'themes' },
-          { to: '/files/#app', text: 'app' },
-          { to: '/files/#config', text: 'config.js' },
+          {
+            to: '/files/#pages',
+            text: '/pages',
+            items: [
+              { to: '/files/#pages-dir-structure', text: 'url mapping' },
+              { to: '/files/#pages-example', text: 'example' },
+            ],
+          },
+          {
+            to: '/files/#assets',
+            text: '/assets',
+            items: [{ to: '/files/#assets-example', text: 'example' }],
+          },
+          { to: '/files/#static', text: '/assets/static' },
+          {
+            to: '/files/#themes',
+            text: '/assets/themes',
+            items: [{ to: '/files/#themes-example', text: 'example' }],
+          },
+          {
+            to: '/files/#app',
+            text: '/assets/app.js',
+            items: [{ to: '/files/#app-example', text: 'example' }],
+          },
+          {
+            to: '/files/#config',
+            text: '/config.js',
+            items: [{ to: '/files/#config-example', text: 'example' }],
+          },
+          {
+            to: '/files/#menu',
+            text: '/assets/Menu.js',
+            items: [{ to: '/files/#menu-example', text: 'example' }],
+          },
         ],
       },
       {
@@ -79,7 +108,14 @@ module.exports = {
           { to: '/modules/#usage', text: 'usage' },
           { to: '/modules/#custom-module', text: 'custom modules' },
           { to: '/modules/#preinstalled', text: 'preinstalled' },
-          { to: '/modules/#menu', text: 'menu' },
+          {
+            to: '/modules/#menu',
+            text: 'menu',
+            items: [
+              { to: '/modules/#menu-props', text: 'props' },
+              { to: '/modules/#menu-sub-menus', text: 'sub menus' },
+            ],
+          },
           { to: '/modules/#link', text: 'link' },
           { to: '/modules/#footer', text: 'footer' },
           { to: '/modules/#magic-modules', text: '@magic-modules' },

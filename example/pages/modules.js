@@ -144,9 +144,14 @@ module.exports = {
 
     h2({ id: 'menu' }, 'menu'),
     p('the Menu module provides... menus.'),
-    p(
-      'just pass it a string which is the state key of the menu, add that menu to the /assets/app.js file.',
-    ),
+    p([
+      'just pass it a string which is the state key of the menu,',
+      ' then add that menu to the /assets/app.js file.',
+    ]),
+    p([
+      'by default, the menu will only show submenu items if their parent link is active.',
+      ' to force submenu items to show at all times, just pass a collapse: false prop',
+    ]),
     Pre.View(`
 // assets/app.js
 module.exports = {
@@ -163,7 +168,7 @@ module.exports = {
 
     p('then, in a page or module'),
     Pre.View(`
-module.exports = () => Menu.View({ name: 'menuName' })
+module.exports = () => Menu.View({ name: 'menuName', collapse: false })
 
 // output:
 <nav class="Menu">
@@ -181,8 +186,23 @@ module.exports = () => Menu.View({ name: 'menuName' })
 </nav>
 }`),
 
-    h3({ id: 'sub-menus' }, 'sub menus'),
-    p('to define a submenu, simply defined a .items array on the menu item'),
+    h3({ id: 'menu-props' }, 'Menu props'),
+    p('the Menu module allows multiple props to be passed when instantiating the Menu'),
+
+    Pre.View(`
+Menu({
+  collapse: false, // (default: true) menu will always show all submenu items
+})`),
+
+    h3({ id: 'menu-item-props' }, 'Menu.Item props'),
+    p('every MenuItem accepts props.'),
+
+    Pre.View(`
+
+`),
+
+    h3({ id: 'menu-sub-menus' }, 'sub menus'),
+    p('to define a submenu, simply define a .items array on the menu item'),
     Pre.View(`
 // assets/app.js
 module.exports = {

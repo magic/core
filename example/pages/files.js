@@ -74,20 +74,21 @@ module.exports = {
         li('/assets - custom components, @magic-modules get imported here'),
         li('/assets/static - static files'),
         li('/assets/themes - theme directory, @magic-themes get imported here'),
+        li('/assets/lib.js - imports npm and local but external packages into your app'),
         li('/app.js - gets merged into the app, can set state, actions, style here'),
         li('/config.js - custom config for your app'),
         li('/assets/Menu.js - custom Menu for your app'),
       ]),
 
-      div({ id: 'pages' }, [
-        h2('/pages'),
+      div([
+        h2({ id: 'pages' }, '/pages'),
         p('the pages dir contains the pages of your webapp.'),
         p([
           "each page has it's own state and actions, ",
           "but also inherits the global state and actions from the app and it's dependencies",
         ]),
 
-        h4('page to url map, for the domain mag.ic:'),
+        h3({ id: 'pages-dir-structure' }, 'pages directory to url map, for the domain mag.ic:'),
         ul([
           li('/pages/index.js === http://mag.ic/'),
           li('/pages/pageName.js === http://mag.ic/pageName/'),
@@ -97,55 +98,61 @@ module.exports = {
           li('/pages/dir/name.js === http://mag.ic/dir/name/'),
         ]),
 
-        h3('example page:'),
+        h3({ id: 'pages-example' }, 'example page:'),
         Pre.View(examples.page),
       ]),
 
-      div({ id: 'assets' }, [
-        h2('/assets'),
+      div([
+        h2({ id: 'assets' }, '/assets'),
         p('the assets dir contains custom components of your app.'),
         p('you can additionally import @magic-modules here'),
-        h3('example /assets/index.js'),
+        h3({ id: 'assets-example' }, 'example /assets/index.js'),
         Pre.View(examples.assets),
       ]),
 
-      div({ id: 'static' }, [
-        h2('/assets/static'),
+      div([
+        h2({ id: 'static' }, '/assets/static'),
         p('the static dir contains all of your static assets.'),
-        p('every file in this directory gets copied to the app'),
+        p('every file in this directory gets copied to the public dir.'),
         p('image and svg files get minified using imagemin'),
-        p('text and binary files get compressed using zopfli'),
+        p([
+          'text and binary files get compressed using the optional ',
+          Link({ to: 'https://github.com/jaeh/node-zopfli-es' }, 'node-zopfli-es'),
+          ' (if it is installed)',
+        ]),
       ]),
 
-      div({ id: 'themes' }, [
-        h2('/assets/themes'),
+      div([
+        h2({ id: 'themes' }, '/assets/themes'),
         p('the themes directory contains... themes.'),
         p(
           'at the moment this is file based, which means you have to manually import themes there.',
         ),
-        p('TODO: handle themes as we handle assets. maybe move them into assets.'),
-        h3('example /themes/blue/index.js'),
+
+        h3({ id: 'themes-example' }, 'example theme'),
         Pre.View(examples.theme),
       ]),
 
-      div({ id: 'app' }, [
-        h2('/assets/app.js'),
+      div([
+        h2({ id: 'app' }, '/assets/app.js'),
         p('the /app.js file allows you to set global state, actions, and styles'),
-        h3('example /app.js'),
+
+        h3({ id: 'app-example' }, 'example /app.js'),
         Pre.View(examples.app),
       ]),
 
-      div({ id: 'config' }, [
-        h2('/config.js'),
+      div([
+        h2({ id: 'config' }, '/config.js'),
         p('the /config.js file allows you to set various aspects of your app'),
-        h3('example /config.js'),
+
+        h3({ id: 'config-example' }, 'example /config.js'),
         Pre.View(examples.config),
       ]),
 
-      div({ id: 'menu' }, [
-        h2('/assets/Menu.js'),
+      div([
+        h2({ id: 'menu' }, '/assets/Menu.js'),
         p('the /assets/Menu.js file allows you to replace the default Menu component'),
-        h3('example /assets/Menu.js'),
+        h3({ id: 'menu-example' }, 'example /assets/Menu.js'),
         Link(
           { to: 'https://github.com/magic/core/blob/master/src/modules/Menu.js' },
           'Menu.js on github',
