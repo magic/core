@@ -80,7 +80,6 @@ if (!is.empty(libFiles)) {
       }
 
       if (lib) {
-        global.LIB[name] = lib
         app.lib[name] = file
       }
     } catch (e) {

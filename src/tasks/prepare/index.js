@@ -128,6 +128,25 @@ const prepare = async app => {
       }
     })
 
+  if (!is.empty(app.lib)) {
+    global.LIB = global.LIB || {}
+
+    const mapLibToGlobal = lib =>
+      Object.entries(app.lib).forEach(lib => {
+        if (!is.array(lib)) {
+          console.log('object', lib)
+          return mapLibToGlobal(lib)
+        }
+
+        const [name, fd] = lib
+        if (is.string(name) && is.string(fd)) {
+          global.LIB[name] = fd
+        }
+      })
+
+    mapLibToGlobal(app.lib)
+  }
+
   // create client magic.js file
   app.client = {
     str: prepareClient(app),
