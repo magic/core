@@ -3,19 +3,25 @@ const util = require('util')
 
 const rmdir = util.promisify(fso.rmdir)
 
+const readDir = util.promisify(fso.readdir)
+const readFile = util.promisify(fso.readFile)
+
 const fs = {
-  exists: util.promisify(fso.exists),
-  mkdir: util.promisify(fso.mkdir),
-  readdir: util.promisify(fso.readdir),
-  readFile: util.promisify(fso.readFile),
-  stat: util.promisify(fso.stat),
-  writeFile: util.promisify(fso.writeFile),
   createReadStream: fso.createReadStream,
   createWriteStream: fso.createWriteStream,
-  rmDir: rmdir,
-  rmdir,
-  unlink: util.promisify(fso.unlink),
+  exists: util.promisify(fso.exists),
   existsSync: fso.existsSync,
+  mkdir: util.promisify(fso.mkdir),
+  readdir: readDir,
+  readDir,
+  readFile,
+  readfile: readFile,
+  rmdir,
+  rmDir: rmdir,
+  stat: util.promisify(fso.stat),
+  unlink: util.promisify(fso.unlink),
+  watch: fso.watch,
+  writeFile: util.promisify(fso.writeFile),
 }
 
 module.exports = fs

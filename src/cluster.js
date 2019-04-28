@@ -1,6 +1,7 @@
 const cluster = require('cluster')
 
 const log = require('@magic/log')
+const is = require('@magic/types')
 
 global.config = require('./config')
 const tasks = require('./tasks')
@@ -30,7 +31,7 @@ const bailEarly = async cmds => {
   return bail
 }
 
-const runCluster = async ({ cmds }) => {
+const runCluster = async ({ cmds, argv }) => {
   if (cluster.isMaster) {
     const bail = await bailEarly(cmds)
     if (bail) {
@@ -77,7 +78,12 @@ const runCluster = async ({ cmds }) => {
     })
   } else if (cluster.isWorker) {
     if (cmds.serve && cluster.worker.id === 1) {
-      tasks.watch(config.ROOT)
+      const watchDirs = argv['--watch']
+      let dirs = [config.ROOT]
+      if (is.array(watchDirs) && !is.empty(watchDirs)) {
+        dirs = [...dirs, ...watchDirs]
+      }
+      tasks.watch(dirs)
     } else {
       const app = await runCmd('prepare', App)
 

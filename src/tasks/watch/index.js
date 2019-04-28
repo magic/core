@@ -1,11 +1,9 @@
-const fs = require('fs')
+const { fs } = require('../../lib')
 const path = require('path')
 
 const { getDirectories } = require('../../lib')
 
-const watch = async () => {
-  const dir = config.ROOT
-
+const watch = async dir => {
   const dirs = await getDirectories(dir)
 
   dirs.map(dir => {

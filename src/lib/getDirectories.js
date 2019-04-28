@@ -18,14 +18,21 @@ const getFilePath = async (dir, file) => {
 
 const getDirectories = async directories => {
   if (is.array(directories)) {
-    const dirs = await Promise.all(directories.map(getDirectory))
-    return deep.flatten(...dirs)
+    const dirs = await Promise.all(directories.filter(fs.exists).map(getDirectories))
+    return deep.flatten(...dirs).filter(a => a)
   }
 
+  const exists = await fs.exists(directories)
+  if (!exists) {
+    return ''
+  }
+
+  let flattened = [directories]
   const dirContent = await fs.readdir(directories)
   const dirs = await Promise.all(dirContent.map(async file => await getFilePath(directories, file)))
-  const flattened = deep.flatten(directories, dirs).filter(a => a)
-  return flattened
+  flattened = deep.flatten(flattened, dirs)
+
+  return flattened.filter(a => a)
 }
 
 module.exports = getDirectories
