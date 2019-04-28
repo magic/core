@@ -48,7 +48,7 @@ let app = {
         ]),
         body([
           app.Body(page.View, state, actions),
-          script({ type: 'text/javascript', src: '/' + config.CLIENT_LIB_NAME + '.js' }),
+          script({ src: '/' + config.CLIENT_LIB_NAME + '.js' }),
         ]),
       ]),
     ]
