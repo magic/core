@@ -37,13 +37,25 @@ const prepareClient = app => {
       throw new Error(`Expected app.lib to be an object, received ${typeof app.lib}, ${app.lib}`)
     }
 
-    let libString = 'window.LIB = {'
+    let libString = 'const lib = {};'
+
     Object.entries(app.lib).forEach(([name, res]) => {
-      const lib = fs.readFileSync(require.resolve(res), 'utf8')
-      const str = `\n${lib.replace('module.exports =', `${name}: `)}`
+      res = require.resolve(res)
+      const libContent = fs.readFileSync(res, 'utf8')
+      let lib = libContent
+      if (libContent.includes('module.exports')) {
+        lib = libContent.replace('module.exports =', `lib.${name} =`)
+      } else if (libContent.includes('exports')) {
+        libString += `\n lib.${name} = lib.${name} || {};\n`
+        lib = libContent.replace('exports\.', `lib.${name}.`)
+      } else {
+        throw new Error(`library ${name} has no exports`)
+      }
+
+      const str = `\n  (() => {\n    ${lib}\n  })();\n`
       libString += str
     })
-    libString += '\n}\n'
+    libString += '\nwindow.LIB = lib\n'
     clientString += libString
   }
 
