@@ -85,7 +85,7 @@ const runCluster = async ({ cmds, argv }) => {
         dirs = [...dirs, ...watchDirs]
       }
       const cwd = process.cwd()
-      dirs = dirs.map(dir => dir.startsWith(cwd) ? dir : path.join(cwd, dir))
+      dirs = dirs.map(dir => (dir.startsWith(cwd) ? dir : path.join(cwd, dir)))
       tasks.watch(dirs)
     } else {
       const app = await runCmd('prepare', App)
