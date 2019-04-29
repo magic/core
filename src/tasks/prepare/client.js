@@ -1,5 +1,6 @@
 const is = require('@magic/types')
 const deep = require('@magic/deep')
+const { fs } = require('../../lib')
 
 const { stringifyObject, handleDeps } = require('./lib')
 
@@ -37,14 +38,12 @@ const prepareClient = app => {
     }
 
     let libString = 'window.LIB = {'
-
     Object.entries(app.lib).forEach(([name, res]) => {
-      const str = `\n  ${name}: require('${res}'),`
+      const lib = fs.readFileSync(require.resolve(res), 'utf8')
+      const str = `\n${lib.replace('module.exports =', `${name}: `)}`
       libString += str
     })
-
     libString += '\n}\n'
-
     clientString += libString
   }
 

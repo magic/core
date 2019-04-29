@@ -22,6 +22,7 @@ const fs = {
   unlink: util.promisify(fso.unlink),
   watch: fso.watch,
   writeFile: util.promisify(fso.writeFile),
+  readFileSync: fso.readFileSync,
 }
 
 module.exports = fs
