@@ -195,11 +195,19 @@ Menu({
 })`),
 
     h3({ id: 'menu-item-props' }, 'Menu.Item props'),
-    p('every MenuItem accepts props.'),
+    p([
+      'every MenuItem accepts props the same props as a link does.',
+      ' additionally a MenuItem accepts a items prop with sub menu items.',
+    ]),
 
     Pre.View(`
-
-`),
+const menuItem = ({
+  to: '/url',
+  text: 'link text',
+  items: [SubMenuItems],
+  noreferrer: true, // set rel='noreferer'
+  nofollow: true, // set rel='nofollow'
+})`),
 
     h3({ id: 'menu-sub-menus' }, 'sub menus'),
     p('to define a submenu, simply define a .items array on the menu item'),

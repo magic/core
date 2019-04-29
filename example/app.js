@@ -131,6 +131,7 @@ module.exports = {
           { to: '/libraries/#require-app', text: '/app.js' },
           { to: '/libraries/#require-page', text: 'modules / pages' },
           { to: '/libraries/#example', text: 'example' },
+          { to: '/libraries/#caveat', text: 'caveat' },
         ],
       },
     ],
