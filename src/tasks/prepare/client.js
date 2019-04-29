@@ -18,7 +18,7 @@ const prepareClient = app => {
     let libString = 'window.LIB = {'
 
     Object.entries(app.lib).forEach(([name, res]) => {
-      const str = `\n  ${name}: require('${res}',)`
+      const str = `\n  ${name}: require('${res}'),`
       libString += str
     })
 
