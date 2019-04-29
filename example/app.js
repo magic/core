@@ -140,6 +140,6 @@ module.exports = {
   },
 
   lib: {
-    test: require.resolve('./assets/lib/test.js'),
+    test: require.resolve('./assets/lib/module-exports.js'),
   },
 }

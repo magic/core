@@ -44,12 +44,15 @@ module.exports = {
 
   Pre.View("div(['LIB.test output: ', LIB.test('magic')])"),
   p('renders'),
-  div(['LIB.test output: ', LIB.test('magic')]),
+  div([h4('LIB.test output: '), LIB.test('magic')]),
+
+  div([h4('LIB.exportsTesting.testing output: '), LIB.exportsTesting.testing()]),
 
   h4({ id: 'caveat' }, 'caveat'),
   p([
-    'all libs are expected to export a single object or function using module.exports.',
-    ' exports.variableName will not work. the behaviour might appear in the future.',
+    'all libs must either export a single object using module.expots OR using exports.key mappings. one OR the other.',
+    ' when using exports.key to export, you will always get an object in LIB.',
+    ' when using module.exports, structuring the LIB[name] object is up to you.',
   ]),
 ]
 
