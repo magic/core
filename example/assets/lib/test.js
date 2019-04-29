@@ -1,1 +1,1 @@
-module.exports = a => a
+module.exports = a => b(`this is ${a}`)
