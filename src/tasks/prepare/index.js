@@ -43,7 +43,6 @@ const prepare = async app => {
   // collect the pages, create their states
   app.pages = preparePages(files)
 
-
   app.pages.map(page => {
     if (!is.empty(page.state)) {
       if (!app.state.pages) {
@@ -132,7 +131,12 @@ const prepare = async app => {
     })
 
   if (!is.empty(app.lib)) {
-    mapLibToGlobal(app.lib)
+    const dependencies = mapLibToGlobal(app.lib)
+    dependencies.forEach(dep => {
+      Object.entries(dep).forEach(([name, val]) => {
+        app.dependencies[name] = val
+      })
+    })
   }
 
   // create client magic.js file
