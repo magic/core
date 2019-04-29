@@ -122,8 +122,19 @@ module.exports = {
         ],
       },
       { to: '/themes/', text: 'themes' },
+      { to: '/libraries/', text: 'libraries', items: [
+        { to: '/libraries/#require', text: 'require from' },
+        { to: '/libraries/#require-assets', text: '/assets/lib.js' },
+        { to: '/libraries/#require-app', text: '/app.js' },
+        { to: '/libraries/#require-page', text: 'modules / pages' },
+        { to: '/libraries/#example', text: 'example' },
+      ] },
     ],
     logo: '/logo.png',
     logotext: '@magic',
+  },
+
+  lib: {
+    test: require.resolve('./assets/lib/test.js'),
   },
 }
