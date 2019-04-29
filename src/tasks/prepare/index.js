@@ -8,29 +8,9 @@ const prepareClient = require('./client')
 const preparePages = require('./pages')
 const prepareStyle = require('./style')
 
-const { isGlobal } = require('./lib')
+const { isGlobal, mapLibToGlobal } = require('./lib')
 
 global.keys = new Set()
-
-
-const mapLibToGlobal = libs => {
-  global.LIB = global.LIB || {}
-
-  Object.entries(libs).forEach(lib => {
-    if (!is.array(lib)) {
-      return mapLibToGlobal(lib)
-    }
-
-    const [name, fd] = lib
-    if (is.string(name) && is.string(fd)) {
-      try {
-        global.LIB[name] = require(fd)
-      } catch(e) {
-        throw new Error(`LIB.[name] with fd = ${fd} can not be found`)
-      }
-    }
-  })
-}
 
 const prepare = async app => {
   app.lib = app.lib || {}
