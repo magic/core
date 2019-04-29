@@ -12,6 +12,26 @@ const { isGlobal } = require('./lib')
 
 global.keys = new Set()
 
+
+const mapLibToGlobal = libs => {
+  global.LIB = global.LIB || {}
+
+  Object.entries(libs).forEach(lib => {
+    if (!is.array(lib)) {
+      return mapLibToGlobal(lib)
+    }
+
+    const [name, fd] = lib
+    if (is.string(name) && is.string(fd)) {
+      try {
+        global.LIB[name] = require(fd)
+      } catch(e) {
+        throw new Error(`LIB.[name] with fd = ${fd} can not be found`)
+      }
+    }
+  })
+}
+
 const prepare = async app => {
   app.lib = app.lib || {}
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
@@ -41,7 +61,10 @@ const prepare = async app => {
   app.actions = deep.merge({}, app.actions)
 
   // collect the pages, create their states
-  app.pages = preparePages(files).map(page => {
+  app.pages = preparePages(files)
+
+
+  app.pages.map(page => {
     if (!is.empty(page.state)) {
       if (!app.state.pages) {
         app.state.pages = {}
@@ -129,25 +152,6 @@ const prepare = async app => {
     })
 
   if (!is.empty(app.lib)) {
-    global.LIB = global.LIB || {}
-
-    const mapLibToGlobal = lib =>
-      Object.entries(app.lib).forEach(lib => {
-        if (!is.array(lib)) {
-          console.log('object', lib)
-          return mapLibToGlobal(lib)
-        }
-
-        const [name, fd] = lib
-        if (is.string(name) && is.string(fd)) {
-          try {
-            global.LIB[name] = require(fd)
-          } catch(e) {
-            throw new Error(`LIB.[name] with fd = ${fd} can not be found`)
-          }
-        }
-      })
-
     mapLibToGlobal(app.lib)
   }
 
