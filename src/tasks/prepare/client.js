@@ -128,7 +128,7 @@ app(state, actions, view, mD)\n`
     clientString = clientString
       // find all links, callback gets match, key, delimiter, link
       .replace(
-        /('|")?(src|href|to|action|logo)('|")?\:\s*('|")(.*?)\4/gm,
+        /('|")?(src|href|to|action|logo)(\1)?\:\s*('|")(.*?)\4/gm,
         (match, d1, key, d2, d, link) => {
           if (link.startsWith(config.WEB_ROOT)) {
             return `${key}: '${link}'`
