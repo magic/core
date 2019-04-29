@@ -1,10 +1,12 @@
 const page = state => [
   h1(state.title),
   div([
-    h3({ id: 'require'}, 'require'),
+    h3({ id: 'require' }, 'require'),
 
-    h4({ id: 'require-assets'}, 'require in /assets/lib/index.js'),
-    p('if /assets/lib/index.js or /assets/lib.js exist, whatever those files export will be merged into LIB.'),
+    h4({ id: 'require-assets' }, 'require in /assets/lib/index.js'),
+    p(
+      'if /assets/lib/index.js or /assets/lib.js exist, whatever those files export will be merged into LIB.',
+    ),
     Pre.View(`
 // /assets/lib/index.js or /assets/lib.js
 module.exports = {
@@ -37,11 +39,8 @@ module.exports = {
   },
 }`),
 
-    h3({ id: 'example'}, 'example'),
-    p([
-      'first import the library, see ',
-      Link({ to: '/libraries/#require' }, 'require'),
-    ]),
+    h3({ id: 'example' }, 'example'),
+    p(['first import the library, see ', Link({ to: '/libraries/#require' }, 'require')]),
 
     Pre.View("div(['this is a hello: ', LIB.test('hello')])"),
     p('renders'),
