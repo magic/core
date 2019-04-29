@@ -92,8 +92,7 @@ const maybeAppFile = path.join(config.ROOT, 'app.js')
 if (maybeAppFile !== __filename && fs.existsSync(maybeAppFile)) {
   const maybeApp = require(maybeAppFile)
   if (is.object(maybeApp) && !is.empty(maybeApp)) {
-    app.state = deep.merge(app.state, maybeApp.state)
-    app.actions = deep.merge(app.actions, maybeApp.actions)
+    app = deep.merge(app, maybeApp)
   }
 }
 
