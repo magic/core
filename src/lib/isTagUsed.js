@@ -14,8 +14,9 @@ const isTagUsed = str => fn => {
 
   const tag = new RegExp(`${beforeFn}${fn}${afterFn}`, 'gm')
   const includes = str.match(tag)
+  const matches = includes === null ? false : includes.length > 0
 
-  return includes === null ? false : includes.length > 0
+  return matches
 }
 
 module.exports = isTagUsed
