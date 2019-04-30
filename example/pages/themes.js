@@ -24,6 +24,6 @@ module.exports = {
     p('/assets/themes/${config.THEME}/index.js'),
 
     h2('list of magic themes'),
-    ul([li([Link({ to: 'https://github.com/magic-themes' }, 'none yet, coming soon.')])]),
+    ThemeList,
   ],
 }
