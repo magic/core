@@ -131,12 +131,9 @@ const prepare = async app => {
     })
 
   if (!is.empty(app.lib)) {
-    const dependencies = mapLibToGlobal(app.lib)
-    dependencies.forEach(dep => {
-      Object.entries(dep).forEach(([name, val]) => {
-        app.dependencies[name] = val
-      })
-    })
+    const deps = mapLibToGlobal(app.lib)
+
+    app.dependencies = deep.merge(deps, app.dependencies)
   }
 
   // create client magic.js file
