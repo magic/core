@@ -42,9 +42,7 @@ const getDependencies = (props, keys) => {
         } else {
           const dependencies = getDependencies(v.toString(), keys)
           dependencies.forEach(dep => {
-            // console.log({ dep })
             Object.entries(dep).forEach(([kk, vv]) => {
-              // console.log({ kk })
               entries[kk] = vv
             })
           })
