@@ -55,7 +55,7 @@ module.exports = {
     ' when using module.exports, structuring the LIB[name] object is up to you.',
   ]),
 
-  h4({ id: '@magic-client library list'}),
+  h2({ id: 'magic-client'}, '@magic-client library list'),
   p('below is a collection of the available @magic client libraries.'),
   ClientList,
 ]

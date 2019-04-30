@@ -121,7 +121,9 @@ module.exports = {
           { to: '/modules/#magic-modules', text: '@magic-modules' },
         ],
       },
-      { to: '/themes/', text: 'themes' },
+      { to: '/themes/', text: 'themes', items: [
+        { to: '/themes/#magic-themes', text: '@magic-themes' },
+      ]},
       {
         to: '/libraries/',
         text: 'libraries',
@@ -132,6 +134,7 @@ module.exports = {
           { to: '/libraries/#require-page', text: 'modules / pages' },
           { to: '/libraries/#example', text: 'example' },
           { to: '/libraries/#caveat', text: 'caveat' },
+          { to: '/libraries/#magic-client', text: '@magic-client' },
         ],
       },
     ],

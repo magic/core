@@ -23,7 +23,7 @@ module.exports = {
     p('/node_modules/@magic-themes/${config.THEME}'),
     p('/assets/themes/${config.THEME}/index.js'),
 
-    h2('list of magic themes'),
+    h2({ id: 'magic-themes' }, 'list of magic themes'),
     ThemeList,
   ],
 }
