@@ -10,7 +10,7 @@ module.exports = {
 
     h2({ id: 'definition' }, 'module definition:'),
     p('the minimal module is a function that returns some html.'),
-    Pre.View(`
+    Pre(`
 // /assets/ModuleName.js
 
 // simplest module
@@ -22,7 +22,7 @@ module.exports = (props, children) => (state, actions) => div('hello, world')
 
     h2({ id: 'usage' }, 'usage'),
     p('to use a module in your app it has to be imported using /assets/index.js. '),
-    Pre.View(`
+    Pre(`
 // /assets/index.js
 module.exports = {
   // ...otherModules
@@ -37,7 +37,7 @@ module.exports = {
       'after this, the module will be a global in your app and can be used like any other component.',
     ),
 
-    Pre.View(`
+    Pre(`
 // any page or module
 module.exports = () => div([
   'modules that do not need props can be used without calling them as a function ',
@@ -54,7 +54,7 @@ module.exports = () => div([
 
     h3('Mod sourcecode:'),
 
-    Pre.View(`const Mod = {
+    Pre(`const Mod = {
   View: state =>
     div({ class: 'Mod View' }, [
       h3('Mod.View'),
@@ -125,7 +125,7 @@ module.exports = Mod`),
       Link({ to: 'https://github.com/magic/deep', text: 'deep .merged' }),
       ' into the app',
     ]),
-    Pre.View(`
+    Pre(`
 // /assets/app.js
 module.exports = {
   state: {
@@ -152,7 +152,7 @@ module.exports = {
       'by default, the menu will only show submenu items if their parent link is active.',
       ' to force submenu items to show at all times, just pass a collapse: false prop',
     ]),
-    Pre.View(`
+    Pre(`
 // assets/app.js
 module.exports = {
   state: {
@@ -167,7 +167,7 @@ module.exports = {
 }`),
 
     p('then, in a page or module'),
-    Pre.View(`
+    Pre(`
 module.exports = () => Menu.View({ name: 'menuName', collapse: false })
 
 // output:
@@ -189,7 +189,7 @@ module.exports = () => Menu.View({ name: 'menuName', collapse: false })
     h3({ id: 'menu-props' }, 'Menu props'),
     p('the Menu module allows multiple props to be passed when instantiating the Menu'),
 
-    Pre.View(`
+    Pre(`
 Menu({
   collapse: false, // (default: true) menu will always show all submenu items
 })`),
@@ -200,7 +200,7 @@ Menu({
       ' additionally a MenuItem accepts a items prop with sub menu items.',
     ]),
 
-    Pre.View(`
+    Pre(`
 const menuItem = ({
   to: '/url',
   text: 'link text',
@@ -211,7 +211,7 @@ const menuItem = ({
 
     h3({ id: 'menu-sub-menus' }, 'sub menus'),
     p('to define a submenu, simply define a .items array on the menu item'),
-    Pre.View(`
+    Pre(`
 // assets/app.js
 module.exports = {
   state: {
@@ -230,7 +230,7 @@ module.exports = {
 
     h2({ id: 'link' }, 'link'),
     p('the link module allows you to link to things.'),
-    Pre.View(`
+    Pre(`
 // in any page or module View
 module.exports = () => [
   Link({ to: '/page', text: 'page' }),
@@ -249,7 +249,7 @@ module.exports = () => [
 
     h2({ id: 'img' }, 'img'),
     p('the img module adds some sane default values to your images.'),
-    Pre.View(`
+    Pre(`
 // in any page or module View
 module.exports = () => [
   Img('/image.png'),
@@ -269,7 +269,7 @@ module.exports = () => [
     p(
       'to overwrite this behaviour, just place a Footer.js file in your assets and require it in /assets/index.js',
     ),
-    Pre.View(`
+    Pre(`
 // /assets/Footer.js:
 const Footer = {
   style: {

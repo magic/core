@@ -9,7 +9,7 @@ module.exports = {
     p(
       'magic themes are themes for magic apps. you decide which theme to load by specifying the theme name in config.THEME',
     ),
-    Pre.View(`
+    Pre(`
 // /config.js
 module.exports = {
   // ...rest of config,

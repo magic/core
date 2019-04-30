@@ -138,7 +138,7 @@ const exampleModule = {
           p('every rendering step, the state determines the output of the view'),
 
           h3({ id: 'state-example' }, 'state example'),
-          Pre.View(example.state),
+          Pre(example.state),
         ]),
       ]),
 
@@ -149,7 +149,7 @@ const exampleModule = {
         p('alternatively, you can call any action from within any other action.'),
 
         h3({ id: 'actions-example' }, 'actions example'),
-        Pre.View(example.actions),
+        Pre(example.actions),
       ]),
 
       div([
@@ -160,7 +160,7 @@ const exampleModule = {
         ),
 
         h3({ id: 'views-example' }, 'views example'),
-        Pre.View(example.view),
+        Pre(example.view),
       ]),
 
       div([
@@ -173,7 +173,7 @@ const exampleModule = {
         p('module.style < page.style < app.style < theme.style'),
 
         h3({ id: 'styles-example' }, 'example styles'),
-        Pre.View(example.style),
+        Pre(example.style),
 
         h3({ id: 'styles-magic-css' }, '@magic/css'),
         p("internally, magic uses it's own css-in-js library."),
@@ -189,7 +189,7 @@ const exampleModule = {
         ),
 
         h3({ id: 'globals-example' }, 'global example'),
-        Pre.View(example.global),
+        Pre(example.global),
       ]),
 
       div([
@@ -202,10 +202,10 @@ const exampleModule = {
         ),
 
         h3({ id: 'lambdas-example' }, 'single lambda'),
-        Pre.View(example.server),
+        Pre(example.server),
 
         h3({ id: 'lambdas-example-multi' }, 'multiple lambdas'),
-        Pre.View(example.complexServer),
+        Pre(example.complexServer),
       ]),
 
       div([
@@ -238,20 +238,20 @@ const exampleModule = {
           ' to achieve this, one can simply create /assets/lib.js and export a object from it.',
           ' the keys of the object are the function name, the values are the paths to the lib.js file',
         ]),
-        Pre.View(`
+        Pre(`
 // /assets/lib.js or /assets/lib/index.js
 module.exports = {
   local: require.resolve('./local.js'),
   npm: 'npm-lib',
 }`),
         h3({ id: 'libs-example-file' }, 'example lib file'),
-        Pre.View(`
+        Pre(`
 // /assets/lib/local.js
 module.exports = name => \`hello, \${name}\`
 `),
 
         h3({ id: 'libs-app' }, 'app.lib'),
-        Pre.View(`
+        Pre(`
 // /assets/app.js
 module.exports = {
   // ... other app props
@@ -264,7 +264,7 @@ module.exports = {
         h3({ id: 'libs-module' }, 'module.lib'),
         p('any page or module can export a lib key'),
 
-        Pre.View(`
+        Pre(`
 // /pages/page.js
 // /assets/Module.js
 
@@ -282,7 +282,7 @@ View: () => div(LIB.local('name')),
       div([
         h2({ id: 'full-example' }, 'Full example'),
         p('If we assemble those pieces, we get the following:'),
-        Pre.View(combined),
+        Pre(combined),
       ]),
     ]
   },

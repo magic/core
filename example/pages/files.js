@@ -99,7 +99,7 @@ module.exports = {
         ]),
 
         h3({ id: 'pages-example' }, 'example page:'),
-        Pre.View(examples.page),
+        Pre(examples.page),
       ]),
 
       div([
@@ -107,7 +107,7 @@ module.exports = {
         p('the assets dir contains custom components of your app.'),
         p('you can additionally import @magic-modules here'),
         h3({ id: 'assets-example' }, 'example /assets/index.js'),
-        Pre.View(examples.assets),
+        Pre(examples.assets),
       ]),
 
       div([
@@ -130,7 +130,7 @@ module.exports = {
         ),
 
         h3({ id: 'themes-example' }, 'example theme'),
-        Pre.View(examples.theme),
+        Pre(examples.theme),
       ]),
 
       div([
@@ -138,7 +138,7 @@ module.exports = {
         p('the /app.js file allows you to set global state, actions, and styles'),
 
         h3({ id: 'app-example' }, 'example /app.js'),
-        Pre.View(examples.app),
+        Pre(examples.app),
       ]),
 
       div([
@@ -146,7 +146,7 @@ module.exports = {
         p('the /config.js file allows you to set various aspects of your app'),
 
         h3({ id: 'config-example' }, 'example /config.js'),
-        Pre.View(examples.config),
+        Pre(examples.config),
       ]),
 
       div([
