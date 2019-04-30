@@ -267,7 +267,7 @@ module.exports = () => [
     h2({ id: 'footer' }, 'footer'),
     p('the footer module contains a small info text and a link to the magic github repository.'),
     p(
-      'to overwrite this behaviour, just place a Footer.js file in your assets and require it in /assets/index.js',
+      'to overwrite this behaviour, just place a Footer.js file in your assets and require it in /assets/index.js.',
     ),
     Pre(`
 // /assets/Footer.js:
@@ -298,11 +298,36 @@ module.exports = {
     h2({ id: 'magic-modules' }, 'list of installable magic modules'),
     ul([
       li([
-        h3('pre'),
+        h3('Pre'),
+        div([
+          'the Pre module allows you to display javascript code with syntax highlighting.',
+          ' it is used throughout this documentation.',
+        ]),
+        p([Link({ to: 'https://github.com/magic-modules/pre' }, '@magic-modules/pre')]),
+        p([Link({ to: 'https://magic-modules.github.io/pre' }, 'docs / demo')]),
+      ]),
+      li([
+        h3('LanguageSwitch'),
         div(
-          'the pre magic module allows you to display javascript code with syntax highlighting. it is used throughout this documentation.',
+          'file hierarchy based multilanguage support for magic.',
         ),
-        Link({ to: 'https://github.com/magic-modules/pre' }, '@magic-modules/pre'),
+        p([Link({ to: 'https://github.com/magic-modules/languageswitch' }, '@magic-modules/languageswitch')]),
+        p([Link({ to: 'https://magic-modules.github.io/languageswitch' }, 'docs / demo')]),
+      ]),
+      li([
+        h3('VideoEmbed'),
+        div([
+          'the VideoEmbed module embeds videos from any video hoster using iframes. ',
+          ' comes with default support for vimeo and youtube.',
+        ]),
+        p([Link({ to: 'https://github.com/magic-modules/video-embed' }, '@magic-modules/video-embed')]),
+        p([Link({ to: 'https://magic-modules.github.io/video-embed' }, 'docs / demo')]),
+      ]),
+      li([
+        h3('GitBadges'),
+        div('shows a list of github repository status badges.'),
+        p([Link({ to: 'https://github.com/magic-modules/gitbadges' }, '@magic-modules/gitbadgesi')]),
+        p([Link({ to: 'https://magic-modules.github.io/gitbadges' }, 'docs / demo')]),
       ]),
     ]),
   ],
