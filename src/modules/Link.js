@@ -42,16 +42,16 @@ Link.actions = {
       url = to.replace(window.location.origin, '')
       const [u, h = ''] = url.split('#')
       uri = u
-      hash = h
-      const stateHash = state.hash ? `#${state.hash}` : ''
+      hash = !h || h === '/' ? '' : h
+      const stateHash = state.hash ? `#${state.hash}` : window.location.hash
       const stateUrl = state.url + stateHash
-      if (url !== stateUrl) {
+      if (url !== stateUrl || hash !== stateHash) {
         window.history && window.history.pushState({ uri }, '', url)
         if (!hash) {
           window.scrollTo(0, 0)
         }
       }
-      // in case of popstate events firing, we do not have props.to
+    // in case of popstate events firing, we do not have props.to
     } else {
       // but instead the e is a history event
       if (e.state) {
