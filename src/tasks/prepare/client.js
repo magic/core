@@ -47,7 +47,7 @@ const prepareClient = app => {
         lib = libContent.replace('module.exports =', `lib.${name} =`)
       } else if (libContent.includes('exports')) {
         libString += `\n lib.${name} = lib.${name} || {};\n`
-        lib = libContent.replace('exports\.', `lib.${name}.`)
+        lib = libContent.replace('exports.', `lib.${name}.`)
       } else {
         throw new Error(`library ${name} has no exports`)
       }
