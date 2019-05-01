@@ -63,8 +63,15 @@ module.exports = app => {
     // load user's custom theme, overwriting both preinstalled and node_modules themes
     const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.js')
     if (fs.existsSync(maybeThemeFile)) {
-      let theme = require(maybeThemeFile)
-      styles.push(handleStyleFunctions(theme))
+      let theme = handleStyleFunctions(require(maybeThemeFile))
+
+      if (is.array(maybeThemeFile)) {
+        theme.forEach(t => {
+          styles.push(t)
+        })
+      } else {
+        styles.push(theme)
+      }
     }
   }
 
