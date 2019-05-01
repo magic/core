@@ -13,15 +13,11 @@ const args = {
     ['--keep-client'],
     ['--watch', '-w'],
   ],
-
   env: [[['--production', '--prod', '--p', '-p'], 'NODE_ENV', 'production']],
-
   commands: [['serve', 'dev', 'development', 'start'], 'clean', 'connect', 'publish', 'build'],
-
   help: {
     name: 'magic',
     header: 'static and serverless page generator',
-
     commands: {
       start: 'starts magic dev env, same as npm run dev',
       dev: 'prepare and transpile, then serve app from memory',
@@ -44,18 +40,8 @@ const args = {
 production:
 NODE_ENV=production magic [...TASKS]
 
-available tasks:
-
-command line flags:
---keep-console    - keep console.log in production javascript
---no-mangle-names - do not mangle names of variables and functions
---keep-dead-code  - do not remove dead code
---keep-debugger   - do not remove debugger statements from js
---no-minify       - do not minify js
---keep-client     - keeps the unminifed .__browserify_empty
---watch d1 d2     - watch additional directories.
-
-help    - this help text
+dev, watch src directory:
+magic dev --watch src
 `,
   },
 }
