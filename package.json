@@ -47,7 +47,7 @@
     "imagemin-mozjpeg": "8.0.0",
     "imagemin-pngquant": "7.0.0",
     "imagemin-svgo": "7.0.0",
-    "now-env": "3.1.0"
+    "now-env": "3.2.0"
   },
   "optionalDependencies": {
     "node-zopfli-es": "1.0.3"
