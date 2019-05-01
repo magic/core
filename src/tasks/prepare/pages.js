@@ -3,6 +3,7 @@ const path = require('path')
 const deep = require('@magic/deep')
 
 const { isUpperCase, getDependencies } = require('../../lib')
+const { handlePageDependencyStyles } = require('./lib')
 
 const preparePages = files => {
   const pages = files.map(file => {
@@ -69,26 +70,10 @@ does not export a view function or page.View key.`)
     })
 
     // merge dependency styles into page dependencies
-    page.dependencies.forEach(dep => {
-      Object.entries(dep).forEach(([k, c]) => {
-        if (c.style) {
-          // wrap styles in a html/css class if they are not yet.
-          // this allows us to omit css classes in ALL modules,
-          // as long as we pass the props downwards ...
-          const keys = Object.keys(c.style)
-          if (!keys.includes(`.${k}`)) {
-            c.style = {
-              [`.${k}`]: c.style,
-            }
-          }
-          if (is.fn(c.style)) {
-            c.style = c.style(THEME_VARS)
-          }
-          page.dependencyStyles = deep.merge(c.style, page.dependencyStyles)
-        }
-      })
-    })
-
+    const mappedStyles = handlePageDependencyStyles(page.dependencies)
+    if (!is.empty(mappedStyles)) {
+      page.dependencyStyles = mappedStyles
+    }
     return page
   })
 

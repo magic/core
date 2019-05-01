@@ -4,4 +4,5 @@ module.exports = {
   mapPageObject: require('./mapPageObject'),
   isGlobal: require('./isGlobal'),
   mapLibToGlobal: require('./mapLibToGlobal'),
+  handlePageDependencyStyles: require('./handlePageDependencyStyles'),
 }

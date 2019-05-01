@@ -21,7 +21,7 @@ const prepare = async app => {
   }
 
   Object.entries(modules).forEach(([key, value]) => {
-    keys.add(key)
+    global.keys.add(key)
     global[key] = value
   })
 
@@ -73,6 +73,13 @@ const prepare = async app => {
   dependencies.forEach(dep => {
     Object.entries(dep).forEach(([key, val]) => {
       app.dependencies[key] = val
+      if (!is.empty(val.dependencies)) {
+        Object.entries(val.dependencies).forEach(([key, val]) => {
+          global.keys.add(key)
+          global[key] = val
+          app.dependencies[key] = val
+        })
+      }
     })
   })
 
@@ -132,7 +139,6 @@ const prepare = async app => {
 
   if (!is.empty(app.lib)) {
     const deps = mapLibToGlobal(app.lib)
-
     app.dependencies = deep.merge(deps, app.dependencies)
   }
 
