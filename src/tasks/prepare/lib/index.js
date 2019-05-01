@@ -5,4 +5,5 @@ module.exports = {
   isGlobal: require('./isGlobal'),
   mapLibToGlobal: require('./mapLibToGlobal'),
   handlePageDependencyStyles: require('./handlePageDependencyStyles'),
+  handleStyleFunctions: require('./handleStyleFunctions'),
 }

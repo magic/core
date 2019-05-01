@@ -3,7 +3,7 @@ const path = require('path')
 const deep = require('@magic/deep')
 
 const { isUpperCase, getDependencies } = require('../../lib')
-const { handlePageDependencyStyles } = require('./lib')
+const { handlePageDependencyStyles, handleStyleFunctions } = require('./lib')
 
 const preparePages = files => {
   const pages = files.map(file => {
@@ -48,13 +48,7 @@ does not export a view function or page.View key.`)
 
     page.dependencies = getDependencies(page.View, global.keys)
 
-    const { THEME_VARS = {} } = config
-
-    if (is.fn(page.style)) {
-      page.style = page.style(THEME_VARS)
-    }
-
-    page.dependencyStyles = {}
+    page.style = handleStyleFunctions(page.style)
 
     // merge subdependencies into page dependencies
     page.dependencies.forEach(dep => {

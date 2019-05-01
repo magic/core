@@ -1,6 +1,8 @@
 const is = require('@magic/types')
 const deep = require('@magic/deep')
 
+const handleStyleFunctions = require('./handleStyleFunctions')
+
 const handlePageDependencyStyles = dep => {
   if (is.array(dep)) {
     return dep.map(handlePageDependencyStyles)
@@ -9,6 +11,7 @@ const handlePageDependencyStyles = dep => {
   let style = {}
   Object.entries(dep).forEach(([k, c]) => {
     if (c.style) {
+      c.style = handleStyleFunctions(c.style)
       // wrap styles in a html/css class if they are not yet.
       // this allows us to omit css classes in ALL modules,
       // as long as we pass the props downwards ...
@@ -18,15 +21,12 @@ const handlePageDependencyStyles = dep => {
           [`.${k}`]: c.style,
         }
       }
-      if (is.fn(c.style)) {
-        c.style = c.style(THEME_VARS)
-      }
       style = c.style
     }
 
     if (!is.empty(c.dependencies)) {
       const s = handlePageDependencyStyles(c.dependencies)
-      style = deep.merge(style, s)
+      style = deep.merge(style, handleStyleFunctions(s))
     }
   })
 
