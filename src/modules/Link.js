@@ -51,8 +51,8 @@ Link.actions = {
           window.scrollTo(0, 0)
         }
       }
-    // in case of popstate events firing, we do not have props.to
     } else {
+      // in case of popstate events firing, we do not have props.to
       // but instead the e is a history event
       if (e.state) {
         uri = e.state.uri
