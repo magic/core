@@ -121,9 +121,11 @@ module.exports = {
           { to: '/modules/#magic-modules', text: '@magic-modules' },
         ],
       },
-      { to: '/themes/', text: 'themes', items: [
-        { to: '/themes/#magic-themes', text: '@magic-themes' },
-      ]},
+      {
+        to: '/themes/',
+        text: 'themes',
+        items: [{ to: '/themes/#magic-themes', text: '@magic-themes' }],
+      },
       {
         to: '/libraries/',
         text: 'libraries',
