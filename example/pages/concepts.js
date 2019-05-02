@@ -116,18 +116,59 @@ const exampleModule = {
       h1(state.title),
       p('magic concepts. These are the building blocks of every module in a magic app'),
 
-      div([h2({ id: 'philosophy' }, 'philosophy')]),
+      div([
+        h2({ id: 'philosophy' }, 'philosophy'),
+
+        p([
+          '@magic wants to make it easy to stitch together any kind of webapp.',
+          ' by providing simple, well documented and self contained modules,',
+          ' @magic makes it possible to create stunningly fast webpages.',
+        ]),
+      ]),
 
       div([
-        h2({ id: 'modules' }, 'modules'),
+        h2({ id: 'buzzwords' }, 'buzzwordbingo'),
+
+        h3('works without javascript'),
+        p([
+          'most of the functionality works without javascript,',
+          " buttons and realtime user interactions obviously won't.",
+        ]),
+
+        h3('tiny'),
+        p([
+          '~4 kb javascript boilerplate.',
+          ' usually, all the javascript in your homepage will be 30-60kb big (after unpacking),',
+          ' 10-30kb get transmitted from the server to the client.',
+          ' this complete documentation page you are reading with all sub pages has about 50kb unpacked, 15kb transmitted. (values may be out of date)',
+        ]),
+
+        h3('static pages'),
+        p([
+          'generates static pages if possible. this makes free hosting (using github or gitlab pages) possible.',
+          " and it's easy.",
+        ]),
+
+        h3('server side rendering'),
+        p('(wip) if needed, @magic/server will execute your pages on each request.'),
+
+        h3('faas (functions as a service))'),
+        p('(wip) modules can generate server side lambdas.'),
+        p([
+          'magic will in the (very near) future provide a server side solution to host these lambdas.',
+        ]),
+      ]),
+
+      div([
+        h2('@magic-modules'),
 
         p('modules are the main building block of magic.'),
-        p(
-          'modules can include state, actions, style and multiple components (which we call Views).',
-        ),
-        p(
-          'View names have to start with an uppercased character. Every module can export multiple components that share state, actions and styles.',
-        ),
+
+        p([
+          'a page is a module, a button is a module, a link is a module, an image is a module.',
+          ' a @magic app contains of modules containing modules that contain modules.',
+          ' this can lead to inception.',
+        ]),
       ]),
 
       div([
@@ -195,11 +236,12 @@ const exampleModule = {
       div([
         h2({ id: 'lambdas' }, 'server lambdas'),
         p('this is the serverside magic.'),
-        p('you can define functions that will turn into serverside lambdas.'),
-        p('server side lambdas will be available for POST requests.'),
-        p(
-          'the server side function signature is (req, res) => {}, as in any nodejs http server, with the addition of req.body being set.',
-        ),
+        p('you can define functions that get transpiled into serverside lambdas.'),
+        p('server side lambdas will be available for GET and POST requests.'),
+        p([
+          'the server side function signature is (req, res) => {},',
+          ' as in any nodejs http server, with the addition of req.body being awaited before execution of the lambda.',
+        ]),
 
         h3({ id: 'lambdas-example' }, 'single lambda'),
         Pre(example.server),
@@ -235,8 +277,9 @@ const exampleModule = {
         p([
           'if you need libraries in internally developed modules,',
           ' it might be easier to keep your library dependencies in a central place.',
-          ' to achieve this, one can simply create /assets/lib.js and export a object from it.',
-          ' the keys of the object are the function name, the values are the paths to the lib.js file',
+          ' to achieve this, one can simply create /assets/lib.js and export an object from it.',
+          ' the keys of the object are the function name, the values are the paths to the lib.js file.',
+          ' to make sure resolution works, require.resolve has to be used for local libs.',
         ]),
         Pre(`
 // /assets/lib.js or /assets/lib/index.js
