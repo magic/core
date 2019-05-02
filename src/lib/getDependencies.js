@@ -3,12 +3,15 @@ const is = require('@magic/types')
 const isUpperCase = require('./isUpperCase')
 const getUsedComponents = require('./getUsedComponents')
 
-const getDependencies = (props, keys) => {
+const getDependencies = (props, keys, parent) => {
   if (!is.string(props) && is.fn(props.toString)) {
     props = props.toString()
   }
 
   const usedComponents = getUsedComponents(props, keys)
+    // filter out the parent if it has the same name.
+    // prevents endless recursion
+    .filter(c => c !== parent)
 
   const components = usedComponents.map(name => {
     const component = global[name]
@@ -22,7 +25,7 @@ const getDependencies = (props, keys) => {
 
       // get all sub dependencies
       const deps = {}
-      getDependencies(component.toString(), keys).forEach(dep => {
+      getDependencies(component.toString(), keys, name).forEach(dep => {
         Object.entries(dep).forEach(([name, comp]) => {
           deps[name] = comp
         })
