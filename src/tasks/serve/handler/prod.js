@@ -43,10 +43,10 @@ const handler = async app => {
     let { pathname } = url
 
     const { WEB_ROOT = '/' } = config
-    const fullPathname = WEB_ROOT + pathname.slice(1)
+    const Location = WEB_ROOT
 
     if (!pathname.startsWith(WEB_ROOT)) {
-      res.writeHead(301, { Location: fullPathname })
+      res.writeHead(302, { Location })
       res.end()
       return
     } else {
