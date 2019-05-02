@@ -62,7 +62,7 @@ Link.actions = {
     }
 
     // window exists for sure, but make sure window.location also does
-    if (hash && window.location) {
+    if (window.location) {
       window.location.hash = hash
     }
 
