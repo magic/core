@@ -23,6 +23,9 @@ config.CLIENT_LIB_NAME = config.CLIENT_LIB_NAME || 'magic'
 
 config.WEB_ROOT = config.WEB_ROOT || '/'
 
+config.HOST = config.HOST || 'localhost'
+config.PORT = config.PORT || 2323
+
 const PAGES = path.join(config.ROOT, 'pages')
 const PUBLIC = path.join(process.cwd(), config.PUBLIC || config.DIR.PUBLIC || 'public')
 const ASSETS = path.join(config.ROOT, 'assets')
