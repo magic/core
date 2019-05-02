@@ -11,8 +11,7 @@
     "dev": "node src/bin.js dev --watch src",
     "format": "f -w --exclude docs",
     "test": "t --exclude docs example config.js",
-    "calls": "calls",
-    "postinstall": "npm run prod"
+    "calls": "calls"
   },
   "main": "src/index.js",
   "bin": {
