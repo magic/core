@@ -160,7 +160,7 @@ const exampleModule = {
       ]),
 
       div([
-        h2('@magic-modules'),
+        h2({ id: 'modules' }, '@magic-modules'),
 
         p('modules are the main building block of magic.'),
 
