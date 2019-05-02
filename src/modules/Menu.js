@@ -15,26 +15,7 @@ const View = (props = 'menu') => state => {
     url += `#${state.hash}`
   }
 
-  const Item = ({ text, items = [], ...item }) => {
-    // if the item has no values, we quit
-    if (!item.to && !text) {
-      return
-    }
-
-    const p = {}
-    if (item.to === url) {
-      p.class = 'active'
-    }
-
-    let children
-    if (items && (url.startsWith(item.to) || !collapse)) {
-      children = ul(items.map(i => Item(i)))
-    }
-
-    return li(p, [item.to ? Link(item, text) : span(item, text), children])
-  }
-
-  return nav({ class: !cl.includes('Menu') ? `Menu ${cl}` : cl }, ul(items.map(i => Item(i))))
+  return nav({ class: !cl.includes('Menu') ? `Menu ${cl}` : cl }, ul(items.map(i => MenuItem({ ...i, url, collapse }))))
 }
 
 const style = {
