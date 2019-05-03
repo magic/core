@@ -18,8 +18,8 @@ head to the [docs](https://magic.github.io/core/)
 [npm-url]: https://www.npmjs.com/package/@magic/core
 [travis-image]: https://api.travis-ci.org/magic/core.svg?branch=master
 [travis-url]: https://travis-ci.org/magic/core
-[appveyor-image]: https://img.shields.io/appveyor/ci/jaeh/core/master.svg
-[appveyor-url]: https://ci.appveyor.com/project/jaeh/core/branch/master
+[appveyor-image]: https://img.shields.io/appveyor/ci/magic/core/master.svg
+[appveyor-url]: https://ci.appveyor.com/project/magic/core/branch/master
 [coveralls-image]: https://coveralls.io/repos/github/magic/core/badge.svg
 [coveralls-url]: https://coveralls.io/github/magic/core
 [greenkeeper-image]: https://badges.greenkeeper.io/magic/core.svg
