@@ -93,8 +93,9 @@ const handler = async app => {
       }
     }
 
-    res.writeHead(404, { 'Content-Type': 'text/html' })
-    res.end(static['/404/index.html'])
+
+    res.writeHead(302, { Location: WEB_ROOT })
+    res.end()
   }
 }
 
