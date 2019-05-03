@@ -93,7 +93,6 @@ const handler = async app => {
       }
     }
 
-
     res.writeHead(302, { Location: WEB_ROOT })
     res.end()
   }

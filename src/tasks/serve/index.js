@@ -3,7 +3,7 @@ const util = require('util')
 
 const handler = require('./handler')
 
-const startServer = async (server) => {
+const startServer = async server => {
   try {
     await new Promise(r => server.listen(server.options, () => r()))
     return server.options

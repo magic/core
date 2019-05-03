@@ -15,7 +15,10 @@ const View = (props = 'menu') => state => {
     url += `#${state.hash}`
   }
 
-  return nav({ class: !cl.includes('Menu') ? `Menu ${cl}` : cl }, ul(items.map(i => MenuItem({ ...i, url, collapse }))))
+  return nav(
+    { class: !cl.includes('Menu') ? `Menu ${cl}` : cl },
+    ul(items.map(i => MenuItem({ ...i, url, collapse }))),
+  )
 }
 
 const style = {
