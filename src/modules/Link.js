@@ -63,7 +63,11 @@ Link.actions = {
 
     // window exists for sure, but make sure window.location also does
     if (window.location) {
-      window.location.hash = hash
+      const target = document.getElementById(hash)
+      if (target) {
+        const top = target.offsetTop
+        window.scrollTo(0, top)
+      }
     }
 
     return {
