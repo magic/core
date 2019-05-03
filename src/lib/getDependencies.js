@@ -35,29 +35,29 @@ const getDependencies = (props, keys, parent) => {
         ...deps,
         [name]: component,
       }
-    } else if (is.object(component)) {
-      let entries = {}
-      const views = Object.entries(component).filter(([k]) => isUpperCase(k))
-
-      views.forEach(([k, v]) => {
-        if (global[k]) {
-          entries[k] = getDependencies(v.toString(), keys)
-        } else {
-          const dependencies = getDependencies(v.toString(), keys)
-          dependencies.forEach(dep => {
-            Object.entries(dep).forEach(([kk, vv]) => {
-              entries[kk] = vv
-            })
-          })
-        }
-      })
-
-      return { [name]: component, ...entries }
-    } else if (is.array(component)) {
-      throw new Error(`getDependencies got array ${name}`)
-    } else {
-      throw new Error(`unknown component type: ${typeof component}`)
     }
+
+    if (is.array(component)) {
+      throw new Error(`getDependencies got array ${name}`)
+    }
+
+    let entries = {}
+    const views = Object.entries(component).filter(([k]) => isUpperCase(k))
+
+    views.forEach(([k, v]) => {
+      if (global[k]) {
+        entries[k] = getDependencies(v.toString(), keys)
+      } else {
+        const dependencies = getDependencies(v.toString(), keys)
+        dependencies.forEach(dep => {
+          Object.entries(dep).forEach(([kk, vv]) => {
+            entries[kk] = vv
+          })
+        })
+      }
+    })
+
+    return { [name]: component, ...entries }
   })
 
   return components
