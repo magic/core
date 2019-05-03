@@ -83,14 +83,17 @@ const handler = app => (req, res) => {
     return
   }
 
-  // fall back to 404 page
-  // which got added automatically if it did not exist.
-  if (!pages[url]) {
-    url = '/404/'
+  if (pages[url]) {
+    res.writeHead(200, { ...headers, 'Content-Type': 'text/html' })
+    res.end(pages[url])
+    return
   }
 
-  res.writeHead(200, { ...headers, 'Content-Type': 'text/html' })
-  res.end(pages[url])
+  // 404. in development, we redirect to the root
+  const Location = '/'
+
+  res.writeHead(302, { Location })
+  res.end()
 }
 
 module.exports = handler
