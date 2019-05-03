@@ -25,6 +25,7 @@
     "@babel/plugin-proposal-object-rest-spread": "7.4.4",
     "@babel/plugin-transform-arrow-functions": "7.2.0",
     "@babel/preset-env": "7.4.4",
+    "@magic-modules/git-badges": "github:magic-modules/gitbadges",
     "@magic/cli": "0.0.1",
     "@magic/css": "0.4.6",
     "@magic/deep": "0.0.1",
@@ -53,7 +54,7 @@
   },
   "devDependencies": {
     "@magic-modules/client-list": "github:magic-modules/client-list",
-    "@magic-modules/gitbadges": "github:magic-modules/gitbadges",
+    "@magic-modules/gitbadges": "github:magic-modules/git-badges",
     "@magic-modules/module-list": "github:magic-modules/module-list",
     "@magic-modules/pre": "github:magic-modules/pre",
     "@magic-modules/theme-list": "github:magic-modules/theme-list",
