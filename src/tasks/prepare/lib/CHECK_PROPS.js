@@ -28,7 +28,23 @@ const CHECK_PROPS = (props, propTypes, name = 'Module') => {
     }
 
     if (!is(value, ...types)) {
-      console.error(`${name} needs props.${key} to be one of [${types.join(', ')}]`)
+      const typeInfo = types.length > 1 ? 'one of' : 'a'
+      const typeString = types.length > 1 ? `["${types.join(', "')}"]` : types[0]
+      console.error(`${name} needs props.${key} to be ${typeInfo} [${typeString}]`)
+    } else if(required) {
+      if (typeof value === 'object' && !Object.keys(value).length) {
+        let typeString = ''
+        if (types.includes('array')) {
+          typeString += ' array'
+        }
+        if (types.includes('object')) {
+          if (types.includes('array')) {
+            typeString += ' or'
+          }
+          typeString += ' object'
+        }
+        console.error(`${name} needs props.${key} to be a non empty ${typeString}`)
+      }
     }
   })
 
