@@ -20,6 +20,13 @@
   "files": [
     "src"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magic/core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/magic/core/issues"
+  },
   "dependencies": {
     "@babel/core": "7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "7.4.4",
