@@ -67,6 +67,7 @@ Link.actions = {
       if (target) {
         const top = target.offsetTop
         window.scrollTo(0, top)
+        window.location.hash = hash
       }
     }
 
