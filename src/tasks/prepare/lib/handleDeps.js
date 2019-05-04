@@ -1,5 +1,6 @@
 const is = require('@magic/types')
 const { isUpperCase } = require('../../../lib/')
+const stringifyObject = require('./stringifyObject')
 
 const handleDependencies = ([name, component]) => {
   if (is.fn(component) && global.tags.body[name]) {
@@ -27,12 +28,23 @@ const handleDependencies = ([name, component]) => {
       } else {
         comp += `  ${view.name}: ${view.view},\n`
       }
+
+      if (config.ENV === 'development') {
+        if (component[view.name].props) {
+          comp += `${name}.${view.name}.props = ${stringifyObject(component[view.name].props)}\n`
+        }
+      }
     })
     if (!is.fn(component)) {
       comp += '}'
     }
   }
 
+  if (config.ENV === 'development') {
+    if (component.props) {
+      comp += `${name}.props = ${stringifyObject(component.props)}\n`
+    }
+  }
   return `${comp}\n`
 }
 

@@ -5,6 +5,7 @@ const log = require('@magic/log')
 const is = require('@magic/types')
 
 global.config = require('./config')
+global.CHECK_PROPS = require('./tasks/prepare/lib/CHECK_PROPS')
 const tasks = require('./tasks')
 const App = require('./modules/app')
 

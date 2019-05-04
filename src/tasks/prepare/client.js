@@ -10,6 +10,12 @@ const prepareClient = app => {
   // importing hyperapp
   clientString += "const { app, h } = require('hyperapp')\n"
 
+  if (config.ENV === 'development') {
+    clientString += `
+const CHECK_PROPS = ${global.CHECK_PROPS.toString()}
+`
+  }
+
   // add the Component module that wraps all other html tags
   clientString += `const C = ${global.component.toString()}\n`
     // replace names of variables to enforce minification

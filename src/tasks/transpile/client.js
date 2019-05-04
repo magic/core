@@ -41,6 +41,13 @@ if (isProd) {
     plugins.push('transform-remove-debugger')
   }
 
+  plugins.push([
+    'remove-code',
+    {
+      function: ['CHECK_PROPS'],
+    },
+  ])
+
   if (!process.argv.includes('--no-minify')) {
     plugins.push('minify-simplify')
     plugins.push('minify-type-constructors')
