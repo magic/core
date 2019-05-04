@@ -62,7 +62,7 @@ Link.actions = {
     }
 
     // window exists for sure, but make sure window.location also does
-    if (window.location) {
+    if (window.location && hash) {
       const target = document.getElementById(hash)
       if (target) {
         const top = target.offsetTop
