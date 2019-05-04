@@ -50,7 +50,7 @@ module.exports = () => div([
 
     Mod.View,
 
-    Mod.Component,
+    Mod.Component({ header: 'Mod Component Title, passed via props' }),
 
     h3('Mod sourcecode:'),
 
@@ -111,6 +111,10 @@ module.exports = () => div([
 }
 
 module.exports = Mod`),
+
+    h2({ id: 'check-props' }, 'check props'),
+    p('@magic-modules can export a .props key with an array of prop types.'),
+    p('more docs coming soon'),
 
     h2({ id: 'preinstalled' }, 'preinstalled magic modules'),
     p('magic has some preinstalled modules that will be used in most pages.'),
@@ -295,7 +299,6 @@ module.exports = {
 }
 `),
 
-    h2({ id: 'magic-modules' }, 'list of installable magic modules'),
     ModuleList,
   ],
 }

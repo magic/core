@@ -1,11 +1,16 @@
 ## @magic/core
 
-This is the magic core library.
+This is the @magic core library.
 
-It builds a webapp with deeply nested component structure and globally/locally shared state and actions.
+builds a webapp with deeply nested component structure and globally/locally shared state and actions.
 
 To get more information,
-head to the [docs](https://magic.github.io/core/)
+head to the [docs / demo](https://magic.github.io/core/)
+
+other related github organizations:
+[@magic-modules](https://magic-modules.github.io) - modules, buildings block of your app
+[@magic-themes](https://magic-themes.github.io) - themes for your app
+[@magic-client](https://magic-client.github.io) - client libraries
 
 [![NPM version][npm-image]][npm-url]
 [![Linux Build Status][travis-image]][travis-url]
