@@ -21,5 +21,4 @@ const prepare = ({ pages }) => {
 
     return page
   })
-
 }

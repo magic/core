@@ -43,7 +43,7 @@ module.exports = app => {
       const selector = `.${name}`
       if (!style[selector]) {
         style = {
-          [selector]: style
+          [selector]: style,
         }
       }
       styles.push(handleStyleFunctions(style))

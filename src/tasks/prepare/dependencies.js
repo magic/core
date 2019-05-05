@@ -36,17 +36,16 @@ const prepareDependencies = async app => {
       lib = deep.merge(page.lib, app.lib)
     })
 
-  dependencies
-    .forEach(dependency => {
-      Object.entries(dependency)
-        .filter(([_, component]) => !is.empty(component.lib))
-        .forEach(([name, component]) => {
-          lib = deep.merge(component.lib, app.lib)
-        })
-    })
+  dependencies.forEach(dependency => {
+    Object.entries(dependency)
+      .filter(([_, component]) => !is.empty(component.lib))
+      .forEach(([name, component]) => {
+        lib = deep.merge(component.lib, app.lib)
+      })
+  })
 
   if (!is.empty(lib)) {
-    const mapped  = mapLibToGlobal(lib)
+    const mapped = mapLibToGlobal(lib)
     dependencies = deep.merge(mapped.dependencies, dependencies)
     Object.entries(mapped.lib).forEach(([name, lib]) => {
       global.LIB[name] = lib
