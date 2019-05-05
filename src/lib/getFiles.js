@@ -22,8 +22,7 @@ const getFiles = async (dir, recurse = true) => {
   const dirContent = await fs.readdir(dir)
   const files = await Promise.all(dirContent.map(getFilePath(dir)))
 
-  const flattened = deep.flatten(files)
-  return flattened
+  return deep.flatten(files).filter(a => a)
 }
 
 module.exports = getFiles
