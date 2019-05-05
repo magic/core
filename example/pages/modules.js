@@ -50,7 +50,7 @@ module.exports = () => div([
 
     Mod.View,
 
-    Mod.Component({ header: 'Mod Component Title, passed via props' }),
+    Mod.Component({ title: 'Mod Component Title, passed via props' }),
 
     h3('Mod sourcecode:'),
 

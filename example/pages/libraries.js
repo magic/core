@@ -10,7 +10,7 @@ const page = state => [
   Pre(`
 // /assets/lib/index.js or /assets/lib.js
 module.exports = {
-  JSON: '@magic-client/json',
+  JSON: '@magic-libraries/json',
   // ./localLib resolves to /assets/lib/localLib.js
   localLib: require.resolve('./localLib'),
 }`),
@@ -55,9 +55,7 @@ module.exports = {
     ' when using module.exports, structuring the LIB[name] object is up to you.',
   ]),
 
-  h2({ id: 'magic-client' }, '@magic-client library list'),
-  p('below is a collection of the available @magic client libraries.'),
-  ClientList,
+  LibraryList,
 ]
 
 page.state = {

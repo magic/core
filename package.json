@@ -60,7 +60,7 @@
     "node-zopfli-es": "1.0.3"
   },
   "devDependencies": {
-    "@magic-modules/client-list": "github:magic-modules/client-list",
+    "@magic-modules/library-list": "github:magic-modules/library-list",
     "@magic-modules/git-badges": "github:magic-modules/git-badges",
     "@magic-modules/module-list": "github:magic-modules/module-list",
     "@magic-modules/pre": "github:magic-modules/pre",

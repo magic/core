@@ -10,7 +10,7 @@ head to the [docs / demo](https://magic.github.io/core/)
 other related github organizations:
 [@magic-modules](https://magic-modules.github.io) - modules, buildings block of your app
 [@magic-themes](https://magic-themes.github.io) - themes for your app
-[@magic-client](https://magic-client.github.io) - client libraries
+[@magic-libraries](https://magic-libraries.github.io) - client libraries
 
 [![NPM version][npm-image]][npm-url]
 [![Linux Build Status][travis-image]][travis-url]

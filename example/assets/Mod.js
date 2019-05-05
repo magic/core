@@ -46,9 +46,10 @@ Mod.global = {
 Mod.Component = props => () => {
   props = typeof props === 'string' ? { header: props } : props
   CHECK_PROPS(props, Mod.Component.props, 'Mod.Component')
+  const header = props.header || props.title
 
   return div({ class: 'Mod Component' }, [
-    props.header && h3(props.header),
+    header && h3(header),
     p([
       'Mod.Component, a second component in ',
       Link({ to: 'https://github.com/magic/core/example/assets/module.js' }, '/assets/module.js'),
@@ -56,6 +57,8 @@ Mod.Component = props => () => {
   ])
 }
 
-Mod.Component.props = [{ key: 'header', type: ['string', 'array'], required: true }]
+Mod.Component.props = [
+  { key: 'header', type: ['string', 'array'], required: ['title'] },
+]
 
 module.exports = Mod

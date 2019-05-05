@@ -136,7 +136,7 @@ module.exports = {
           { to: '/libraries/#require-page', text: 'modules / pages' },
           { to: '/libraries/#example', text: 'example' },
           { to: '/libraries/#caveat', text: 'caveat' },
-          { to: '/libraries/#magic-client', text: '@magic-client' },
+          { to: '/libraries/#magic-libraries', text: '@magic-libraries' },
         ],
       },
     ],

@@ -4,5 +4,5 @@ module.exports = {
   GitBadges: require('@magic-modules/git-badges'),
   ModuleList: require('@magic-modules/module-list'),
   ThemeList: require('@magic-modules/theme-list'),
-  ClientList: require('@magic-modules/client-list'),
+  LibraryList: require('@magic-modules/library-list'),
 }
