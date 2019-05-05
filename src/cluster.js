@@ -49,7 +49,7 @@ const runCluster = async ({ cmds, argv }) => {
     let lastCall = new Date().getTime()
     cluster.on('message', (worker, msg) => {
       if (watchWorker && worker.id === watchWorker.id) {
-        if (msg.evt === 'change') {
+        if (msg.evt === 'change' || msg.evt === 'rename') {
           const now = new Date().getTime()
           const delay = now - lastCall
           if (delay > 10) {
