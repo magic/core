@@ -1,4 +1,5 @@
 const is = require('@magic/types')
+const log = require('@magic/log')
 const path = require('path')
 const { rmrf, isLocalPath } = require('../../lib')
 
@@ -14,7 +15,7 @@ const clean = async () => {
       throw new Error(msg)
     }
 
-    console.log('remove', dir)
+    log.warn('remove', dir)
     await rmrf(dir)
   }
 }

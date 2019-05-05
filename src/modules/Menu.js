@@ -66,5 +66,4 @@ Menu.Item = ({ url, text, items = [], collapse, ...item }) => {
   return li(p, [item.to ? Link(item, text) : span(item, text), children])
 }
 
-
 module.exports = Menu

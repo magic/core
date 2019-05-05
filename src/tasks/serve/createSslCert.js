@@ -3,6 +3,7 @@ const { exec } = require('child_process')
 const util = require('util')
 const path = require('path')
 const xc = util.promisify(exec)
+const log = require('@magic/log')
 
 const ssl = async () => {
   const privFilename = path.join(__dirname, 'priv.pem')
@@ -16,7 +17,7 @@ const ssl = async () => {
       cert: await fs.readFile(certFilename),
     }
   } else if (!keyExists && !certExists) {
-    console.log('both cert and key missing. generating')
+    log.warn('both cert and key missing. generating')
     const opensslCmd = `openssl \
 req -x509 \
 -newkey rsa:2048 \
@@ -29,9 +30,9 @@ req -x509 \
 
     return await ssl()
   } else if (certExists) {
-    console.log(`${privFilename} missing`)
+    log.error(`${privFilename} missing`)
   } else if (keyExists) {
-    console.log(`${certFilename} missing`)
+    log.error(`${certFilename} missing`)
   }
 }
 

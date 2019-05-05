@@ -75,7 +75,7 @@ const runCluster = async ({ cmds, argv }) => {
 
     cluster.on('exit', (worker, code, signal) => {
       if (code !== null && code !== 0) {
-        console.log('exit', code)
+        log('exit', code)
       }
     })
   } else if (cluster.isWorker) {

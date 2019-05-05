@@ -22,7 +22,9 @@ const getFilePath = async (dir, file, recurse = true) => {
 
 const getDirectories = async (directories, recurse = true) => {
   if (is.array(directories)) {
-    const dirs = await Promise.all(directories.filter(fs.exists).map(f => getDirectories(f, recurse)))
+    const dirs = await Promise.all(
+      directories.filter(fs.exists).map(f => getDirectories(f, recurse)),
+    )
     return deep.flatten(...dirs).filter(a => a)
   }
 
