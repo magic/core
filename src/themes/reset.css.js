@@ -59,6 +59,7 @@ const reset = {
   a: {
     outline: 'none',
     cursor: 'pointer',
+    whiteSpace: 'nowrap',
   },
 
   [buttons]: {
