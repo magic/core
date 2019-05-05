@@ -1,4 +1,6 @@
-const View = (props = 'menu') => state => {
+const Menu = {}
+
+Menu.View = (props = 'menu') => state => {
   if (typeof props === 'string') {
     props = { name: props }
   }
@@ -17,11 +19,11 @@ const View = (props = 'menu') => state => {
 
   return nav(
     { class: !cl.includes('Menu') ? `Menu ${cl}` : cl },
-    ul(items.map(i => MenuItem({ ...i, url, collapse }))),
+    ul(items.map(i => Menu.Item({ ...i, url, collapse }))),
   )
 }
 
-const style = {
+Menu.style = {
   float: 'right',
   margin: '1.5em 0 0',
   position: 'relative',
@@ -45,7 +47,24 @@ const style = {
   },
 }
 
-module.exports = {
-  style,
-  View,
+Menu.Item = ({ url, text, items = [], collapse, ...item }) => {
+  // if the item has no values, we quit
+  if (!item.to && !text) {
+    return
+  }
+
+  const p = {}
+  if (item.to === url) {
+    p.class = 'active'
+  }
+
+  let children = []
+  if (items && (url.startsWith(item.to) || !collapse)) {
+    children = ul(items.map(i => Menu.Item({ url, collapse, ...i })))
+  }
+
+  return li(p, [item.to ? Link(item, text) : span(item, text), children])
 }
+
+
+module.exports = Menu

@@ -1,5 +1,4 @@
 module.exports = {
-  MenuItem: require('./MenuItem'),
   Menu: require('./Menu'),
   Link: require('./Link'),
   Footer: require('./Footer'),
