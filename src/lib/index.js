@@ -16,4 +16,6 @@ module.exports = {
   xc: require('./xc'),
   getPages: require('./getPages'),
   fs: require('./fs'),
+  toCamel: require('./toCamel'),
+  toPascal: require('./toPascal'),
 }
