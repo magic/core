@@ -1,8 +1,6 @@
 const path = require('path')
 
-const deep = require('@magic/deep')
-
-const { fs } = require('../../lib')
+const { getDirectories, getFiles, isUpperCase, toPascal } = require('../../lib')
 const builtinModules = require('../../modules')
 
 const globals = async () => {
@@ -15,25 +13,47 @@ const globals = async () => {
   })
 
   const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
-  if (await fs.exists(maybeAssetFile)) {
+  try {
     const assets = require(maybeAssetFile)
     Object.entries(assets).forEach(([name, value]) => {
       global.keys.add(name)
       global[name] = value
     })
+  } catch (e) {
+    // we are happy without assetfile
   }
 
   const findInstalledModules = async () => {
-    if (await fs.exists(config.DIR.ASSETS)) {
-      const assetModules = await fs.readdir(config.DIR.ASSETS)
-      // console.log({ assetModules })
-    }
+    const assetModules = await getFiles(config.DIR.ASSETS)
 
-    const nodeModules = await fs.readdir(path.join(process.cwd(), 'node_modules', '@magic-modules'))
-    nodeModules
-      .forEach(nodeModule => {
-        // console.log({ nodeModule })
+    assetModules
+      .filter(m => isUpperCase(path.basename(m)))
+      .forEach(m => {
+        try {
+          const mod = require(m)
+          const name = path.basename(m).replace(path.extname(m), '')
+          global.keys.add(name)
+          global[name] = mod
+        } catch (e) {
+          console.error(`Error requiring local magic-module: ${m}, error: ${e.message}`)
+        }
       })
+
+    const nodeModuleDir = path.join(process.cwd(), 'node_modules', '@magic-modules')
+    const nodeModules = await getDirectories([nodeModuleDir], false)
+    nodeModules.forEach(nodeModule => {
+      if (nodeModuleDir !== nodeModule) {
+        try {
+          const mod = require(nodeModule)
+
+          const name = toPascal(path.basename(nodeModule))
+          global.keys.add(name)
+          global[name] = mod
+        } catch (e) {
+          console.error(`Error requiring node_module: ${nodeModule}, error: ${e.message}`)
+        }
+      }
+    })
   }
 
   await findInstalledModules()
