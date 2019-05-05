@@ -24,37 +24,36 @@ const prepareDependencies = async app => {
     const pageString = is.function(page) ? page.toString() : page.View.toString()
     // make sure dependencies contains all recursive dependencies
     let pageDependencies = getDependencies(pageString)
-    // console.log({ pageDependencies })
 
     dependencies = deep.merge(dependencies, pageDependencies)
   })
 
-  let lib = {}
+  let lib = app.lib || {}
   app.pages
     .filter(page => !is.empty(page.lib))
     .map(page => {
-      lib = deep.merge(page.lib, app.lib)
+      lib = deep.merge(page.lib, lib)
     })
 
   dependencies.forEach(dependency => {
     Object.entries(dependency)
       .filter(([_, component]) => !is.empty(component.lib))
       .forEach(([name, component]) => {
-        lib = deep.merge(component.lib, app.lib)
+        Object.entries(component.lib).forEach(([key, mod]) => {
+          lib[key] = mod
+        })
       })
   })
 
   if (!is.empty(lib)) {
     const mapped = mapLibToGlobal(lib)
     dependencies = deep.merge(mapped.dependencies, dependencies)
-    Object.entries(mapped.lib).forEach(([name, lib]) => {
-      global.LIB[name] = lib
+    Object.entries(mapped.lib).forEach(([name, mod]) => {
+      global.LIB[name] = mod
     })
   }
 
   const deps = mapDepsToObject(dependencies)
-
-  // console.log({ deps })
 
   return {
     modules: deps,
