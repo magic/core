@@ -46,28 +46,6 @@ ${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(/\//g, '')}.j
 does not export a view function or page.View key.`)
     }
 
-    page.dependencies = getDependencies(page.View, global.keys)
-
-    page.style = handleStyleFunctions(page.style)
-
-    // merge subdependencies into page dependencies
-    page.dependencies.forEach(dep => {
-      Object.entries(dep).forEach(([k, c]) => {
-        const views = Object.entries(c)
-          .filter(([k]) => isUpperCase(k))
-          .map(([_, v]) => v.toString())
-
-        views.forEach(view => {
-          page.dependencies = deep.merge(getDependencies(view, global.keys), page.dependencies)
-        })
-      })
-    })
-
-    // merge dependency styles into page dependencies
-    const mappedStyles = handlePageDependencyStyles(page.dependencies)
-    if (!is.empty(mappedStyles)) {
-      page.dependencyStyles = mappedStyles
-    }
     return page
   })
 
@@ -79,7 +57,7 @@ does not export a view function or page.View key.`)
       path: path.join(config.DIR.PUBLIC, '404.html'),
       View: () => div('404 - not found'),
     }
-    page404.dependencies = getDependencies(page404.View, global.keys)
+    page404.dependencies = getDependencies(page404.View)
     pages.push(page404)
   }
 

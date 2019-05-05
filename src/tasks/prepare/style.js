@@ -36,10 +36,17 @@ module.exports = app => {
     resetStyles.push(handleStyleFunctions(existingLayoutCssStyles))
   }
 
-  app.pages
-    .filter(p => p.dependencyStyles)
-    .forEach(page => {
-      styles.push(page.dependencyStyles)
+  Object.entries(app.dependencies)
+    .filter(([_, d]) => d.style)
+    .forEach(([name, dep]) => {
+      let style = dep.style
+      const selector = `.${name}`
+      if (!style[selector]) {
+        style = {
+          [selector]: style
+        }
+      }
+      styles.push(handleStyleFunctions(style))
     })
 
   // load user's chosen theme, if it is set and exists, and merge it over the styles
@@ -78,7 +85,7 @@ module.exports = app => {
   app.pages
     .filter(p => p.style)
     .forEach(page => {
-      styles.push(page.style)
+      styles.push(handleStyleFunctions(page.style))
     })
 
   const maybeAppFile = path.join(config.ROOT, 'app.js')

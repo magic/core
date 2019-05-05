@@ -1,29 +1,29 @@
+const deep = require('@magic/deep')
 const { getDependencies, fs } = require('../../../lib')
 
 const requireLib = ([name, fd]) => {
   try {
-    return [name, require(fd), getDependencies(fs.readFileSync(fd), global.keys)]
+    return [name, require(fd), getDependencies(fs.readFileSync(fd))]
   } catch (e) {
     throw new Error(`LIB.[name] with fd = ${fd} can not be found`)
   }
 }
 
 const mapLibToGlobal = libs => {
-  global.LIB = global.LIB || {}
+  const lib = {}
 
   let dependencies = {}
-  Object.entries(libs).forEach(lib => {
-    const [name, val, deps] = requireLib(lib)
-    deps.forEach(dep => {
-      Object.entries(dep).forEach(([name, val]) => {
-        dependencies[name] = val
-      })
-    })
+  Object.entries(libs).forEach(l => {
+    const [name, val, deps] = requireLib(l)
+    dependencies = deep.merge(deps, dependencies)
 
-    global.LIB[name] = val
+    lib[name] = val
   })
 
-  return dependencies
+  return {
+    dependencies,
+    lib,
+  }
 }
 
 module.exports = mapLibToGlobal

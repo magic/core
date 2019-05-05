@@ -7,4 +7,5 @@ module.exports = {
   handlePageDependencyStyles: require('./handlePageDependencyStyles'),
   handleStyleFunctions: require('./handleStyleFunctions'),
   CHECK_PROPS: require('./CHECK_PROPS'),
+  mapDepsToObject: require('./mapDepsToObject'),
 }
