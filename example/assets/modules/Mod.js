@@ -2,7 +2,7 @@ const Mod = state =>
   div({ class: 'Mod' }, [
     h3('Mod.View'),
     p([
-      'this is Mod.View. it gets loaded from ',
+      'this is Mod. it gets loaded from ',
       Link({ to: 'https://github.com/magic/core/example/assets/module.js' }, '/assets/module.js'),
     ]),
     p([

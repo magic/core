@@ -28,20 +28,6 @@ Menu.style = {
   margin: '1.5em 0 0',
   position: 'relative',
 
-  li: {
-    float: 'left',
-    margin: '0 .5em 0 0',
-
-    '&.active': {
-      '> a': {
-        textDecoration: 'underline',
-      },
-    },
-    a: {
-      display: 'block',
-    },
-  },
-
   ul: {
     ul: {
       position: 'absolute',
@@ -57,7 +43,7 @@ Menu.Item = ({ url, text, items = [], collapse, ...item }) => {
   }
 
   const p = {
-    class: 'Item'
+    class: 'MenuItem'
   }
   if (item.to === url) {
     p.class += ' active'
@@ -69,6 +55,20 @@ Menu.Item = ({ url, text, items = [], collapse, ...item }) => {
   }
 
   return li(p, [item.to ? Link(item, text) : span(item, text), children])
+}
+
+Menu.Item.style =  {
+  float: 'left',
+  margin: '0 .5em 0 0',
+
+  '&.active': {
+    '> a': {
+      textDecoration: 'underline',
+    },
+  },
+  a: {
+    display: 'block',
+  },
 }
 
 module.exports = Menu
