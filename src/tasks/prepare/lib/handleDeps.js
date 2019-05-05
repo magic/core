@@ -2,8 +2,8 @@ const is = require('@magic/types')
 const { isUpperCase } = require('../../../lib/')
 const stringifyObject = require('./stringifyObject')
 
-const handleDependencies = ([name, component]) => {
-  if (is.fn(component) && global.tags.body[name]) {
+const handleDependencies = ([name, component], i, modules) => {
+  if (is.fn(component) && !isUpperCase(name)) {
     return `const ${name} = C('${name}')\n`
   }
 

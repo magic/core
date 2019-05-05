@@ -1,9 +1,5 @@
 const is = require('@magic/types')
 const path = require('path')
-const deep = require('@magic/deep')
-
-const { isUpperCase, getDependencies } = require('../../lib')
-const { handlePageDependencyStyles, handleStyleFunctions } = require('./lib')
 
 const preparePages = files => {
   const pages = files.map(file => {
@@ -57,7 +53,6 @@ does not export a view function or page.View key.`)
       path: path.join(config.DIR.PUBLIC, '404.html'),
       View: () => div('404 - not found'),
     }
-    page404.dependencies = getDependencies(page404.View)
     pages.push(page404)
   }
 

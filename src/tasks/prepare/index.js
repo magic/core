@@ -1,26 +1,22 @@
-const path = require('path')
-
 const is = require('@magic/types')
-const deep = require('@magic/deep')
 const { getFiles, getPages, isUpperCase, fs } = require('../../lib')
+
 const prepareGlobals = require('./globals')
 const prepareClient = require('./client')
 const preparePages = require('./pages')
 const prepareStyle = require('./style')
-const prepareDependencies = require('./dependencies')
 
 const { isGlobal } = require('./lib')
 
 const prepare = async app => {
-  await prepareGlobals()
+  const { modules, lib } = await prepareGlobals(app)
 
   const files = await getPages()
 
   app.files = files
 
-  // using merge here to make sure app.state and app.actions are being set if undefined
-  app.state = deep.merge({}, app.state)
-  app.actions = deep.merge({}, app.actions)
+  app.state = app.state || {}
+  app.actions = app.actions || {}
 
   // collect the pages, create their states
   app.pages = preparePages(files)
@@ -58,17 +54,9 @@ const prepare = async app => {
     }
   }
 
-  const { lib, modules } = await prepareDependencies(app)
-
-  app.dependencies = modules
   app.lib = lib
 
-  Object.entries(modules).forEach(([key, val]) => {
-    global.keys.add(key)
-    global[key] = val
-  })
-
-  app.style = await prepareStyle(app)
+  app.style = await prepareStyle({ app, modules })
 
   // merge component states and actions into app.state[componentName].
   // this makes all identical components share their state and actions.
@@ -101,6 +89,8 @@ const prepare = async app => {
         })
       }
     })
+
+  app.modules = modules
 
   // create client magic.js file
   app.client = {

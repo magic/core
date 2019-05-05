@@ -1,12 +1,48 @@
 const is = require('@magic/types')
 const deep = require('@magic/deep')
 const path = require('path')
-const { fs } = require('../../lib')
+const { fs, isUpperCase } = require('../../lib')
 const { handleStyleFunctions } = require('./lib')
 
 const Magic = require('../../modules/admin')
 
-module.exports = app => {
+const findModuleStyles = (modules, parent) => {
+  let styles = {}
+  Object.entries(modules)
+    .filter(([_, m]) => !is.empty(m.style))
+    .forEach(([name, mod]) => {
+      const selector = `.${name}`
+      let style = mod.style
+      if (!mod.style[selector]) {
+        style = {
+          [selector]: style,
+        }
+      }
+
+      if (parent) {
+        const parentSelector = `.${parent}`
+        // parent style overwrites child style
+        styles[parentSelector] = {
+          ...styles[parentSelector],
+          ...style,
+        }
+      } else {
+        styles = deep.merge(styles, style)
+      }
+
+      Object.entries(mod)
+        .filter(([k]) => isUpperCase(k))
+        .filter(([_, m]) => !is.empty(m.style))
+        .forEach(([subName, subMod]) => {
+          const subStyles = findModuleStyles({ [subName]: subMod }, name)
+          styles = deep.merge(styles, subStyles)
+        })
+    })
+
+  return styles
+}
+
+module.exports = ({ app, modules }) => {
   let resetStyles = []
   let styles = []
 
@@ -36,18 +72,9 @@ module.exports = app => {
     resetStyles.push(handleStyleFunctions(existingLayoutCssStyles))
   }
 
-  Object.entries(app.dependencies)
-    .filter(([_, d]) => d.style)
-    .forEach(([name, dep]) => {
-      let style = dep.style
-      const selector = `.${name}`
-      if (!style[selector]) {
-        style = {
-          [selector]: style,
-        }
-      }
-      styles.push(handleStyleFunctions(style))
-    })
+  // load all styles from all modules
+  const moduleStyles = findModuleStyles(modules)
+  styles = deep.merge(styles, moduleStyles)
 
   // load user's chosen theme, if it is set and exists, and merge it over the styles
   if (config.THEME) {
