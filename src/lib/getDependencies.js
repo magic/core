@@ -1,4 +1,5 @@
 const is = require('@magic/types')
+const deep = require('@magic/deep')
 
 const isUpperCase = require('./isUpperCase')
 const getUsedComponents = require('./getUsedComponents')
@@ -50,9 +51,9 @@ const getDependencies = (props, parent) => {
       } else {
         const dependencies = getDependencies(v.toString())
         dependencies.forEach(dep => {
-          Object.entries(dep).forEach(([kk, vv]) => {
-            entries[kk] = vv
-          })
+          const deps = deep.flatten(Object.entries(dep)
+            .map(([kk, vv]) => getDependencies(vv.toString(), kk)))
+          entries = deep.merge(entries, deps)
         })
       }
     })
