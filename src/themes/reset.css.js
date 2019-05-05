@@ -42,6 +42,7 @@ const reset = {
   },
   'ol, ul': {
     listStyle: 'none',
+    display: 'inline-block',
   },
   'blockquote, q': {
     quotes: 'none',
