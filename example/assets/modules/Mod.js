@@ -1,5 +1,5 @@
 const Mod = state =>
-  div({ class: 'Mod View' }, [
+  div({ class: 'Mod' }, [
     h3('Mod.View'),
     p([
       'this is Mod.View. it gets loaded from ',
@@ -19,21 +19,13 @@ Mod.state = {
 }
 
 Mod.style = {
-  '.Mod': {
-    margin: '0 0 1em',
-    padding: '0.5em',
-    border: '1px solid',
+  margin: '0 0 1em',
+  padding: '0.5em',
+  border: '1px solid',
+  borderColor: 'green',
 
-    h3: {
-      margin: 0,
-    },
-
-    '&.View': {
-      borderColor: 'green',
-    },
-    '&.Component': {
-      borderColor: 'red',
-    },
+  h3: {
+    margin: 0,
   },
 }
 
@@ -48,13 +40,21 @@ Mod.Component = props => () => {
   CHECK_PROPS(props, Mod.Component.props, 'Mod.Component')
   const header = props.header || props.title
 
-  return div({ class: 'Mod Component' }, [
-    header && h3(header),
+  return div({ class: 'ModComponent' }, [
+    header && h5(header),
     p([
       'Mod.Component, a second component in ',
       Link({ to: 'https://github.com/magic/core/example/assets/module.js' }, '/assets/module.js'),
     ]),
   ])
+}
+
+Mod.Component.lib = {
+  ModComponentTest: require.resolve('../lib/module-exports.js'),
+}
+
+Mod.Component.style = {
+  borderColor: 'orange',
 }
 
 Mod.Component.props = [{ key: 'header', type: ['string', 'array'], required: ['title'] }]
