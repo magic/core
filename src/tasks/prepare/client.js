@@ -1,5 +1,4 @@
 const is = require('@magic/types')
-const deep = require('@magic/deep')
 const { fs } = require('../../lib')
 
 const { stringifyObject, handleDeps } = require('./lib')
@@ -23,15 +22,9 @@ const CHECK_PROPS = ${global.CHECK_PROPS.toString()}
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
 
-  if (config.ENV !== 'production') {
-    // add all html tags to development bundle.
-    // this will allow easier usage of wysiwyg editors
-    app.dependencies = deep.merge(global.tags.body, app.dependencies)
-  }
-
-  // create string of required dependent modules
-
-  const depString = Object.entries(app.dependencies)
+  // create string of modules
+  // unused tags will be removed by dead code removal
+  const depString = Object.entries(app.modules)
     .map(handleDeps)
     .join('')
 
@@ -47,6 +40,7 @@ const CHECK_PROPS = ${global.CHECK_PROPS.toString()}
 
     Object.entries(app.lib).forEach(([name, res]) => {
       res = require.resolve(res)
+
       const libContent = fs.readFileSync(res, 'utf8')
       let lib = libContent
       if (libContent.includes('module.exports')) {
