@@ -13,20 +13,27 @@ const findModuleStyles = (modules, parent) => {
     .forEach(([name, mod]) => {
       const selector = `.${name}`
       let style = mod.style
-      if (!mod.style[selector]) {
-        style = {
-          [selector]: style,
-        }
-      }
 
       if (parent) {
         const parentSelector = `.${parent}`
+
+        if (!style[parentSelector]) {
+          style = {
+            [`${parentSelector}${name}`]: style,
+          }
+        }
+
         // parent style overwrites child style
         styles[parentSelector] = {
           ...styles[parentSelector],
           ...style,
         }
       } else {
+        if (!mod.style[selector]) {
+          style = {
+            [selector]: style,
+          }
+        }
         styles = deep.merge(styles, style)
       }
 
