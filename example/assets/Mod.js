@@ -57,8 +57,6 @@ Mod.Component = props => () => {
   ])
 }
 
-Mod.Component.props = [
-  { key: 'header', type: ['string', 'array'], required: ['title'] },
-]
+Mod.Component.props = [{ key: 'header', type: ['string', 'array'], required: ['title'] }]
 
 module.exports = Mod
