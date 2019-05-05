@@ -37,6 +37,9 @@ Menu.style = {
         textDecoration: 'underline',
       },
     },
+    a: {
+      display: 'block',
+    },
   },
 
   ul: {
@@ -59,7 +62,7 @@ Menu.Item = ({ url, text, items = [], collapse, ...item }) => {
   }
 
   let children = []
-  if (items && (url.startsWith(item.to) || !collapse)) {
+  if (items.length && (url.startsWith(item.to) || !collapse)) {
     children = ul(items.map(i => Menu.Item({ url, collapse, ...i })))
   }
 
