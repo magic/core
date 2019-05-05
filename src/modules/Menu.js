@@ -56,9 +56,11 @@ Menu.Item = ({ url, text, items = [], collapse, ...item }) => {
     return
   }
 
-  const p = {}
+  const p = {
+    class: 'Item'
+  }
   if (item.to === url) {
-    p.class = 'active'
+    p.class += ' active'
   }
 
   let children = []
