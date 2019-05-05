@@ -5,6 +5,7 @@ module.exports = {
   mkdirp: require('./mkdirp'),
   isTagUsed: require('./isTagUsed'),
   getDependencies: require('./getDependencies'),
+  getUsedComponents: require('./getUsedComponents'),
   rmrf: require('./rmrf'),
   isLocalPath: require('./isLocalPath'),
   addTrailingSlash: require('./addTrailingSlash'),
