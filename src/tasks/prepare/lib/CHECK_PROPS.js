@@ -1,37 +1,43 @@
 const CHECK_PROPS = (props, propTypes, name = 'Module') => {
-  const is = (e, ...types) => {
-    const match = types.some(type => {
-      if (type === 'array') {
-        return Array.isArray(e)
-      }
-      if (type === 'error') {
-        return e instanceof Error
-      }
-      if (type === 'date') {
-        return e instanceof Date
-      }
+  const is = (e, ...types) =>
+    types.some(type => (typeof is[type] === 'function' ? is[type](e) : typeof e === type))
 
-      return typeof e === type
-    })
+  is.number = e => e === +e
+  is.integer = e => e === +e && e === (e | 0)
+  is.float = e => e === +e
 
-    return match
-  }
+  is.array = e => Array.isArray(e)
+  is.regexp = e => e instanceof RegExp
+  is.date = e => e instanceof Date
+  is.error = e => e instanceof Error
+  is.null = e => e === null
+  is.promise = e => e instanceof Promise
 
   propTypes.map(propType => {
     const { key, required, type } = propType
-    const value = props[key]
+    let value = props[key]
 
     const types = Array.isArray(type) ? type : [type]
 
     if (!required) {
       types.push('undefined')
     }
+    const match = is(value, ...types)
+
+    if (Array.isArray(required)) {
+      if (!match) {
+        const altExists = required.filter(key => is(props[key], ...types))
+        if (altExists.length) {
+          value = props[altExists[0]]
+        }
+      }
+    }
 
     if (!is(value, ...types)) {
       const typeInfo = types.length > 1 ? 'one of' : 'a'
       const typeString = types.length > 1 ? `["${types.join(', "')}"]` : types[0]
       console.error(`${name} needs props.${key} to be ${typeInfo} ${typeString}`)
-    } else if(required) {
+    } else if (required) {
       if (typeof value === 'object' && !Object.keys(value).length) {
         let typeString = ''
         if (types.includes('array')) {
