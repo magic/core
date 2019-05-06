@@ -54,7 +54,7 @@ Mod.Component.lib = {
 }
 
 Mod.Component.style = {
-  borderColor: 'orange',
+  border: '1px solid orange',
 }
 
 Mod.Component.props = [{ key: 'header', type: ['string', 'array'], required: ['title'] }]
