@@ -15,18 +15,10 @@ const findModuleStyles = (modules, parent) => {
       let style = mod.style
 
       if (parent) {
-        const parentSelector = `.${parent}`
+        const parentSelector = `.${parent}${name}`
 
-        if (!style[parentSelector]) {
-          style = {
-            [`${parentSelector}${name}`]: style,
-          }
-        }
-
-        // parent style overwrites child style
-        styles[parentSelector] = {
-          ...styles[parentSelector],
-          ...style,
+        style = {
+          [parentSelector]: style,
         }
       } else {
         if (!mod.style[selector]) {
@@ -34,8 +26,9 @@ const findModuleStyles = (modules, parent) => {
             [selector]: style,
           }
         }
-        styles = deep.merge(styles, style)
       }
+
+      styles = deep.merge(styles, style)
 
       Object.entries(mod)
         .filter(([k]) => isUpperCase(k))
