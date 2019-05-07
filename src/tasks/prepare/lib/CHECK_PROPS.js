@@ -63,6 +63,8 @@ const CHECK_PROPS = (props, propTypeDecl, name = 'Module') => {
       }
     }
   })
+
+  return true
 }
 
 module.exports = CHECK_PROPS
