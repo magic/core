@@ -3,7 +3,6 @@ const fs = require('fs')
 const browserify = require('browserify')
 const babel = require('@babel/core')
 
-
 const isProd = config.ENV === 'production'
 const isDev = !isProd
 

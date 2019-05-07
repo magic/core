@@ -111,10 +111,7 @@ module.exports = {
           {
             to: '/modules/#menu',
             text: 'menu',
-            items: [
-              { to: '-props', text: 'props' },
-              { to: '-sub-menus', text: 'sub menus' },
-            ],
+            items: [{ to: '-props', text: 'props' }, { to: '-sub-menus', text: 'sub menus' }],
           },
           { to: '#link', text: 'link' },
           { to: '#footer', text: 'footer' },

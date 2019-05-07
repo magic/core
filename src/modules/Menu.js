@@ -43,7 +43,7 @@ Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, ...item })
   }
 
   const p = {
-    class: 'MenuItem'
+    class: 'MenuItem',
   }
   if (item.to === url) {
     p.class += ' active'
@@ -70,7 +70,7 @@ Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, ...item })
   return li(p, [item.to ? Link(item, text) : span(item, text), children])
 }
 
-Menu.Item.style =  {
+Menu.Item.style = {
   float: 'left',
   margin: '0 .5em 0 0',
 

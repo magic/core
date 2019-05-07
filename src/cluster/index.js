@@ -13,12 +13,12 @@ const runCmd = require('./runCmd')
 
 const runCluster = async ({ cmds, argv }) => {
   process
-  .on('unhandledRejection', error => {
-    process.send({ evt: 'error', error: error.toString() })
-  })
-  .on('uncaughtException', error => {
-    process.send({ evt: 'error', error: error.toString() })
-  })
+    .on('unhandledRejection', error => {
+      process.send({ evt: 'error', error: error.toString() })
+    })
+    .on('uncaughtException', error => {
+      process.send({ evt: 'error', error: error.toString() })
+    })
 
   if (cluster.isMaster) {
     if (cmds.clean) {
@@ -108,6 +108,5 @@ const runCluster = async ({ cmds, argv }) => {
     }
   }
 }
-
 
 module.exports = runCluster
