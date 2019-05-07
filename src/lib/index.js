@@ -3,8 +3,6 @@ module.exports = {
   getDirectories: require('./getDirectories'),
   isUpperCase: require('./isUpperCase'),
   mkdirp: require('./mkdirp'),
-  isTagUsed: require('./isTagUsed'),
-  getUsedComponents: require('./getUsedComponents'),
   rmrf: require('./rmrf'),
   isLocalPath: require('./isLocalPath'),
   addTrailingSlash: require('./addTrailingSlash'),
