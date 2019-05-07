@@ -1,5 +1,6 @@
 const http = require('http')
-const util = require('util')
+
+const log = require('@magic/log')
 
 const handler = require('./handler')
 
@@ -18,7 +19,7 @@ const startServer = async (server, options) => {
   } catch (e) {
     if (e.code === 'EADDRINUSE') {
       options.port += 1
-      console.log(`Address in use, incrementing port to ${options.port}...`)
+      log.warn(`Address in use', 'incrementing port to ${options.port}...`)
     } else {
       throw e
     }
@@ -42,9 +43,9 @@ const serve = async app => {
 
   try {
     const { port, host } = await startServer(server, options)
-    console.log(`listening to http://${host}:${port}${config.WEB_ROOT}`)
+    log.success('listening', `to http://${host}:${port}${config.WEB_ROOT}`)
   } catch (e) {
-    console.error(e)
+    log.error(e)
   }
 
   return server

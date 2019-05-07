@@ -1,6 +1,8 @@
 const path = require('path')
+
 const deep = require('@magic/deep')
 const is = require('@magic/types')
+const log = require('@magic/log')
 
 const { getDirectories, getFiles, isUpperCase, toPascal } = require('../../lib')
 const builtinModules = require('../../modules')
@@ -19,7 +21,7 @@ const findNodeModules = async () => {
           const mod = require(nodeModule)
           modules[name] = mod
         } catch (e) {
-          console.error(`Error requiring node_module: ${nodeModule}, error: ${e.message}`)
+          log.error('Error', `requiring node_module: ${nodeModule}, error: ${e.message}`)
         }
       }
     })
@@ -38,7 +40,7 @@ const findInstalledModules = async () => {
         const name = path.basename(m).replace(path.extname(m), '')
         modules[name] = mod
       } catch (e) {
-        console.error(`Error requiring local magic-module: ${m}, error: ${e.message}`)
+        log.error('Error' `requiring local magic-module: ${m}, error: ${e.message}`)
       }
     })
   return modules

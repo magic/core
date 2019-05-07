@@ -1,3 +1,5 @@
+const log = require('@magic/log')
+
 // git subtree push --prefix example/public origin gh-pages
 const { getGitConfig, xc } = require('../../lib/')
 
@@ -11,9 +13,9 @@ const connect = async () => {
   const cmdArgv = `${cmdPrefix} ${cmdOnto}`
   const cmd = `git subtree push ${cmdArgv}`
 
-  console.time(cmd)
+  log.time(cmd)
   await xc(cmd)
-  console.timeEnd(cmd)
+  log.timeEnd(cmd)
 }
 
 module.exports = connect

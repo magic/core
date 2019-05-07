@@ -1,5 +1,7 @@
 const path = require('path')
 
+const log = require('@magic/log')
+
 const fs = require('./fs')
 const mkdirp = require('./mkdirp')
 const getFiles = require('./getFiles')
@@ -13,7 +15,7 @@ const getPages = async () => {
     return files
   } catch (e) {
     if (config.DIR.PAGES.startsWith(process.cwd())) {
-      console.warn('NOEXIST', `${config.DIR.PAGES} does not exist or does not contain pages`)
+      log.warn('NOEXIST', `${config.DIR.PAGES} does not exist or does not contain pages`)
       const indexPage = "module.exports = {\n  View: () => div('hello world'),\n}"
       const pagePath = path.join(config.DIR.PAGES, 'index.js')
       await mkdirp(config.DIR.PAGES)
