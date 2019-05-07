@@ -48,5 +48,5 @@ magic dev --watch src
 
 const res = cli(args)
 
-const run = require('./cluster.js')
+const run = require('./cluster')
 run(res)

@@ -4,38 +4,37 @@ const path = require('path')
 const log = require('@magic/log')
 const is = require('@magic/types')
 
-global.config = require('./config')
-global.CHECK_PROPS = require('./tasks/prepare/lib/CHECK_PROPS')
-const tasks = require('./tasks')
-const App = require('./modules/app')
+global.config = require('../config')
+global.CHECK_PROPS = require('../tasks/prepare/lib/CHECK_PROPS')
+const tasks = require('../tasks')
+const App = require('../modules/app')
 
-const runCmd = async (cmd, ...args) => {
-  console.time(cmd)
-  const result = await tasks[cmd](...args)
-  console.timeEnd(cmd)
-  return result
-}
-
-const bailEarly = async cmds => {
-  if (cmds.clean) {
-    await runCmd('clean')
-  }
-
-  if (cmds.connect) {
-    await runCmd('connect')
-  }
-
-  if (cmds.publish) {
-    await runCmd('publish')
-  }
-
-  const bail = !cmds.build && !cmds.serve
-  return bail
-}
+const runCmd = require('./runCmd')
 
 const runCluster = async ({ cmds, argv }) => {
+  process
+  .on('unhandledRejection', error => {
+    process.send({ evt: 'error', error: error.toString() })
+  })
+  .on('uncaughtException', error => {
+    process.send({ evt: 'error', error: error.toString() })
+  })
+
   if (cluster.isMaster) {
-    const bail = await bailEarly(cmds)
+    if (cmds.clean) {
+      await runCmd('clean')
+    }
+
+    if (cmds.connect) {
+      await runCmd('connect')
+    }
+
+    if (cmds.publish) {
+      await runCmd('publish')
+    }
+
+    const bail = !cmds.build && !cmds.serve
+
     if (bail) {
       return
     }
@@ -52,6 +51,7 @@ const runCluster = async ({ cmds, argv }) => {
         if (msg.evt === 'change' || msg.evt === 'rename') {
           const now = new Date().getTime()
           const delay = now - lastCall
+          lastCall = now
           if (delay > 10) {
             // files have changed, restart build worker
             buildWorker.kill(1)
@@ -106,15 +106,8 @@ const runCluster = async ({ cmds, argv }) => {
         process.send({ evt: 'quit' })
       }
     }
-
-    process
-      .on('unhandledRejection', error => {
-        process.send({ evt: 'error', error: error.toString() })
-      })
-      .on('uncaughtException', error => {
-        process.send({ evt: 'error', error: error.toString() })
-      })
   }
 }
+
 
 module.exports = runCluster
