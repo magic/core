@@ -135,9 +135,6 @@ module.exports = async ({ str }) => {
             res(src.toString())
           }
         })
-        .catch(err => {
-          log.error(e, `error in page ${filePath}`)
-        })
     )
   } catch(e) {
     log.error(e, `error in page ${filePath}`)
