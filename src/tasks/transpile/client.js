@@ -1,7 +1,10 @@
 const path = require('path')
 const fs = require('fs')
+
+const log = require('@magic/log')
+
 const browserify = require('browserify')
-const babel = require('@babel/core')
+// const babel = require('@babel/core')
 
 const isProd = config.ENV === 'production'
 const isDev = !isProd
@@ -53,13 +56,12 @@ if (isProd) {
   if (minify) {
     plugins.push('minify-simplify')
     // seems to have no real benefit
+    // type constructors are a nono anyways.
     // plugins.push('minify-type-constructors')
     plugins.push('minify-builtins')
     plugins.push('transform-minify-booleans')
   }
 }
-
-// console.log({ plugins })
 
 const babelOpts = {
   filename: 'magic.js',
@@ -119,19 +121,25 @@ module.exports = async ({ str }) => {
 
   // const res = await babel.transformFromAstAsync(ast, str, babelOpts)
   // console.log({res})
-
-  return new Promise((res, rej) =>
-    browserify(filePath)
-      .transform('babelify', babelOpts)
-      .bundle((err, src) => {
-        if (!config.KEEP_CLIENT && !process.argv.includes('--keep-client')) {
-          fs.unlinkSync(filePath)
-        }
-        if (err) {
-          rej(err)
-        } else {
-          res(src.toString())
-        }
-      }),
-  )
+  try {
+    return new Promise((res, rej) =>
+      browserify(filePath)
+        .transform('babelify', babelOpts)
+        .bundle((err, src) => {
+          if (!config.KEEP_CLIENT && !process.argv.includes('--keep-client')) {
+            fs.unlinkSync(filePath)
+          }
+          if (err) {
+            rej(err)
+          } else {
+            res(src.toString())
+          }
+        })
+        .catch(err => {
+          log.error(e, `error in page ${filePath}`)
+        })
+    )
+  } catch(e) {
+    log.error(e, `error in page ${filePath}`)
+  }
 }
