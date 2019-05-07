@@ -36,7 +36,7 @@ Menu.style = {
   },
 }
 
-Menu.Item = ({ url, text, items = [], collapse, ...item }) => {
+Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, ...item }) => {
   // if the item has no values, we quit
   if (!item.to && !text) {
     return
@@ -49,9 +49,22 @@ Menu.Item = ({ url, text, items = [], collapse, ...item }) => {
     p.class += ' active'
   }
 
+  if (parentTo) {
+    const isExternal = item.to.includes('://')
+    const isAbsolute = item.to.startsWith('/')
+    const startsLikeParent = !parentTo || item.to.startsWith(parentTo)
+    if (!startsLikeParent && !isAbsolute && !isExternal) {
+      if (!parentTo.endsWith('/') && !item.to.startsWith('-')) {
+        parentTo = `${parentTo}/`
+      }
+
+      item.to = parentTo + item.to
+    }
+  }
+
   let children = []
   if (items.length && (url.startsWith(item.to) || !collapse)) {
-    children = ul(items.map(i => Menu.Item({ url, collapse, ...i })))
+    children = ul(items.map(i => Menu.Item({ parentTo: item.to, url, collapse, ...i })))
   }
 
   return li(p, [item.to ? Link(item, text) : span(item, text), children])
