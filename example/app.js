@@ -9,25 +9,25 @@ module.exports = {
         to: '/concepts/',
         text: 'concepts',
         items: [
-          { to: '/concepts/#philosophy', text: 'philosophy' },
+          { to: '#philosophy', text: 'philosophy' },
           { to: '/concepts/#modules', text: 'modules' },
           {
-            to: '/concepts/#state',
+            to: '#state',
             text: 'state',
             items: [{ to: '/concepts/#state-example', text: 'example state' }],
           },
           {
-            to: '/concepts/#actions',
+            to: '#actions',
             text: 'actions',
             items: [{ to: '/concepts/#actions-example', text: 'example actions' }],
           },
           {
-            to: '/concepts/#views',
+            to: '#views',
             text: 'views',
             items: [{ to: '/concepts/#views-example', text: 'example view' }],
           },
           {
-            to: '/concepts/#styles',
+            to: '#styles',
             text: 'styles',
             items: [
               { to: '/concepts/#styles-example', text: 'example styles' },
@@ -35,12 +35,12 @@ module.exports = {
             ],
           },
           {
-            to: '/concepts/#globals',
+            to: '#globals',
             text: 'global',
             items: [{ to: '/concepts/#globals-example', text: 'example global' }],
           },
           {
-            to: '/concepts/#lambdas',
+            to: '#lambdas',
             text: 'server lambdas',
             items: [
               { to: '/concepts/#lambdas-example', text: 'single lambda' },
@@ -48,7 +48,7 @@ module.exports = {
             ],
           },
           {
-            to: '/concepts/#libs',
+            to: '#libs',
             text: 'external libs',
             items: [
               { to: '/concepts/#libs-dir-or-file', text: 'lib dir or file' },
@@ -65,7 +65,7 @@ module.exports = {
         text: 'files & directories',
         items: [
           {
-            to: '/files/#pages',
+            to: '#pages',
             text: '/pages',
             items: [
               { to: '/files/#pages-dir-structure', text: 'url mapping' },
@@ -73,28 +73,28 @@ module.exports = {
             ],
           },
           {
-            to: '/files/#assets',
+            to: '#assets',
             text: '/assets',
             items: [{ to: '/files/#assets-example', text: 'example' }],
           },
           { to: '/files/#static', text: '/assets/static' },
           {
-            to: '/files/#themes',
+            to: '#themes',
             text: '/assets/themes',
             items: [{ to: '/files/#themes-example', text: 'example' }],
           },
           {
-            to: '/files/#app',
+            to: '#app',
             text: '/assets/app.js',
             items: [{ to: '/files/#app-example', text: 'example' }],
           },
           {
-            to: '/files/#config',
+            to: '#config',
             text: '/config.js',
             items: [{ to: '/files/#config-example', text: 'example' }],
           },
           {
-            to: '/files/#menu',
+            to: '#menu',
             text: '/assets/Menu.js',
             items: [{ to: '/files/#menu-example', text: 'example' }],
           },
@@ -104,39 +104,39 @@ module.exports = {
         to: '/modules/',
         text: 'modules',
         items: [
-          { to: '/modules/#definition', text: 'definition' },
-          { to: '/modules/#usage', text: 'usage' },
-          { to: '/modules/#custom-module', text: 'custom modules' },
-          { to: '/modules/#preinstalled', text: 'preinstalled' },
+          { to: '#definition', text: 'definition' },
+          { to: '#usage', text: 'usage' },
+          { to: '#custom-module', text: 'custom modules' },
+          { to: '#preinstalled', text: 'preinstalled' },
           {
             to: '/modules/#menu',
             text: 'menu',
             items: [
-              { to: '/modules/#menu-props', text: 'props' },
-              { to: '/modules/#menu-sub-menus', text: 'sub menus' },
+              { to: '-props', text: 'props' },
+              { to: '-sub-menus', text: 'sub menus' },
             ],
           },
-          { to: '/modules/#link', text: 'link' },
-          { to: '/modules/#footer', text: 'footer' },
-          { to: '/modules/#magic-modules-list', text: '@magic-modules' },
+          { to: '#link', text: 'link' },
+          { to: '#footer', text: 'footer' },
+          { to: '#magic-modules-list', text: '@magic-modules' },
         ],
       },
       {
         to: '/themes/',
         text: 'themes',
-        items: [{ to: '/themes/#magic-themes-list', text: '@magic-themes' }],
+        items: [{ to: '#magic-themes-list', text: '@magic-themes' }],
       },
       {
         to: '/libraries/',
         text: 'libraries',
         items: [
-          { to: '/libraries/#require', text: 'require from' },
-          { to: '/libraries/#require-assets', text: '/assets/lib.js' },
-          { to: '/libraries/#require-app', text: '/app.js' },
-          { to: '/libraries/#require-page', text: 'modules / pages' },
-          { to: '/libraries/#example', text: 'example' },
-          { to: '/libraries/#caveat', text: 'caveat' },
-          { to: '/libraries/#magic-libraries-list', text: '@magic-libraries' },
+          { to: '#require', text: 'require from' },
+          { to: '#require-assets', text: '/assets/lib.js' },
+          { to: '#require-app', text: '/app.js' },
+          { to: '#require-page', text: 'modules / pages' },
+          { to: '#example', text: 'example' },
+          { to: '#caveat', text: 'caveat' },
+          { to: '#magic-libraries-list', text: '@magic-libraries' },
         ],
       },
     ],
