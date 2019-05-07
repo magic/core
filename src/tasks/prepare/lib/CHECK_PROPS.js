@@ -1,4 +1,4 @@
-const CHECK_PROPS = (props, propTypes, name = 'Module') => {
+const CHECK_PROPS = (props, propTypeDecl, name = 'Module') => {
   const is = (e, ...types) =>
     types.some(type => (typeof is[type] === 'function' ? is[type](e) : typeof e === type))
 
@@ -12,6 +12,16 @@ const CHECK_PROPS = (props, propTypes, name = 'Module') => {
   is.error = e => e instanceof Error
   is.null = e => e === null
   is.promise = e => e instanceof Promise
+
+  let propTypes = propTypeDecl
+  if (!propTypeDecl[0].key) {
+    let [ FALLBACK, ...pT ] = propTypeDecl
+    propTypes = pT
+
+    if (FALLBACK && typeof props === FALLBACK.type) {
+      return
+    }
+  }
 
   propTypes.map(propType => {
     const { key, required, type } = propType
@@ -53,8 +63,6 @@ const CHECK_PROPS = (props, propTypes, name = 'Module') => {
       }
     }
   })
-
-  return p
 }
 
 module.exports = CHECK_PROPS
