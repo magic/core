@@ -43,7 +43,7 @@ const serve = async app => {
 
   try {
     const { port, host } = await startServer(server, options)
-    log.success('listening', `to http://${host}:${port}${config.WEB_ROOT}`)
+    log(`listening to http://${host}:${port}${config.WEB_ROOT}`)
   } catch (e) {
     log.error(e)
   }
