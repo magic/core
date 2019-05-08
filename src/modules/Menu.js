@@ -60,7 +60,6 @@ Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, ...item })
   const rooted = item.to.startsWith(state.root) ? item.to : `${state.root}${item.to.substr(1)}`
   const active = url.startsWith(rooted)
   const current = url === rooted
-  console.log({ rooted, url })
   if (current) {
     p.class += ' active'
   }
