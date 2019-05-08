@@ -46,18 +46,8 @@ let app = {
         ]),
         body([
           div(
-            { id: 'magic' },
-            div(
-              {
-                class: 'wrapper',
-                oncreate: () => {
-                  if (typeof window !== 'undefined' && actions.go) {
-                    window.addEventListener('popstate', actions.go)
-                  }
-                },
-              },
-              Page(page.View),
-            ),
+            { id: 'Magic' },
+            Wrapper(page.View),
           ),
           script({ src: '/' + config.CLIENT_LIB_NAME + '.js' }),
         ]),
