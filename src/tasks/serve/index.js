@@ -19,7 +19,7 @@ const startServer = async (server, options) => {
   } catch (e) {
     if (e.code === 'EADDRINUSE') {
       options.port += 1
-      log.warn(`Address in use', 'incrementing port to ${options.port}...`)
+      log.warn('Address in use', `incrementing port to ${options.port}...`)
     } else {
       throw e
     }

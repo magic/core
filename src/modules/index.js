@@ -5,5 +5,6 @@ module.exports = {
   Magic: require('./admin'),
   Header: require('./Header'),
   Img: require('./Img'),
+  Page: require('./Page'),
   ...require('./tags'),
 }
