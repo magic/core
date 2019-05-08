@@ -16,4 +16,5 @@ module.exports = {
   fs: require('./fs'),
   toCamel: require('./toCamel'),
   toPascal: require('./toPascal'),
+  babel: require('./babel'),
 }
