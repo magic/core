@@ -7,20 +7,34 @@ const findModuleStyles = (modules, parent) => {
   Object.entries(modules)
     .filter(([_, m]) => !is.empty(m.style))
     .forEach(([name, mod]) => {
-      const selector = `.${name}`
+      let selector = `.${name}`
       let style = mod.style
 
       if (parent) {
-        const parentSelector = `.${parent}${name}`
+        selector = `.${parent}${name}`
+      }
 
+      if (!mod.style[selector]) {
+        const modStyle = {}
+        const metaStyle = {}
+        Object.entries(mod.style)
+          .forEach(([k,v]) => {
+            if (k.startsWith('@')) {
+              if (k.startsWith('@media')) {
+                if (!Object.keys(v).some(kk => kk.includes(`.${k}`))) {
+                  v = {
+                    [selector]: v
+                  }
+                }
+              }
+              metaStyle[k] = v
+            } else {
+              modStyle[k] = v
+            }
+          })
         style = {
-          [parentSelector]: style,
-        }
-      } else {
-        if (!mod.style[selector]) {
-          style = {
-            [selector]: style,
-          }
+          [selector]: modStyle,
+          ...metaStyle,
         }
       }
 
