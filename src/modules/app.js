@@ -106,9 +106,10 @@ if (maybeAppFile !== __filename && fs.existsSync(maybeAppFile)) {
   }
 }
 
-if (config.ENV === 'development') {
-  app.state = deep.merge(Magic.state, app.state)
-  app.actions = deep.merge(Magic.actions, app.actions)
-}
+// admin
+// if (config.ENV === 'development') {
+//  app.state = deep.merge(Magic.state, app.state)
+//  app.actions = deep.merge(Magic.actions, app.actions)
+// }
 
 module.exports = app
