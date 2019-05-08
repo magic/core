@@ -7,7 +7,8 @@ const { applyWebRoot } = require('../../lib')
 
 module.exports = app => page => {
   try {
-    const state = deep.merge(page.state, app.state, { url: page.name })
+    app.state.url = page.name
+    const state = deep.merge(page.state, app.state)
     const actions = deep.merge(page.actions, app.actions)
     const rendered = applyWebRoot(config, renderToString(app.View(page), state, actions))
 
