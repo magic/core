@@ -3,7 +3,7 @@ module.exports = {
   Link: require('./Link'),
   Footer: require('./Footer'),
   Magic: require('./admin'),
-  PageHead: require('./PageHead'),
+  Header: require('./Header'),
   Img: require('./Img'),
   ...require('./tags'),
 }

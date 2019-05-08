@@ -69,7 +69,7 @@ module.exports = {
         },
         [
           Admin,
-          PageHead,
+          Header,
           page
             ? div({ class: 'page' }, page(state, actions))
             : div({ class: 'page' }, '404 - not found'),
