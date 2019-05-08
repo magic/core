@@ -68,9 +68,9 @@ const prepareClient = async app => {
   const stateString = `const state = ${stringifyObject(app.state)}`
 
   // set state.url, can not be done above
-  const urlString = `\nstate.url = window.location.pathname`
+  const urlString = `state.url = window.location.pathname`
 
-  const rootString = `\nstate.root = '${config.WEB_ROOT}'`
+  const rootString = `state.root = '${config.WEB_ROOT}'`
 
   // create global actions object
   const actionString = `const actions = ${stringifyObject(app.actions)}\n`
@@ -98,7 +98,7 @@ const view = (state, actions) => {
     }
   }
 
-  return Page(page)(state, actions)
+  return Wrapper(page)(state, actions)
 }
 `
 
@@ -106,7 +106,7 @@ const view = (state, actions) => {
   // then mount the app in it.
   const createMagic = `
 const d = document
-let mD = d.getElementById('magic')
+let mD = d.getElementById('Magic')
 if (!mD) {
   mD = d.createElement('div')
   mD.id = 'magic'
@@ -157,6 +157,45 @@ app(state, actions, view, mD)\n`
         }
       }
     },
+
+    // CallExpression(path) {
+    //   const moduleName = path.node.callee.name
+    //   const excludedCalleeTypes = ['Link', 'Img', 'Pre']
+    //   if (!excludedCalleeTypes.some(t => moduleName === t)) {
+    //     if (moduleNames.includes(moduleName) && isUpperCase(moduleName)) {
+    //       console.log(path.node)
+    //     }
+    //     //   const args = path.node.arguments[0]
+    //   //   if (args.type === 'ObjectExpression') {
+    //   //     if (moduleName !== 'Link' && moduleName !== 'Img') {
+    //   //       let found = false
+    //   //       const props = args.properties
+    //   //       props
+    //   //         .filter(({ key }) => key && key.name === 'class')
+    //   //         .forEach(prop => {
+    //   //           const name = prop.key.name
+    //   //           const value = prop.value.value
+    //   //           found = true
+    //   //           console.log(moduleName, name, value)
+    //   //           // process.exit(1)
+    //   //         })
+
+    //   //       if (!found) {
+    //   //         console.log('no class prop given', moduleName, args.properties)
+    //   //       }
+    //   //     }
+    //   //   }
+    //   }
+    // },
+    // ObjectPattern(path) {
+    //   console.log(path)
+    //   process.exit(1)
+    //   const key = path.node.key.name
+    //   const value = path.node.value.value
+    //   if (key === 'class') {
+    //     console.log(key, value, path)
+    //   }
+    // },
   })
 
   const cleanDependencies = {}
