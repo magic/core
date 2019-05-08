@@ -41,14 +41,14 @@ module.exports = {
 // any page or module
 module.exports = () => div([
   'modules that do not need props can be used without calling them as a function ',
-  Mod.View,
+  Mod,
   'modules that need props: ',
-  Mod.View(propObject),
+  Mod(propObject),
 `),
 
-    h2({ id: 'custom-module' }, 'Mod.View and Mod.Component:'),
+    h2({ id: 'custom-module' }, 'Mod and Mod.Component:'),
 
-    Mod.View,
+    Mod,
 
     Mod.Component({ title: 'Mod Component Title, passed via props' }),
 
@@ -172,7 +172,7 @@ module.exports = {
 
     p('then, in a page or module'),
     Pre(`
-module.exports = () => Menu.View({ name: 'menuName', collapse: false })
+module.exports = () => Menu({ name: 'menuName', collapse: false })
 
 // output:
 <nav class="Menu">
