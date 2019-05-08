@@ -19,7 +19,7 @@ const prepare = async app => {
   app.actions = app.actions || {}
 
   // collect the pages, create their states
-  app.pages = preparePages(files)
+  app.pages = await preparePages(files)
 
   app.pages.map(page => {
     if (!is.empty(page.state)) {
@@ -94,7 +94,7 @@ const prepare = async app => {
 
   // create client magic.js file
   app.client = {
-    str: prepareClient(app),
+    str: await prepareClient(app),
   }
 
   // extract lambdas and prepare them
