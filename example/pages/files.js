@@ -88,14 +88,14 @@ module.exports = {
       ]),
 
       h3({ id: 'pages-dir-structure' }, 'pages directory to url map, for the domain mag.ic:'),
-      ul([
-        li('/pages/index.js === http://mag.ic/'),
-        li('/pages/pageName.js === http://mag.ic/pageName/'),
-        li('/pages/page-name.js === http://mag.ic/page-name/'),
-        li('/pages/page_name.js === http://mag.ic/page_name/'),
-        li('/pages/dir/index.js === http://mag.ic/dir/'),
-        li('/pages/dir/name.js === http://mag.ic/dir/name/'),
-      ]),
+      Pre(`
+/pages/index.js === http://mag.ic/
+/pages/pageName.js === http://mag.ic/pageName/
+/pages/page-name.js === http://mag.ic/page-name/
+/pages/page_name.js === http://mag.ic/page_name/
+/pages/dir/index.js === http://mag.ic/dir/
+/pages/dir/name.js === http://mag.ic/dir/name/
+`),
 
       h3({ id: 'pages-example' }, 'example page:'),
       Pre(examples.page),
