@@ -6,8 +6,6 @@ const { h } = require('hyperapp')
 
 const { fs } = require('../lib/')
 const config = require('../config')
-// const { ENV } = config
-const Magic = require('./admin')
 
 const { WEB_ROOT = '/', LANG = 'en' } = config
 
@@ -47,13 +45,25 @@ let app = {
           page.Head && page.Head(state, actions),
         ]),
         body([
-          app.Body(page.View, state, actions),
+          div(
+            { id: 'magic' },
+            div(
+              {
+                class: 'wrapper',
+                oncreate: () => {
+                  if (typeof window !== 'undefined' && actions.go) {
+                    window.addEventListener('popstate', actions.go)
+                  }
+                },
+              },
+              Page(page.View),
+            ),
+          ),
           script({ src: '/' + config.CLIENT_LIB_NAME + '.js' }),
         ]),
       ]),
     ]
   },
-  Body: Magic,
 }
 
 let libFiles
