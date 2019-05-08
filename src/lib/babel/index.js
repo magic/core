@@ -49,16 +49,14 @@ if (isProd) {
 
   if (minify) {
     plugins.push('minify-simplify')
-    // seems to have no real benefit
-    // type constructors are a nono anyways.
-    // plugins.push('minify-type-constructors')
+    plugins.push('minify-type-constructors')
     plugins.push('minify-builtins')
     plugins.push('transform-minify-booleans')
   }
 }
 
 babel.opts = {
-  filename: 'magic.js',
+  filename: `${config.CLIENT_LIB_NAME}.js`,
   minified: isProd,
   comments: isDev,
   configFile: false,
