@@ -75,13 +75,6 @@ const prepareClient = async app => {
   // create global actions object
   const actionString = `const actions = ${stringifyObject(app.actions)}\n`
 
-  // get inner View from app
-  let b = app.Body.toString().split("{ id: 'magic' },\n")[1]
-
-  // remove last two characters from inner app view
-  b = b.substr(0, b.length - 1).trim()
-  b = b.substr(0, b.length - 1).trim()
-
   // routing view
   const viewString = `
 const view = (state, actions) => {
@@ -105,7 +98,7 @@ const view = (state, actions) => {
     }
   }
 
-  return ${b}
+  return Page(page)(state, actions)
 }
 `
 
