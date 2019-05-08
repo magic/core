@@ -6,5 +6,5 @@ module.exports = state =>
         state.logo && Img({ class: 'logo', src: state.logo }),
         state.logotext && span({ class: 'logo-text' }, state.logotext),
       ]),
-    Menu.View,
+    Menu,
   ])

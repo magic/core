@@ -53,7 +53,7 @@ let app = {
       ]),
     ]
   },
-  Body: Magic.View,
+  Body: Magic,
 }
 
 let libFiles

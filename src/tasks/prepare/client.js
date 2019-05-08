@@ -2,33 +2,29 @@ const is = require('@magic/types')
 const { fs } = require('../../lib')
 
 const { stringifyObject, handleDeps } = require('./lib')
+const { babel, isUpperCase } = require('../../lib')
 
-const prepareClient = app => {
-  let clientString = ''
-
+const prepareClient = async app => {
   // importing hyperapp
-  clientString += "const { app, h } = require('hyperapp')\n"
+  const hyperappImport = "const { app, h } = require('hyperapp')\n"
 
+  let checkProps = ''
   if (config.ENV === 'development') {
-    clientString += `
-const CHECK_PROPS = ${global.CHECK_PROPS.toString()}
-`
+    checkProps = `const CHECK_PROPS = ${global.CHECK_PROPS.toString()}`
   }
 
   // add the Component module that wraps all other html tags
-  clientString += `const C = ${global.component.toString()}\n`
+  const componentString = `const C = ${global.component.toString()}\n`
     // replace names of variables to enforce minification
     .replace(/attributes/gm, 'a')
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
 
-  // create string of modules
-  // unused tags will be removed by dead code removal
-  const depString = Object.entries(app.modules)
-    .map(handleDeps)
+  const tempDepString = Object.entries(app.modules)
+    .map(([k, v]) => handleDeps(k, v))
     .join('')
 
-  clientString += depString
+  let libString = ''
 
   // define every lib import at the top of magic.js
   if (!is.empty(app.lib)) {
@@ -36,7 +32,7 @@ const CHECK_PROPS = ${global.CHECK_PROPS.toString()}
       throw new Error(`Expected app.lib to be an object, received ${typeof app.lib}, ${app.lib}`)
     }
 
-    let libString = 'const lib = {};'
+    libString = 'const lib = {};'
 
     Object.entries(app.lib).forEach(([name, res]) => {
       res = require.resolve(res)
@@ -56,7 +52,7 @@ const CHECK_PROPS = ${global.CHECK_PROPS.toString()}
       libString += str
     })
     libString += '\nwindow.LIB = lib\n'
-    clientString += libString
+    // clientString += libString
   }
 
   // create pages object, each Page is a html View
@@ -67,22 +63,17 @@ const CHECK_PROPS = ${global.CHECK_PROPS.toString()}
   })
 
   pageString += '\n}\n'
-  clientString += pageString
 
   // handle global app state
-  const stateString = `const state = ${stringifyObject(app.state)}\n`
-  clientString += stateString
+  const stateString = `const state = ${stringifyObject(app.state)}`
 
   // set state.url, can not be done above
-  const urlString = `\nstate.url = window.location.pathname\n`
-  clientString += urlString
+  const urlString = `\nstate.url = window.location.pathname`
 
-  const rootString = `\nstate.root = '${config.WEB_ROOT}'\n`
-  clientString += rootString
+  const rootString = `\nstate.root = '${config.WEB_ROOT}'`
 
   // create global actions object
   const actionString = `const actions = ${stringifyObject(app.actions)}\n`
-  clientString += actionString
 
   // get inner View from app
   let b = app.Body.toString().split("{ id: 'magic' },\n")[1]
@@ -117,7 +108,6 @@ const view = (state, actions) => {
   return ${b}
 }
 `
-  clientString += viewString
 
   // get #magic div from html, create it if it does not exist,
   // then mount the app in it.
@@ -131,10 +121,96 @@ if (!mD) {
 }
 app(state, actions, view, mD)\n`
 
-  clientString += createMagic
+  const tempClientString = [
+    hyperappImport,
+    checkProps,
+    componentString,
+    tempDepString,
+    libString,
+    pageString,
+    stateString,
+    urlString,
+    rootString,
+    actionString,
+    viewString,
+    createMagic,
+  ]
+    .filter(a => a)
+    .join('\n')
 
-  // prepend client urls with WEB_ROOT url in production,
-  // this allows, for example, username.github.io/packagename
+  const ast = await babel.parseAsync(tempClientString, babel.opts)
+
+  const moduleNames = Object.keys(app.modules)
+
+  const usedModules = new Set()
+  babel.traverse(ast, {
+    Identifier(path) {
+      const { node, parent } = path
+      if (moduleNames.includes(node.name)) {
+        const excludedParentTypes = [
+          'MemberExpression',
+          'VariableDeclarator',
+          'BinaryExpression',
+          'UpdateExpression',
+        ]
+        if (!excludedParentTypes.some(t => parent.type === t)) {
+          usedModules.add(node.name)
+        }
+      } else if (isUpperCase(node.name)) {
+        const { object } = parent
+        if (object && moduleNames.includes(object.name)) {
+          const name = `${object.name}.${node.name}`
+          usedModules.add(name)
+        }
+      }
+    },
+  })
+
+  const cleanDependencies = {}
+  Array.from(usedModules)
+    // make subModules apply last
+    .sort(key => (key.includes('.') ? 1 : -1))
+    .forEach(key => {
+      if (!key.includes('.')) {
+        cleanDependencies[key] = app.modules[key]
+      } else {
+        // submodules
+        const [parName, modName] = key.split('.')
+
+        // if the module is not referenced directly in the source, we default to an object
+        const parComp = cleanDependencies[parName] || {}
+
+        parComp[modName] = app.modules[parName][modName]
+        cleanDependencies[parName] = parComp
+      }
+    })
+
+  let dependencyString = ''
+
+  Object.entries(cleanDependencies).forEach(([k, v]) => {
+    const depString = handleDeps(k, v)
+    dependencyString += depString
+  })
+
+  let clientString = [
+    hyperappImport,
+    checkProps,
+    componentString,
+    dependencyString,
+    libString,
+    pageString,
+    stateString,
+    urlString,
+    rootString,
+    actionString,
+    viewString,
+    createMagic,
+  ]
+    .filter(a => a)
+    .join('\n')
+
+  // // prepend client urls with WEB_ROOT url in production,
+  // // this allows, for example, username.github.io/packagename
   if (config.ENV === 'production' && config.WEB_ROOT !== '/') {
     clientString = clientString
       // find all links, callback gets match, key, delimiter, link

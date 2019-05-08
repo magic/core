@@ -1,6 +1,4 @@
-const Menu = {}
-
-Menu.View = (props = 'menu') => state => {
+const Menu = (props = 'menu') => state => {
   if (typeof props === 'string') {
     props = { name: props }
   }

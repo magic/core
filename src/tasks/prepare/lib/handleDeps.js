@@ -2,7 +2,7 @@ const is = require('@magic/types')
 const { isUpperCase } = require('../../../lib/')
 const stringifyObject = require('./stringifyObject')
 
-const handleDependencies = ([name, component], i, modules) => {
+const handleDependencies = (name, component) => {
   if (is.fn(component) && !isUpperCase(name)) {
     return `const ${name} = C('${name}')\n`
   }
