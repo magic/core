@@ -115,18 +115,18 @@ if (!mD) {
 app(state, actions, view, mD)\n`
 
   const tempClientString = [
-    hyperappImport,
-    checkProps,
+    // hyperappImport,
+    // checkProps,
     componentString,
     tempDepString,
     libString,
     pageString,
-    stateString,
-    urlString,
-    rootString,
-    actionString,
+    // stateString,
+    // urlString,
+    // rootString,
+    // actionString,
     viewString,
-    createMagic,
+    // createMagic,
   ]
     .filter(a => a)
     .join('\n')
