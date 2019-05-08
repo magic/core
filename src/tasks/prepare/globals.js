@@ -34,6 +34,7 @@ const findInstalledModules = async () => {
   const assetModules = await getFiles(config.DIR.ASSETS)
   assetModules
     .filter(m => isUpperCase(path.basename(m)))
+    .filter(m => ['.js', '.mjs'].some(ext => m.endsWith(ext)))
     .forEach(m => {
       try {
         const mod = require(m)
@@ -43,6 +44,7 @@ const findInstalledModules = async () => {
         log.error('Error', `requiring local magic-module: ${m}, error: ${e.message}`)
       }
     })
+
   return modules
 }
 
