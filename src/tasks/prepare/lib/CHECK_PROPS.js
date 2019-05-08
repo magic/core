@@ -15,7 +15,7 @@ const CHECK_PROPS = (props, propTypeDecl, name = 'Module') => {
 
   let propTypes = propTypeDecl
   if (!propTypeDecl[0].key) {
-    let [ FALLBACK, ...pT ] = propTypeDecl
+    let [FALLBACK, ...pT] = propTypeDecl
     propTypes = pT
 
     if (FALLBACK && typeof props === FALLBACK.type) {
