@@ -49,7 +49,7 @@ does not export a view function or page.View key.`)
 
   if (!has404) {
     const page404 = {
-      name: '/404/',
+      name: `${config.WEB_ROOT}404/`,
       path: path.join(config.DIR.PUBLIC, '404.html'),
       View: () => div('404 - not found'),
     }
