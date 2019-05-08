@@ -8,28 +8,30 @@ module.exports = {
     width: '90%',
   },
 
-  // header and menu in header
-  header: {
-    '&.main': {
-      display: 'inline-block',
-      width: '90%',
+  '.Wrapper': {
+    display: 'inline-block',
+  },
 
-      '.logo': {
-        float: 'left',
-      },
-      '.logo-text': {
-        float: 'left',
-        fontSize: '1.5em',
-        margin: '.7em .2em',
-      },
-      '.logo-wrapper': {
-        display: 'inline-block',
-      },
+  // header and menu in header
+  '.Header': {
+    display: 'inline-block',
+    width: '90%',
+
+    '.Logo': {
+      float: 'left',
+    },
+    '.LogoText': {
+      float: 'left',
+      fontSize: '1.5em',
+      margin: '.7em .2em',
+    },
+    '.LogoWrapper': {
+      display: 'inline-block',
     },
   },
 
-  '.page': {
-    header: {
+  '.Page': {
+    '.Header': {
       margin: '0 0 .5em',
     },
 
@@ -38,7 +40,7 @@ module.exports = {
     },
   },
 
-  footer: {
+  '.Footer': {
     width: '100%',
   },
 

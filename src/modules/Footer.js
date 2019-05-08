@@ -1,5 +1,5 @@
 const Footer = () =>
-  footer({ class: 'main' }, [
+  footer({ class: 'Footer' }, [
     div({ class: 'wrapper' }, [
       'made with a few bits of ',
       Link({ to: 'https://github.com/magic/core', target: '_blank', rel: 'noopener' }, 'magic'),
