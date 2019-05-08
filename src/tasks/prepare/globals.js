@@ -40,7 +40,7 @@ const findInstalledModules = async () => {
         const name = path.basename(m).replace(path.extname(m), '')
         modules[name] = mod
       } catch (e) {
-        log.error('Error' `requiring local magic-module: ${m}, error: ${e.message}`)
+        log.error('Error', `requiring local magic-module: ${m}, error: ${e.message}`)
       }
     })
   return modules
