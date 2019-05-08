@@ -16,7 +16,7 @@ const Menu = (props = 'menu') => state => {
   }
 
   return nav(
-    { class: !cl.includes('Menu') ? `Menu ${cl}` : cl },
+    { class: cl },
     ul(items.map(i => Menu.Item({ ...i, url, collapse }))),
   )
 }
@@ -34,7 +34,7 @@ Menu.style = {
   },
 }
 
-Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, ...item }) => {
+Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, ...item }) => state => {
   // if the item has no values, we quit
   if (!item.to && !text) {
     return
@@ -42,9 +42,6 @@ Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, ...item })
 
   const p = {
     class: 'MenuItem',
-  }
-  if (item.to === url) {
-    p.class += ' active'
   }
 
   if (parentTo) {
@@ -60,8 +57,16 @@ Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, ...item })
     }
   }
 
+  const rooted = item.to.startsWith(state.root) ? item.to : `${state.root}${item.to.substr(1)}`
+  const active = url.startsWith(rooted)
+  const current = url === rooted
+  console.log({ rooted, url })
+  if (current) {
+    p.class += ' active'
+  }
+
   let children = []
-  if (items.length && (url.startsWith(item.to) || !collapse)) {
+  if ((items.length && active) || !collapse) {
     children = ul(items.map(i => Menu.Item({ parentTo: item.to, url, collapse, ...i })))
   }
 
