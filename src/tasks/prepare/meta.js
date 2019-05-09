@@ -6,9 +6,12 @@ const sitemapHeader = `
 <urlset
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
 `
-const sitemapFooter = '</urlset>'
+const sitemapFooter = `
+</urlset>
+`
 
 const prepareMetaFiles = async app => {
   const res = {}
@@ -24,17 +27,38 @@ const prepareMetaFiles = async app => {
   }
 
   if (config.SITEMAP) {
-    const sitemap = [sitemapHeader]
+    const sitemapArray = [sitemapHeader]
 
     app.pages.forEach(({ name }) => {
-      console.log({ name })
+      const now = new Date()
+      let month = now.getMonth() + 1
+      if (month < 10) {
+        month = `0${month}`
+      }
+      let day = now.getDate()
+      if (day < 10) {
+        day = `0${day}`
+      }
+
+      const changeDate = `${now.getFullYear()}-${month}-${day}`
+
+      sitemapArray.push(`
+<url>
+  <loc>https://${config.URL}${name.replace(config.WEB_ROOT, '/')}</loc>
+  <lastmod>${changeDate}</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+</url>
+`)
     })
 
-    sitemap.push(sitemapFooter)
+    sitemapArray.push(sitemapFooter)
+
+    res['/sitemap.xml'] = sitemapArray.join('').trim()
   }
 
   if (config.CNAME) {
-    res['/CNAME'] = config.CNAME.trim()
+    res['/CNAME'] = config.URL.trim()
   }
 
   return res

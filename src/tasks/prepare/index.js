@@ -1,6 +1,6 @@
 const is = require('@magic/types')
 
-const { isGlobal, getFiles, getPages, isUpperCase, fs } = require('../../lib')
+const { isGlobal, getFiles, getPages, isUpperCase, fs, createFileHash } = require('../../lib')
 
 const prepareGlobals = require('./globals')
 const prepareClient = require('./client')
@@ -17,6 +17,8 @@ const prepare = async app => {
 
   app.state = app.state || {}
   app.actions = app.actions || {}
+  app.hashes = app.hashes || {}
+  app.hashes.static = app.hashes.static || {}
 
   // collect the pages, create their states
   app.pages = await preparePages(files)
@@ -40,7 +42,7 @@ const prepare = async app => {
 
   // collect all static files,
   // write their buffers into app.static
-  app.static = prepareMetaFiles(app)
+  app.static = await prepareMetaFiles(app)
   if (await fs.exists(config.DIR.STATIC)) {
     const staticFiles = await getFiles(config.DIR.STATIC)
     if (staticFiles) {
@@ -49,6 +51,7 @@ const prepare = async app => {
           const name = f.replace(config.DIR.STATIC, '')
           // TODO: use streams here
           app.static[name] = await fs.readFile(f)
+          app.hashes.static[name] = createFileHash(app.static[name])
         }),
       )
     }

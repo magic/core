@@ -26,10 +26,18 @@ const write = async app => {
   await Promise.all(
     Object.entries(static)
       .filter(([name]) => !images.includes(getFileType(name)))
-      .map(async file => await writeFile(file)),
+      .map(async file => {
+        await writeFile(file)
+      }),
   )
 
   pages.forEach(async page => {
+    const oldHash = app.hashes.pages[page.name]
+    if (oldHash === page.hash) {
+      return
+    }
+
+    console.log('write page', page.name)
     const dir = path.dirname(page.path)
     await mkdirp(dir)
     await fs.writeFile(page.path, page.rendered)

@@ -15,10 +15,7 @@ const Menu = (props = 'menu') => state => {
     url += `#${state.hash}`
   }
 
-  return nav(
-    { class: cl },
-    ul(items.map(i => Menu.Item({ ...i, url, collapse }))),
-  )
+  return nav({ class: cl }, ul(items.map(i => Menu.Item({ ...i, url, collapse }))))
 }
 
 Menu.style = {

@@ -31,8 +31,6 @@ config.CNAME = config.hasOwnProperty('CNAME') ? config.CNAME : false
 config.ROBOTS_TXT = config.hasOwnProperty('ROBOTS_TXT') ? config.ROBOTS_TXT : true
 config.SITEMAP = config.hasOwnProperty('SITEMAP') ? config.SITEMAP : true
 
-config.HASH_FILE_NAME = config.HASH_FILE_NAME || 'sri-hashes.json'
-
 const PAGES = path.join(config.ROOT, 'pages')
 const PUBLIC = path.join(process.cwd(), config.PUBLIC || config.DIR.PUBLIC || 'public')
 const ASSETS = path.join(config.ROOT, 'assets')
@@ -40,6 +38,22 @@ const MODULES = path.join(config.ROOT, 'modules')
 const STATIC = path.join(ASSETS, 'static')
 const THEMES = path.join(ASSETS, 'themes')
 const API = path.join(process.cwd(), config.DIR.API || 'api')
+
+config.HASH_FILE_NAME = config.HASH_FILE_NAME || 'sri-hashes.json'
+
+try {
+  const hashPath = path.join(PUBLIC, config.HASH_FILE_NAME)
+  config.HASHES = require(hashPath)
+} catch (e) {
+  if (e.code === 'MODULE_NOT_FOUND') {
+    config.HASHES = {
+      pages: {},
+      static: {},
+    }
+  } else {
+    throw e
+  }
+}
 
 const ZIPPABLE = [
   'css',
