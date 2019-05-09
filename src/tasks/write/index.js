@@ -1,12 +1,22 @@
 const path = require('path')
 
+const is = require('@magic/types')
+
 const { mkdirp, fs, getFileType } = require('../../lib')
+const minifyImages = require('./lib/minifyImages')
+const { compress, writeFile, writeServer } = require('./lib')
 
 const isProd = config.ENV === 'production'
 
-const minifyImages = require('./lib/minifyImages')
+const hasFileChanged = async ([name, content]) => {
+  const stat = await fs.stat(path.join(config.DIR.PUBLIC, name))
+  if (stat.size !== buffer.length) {
+    return true
+  }
 
-const { compress, writeFile, writeServer } = require('./lib')
+  const oldContent = await fs.readFile(path.join(config.DIR.PUBLIC, name))
+  return !is.deep.equal(content, oldContent)
+}
 
 const write = async app => {
   const zippable = config.FILETYPES.ZIPPABLE
@@ -20,7 +30,12 @@ const write = async app => {
   await Promise.all(
     Object.entries(static)
       .filter(([name]) => !images.includes(getFileType(name)))
-      .map(async file => await writeFile(file)),
+      .map(async file => {
+        const hasChanged = await hasFileChanged(file)
+        if (hasChanged) {
+          await writeFile(file)
+        }
+      }),
   )
 
   pages.forEach(async page => {

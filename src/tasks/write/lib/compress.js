@@ -1,6 +1,7 @@
 const log = require('@magic/log')
 const { getFiles, fs, getFileType } = require('../../../lib')
 
+// both zip and compress get overwritten if node-zopfli-es exists
 let zip
 let compress = () =>
   log.warn(
@@ -11,7 +12,7 @@ to fix this, please run
 
 npm install node-zopfli-es
 
-this needs xcode on macosx, which might be the reason you see this error.
+this needs xcode on macos, which might be the reason you see this error.
 `,
   )
 
@@ -20,17 +21,17 @@ try {
 } catch (e) {}
 
 if (zip) {
-  compress = async (zippable, images) =>
-    await Promise.all(
-      (await getFiles(config.DIR.PUBLIC))
-        .filter(file => zippable.includes(getFileType(file)))
-        .filter(file => !images.includes(getFileType(file)))
-        .map(async file => {
-          const fileContent = await fs.readFile(file)
-          const zipped = await zip.gzip(fileContent)
-          await fs.writeFile(`${file}.gz`, zipped)
-        }),
-    )
+  compress = async (zippable, images) => {
+    const files = await getFiles(config.DIR.PUBLIC)
+    await Promise.all(files)
+      .filter(file => zippable.includes(getFileType(file)))
+      .filter(file => !images.includes(getFileType(file)))
+      .map(async file => {
+        const fileContent = await fs.readFile(file)
+        const zipped = await zip.gzip(fileContent)
+        await fs.writeFile(`${file}.gz`, zipped)
+      })
+  }
 }
 
 module.exports = compress
