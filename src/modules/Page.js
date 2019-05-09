@@ -1,10 +1,6 @@
-module.exports = page => (state, actions) => div(
-  { class: 'Wrapper' },
-  [
+module.exports = page => (state, actions) =>
+  div({ class: 'Wrapper' }, [
     Header,
-    page
-      ? div({ class: 'Page' }, page(state, actions))
-      : div({ class: 'Page' }, '404 - not found'),
+    div({ class: 'Page' }, page ? page(state, actions) : '404 - not found'),
     Footer,
-  ]
-)
+  ])
