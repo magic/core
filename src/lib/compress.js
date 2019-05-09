@@ -1,5 +1,7 @@
 const log = require('@magic/log')
-const { getFiles, fs, getFileType } = require('../../../lib')
+const fs = require('./fs')
+const getFiles = require('./getFiles')
+const getFileType = require('./getFileType')
 
 // both zip and compress get overwritten if node-zopfli-es exists
 let zip
@@ -23,14 +25,16 @@ try {
 if (zip) {
   compress = async (zippable, images) => {
     const files = await getFiles(config.DIR.PUBLIC)
-    await Promise.all(files)
-      .filter(file => zippable.includes(getFileType(file)))
-      .filter(file => !images.includes(getFileType(file)))
-      .map(async file => {
-        const fileContent = await fs.readFile(file)
-        const zipped = await zip.gzip(fileContent)
-        await fs.writeFile(`${file}.gz`, zipped)
-      })
+    await Promise.all(
+      files
+        .filter(file => zippable.includes(getFileType(file)))
+        .filter(file => !images.includes(getFileType(file)))
+        .map(async file => {
+          const fileContent = await fs.readFile(file)
+          const zipped = await zip.gzip(fileContent)
+          await fs.writeFile(`${file}.gz`, zipped)
+        }),
+    )
   }
 }
 

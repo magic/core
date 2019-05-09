@@ -1,8 +1,9 @@
 const is = require('@magic/types')
 const { fs } = require('../../lib')
 
-const { stringifyObject, handleDeps } = require('./lib')
-const { babel, isUpperCase } = require('../../lib')
+const { stringifyObject, handleDeps, isUpperCase } = require('../../lib')
+
+const babel = require('../../lib/babel')
 
 const prepareClient = async app => {
   // importing hyperapp
@@ -131,7 +132,7 @@ app(state, actions, view, mD)\n`
     .filter(a => a)
     .join('\n')
 
-  const ast = await babel.parseAsync(tempClientString, babel.opts)
+  const ast = await babel.parseAsync(tempClientString, { ...babel.opts })
 
   const moduleNames = Object.keys(app.modules)
 
@@ -157,6 +158,15 @@ app(state, actions, view, mD)\n`
         }
       }
     },
+
+    // AssignmentExpression(path) {
+    //   console.log(path.node)
+    // },
+
+    // ObjectTypeIndexer(path) {
+    //   console.log(path)
+    //   process.exit(1)
+    // },
 
     // CallExpression(path) {
     //   const moduleName = path.node.callee.name
@@ -243,7 +253,7 @@ app(state, actions, view, mD)\n`
 
   // // prepend client urls with WEB_ROOT url in production,
   // // this allows, for example, username.github.io/packagename
-  if (config.ENV === 'production' && config.WEB_ROOT !== '/') {
+  if (config.WEB_ROOT !== '/') {
     clientString = clientString
       // find all links, callback gets match, key, delimiter, link
       .replace(

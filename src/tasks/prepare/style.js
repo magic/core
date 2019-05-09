@@ -1,8 +1,7 @@
 const is = require('@magic/types')
 const deep = require('@magic/deep')
 const path = require('path')
-const { fs } = require('../../lib')
-const { handleStyleFunctions, findModuleStyles } = require('./lib')
+const { handleStyleFunctions, findModuleStyles } = require('../../lib')
 
 const Magic = require('../../modules/admin')
 
@@ -12,28 +11,20 @@ module.exports = ({ app, modules }) => {
 
   const theme = config.THEME || ''
 
-  // merge user created custom layout into styles, if it exists
-  const maybeResetCssFile = path.join(config.DIR.THEMES, theme, 'reset.css.js')
-  if (fs.existsSync(maybeResetCssFile)) {
-    const maybeResetCssStyles = require(maybeResetCssFile)
-    resetStyles = [handleStyleFunctions(maybeResetCssStyles), ...resetStyles]
-  } else {
-    // merge default reset css into styles if no custom reset file exists
-    const libResetCssFile = path.join(__dirname, '..', '..', 'themes', 'reset.css.js')
-    const libResetCssStyles = require(libResetCssFile)
-    resetStyles = [handleStyleFunctions(libResetCssStyles), ...resetStyles]
-  }
+  // merge default reset css into styles
+  const libResetCssFile = path.join(__dirname, '..', '..', 'themes', 'reset.css.js')
+  const libResetCssStyles = require(libResetCssFile)
+  resetStyles = [...resetStyles, handleStyleFunctions(libResetCssStyles)]
 
-  // merge user created custom layout into styles, if it exists
-  const maybeLayoutCssFile = path.join(config.DIR.THEMES, theme, 'layout.css.js')
-  if (fs.existsSync(maybeLayoutCssFile)) {
-    const maybeLayoutCssStyles = require(maybeLayoutCssFile)
-    resetStyles.push(handleStyleFunctions(maybeLayoutCssStyles))
-  } else {
-    // merge default layout into styles if no custom layout file exists
-    const existingLayoutCssFile = path.join(__dirname, '..', '..', 'themes', 'layout.css.js')
-    const existingLayoutCssStyles = require(existingLayoutCssFile)
-    resetStyles.push(handleStyleFunctions(existingLayoutCssStyles))
+  // merge user created custom rest.css into styles, if it exists
+  try {
+    const maybeResetCssFile = path.join(config.DIR.THEMES, theme, 'reset.css.js')
+    const maybeResetCssStyles = require(maybeResetCssFile)
+    resetStyles = [...resetStyles, handleStyleFunctions(maybeResetCssStyles)]
+  } catch (e) {
+    if (e.code !== 'MODULE_NOT_FOUND') {
+      throw e
+    }
   }
 
   // load all styles from all modules
@@ -53,14 +44,18 @@ module.exports = ({ app, modules }) => {
     // first look if we have this theme preinstalled, if so, merge it into the styles
     const libThemeFile = path.join(__dirname, '..', '..', 'themes', config.THEME, 'index.js')
 
-    if (fs.existsSync(libThemeFile)) {
+    try {
       let theme = require(libThemeFile)
       styles.push(handleStyleFunctions(theme))
+    } catch (e) {
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e
+      }
     }
 
     // load user's custom theme, overwriting both preinstalled and node_modules themes
-    const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.js')
-    if (fs.existsSync(maybeThemeFile)) {
+    try {
+      const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.js')
       let theme = handleStyleFunctions(require(maybeThemeFile))
 
       if (is.array(maybeThemeFile)) {
@@ -69,6 +64,10 @@ module.exports = ({ app, modules }) => {
         })
       } else {
         styles.push(theme)
+      }
+    } catch (e) {
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e
       }
     }
   }
@@ -80,10 +79,16 @@ module.exports = ({ app, modules }) => {
     })
 
   const maybeAppFile = path.join(config.ROOT, 'app.js')
-  if (maybeAppFile !== __filename && fs.existsSync(maybeAppFile)) {
-    const maybeApp = require(maybeAppFile)
-    if (is.object(maybeApp) && !is.empty(maybeApp) && maybeApp.style) {
-      styles.push(handleStyleFunctions(maybeApp.style))
+  if (maybeAppFile !== __filename) {
+    try {
+      const maybeApp = require(maybeAppFile)
+      if (is.object(maybeApp) && !is.empty(maybeApp) && maybeApp.style) {
+        styles.push(handleStyleFunctions(maybeApp.style))
+      }
+    } catch (e) {
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e
+      }
     }
   }
 

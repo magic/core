@@ -4,8 +4,14 @@ const path = require('path')
 const log = require('@magic/log')
 const is = require('@magic/types')
 
-global.config = require('../config')
-global.CHECK_PROPS = require('../tasks/prepare/lib/CHECK_PROPS')
+if (!global.config) {
+  global.config = require('../config')
+}
+if (!global.CHECK_PROPS) {
+  const { CHECK_PROPS } = require('../lib')
+  global.CHECK_PROPS = CHECK_PROPS
+}
+
 const tasks = require('../tasks')
 const App = require('../modules/app')
 
@@ -13,6 +19,18 @@ const runCmd = require('./runCmd')
 
 const runCluster = async ({ cmds, argv }) => {
   if (cluster.isMaster) {
+    if (config.URL_WARNING) {
+      log.warn('Autodetected URL:', remote)
+      log.info(`
+to hide this warning and make startup ${config.URL_WARNING}ms faster,
+add the following to your config.js file (and adjust the values if needed)
+
+  URL: '${config.URL}',
+  WEB_ROOT: '${config.WEB_ROOT}',
+
+`)
+    }
+
     if (cmds.clean) {
       await runCmd('clean')
     }
@@ -35,7 +53,6 @@ const runCluster = async ({ cmds, argv }) => {
       watchWorker = cluster.fork()
     }
     let buildWorker = cluster.fork()
-    buildWorker.send('run')
 
     let lastCall = new Date().getTime()
     cluster.on('message', (worker, msg) => {

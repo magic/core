@@ -1,5 +1,4 @@
 const css = require('@magic/css')
-const deep = require('@magic/deep')
 
 module.exports = async ([reset, style]) => {
   reset = await css(reset)

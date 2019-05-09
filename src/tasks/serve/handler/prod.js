@@ -13,6 +13,8 @@ const maybeGetFiles = async dir => {
   return []
 }
 
+// Content-Security-Policy: require-sri-for style script
+
 const handler = async () => {
   const publicFiles = await maybeGetFiles(config.DIR.PUBLIC)
   const apiFiles = await maybeGetFiles(config.DIR.API)

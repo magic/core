@@ -1,5 +1,5 @@
 const is = require('@magic/types')
-const { isUpperCase } = require('../../../lib/')
+const isUpperCase = require('./isUpperCase')
 const stringifyObject = require('./stringifyObject')
 
 const handleDependencies = (name, component) => {

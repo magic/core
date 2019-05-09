@@ -1,12 +1,12 @@
 const is = require('@magic/types')
-const { getFiles, getPages, isUpperCase, fs } = require('../../lib')
+
+const { isGlobal, getFiles, getPages, isUpperCase, fs } = require('../../lib')
 
 const prepareGlobals = require('./globals')
 const prepareClient = require('./client')
 const preparePages = require('./pages')
 const prepareStyle = require('./style')
-
-const { isGlobal } = require('./lib')
+const prepareMetaFiles = require('./meta')
 
 const prepare = async app => {
   const { modules, lib } = await prepareGlobals(app)
@@ -40,7 +40,7 @@ const prepare = async app => {
 
   // collect all static files,
   // write their buffers into app.static
-  app.static = {}
+  app.static = prepareMetaFiles(app)
   if (await fs.exists(config.DIR.STATIC)) {
     const staticFiles = await getFiles(config.DIR.STATIC)
     if (staticFiles) {

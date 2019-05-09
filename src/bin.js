@@ -2,6 +2,8 @@
 
 const cli = require('@magic/cli')
 
+const run = require('./cluster')
+
 const args = {
   options: [
     ['--help', '-help', 'help', '--h', '-h'],
@@ -47,6 +49,4 @@ magic dev --watch src
 }
 
 const res = cli(args)
-
-const run = require('./cluster')
 run(res)

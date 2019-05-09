@@ -1,6 +1,6 @@
 const is = require('@magic/types')
 const deep = require('@magic/deep')
-const { isUpperCase } = require('../../../lib')
+const isUpperCase = require('./isUpperCase')
 
 const findModuleStyles = (modules, parent) => {
   let styles = {}
@@ -17,21 +17,20 @@ const findModuleStyles = (modules, parent) => {
       if (!mod.style[selector]) {
         const modStyle = {}
         const metaStyle = {}
-        Object.entries(mod.style)
-          .forEach(([k,v]) => {
-            if (k.startsWith('@')) {
-              if (k.startsWith('@media')) {
-                if (!Object.keys(v).some(kk => kk.includes(`.${k}`))) {
-                  v = {
-                    [selector]: v
-                  }
+        Object.entries(mod.style).forEach(([k, v]) => {
+          if (k.startsWith('@')) {
+            if (k.startsWith('@media')) {
+              if (!Object.keys(v).some(kk => kk.includes(`.${k}`))) {
+                v = {
+                  [selector]: v,
                 }
               }
-              metaStyle[k] = v
-            } else {
-              modStyle[k] = v
             }
-          })
+            metaStyle[k] = v
+          } else {
+            modStyle[k] = v
+          }
+        })
         style = {
           [selector]: modStyle,
           ...metaStyle,

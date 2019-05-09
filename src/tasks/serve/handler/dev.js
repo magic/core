@@ -1,13 +1,27 @@
+const URL = require('url')
+
 const { addTrailingSlash, getContentType } = require('../../../lib/')
 
 const isProd = config.ENV === 'production'
 
 const handler = app => (req, res) => {
   const { css, client, static, lambdas } = app
-
   const WEB_ROOT = addTrailingSlash(config.WEB_ROOT)
-  let url = req.url
-  const rawUrl = req.url.replace(config.WEB_ROOT, '/')
+  const url = URL.parse(req.url)
+  let { pathname } = url
+
+  const Location = WEB_ROOT
+
+  if (!pathname.startsWith(WEB_ROOT)) {
+    console.log({ pathname, WEB_ROOT })
+    res.writeHead(302, { Location })
+    res.end()
+    return
+  } else {
+    pathname = pathname.replace(WEB_ROOT, '/')
+  }
+
+  const rawUrl = url.pathname.replace(config.WEB_ROOT, '/')
 
   if (rawUrl.startsWith('/api')) {
     const action = rawUrl.replace('/api/', '').replace('/', '')
@@ -69,9 +83,7 @@ const handler = app => (req, res) => {
   if (!isWebRoot && (rawUrl !== addedSlashUrl && pages[addedSlashUrl])) {
     redirect = addedSlashUrl
   } else if (req.url === '/' && WEB_ROOT !== '/') {
-    if (isProd) {
-      redirect = WEB_ROOT
-    }
+    redirect = WEB_ROOT
   }
 
   if (redirect) {
@@ -83,14 +95,14 @@ const handler = app => (req, res) => {
     return
   }
 
-  if (pages[url]) {
+  const page = pages[url.pathname]
+  if (page) {
     res.writeHead(200, { ...headers, 'Content-Type': 'text/html' })
-    res.end(pages[url])
+    res.end(page)
     return
   }
 
   // 404. in development, we redirect to the root
-  const Location = '/'
 
   res.writeHead(302, { Location })
   res.end()
