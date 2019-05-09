@@ -99,7 +99,7 @@ const view = (state, actions) => {
     }
   }
 
-  return Wrapper(page)(state, actions)
+  return Page(page)(state, actions)
 }
 `
 

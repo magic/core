@@ -49,7 +49,7 @@ let app = {
           page.Head && page.Head(state, actions),
         ]),
         body([
-          div({ id: 'Magic' }, Wrapper(page.View)),
+          div({ id: 'Magic' }, Page(page.View)),
           script({
             src: '/' + config.CLIENT_LIB_NAME + '.js',
             integrity: hashes.js,

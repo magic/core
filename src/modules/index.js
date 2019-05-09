@@ -1,6 +1,5 @@
 module.exports = {
   Page: require('./Page'),
-  Wrapper: require('./Wrapper'),
   Menu: require('./Menu'),
   Link: require('./Link'),
   Footer: require('./Footer'),
