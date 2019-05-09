@@ -13,7 +13,7 @@ const maybeGetFiles = async dir => {
   return []
 }
 
-const handler = async app => {
+const handler = async () => {
   const publicFiles = await maybeGetFiles(config.DIR.PUBLIC)
   const apiFiles = await maybeGetFiles(config.DIR.API)
 
