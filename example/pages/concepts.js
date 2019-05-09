@@ -117,49 +117,6 @@ const exampleModule = {
       p('magic concepts. These are the building blocks of every module in a magic app'),
 
       div([
-        h2({ id: 'philosophy' }, 'philosophy'),
-
-        p([
-          '@magic wants to make it easy to stitch together any kind of webapp.',
-          ' by providing simple, well documented and self contained modules,',
-          ' @magic makes it possible to create stunningly fast webpages.',
-        ]),
-      ]),
-
-      div([
-        h2({ id: 'buzzwords' }, 'buzzwordbingo'),
-
-        h3('works without javascript'),
-        p([
-          'most of the functionality works without javascript,',
-          " buttons and realtime user interactions obviously won't.",
-        ]),
-
-        h3('tiny'),
-        p([
-          '~4 kb javascript boilerplate.',
-          ' usually, all the javascript in your homepage will be 30-60kb big (after unpacking),',
-          ' 10-30kb get transmitted from the server to the client.',
-          ' this complete documentation page you are reading with all sub pages has about 50kb unpacked, 15kb transmitted. (values may be out of date)',
-        ]),
-
-        h3('static pages'),
-        p([
-          'generates static pages if possible. this makes free hosting (using github or gitlab pages) possible.',
-          " and it's easy.",
-        ]),
-
-        h3('server side rendering'),
-        p('(wip) if needed, @magic/server will execute your pages on each request.'),
-
-        h3('faas (functions as a service))'),
-        p('(wip) modules can generate server side lambdas.'),
-        p([
-          'magic will in the (very near) future provide a server side solution to host these lambdas.',
-        ]),
-      ]),
-
-      div([
         h2({ id: 'modules' }, '@magic-modules'),
 
         p('modules are the main building block of magic.'),

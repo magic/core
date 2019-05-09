@@ -7,31 +7,54 @@ module.exports = {
   View: state => [
     h1(state.title),
     div([
-      h2('Welcome to the magic docs.'),
-      p('The goal of this document is to give you a rough @magical overview.'),
+      h2('welcome to the magic docs.'),
+      p('the goal of this document is to give you a rough @magical overview.'),
 
       GitBadges('magic/core'),
 
-      h2('Features'),
+      h2({ id: 'philosophy' }, 'philosophy'),
 
-      h3('client app'),
       p([
-        'magic uses ',
-        Link({ to: 'https://github.com/jorgebucaran/hyperapp/' }, 'hyperapp'),
-        ' to generate a client side webapp.',
-      ]),
-      p([
-        'since hyperapp is awesomely small, the minimal client bundle size hovers around 3-4kb (gzipped),',
-        ' this includes all of @magic and depends on the variety of html elements in use as well as the amount and content length of the pages.',
+        '@magic aims to make it easy to stitch together any kind of webapp.',
+        ' by providing simple, well documented and self contained modules,',
+        ' @magic makes it possible to create stunningly fast webpages.',
       ]),
 
-      h3('static file hosting:'),
+      h2({ id: 'privacy'}, 'privacy'),
       p([
-        'publishes to ',
+        '@magic does not spy on it\'s users.',
+        ' we not only try to be legally compliant,',
+        ' but additionally to be ethical and do the right thing for your users.',
+      ]),
+
+      h2({ id: 'buzzwords' }, 'why should i use magic?'),
+
+      h3('@magic is tiny'),
+      p([
+        '~4 kb javascript boilerplate.',
+        ' usually, all the javascript in your homepage will be 30-60kb big (after unpacking),',
+        ' 10-30kb get transmitted from the server to the client.',
+        ' this complete documentation page you are reading with all sub pages has about 50kb unpacked, 15kb transmitted. (values may be out of date)',
+      ]),
+
+      h3('@magic works without javascript'),
+      p([
+        'most of the functionality works without javascript,',
+        " buttons and realtime user interactions obviously won't.",
+      ]),
+
+      h3('@magic generates static pages'),
+      p([
+        'this makes free hosting (using github or gitlab pages) possible.',
+        " and it's easy.",
+      ]),
+
+      p([
+        '@magic publishes to ',
         Link({ to: 'https://github.com' }, 'github'),
         ', ',
         Link({ to: 'https://gitlab.com' }, 'gitlab'),
-        ' and any other git enabled hosting service.',
+        ' and any other git-pages enabled hosting service.',
       ]),
 
       h3('serverless / faas'),
