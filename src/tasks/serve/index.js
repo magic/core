@@ -19,13 +19,13 @@ const startServer = async (server, options) => {
   } catch (e) {
     if (e.code === 'EADDRINUSE') {
       options.port += 1
-      log.warn('Address in use', `incrementing port to ${options.port}...`)
     } else {
       throw e
     }
 
     return startServer(server, options)
   }
+
   return options
 }
 
@@ -43,6 +43,9 @@ const serve = async app => {
 
   try {
     const { port, host } = await startServer(server, options)
+    if (port !== config.PORT) {
+      log.warn('Address in use', `incrementing port to ${port}...`)
+    }
     log(`listening to http://${host}:${port}${config.WEB_ROOT}`)
   } catch (e) {
     log.error(e)
