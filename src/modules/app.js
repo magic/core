@@ -5,7 +5,6 @@ const deep = require('@magic/deep')
 const { h } = require('hyperapp')
 
 const { fs } = require('../lib/')
-const config = require('../config')
 
 const { WEB_ROOT = '/', LANG = 'en' } = config
 
@@ -18,7 +17,7 @@ let app = {
   },
 
   // this View gets server rendered.
-  View: page => (state, actions) => {
+  View: (page, hashes) => (state, actions) => {
     state.url = page.name
 
     return [
@@ -41,15 +40,21 @@ let app = {
               content: is.array(state.keywords) ? state.keywords.join(' ') : state.keywords,
             }),
           !is.empty(state.author) && meta({ name: 'author', content: state.author }),
-          link({ rel: 'stylesheet', href: '/' + config.CLIENT_LIB_NAME + '.css' }),
+          link({
+            rel: 'stylesheet',
+            href: '/' + config.CLIENT_LIB_NAME + '.css',
+            integrity: hashes.css,
+            crossorigin: 'anonymous',
+          }),
           page.Head && page.Head(state, actions),
         ]),
         body([
-          div(
-            { id: 'Magic' },
-            Wrapper(page.View),
-          ),
-          script({ src: '/' + config.CLIENT_LIB_NAME + '.js' }),
+          div({ id: 'Magic' }, Wrapper(page.View)),
+          script({
+            src: '/' + config.CLIENT_LIB_NAME + '.js',
+            integrity: hashes.js,
+            crossorigin: 'anonymous',
+          }),
         ]),
       ]),
     ]
