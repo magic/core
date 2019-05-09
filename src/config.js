@@ -26,6 +26,11 @@ config.WEB_ROOT = config.WEB_ROOT || '/'
 config.HOST = config.HOST || 'localhost'
 config.PORT = config.PORT || 2323
 
+config.URL = config.URL || false
+config.CNAME = config.hasOwnProperty('CNAME') ? config.CNAME : false
+config.ROBOTS_TXT = config.hasOwnProperty('ROBOTS_TXT') ? config.ROBOTS_TXT : true
+config.SITEMAP = config.hasOwnProperty('SITEMAP') ? config.SITEMAP : true
+
 const PAGES = path.join(config.ROOT, 'pages')
 const PUBLIC = path.join(process.cwd(), config.PUBLIC || config.DIR.PUBLIC || 'public')
 const ASSETS = path.join(config.ROOT, 'assets')
