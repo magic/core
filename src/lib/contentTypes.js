@@ -24,4 +24,5 @@ module.exports = {
   jpg: 'image/jpg',
   gif: 'image/gif',
   ico: 'image/x-icon',
+  webp: 'image/webp',
 }
