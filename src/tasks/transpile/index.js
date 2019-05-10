@@ -21,7 +21,7 @@ const transpile = async app => {
   hashes.pages = {}
 
   pages
-    .sort((a, b) => a.name < b.name ? -1 : 1)
+    .sort((a, b) => (a.name < b.name ? -1 : 1))
     .forEach(page => {
       page.hash = createFileHash(page.rendered)
       // app.hashes.pages[`${page.name}`] = page.hash
@@ -29,9 +29,11 @@ const transpile = async app => {
     })
 
   hashes.static = {}
-  Object.entries(app.hashes.static).sort(([a], [b]) => a > b ? 1 : -1).forEach(([name, val]) => {
-    hashes.static[name] = val
-  })
+  Object.entries(app.hashes.static)
+    .sort(([a], [b]) => (a > b ? 1 : -1))
+    .forEach(([name, val]) => {
+      hashes.static[name] = val
+    })
 
   app.hashes = hashes
 
