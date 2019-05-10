@@ -17,8 +17,6 @@ const prepare = async app => {
 
   app.state = app.state || {}
   app.actions = app.actions || {}
-  app.hashes = app.hashes || {}
-  app.hashes.static = app.hashes.static || {}
 
   // collect the pages, create their states
   app.pages = await preparePages(files)
@@ -51,7 +49,6 @@ const prepare = async app => {
           const name = f.replace(config.DIR.STATIC, '')
           // TODO: use streams here
           app.static[name] = await fs.readFile(f)
-          app.hashes.static[name] = createFileHash(app.static[name])
         }),
       )
     }

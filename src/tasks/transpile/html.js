@@ -5,7 +5,7 @@ const deep = require('@magic/deep')
 
 const { applyWebRoot } = require('../../lib')
 
-module.exports = app =>
+module.exports = (app, hashes) =>
   app.pages.map(page => {
     try {
       app.state.url = page.name
@@ -13,7 +13,7 @@ module.exports = app =>
       const actions = deep.merge(page.actions, app.actions)
       const rendered = applyWebRoot(
         config,
-        renderToString(app.View(page, app.hashes), state, actions),
+        renderToString(app.View(page, hashes), state, actions),
       )
 
       return {
