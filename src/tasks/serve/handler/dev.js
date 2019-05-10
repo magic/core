@@ -1,3 +1,4 @@
+const path = require('path')
 const URL = require('url')
 
 const { addTrailingSlash, getContentType } = require('../../../lib/')
@@ -10,14 +11,9 @@ const handler = app => (req, res) => {
   const url = URL.parse(req.url)
   let { pathname } = url
 
-  const Location = WEB_ROOT
+  let Location = WEB_ROOT
 
-  if (!pathname.startsWith(WEB_ROOT)) {
-    console.log({ pathname, WEB_ROOT })
-    res.writeHead(302, { Location })
-    res.end()
-    return
-  } else {
+  if (pathname.startsWith(WEB_ROOT)) {
     pathname = pathname.replace(WEB_ROOT, '/')
   }
 
@@ -73,25 +69,6 @@ const handler = app => (req, res) => {
     const contentType = getContentType(rawUrl)
     res.writeHead(200, { ...headers, 'Content-Type': contentType })
     res.end(static[rawUrl])
-    return
-  }
-
-  const addedSlashUrl = addTrailingSlash(rawUrl)
-  const isWebRoot = addedSlashUrl === WEB_ROOT
-
-  let redirect = ''
-  if (!isWebRoot && (rawUrl !== addedSlashUrl && pages[addedSlashUrl])) {
-    redirect = addedSlashUrl
-  } else if (req.url === '/' && WEB_ROOT !== '/') {
-    redirect = WEB_ROOT
-  }
-
-  if (redirect) {
-    res.writeHead(302, {
-      ...headers,
-      Location: redirect,
-    })
-    res.end()
     return
   }
 
