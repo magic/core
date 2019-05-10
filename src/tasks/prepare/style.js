@@ -16,7 +16,7 @@ module.exports = ({ app, modules }) => {
   try {
     const maybeResetCssFile = path.join(config.DIR.THEMES, theme, 'reset.css.js')
     const maybeResetCssStyles = require(maybeResetCssFile)
-    resetStyles.push(maybeResetCssStyles)
+    resetStyles = maybeResetCssStyles
   } catch (e) {
     if (e.code !== 'MODULE_NOT_FOUND') {
       throw e
