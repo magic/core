@@ -21,8 +21,6 @@ config.DIR = config.DIR || {}
 
 config.CLIENT_LIB_NAME = config.CLIENT_LIB_NAME || 'magic'
 
-config.WEB_ROOT = config.WEB_ROOT || '/'
-
 config.HOST = config.HOST || 'localhost'
 config.PORT = config.PORT || 2323
 
@@ -138,7 +136,9 @@ if (!config.WEB_ROOT || !config.URL) {
   } else {
     remote = `${org}.${host}.io/${repo}`
   }
-  config.WEB_ROOT = `/${repo}/`
+  if (!config.WEB_ROOT) {
+    config.WEB_ROOT = `/${repo}/`
+  }
   config.URL = remote
   const timeSpent = new Date().getTime() - startTime
   config.URL_WARNING = timeSpent
