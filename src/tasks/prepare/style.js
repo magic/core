@@ -10,7 +10,7 @@ module.exports = ({ app, modules }) => {
 
   // merge default reset css into styles
   const libResetCssFile = path.join(__dirname, '..', '..', 'themes', 'reset.css.js')
-  const resetStyles = require(libResetCssFile)
+  let resetStyles = require(libResetCssFile)
 
   // merge user created custom rest.css into styles, if it exists
   try {
