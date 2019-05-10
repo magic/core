@@ -28,8 +28,8 @@ module.exports = [
   },
   {
     fn: applyWebRoot({ ...config, ENV: 'development' }, 'href="/testing'),
-    expect: 'href="/testing',
-    info: 'does nothing in development',
+    expect: 'href="/WEB_ROOT/testing',
+    info: 'works in development',
   },
   {
     fn: applyWebRoot(config, 'href="/testing'),
