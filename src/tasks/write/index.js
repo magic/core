@@ -1,7 +1,5 @@
 const path = require('path')
 
-const is = require('@magic/types')
-
 const {
   minifyImages,
   compress,
@@ -32,12 +30,11 @@ const write = async app => {
   )
 
   pages.forEach(async page => {
-    const oldHash = app.hashes.pages[page.name]
+    const oldHash = config.HASHES.pages[page.name]
     if (oldHash === page.hash) {
       return
     }
 
-    console.log('write page', page.name)
     const dir = path.dirname(page.path)
     await mkdirp(dir)
     await fs.writeFile(page.path, page.rendered)
