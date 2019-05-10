@@ -20,117 +20,123 @@ input[type="button"],
 input[type="submit"],
 input[type="file"] > input[type="button"]`
 
-const reset = {
-  [all]: {
+// define the original style as a Map to keep key inheritance working.
+// all other styles will be added as keys onto this map,
+// which means that order should be preserved
+const reset = new Map([
+  [all, {
     margin: 0,
     padding: 0,
     border: 0,
     fontSize: '100%',
     font: 'inherit',
     verticalAlign: 'baseline',
-  },
+  }],
   /* HTML5 display-role reset for older browsers */
-  [html5Reset]: {
+  [html5Reset, {
     display: 'block',
-  },
-  body: {
-    lineHeight: 1.5,
-    margin: 0,
-    padding: 0,
-    minHeight: '100vh',
-    // always show scrollbar to prevent layout glitch if page resizes
-    overflowY: 'scroll',
-  },
-  'ol, ul': {
-    listStyle: 'none',
-    display: 'inline-block',
-  },
-  'blockquote, q': {
-    quotes: 'none',
-  },
-  'blockquote:before, blockquote:after, q:before, q:after': {
-    content: '',
-    content: 'none',
-  },
-  table: {
-    borderCollapse: 'collapse',
-    borderSpacing: 0,
-  },
+  }],
 
-  // remove outlines from links
-  a: {
-    outline: 'none',
-    cursor: 'pointer',
-    whiteSpace: 'nowrap',
-  },
-
-  [buttons]: {
-    cursor: 'pointer',
-    '&::-moz-focus-inner': {
-      padding: '0',
-      border: '0 none',
+  ...Object.entries({
+    body: {
+      lineHeight: 1.5,
+      margin: 0,
+      padding: 0,
+      minHeight: '100vh',
+      // always show scrollbar to prevent layout glitch if page resizes
+      overflowY: 'scroll',
     },
-  },
-
-  '#Magic': {
-    margin: '0 auto',
-    width: '90%',
-  },
-
-  '.Wrapper': {
-    display: 'inline-block',
-  },
-
-  // header and menu in header
-  '.Header': {
-    display: 'inline-block',
-    width: '90%',
-
-    '.Logo': {
-      float: 'left',
-    },
-
-    '.LogoText': {
-      float: 'left',
-      fontSize: '1.5em',
-      margin: '.7em .2em',
-    },
-
-    '.LogoWrapper': {
+    'ol, ul': {
+      listStyle: 'none',
       display: 'inline-block',
     },
-  },
+    'blockquote, q': {
+      quotes: 'none',
+    },
+    'blockquote:before, blockquote:after, q:before, q:after': {
+      content: '',
+      content: 'none',
+    },
+    table: {
+      borderCollapse: 'collapse',
+      borderSpacing: 0,
+    },
 
-  '.Page': {
+    // remove outlines from links
+    a: {
+      outline: 'none',
+      cursor: 'pointer',
+      whiteSpace: 'nowrap',
+    },
+
+    [buttons]: {
+      cursor: 'pointer',
+      '&::-moz-focus-inner': {
+        padding: '0',
+        border: '0 none',
+      },
+    },
+
+    '#Magic': {
+      margin: '0 auto',
+      width: '90%',
+    },
+
+    '.Wrapper': {
+      display: 'inline-block',
+    },
+
+    // header and menu in header
     '.Header': {
-      margin: '0 0 .5em',
+      display: 'inline-block',
+      width: '90%',
+
+      '.Logo': {
+        float: 'left',
+      },
+
+      '.LogoText': {
+        float: 'left',
+        fontSize: '1.5em',
+        margin: '.7em .2em',
+      },
+
+      '.LogoWrapper': {
+        display: 'inline-block',
+      },
+    },
+
+    '.Page': {
+      '.Header': {
+        margin: '0 0 .5em',
+      },
+
+      h1: {
+        padding: '1em 0 .2em',
+      },
+    },
+
+    '.Footer': {
+      width: '100%',
+    },
+
+    // html header tags
+    'h1, h2, h3, h4, h5': {
+      padding: '1em 0 .2em',
     },
 
     h1: {
-      padding: '1em 0 .2em',
+      fontSize: '1.3em',
     },
-  },
 
-  '.Footer': {
-    width: '100%',
-  },
+    h2: {
+      fontSize: '1.2em',
+    },
 
-  // html header tags
-  'h1, h2, h3, h4, h5': {
-    padding: '1em 0 .2em',
-  },
-
-  h1: {
-    fontSize: '1.3em',
-  },
-
-  h2: {
-    fontSize: '1.2em',
-  },
-
-  h3: {
-    fontSize: '1.1em',
-  },
-}
+    h3: {
+      fontSize: '1.1em',
+    },
+  })
+])
 
 module.exports = reset
