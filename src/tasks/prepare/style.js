@@ -1,26 +1,22 @@
 const is = require('@magic/types')
 const deep = require('@magic/deep')
 const path = require('path')
-const { handleStyleFunctions, findModuleStyles } = require('../../lib')
-
-const Magic = require('../../modules/admin')
+const { findModuleStyles } = require('../../lib')
 
 module.exports = ({ app, modules }) => {
-  let resetStyles = []
-  let styles = []
+  const styles = []
 
   const theme = config.THEME || ''
 
   // merge default reset css into styles
   const libResetCssFile = path.join(__dirname, '..', '..', 'themes', 'reset.css.js')
-  const libResetCssStyles = require(libResetCssFile)
-  resetStyles = [...resetStyles, handleStyleFunctions(libResetCssStyles)]
+  const resetStyles = require(libResetCssFile)
 
   // merge user created custom rest.css into styles, if it exists
   try {
     const maybeResetCssFile = path.join(config.DIR.THEMES, theme, 'reset.css.js')
     const maybeResetCssStyles = require(maybeResetCssFile)
-    resetStyles = [...resetStyles, handleStyleFunctions(maybeResetCssStyles)]
+    resetStyles.push(maybeResetCssStyles)
   } catch (e) {
     if (e.code !== 'MODULE_NOT_FOUND') {
       throw e
@@ -29,14 +25,14 @@ module.exports = ({ app, modules }) => {
 
   // load all styles from all modules
   const moduleStyles = findModuleStyles(modules)
-  styles = deep.merge(styles, moduleStyles)
+  styles.push(moduleStyles)
 
   // load user's chosen theme, if it is set and exists, and merge it over the styles
   if (config.THEME) {
     // look if it exists in node_modules
     try {
       let theme = require(`@magic-themes/${config.THEME}`)
-      styles.push(handleStyleFunctions(theme))
+      styles.push(theme)
     } catch (e) {
       // theme does not exist in node_modules, continue happily.
     }
@@ -46,7 +42,7 @@ module.exports = ({ app, modules }) => {
 
     try {
       let theme = require(libThemeFile)
-      styles.push(handleStyleFunctions(theme))
+      styles.push(theme)
     } catch (e) {
       if (e.code !== 'MODULE_NOT_FOUND') {
         throw e
@@ -56,7 +52,7 @@ module.exports = ({ app, modules }) => {
     // load user's custom theme, overwriting both preinstalled and node_modules themes
     try {
       const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.js')
-      let theme = handleStyleFunctions(require(maybeThemeFile))
+      let theme = require(maybeThemeFile)
 
       if (is.array(maybeThemeFile)) {
         theme.forEach(t => {
@@ -75,7 +71,7 @@ module.exports = ({ app, modules }) => {
   app.pages
     .filter(p => p.style)
     .forEach(page => {
-      styles.push(handleStyleFunctions(page.style))
+      styles.push(page.style)
     })
 
   const maybeAppFile = path.join(config.ROOT, 'app.js')
@@ -83,7 +79,7 @@ module.exports = ({ app, modules }) => {
     try {
       const maybeApp = require(maybeAppFile)
       if (is.object(maybeApp) && !is.empty(maybeApp) && maybeApp.style) {
-        styles.push(handleStyleFunctions(maybeApp.style))
+        styles.push(maybeApp.style)
       }
     } catch (e) {
       if (e.code !== 'MODULE_NOT_FOUND') {
@@ -92,19 +88,6 @@ module.exports = ({ app, modules }) => {
     }
   }
 
-  if (config.ENV === 'development') {
-    styles = [handleStyleFunctions(Magic.style), ...styles]
-  }
-
-  let resetStyleObject = {}
-  resetStyles.map(style => {
-    resetStyleObject = deep.merge(resetStyleObject, handleStyleFunctions(style))
-  })
-  let styleObject = {}
-  styles.map(style => {
-    styleObject = deep.merge(styleObject, handleStyleFunctions(style))
-  })
-
-  const finalStyles = [resetStyleObject, styleObject]
+  const finalStyles = [resetStyles, styles]
   return finalStyles
 }
