@@ -50,8 +50,9 @@ module.exports = {
 
   h4({ id: 'caveat' }, 'caveat'),
   p([
-    'all libs must either export a single object using module.exports OR using exports.key mappings. one OR the other.',
-    ' when using exports.key to export, you will always get an object in LIB.',
+    'all libs must either export a single object using module.exports ',
+    ' OR using exports.key mappings. one OR the other.',
+    ' when using exports.key to export, you will always get an object of your exports in LIB.',
     ' when using module.exports, structuring the LIB[name] object is up to you.',
   ]),
 
