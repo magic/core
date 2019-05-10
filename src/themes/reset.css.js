@@ -81,10 +81,6 @@ const reset = {
     width: '90%',
   },
 
-  '.Wrapper': {
-    display: 'inline-block',
-  },
-
   // header and menu in header
   '.Header': {
     display: 'inline-block',
