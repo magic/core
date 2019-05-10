@@ -9,8 +9,8 @@
     "/core/404/": "sha384-TY9UIT1SgDgP92u1NjD88Yr+RxovhXM4x2b1wZCBzoLEryZS5Qr4F9JcbsjSS66z"
   },
   "static": {
-    "/logo.png": "sha384-mosOoczFXyMjpHLfSyz0DWwJO3qE+XQl3uW94lHE/BX1rpI2m/n+dsBu67djqyUq",
-    "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+"
+    "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+",
+    "/logo.png": "sha384-mosOoczFXyMjpHLfSyz0DWwJO3qE+XQl3uW94lHE/BX1rpI2m/n+dsBu67djqyUq"
   },
   "js": "sha384-c5GHv7/GtXSkRqjjE812MLx4DdxCwI2rCK3fnme2sBK4iJDKzO+jP/yJiiQS6Sd9",
   "css": "sha384-4jZ8blmpKbu2KSrS1JS05ROirpDZSkPrilj1NRSKsbrjVEIYJl2+AvHZIVzekNZ+"
