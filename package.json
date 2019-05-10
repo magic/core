@@ -5,6 +5,7 @@
   "scripts": {
     "start": "t -p",
     "build": "NODE_ENV=production node src/bin.js build",
+    "serve": "NODE_ENV=production node src/bin.js serve --watch src",
     "prod": "NODE_ENV=production node src/bin.js build serve --watch src",
     "clean": "node src/bin.js clean",
     "serve": "node src/bin.js serve --watch src",
