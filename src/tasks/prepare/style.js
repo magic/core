@@ -27,7 +27,7 @@ module.exports = ({ app, modules }) => {
   }
 
   // load all styles from all modules
-  const moduleStyles = findModuleStyles(modules)
+  const moduleStyles = findModuleStyles(modules, config.THEME_VARS)
   styles.push(moduleStyles)
 
   // load user's chosen theme, if it is set and exists, and merge it over the styles
