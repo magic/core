@@ -11,10 +11,7 @@ module.exports = (app, hashes) =>
       app.state.url = page.name
       const state = deep.merge(page.state, app.state)
       const actions = deep.merge(page.actions, app.actions)
-      const rendered = applyWebRoot(
-        config,
-        renderToString(app.View(page, hashes), state, actions),
-      )
+      const rendered = applyWebRoot(config, renderToString(app.View(page, hashes), state, actions))
 
       return {
         ...page,

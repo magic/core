@@ -42,7 +42,8 @@ let app = {
           !is.empty(state.author) && meta({ name: 'author', content: state.author }),
           link({
             rel: 'stylesheet',
-            href: '/' + config.CLIENT_LIB_NAME + '.css' + `?${hashes.css.split('-')[1].substr(0,11)}`,
+            href:
+              '/' + config.CLIENT_LIB_NAME + '.css' + `?${hashes.css.split('-')[1].substr(0, 11)}`,
             integrity: hashes.css,
             crossorigin: 'anonymous',
           }),
@@ -51,7 +52,7 @@ let app = {
         body([
           div({ id: 'Magic' }, Page(page.View)),
           script({
-            src: '/' + config.CLIENT_LIB_NAME + '.js' + `?${hashes.js.split('-')[1].substr(0,11)}`,
+            src: '/' + config.CLIENT_LIB_NAME + '.js' + `?${hashes.js.split('-')[1].substr(0, 11)}`,
             integrity: hashes.js,
             crossorigin: 'anonymous',
           }),
