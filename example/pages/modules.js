@@ -21,17 +21,18 @@ module.exports = (props, children) => (state, actions) => div('hello, world')
 `),
 
     h2({ id: 'usage' }, 'usage'),
-    p('to use a module in your app it has to be imported using /assets/index.js. '),
+    p([
+      'if the npm package name starts with @magic-modules/ or magic-module, it will get imported automagically.',
+      ' the same is true for all uppercased files in your /assets directory.',
+      ' in the rare case where you want to install a npm module that can not be found, you can import it in /assets/index.js',
+    ]),
     Pre(`
 // /assets/index.js
 module.exports = {
   // ...otherModules
 
-  // load module from /assets/Mod.js
-  Mod: require('./Mod'),
-
   // load module from node_modules
-  NpmModule: require('@magic-modules/npm-module'),
+  NpmModule: require('not-standard-named-magic-module-from-npm'),
 }`),
     p(
       'after this, the module will be a global in your app and can be used like any other component.',
