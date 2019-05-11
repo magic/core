@@ -16,6 +16,9 @@ module.exports = ({ app, modules }) => {
   try {
     const maybeResetCssFile = path.join(config.DIR.THEMES, theme, 'reset.css.js')
     const maybeResetCssStyles = require(maybeResetCssFile)
+    if (is.fn(maybeResetCssStyles)) {
+      maybeResetCssStyles = maybeResetCssStyles(config.THEME_VARS)
+    }
     resetStyles = maybeResetCssStyles
   } catch (e) {
     if (e.code !== 'MODULE_NOT_FOUND') {
@@ -62,16 +65,7 @@ module.exports = ({ app, modules }) => {
       if (is.fn(theme)) {
         theme = theme(config.THEME_VARS)
       }
-      if (is.array(maybeThemeFile)) {
-        theme.forEach(t => {
-          if (is.fn(t)) {
-            t = t(config.THEME_VARS)
-          }
-          styles.push(t)
-        })
-      } else {
-        styles.push(theme)
-      }
+      styles.push(theme)
     } catch (e) {
       if (e.code !== 'MODULE_NOT_FOUND') {
         throw e
@@ -93,6 +87,9 @@ module.exports = ({ app, modules }) => {
     try {
       const maybeApp = require(maybeAppFile)
       if (is.object(maybeApp) && !is.empty(maybeApp) && maybeApp.style) {
+        if (is.fn(maybeApp.style)) {
+          maybeApp.style = maybeApp.style(config.THEME_VARS)
+        }
         styles.push(maybeApp.style)
       }
     } catch (e) {
