@@ -6,6 +6,20 @@
 >
 
 <url>
+  <loc>https://magic.github.io/core/</loc>
+  <lastmod>2019-05-11</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+</url>
+
+<url>
+  <loc>https://magic.github.io/core/404/</loc>
+  <lastmod>2019-05-11</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+</url>
+
+<url>
   <loc>https://magic.github.io/core/concepts/</loc>
   <lastmod>2019-05-11</lastmod>
   <changefreq>weekly</changefreq>
@@ -14,13 +28,6 @@
 
 <url>
   <loc>https://magic.github.io/core/files/</loc>
-  <lastmod>2019-05-11</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.5</priority>
-</url>
-
-<url>
-  <loc>https://magic.github.io/core/</loc>
   <lastmod>2019-05-11</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
@@ -42,13 +49,6 @@
 
 <url>
   <loc>https://magic.github.io/core/themes/</loc>
-  <lastmod>2019-05-11</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.5</priority>
-</url>
-
-<url>
-  <loc>https://magic.github.io/core/404/</loc>
   <lastmod>2019-05-11</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
