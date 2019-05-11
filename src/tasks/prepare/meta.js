@@ -29,7 +29,7 @@ const prepareMetaFiles = async app => {
     const sitemapArray = [sitemapHeader]
 
     app.pages
-      .sort(({name},{name: n2}) => is.ln.gt(name, n2) ? 1 : -1)
+      .sort(({ name }, { name: n2 }) => (is.ln.gt(name, n2) || name > n2 ? 1 : -1))
       .forEach(({ name }) => {
         const now = new Date()
         let month = now.getMonth() + 1
