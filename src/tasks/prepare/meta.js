@@ -1,5 +1,4 @@
-const log = require('@magic/log')
-const { xc } = require('../../lib')
+const is = require('@magic/types')
 
 const sitemapHeader = `
 <?xml version='1.0' encoding='UTF-8'?>
@@ -29,20 +28,22 @@ const prepareMetaFiles = async app => {
   if (config.SITEMAP) {
     const sitemapArray = [sitemapHeader]
 
-    app.pages.forEach(({ name }) => {
-      const now = new Date()
-      let month = now.getMonth() + 1
-      if (month < 10) {
-        month = `0${month}`
-      }
-      let day = now.getDate()
-      if (day < 10) {
-        day = `0${day}`
-      }
+    app.pages
+      .sort(({name},{name: n2}) => is.ln.gt(name, n2) ? 1 : -1)
+      .forEach(({ name }) => {
+        const now = new Date()
+        let month = now.getMonth() + 1
+        if (month < 10) {
+          month = `0${month}`
+        }
+        let day = now.getDate()
+        if (day < 10) {
+          day = `0${day}`
+        }
 
-      const changeDate = `${now.getFullYear()}-${month}-${day}`
+        const changeDate = `${now.getFullYear()}-${month}-${day}`
 
-      sitemapArray.push(`
+        sitemapArray.push(`
 <url>
   <loc>https://${config.URL}${name.replace(config.WEB_ROOT, '/')}</loc>
   <lastmod>${changeDate}</lastmod>
@@ -50,7 +51,7 @@ const prepareMetaFiles = async app => {
   <priority>0.5</priority>
 </url>
 `)
-    })
+      })
 
     sitemapArray.push(sitemapFooter)
 
