@@ -32,6 +32,9 @@ module.exports = ({ app, modules }) => {
     // look if it exists in node_modules
     try {
       let theme = require(`@magic-themes/${config.THEME}`)
+      if (is.fn(theme)) {
+        theme = theme(config.THEME_VARS)
+      }
       styles.push(theme)
     } catch (e) {
       // theme does not exist in node_modules, continue happily.
@@ -42,6 +45,9 @@ module.exports = ({ app, modules }) => {
 
     try {
       let theme = require(libThemeFile)
+      if (is.fn(theme)) {
+        theme = theme(config.THEME_VARS)
+      }
       styles.push(theme)
     } catch (e) {
       if (e.code !== 'MODULE_NOT_FOUND') {
@@ -53,9 +59,14 @@ module.exports = ({ app, modules }) => {
     try {
       const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.js')
       let theme = require(maybeThemeFile)
-
+      if (is.fn(theme)) {
+        theme = theme(config.THEME_VARS)
+      }
       if (is.array(maybeThemeFile)) {
         theme.forEach(t => {
+          if (is.fn(t)) {
+            t = t(config.THEME_VARS)
+          }
           styles.push(t)
         })
       } else {
@@ -71,6 +82,9 @@ module.exports = ({ app, modules }) => {
   app.pages
     .filter(p => p.style)
     .forEach(page => {
+      if (is.fn(page.style)) {
+        page.style = page.style(config.THEME_VARS)
+      }
       styles.push(page.style)
     })
 

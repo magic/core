@@ -7,6 +7,10 @@ const findModuleStyles = (modules, parent) => {
   Object.entries(modules)
     .filter(([_, m]) => !is.empty(m.style))
     .forEach(([name, mod]) => {
+      if (is.fn(mod.style)) {
+        mod.style = mod.style(config.THEME_VARS)
+      }
+
       let selector = `.${name}`
       let style = mod.style
 
