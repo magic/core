@@ -10,12 +10,27 @@ const builtinModules = require('../../modules')
 const findNodeModules = async () => {
   let modules = {}
 
-  const nodeModuleDir = path.join(process.cwd(), 'node_modules', '@magic-modules')
-  const nodeModules = await getDirectories([nodeModuleDir], false)
+  const nodeModuleDir = path.join(process.cwd(), 'node_modules')
+
+  const dirs = await getDirectories(nodeModuleDir, false)
+  dirs
+    .filter(dir => dir.includes('magic-module-'))
+    .forEach(nodeModule => {
+      try {
+        const name = nodeModule.split('magic-module-')[1]
+        const mod = require(nodeModule)
+        modules[name] = mod
+      } catch (e) {
+        log.error('Error', `requiring node_module: ${nodeModule}, error: ${e.message}`)
+      }
+    })
+
+  const magicModuleDir = path.join(nodeModuleDir, '@magic-modules')
+  const nodeModules = await getDirectories(magicModuleDir, false)
   nodeModules
     .filter(n => nodeModuleDir !== n)
     .forEach(nodeModule => {
-      if (nodeModuleDir !== nodeModule) {
+      if (magicModuleDir !== nodeModule) {
         try {
           const name = toPascal(path.basename(nodeModule))
           const mod = require(nodeModule)
@@ -25,6 +40,7 @@ const findNodeModules = async () => {
         }
       }
     })
+
   return modules
 }
 
