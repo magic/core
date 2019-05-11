@@ -15,7 +15,6 @@ module.exports = {
   getPages: require('./getPages'),
   handleDeps: require('./handleDeps'),
   handleStyleFunctions: require('./handleStyleFunctions'),
-  isGlobal: require('./isGlobal'),
   isLocalPath: require('./isLocalPath'),
   isUpperCase: require('./isUpperCase'),
   minifyImages: require('./minifyImages'),
