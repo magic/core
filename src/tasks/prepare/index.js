@@ -1,6 +1,6 @@
 const is = require('@magic/types')
 
-const { isGlobal, getFiles, getPages, isUpperCase, fs, createFileHash } = require('../../lib')
+const { getFiles, getPages, isUpperCase, fs, createFileHash } = require('../../lib')
 
 const prepareGlobals = require('./globals')
 const prepareClient = require('./client')
@@ -69,7 +69,7 @@ const prepare = async app => {
 
       if (!is.empty(component.state)) {
         Object.entries(component.state).forEach(([key, val]) => {
-          if (isGlobal(glob.state, key)) {
+          if (glob.state && glob.state[key] === true) {
             app.state[key] = val
           } else {
             app.state[lowerName] = app.state[lowerName] || {}
@@ -80,7 +80,7 @@ const prepare = async app => {
 
       if (!is.empty(component.actions)) {
         Object.entries(component.actions).forEach(([key, val]) => {
-          if (isGlobal(glob.actions, key)) {
+          if (glob.actions && glob.actions[key] === true) {
             app.actions[key] = val
           } else {
             app.actions[lowerName] = app.actions[lowerName] || {}
