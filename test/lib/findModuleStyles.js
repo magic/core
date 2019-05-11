@@ -27,7 +27,7 @@ const moduleWithMedia = {
         color: 'green',
       },
     },
-  }
+  },
 }
 
 const moduleWithMediaExpect = { '@media screen': { '.Module': { color: 'green' } } }
@@ -47,7 +47,10 @@ const expectModuleWithSubmodule = { '.ModuleSubModule': { color: 'green' } }
 module.exports = [
   { fn: findModuleStyles(exampleModules), expect: is.object },
   { fn: findModuleStyles(exampleModules), expect: is.deep.equal(expectExampleModules) },
-  { fn: findModuleStyles(moduleWithFnStyle, { color: 'green' }), expect: is.deep.equal(expectExampleModules) },
+  {
+    fn: findModuleStyles(moduleWithFnStyle, { color: 'green' }),
+    expect: is.deep.equal(expectExampleModules),
+  },
   { fn: findModuleStyles(moduleWithMedia), expect: is.deep.equal(moduleWithMediaExpect) },
   { fn: findModuleStyles(moduleWithSubModule), expect: is.deep.equal(expectModuleWithSubmodule) },
 ]
