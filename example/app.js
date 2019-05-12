@@ -14,17 +14,17 @@ module.exports = {
           {
             to: '#state',
             text: 'state',
-            items: [{ to: '#state-example', text: 'example state' }],
+            items: [{ to: '-example', text: 'example state' }],
           },
           {
             to: '#actions',
             text: 'actions',
-            items: [{ to: '#actions-example', text: 'example actions' }],
+            items: [{ to: '-example', text: 'example actions' }],
           },
           {
             to: '#views',
             text: 'views',
-            items: [{ to: '#views-example', text: 'example view' }],
+            items: [{ to: '-example', text: 'example view' }],
           },
           {
             to: '#styles',
@@ -51,10 +51,10 @@ module.exports = {
             to: '#libs',
             text: 'external libs',
             items: [
-              { to: '/concepts/#libs-dir-or-file', text: 'lib dir or file' },
-              { to: '/concepts/#libs-example-file', text: 'example lib file' },
-              { to: '/concepts/#libs-app', text: 'app.lib' },
-              { to: '/concepts/#libs-module', text: 'module.lib' },
+              { to: '-dir-or-file', text: 'lib dir or file' },
+              { to: '-example-file', text: 'example lib file' },
+              { to: '-app', text: 'app.lib' },
+              { to: '-module', text: 'module.lib' },
             ],
           },
           { to: '/concepts/#full-example', text: 'example' },
