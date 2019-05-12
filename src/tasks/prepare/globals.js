@@ -12,7 +12,9 @@ const findNodeModules = async () => {
 
   const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 
-  const dirs = await getDirectories(nodeModuleDir, false)
+  const recursiveSearch = false
+
+  const dirs = await getDirectories(nodeModuleDir, recursiveSearch)
   dirs
     .filter(dir => dir.includes('magic-module-'))
     .forEach(nodeModule => {
@@ -26,7 +28,8 @@ const findNodeModules = async () => {
     })
 
   const magicModuleDir = path.join(nodeModuleDir, '@magic-modules')
-  const nodeModules = await getDirectories(magicModuleDir, false)
+  const nodeModules = await getDirectories(magicModuleDir, recursiveSearch)
+
   nodeModules
     .filter(n => nodeModuleDir !== n)
     .forEach(nodeModule => {
