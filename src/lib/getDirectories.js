@@ -30,7 +30,7 @@ const getDirectories = async (directories, recurse = true) => {
 
   const exists = await fs.exists(directories)
   if (!exists) {
-    return ''
+    return []
   }
 
   let flattened = [directories]
