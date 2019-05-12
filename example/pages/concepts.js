@@ -123,7 +123,7 @@ const exampleModule = {
 
         p([
           'a page is a module, a button is a module, a link is a module, an image is a module.',
-          ' a @magic app contains of modules containing modules that contain modules.',
+          ' a @magic app contains modules containing modules that contain modules.',
           ' this can lead to inception.',
         ]),
       ]),
