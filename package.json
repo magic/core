@@ -66,7 +66,7 @@
     "@magic-modules/pre": "github:magic-modules/pre",
     "@magic-modules/theme-list": "github:magic-modules/theme-list",
     "@magic-themes/docs": "github:magic-themes/docs",
-    "@magic/test": "0.0.12"
+    "@magic/test": "0.1.0"
   },
   "author": "Wizards & Witches",
   "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
