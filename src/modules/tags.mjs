@@ -1,6 +1,6 @@
 import component from './component.mjs'
 
-const htmlTags = [
+export const htmlTags = [
   'a',
   'abbr',
   'address',
@@ -116,7 +116,7 @@ const htmlTags = [
   'text',
 ]
 
-const headTags = ['html', 'head', 'title', 'meta', 'link', 'body', 'script']
+export const headTags = ['html', 'head', 'title', 'meta', 'link', 'body', 'script']
 
 const exp = {
   component,
@@ -145,4 +145,6 @@ const description = attrs => {
 exp.tags.head.description = description
 exp.description = description
 
-export default exp
+export const tags = exp
+
+export default tags

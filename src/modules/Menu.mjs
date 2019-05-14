@@ -1,4 +1,4 @@
-const Menu = (props = 'menu') => state => {
+export const Menu = (props = 'menu') => state => {
   if (typeof props === 'string') {
     props = { name: props }
   }

@@ -1,4 +1,4 @@
-const Footer = () =>
+export const Footer = () =>
   footer({ class: 'Footer' }, [
     div({ class: 'wrapper' }, [
       'made with a few bits of ',

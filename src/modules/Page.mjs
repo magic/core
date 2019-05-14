@@ -1,4 +1,4 @@
-export default page => (state, actions) =>
+export const Page = page => (state, actions) =>
   div(
     {
       class: 'Wrapper',
@@ -10,3 +10,5 @@ export default page => (state, actions) =>
     },
     [Header, div({ class: 'Page' }, page ? page(state, actions) : '404 - not found'), Footer],
   )
+
+export default Page

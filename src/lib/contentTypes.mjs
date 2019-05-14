@@ -26,5 +26,3 @@ export const contentTypes = {
   ico: 'image/x-icon',
   webp: 'image/webp',
 }
-
-export default contentTypes

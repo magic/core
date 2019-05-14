@@ -1,10 +1,10 @@
 import is from '@magic/types'
 
-import { babel, fs, handleDependencies, isUpperCase, stringifyObject } from '../../lib/index.mjs'
+import { runBabel, fs, handleDependencies, isUpperCase, stringifyObject } from '../../lib/index.mjs'
 
 const prepareClient = async app => {
   // importing hyperapp
-  const hyperappImport = "const { app, h } from 'hyperapp'\n"
+  const hyperappImport = "const { app, h } = require('hyperapp')\n"
 
   let checkProps = ''
   if (config.ENV === 'development') {
@@ -26,7 +26,7 @@ const prepareClient = async app => {
 
   // define every lib import at the top of magic.js
   if (!is.empty(app.lib)) {
-    if (!is.object(app.lib)) {
+    if (!is.object(app.lib) || is.array(app.lib)) {
       throw new Error(`Expected app.lib to be an object, received ${typeof app.lib}, ${app.lib}`)
     }
 
@@ -35,11 +35,11 @@ const prepareClient = async app => {
     Object.entries(app.lib).forEach(([name, res]) => {
       const libContent = fs.readFileSync(res, 'utf8')
       let lib = libContent
-      if (libContent.includes('module.exports')) {
+      if (libContent.includes('export default')) {
         lib = libContent.replace('export default', `lib.${name} =`)
-      } else if (libContent.includes('exports')) {
+      } else if (libContent.includes('export')) {
         libString += `\n lib.${name} = lib.${name} || {};\n`
-        lib = libContent.replace('exports.', `lib.${name}.`)
+        lib = libContent.replace('export const ', `lib.${name}.`)
       } else {
         throw new Error(`library ${name} has no exports`)
       }
@@ -48,7 +48,6 @@ const prepareClient = async app => {
       libString += str
     })
     libString += '\nwindow.LIB = lib\n'
-    // clientString += libString
   }
 
   // create pages object, each Page is a html View
@@ -127,6 +126,9 @@ app(state, actions, view, mD)\n`
     .filter(a => a)
     .join('\n')
 
+  // console.log(tempClientString)
+
+  const babel = runBabel(config)
   const ast = await babel.parseAsync(tempClientString, { ...babel.opts })
 
   const moduleNames = Object.keys(app.modules)

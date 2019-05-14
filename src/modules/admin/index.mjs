@@ -1,2 +1,2 @@
-const lib = /*config.ENV === 'production' ?*/ './magic' //: './admin'
-export default require(lib)
+// const lib = /*config.ENV === 'production' ?*/ './magic' //: './admin'
+export { Magic } from './magic.mjs'

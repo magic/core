@@ -23,6 +23,8 @@ export const fs = {
   watch: fso.watch,
   writeFile: util.promisify(fso.writeFile),
   readFileSync: fso.readFileSync,
+  writeFileSync: fso.writeFileSync,
+  unlinkSync: fso.unlinkSync,
 }
 
 export default fs

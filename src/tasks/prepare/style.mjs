@@ -11,20 +11,22 @@ export default async ({ app, modules }) => {
 
   const theme = config.THEME || ''
 
-  // merge default reset css into styles
-  const libResetCssFile = path.join(dirName, '..', '..', 'themes', 'reset.css.js')
-  let resetStyles = await import(libResetCssFile)
+  let resetStyles
 
   // merge user created custom rest.css into styles, if it exists
   try {
-    const maybeResetCssFile = path.join(config.DIR.THEMES, theme, 'reset.css.js')
+    // merge default reset css into styles
+    const libResetCssFile = path.join(dirName, '..', '..', 'themes', 'reset.css.mjs')
+    const { reset } = await import(libResetCssFile)
+    resetStyles = reset
+    const maybeResetCssFile = path.join(config.DIR.THEMES, theme, 'reset.css.mjs')
     const maybeResetCssStyles = await import(maybeResetCssFile)
     if (is.fn(maybeResetCssStyles)) {
       maybeResetCssStyles = maybeResetCssStyles(config.THEME_VARS)
     }
     resetStyles = maybeResetCssStyles
   } catch (e) {
-    if (e.code !== 'MODULE_NOT_FOUND') {
+    if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
       throw e
     }
   }
@@ -43,11 +45,14 @@ export default async ({ app, modules }) => {
       }
       styles.push(theme)
     } catch (e) {
+      if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+        throw e
+      }
       // theme does not exist in node_modules, continue happily.
     }
 
     // first look if we have this theme preinstalled, if so, merge it into the styles
-    const libThemeFile = path.join(dirName, '..', '..', 'themes', config.THEME, 'index.js')
+    const libThemeFile = path.join(dirName, '..', '..', 'themes', config.THEME, 'index.mjs')
 
     try {
       let theme = await import(libThemeFile)
@@ -56,21 +61,21 @@ export default async ({ app, modules }) => {
       }
       styles.push(theme)
     } catch (e) {
-      if (e.code !== 'MODULE_NOT_FOUND') {
+      if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
         throw e
       }
     }
 
     // load user's custom theme, overwriting both preinstalled and node_modules themes
     try {
-      const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.js')
+      const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.mjs')
       let theme = await import(maybeThemeFile)
       if (is.fn(theme)) {
         theme = theme(config.THEME_VARS)
       }
       styles.push(theme)
     } catch (e) {
-      if (e.code !== 'MODULE_NOT_FOUND') {
+      if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
         throw e
       }
     }
@@ -85,18 +90,19 @@ export default async ({ app, modules }) => {
       styles.push(page.style)
     })
 
-  const maybeAppFile = path.join(config.ROOT, 'app.js')
-  if (maybeAppFile !== __filename) {
+  const maybeAppFile = path.join(config.ROOT, 'app.mjs')
+  const fileName = new URL(import.meta.url).pathname
+  if (maybeAppFile !== fileName) {
     try {
-      const maybeApp = await import(maybeAppFile)
-      if (is.object(maybeApp) && !is.empty(maybeApp) && maybeApp.style) {
-        if (is.fn(maybeApp.style)) {
-          maybeApp.style = maybeApp.style(config.THEME_VARS)
+      const { style } = await import(maybeAppFile)
+      if (style) {
+        if (is.fn(style)) {
+          style = style(config.THEME_VARS)
         }
-        styles.push(maybeApp.style)
+        styles.push(style)
       }
     } catch (e) {
-      if (e.code !== 'MODULE_NOT_FOUND') {
+      if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
         throw e
       }
     }

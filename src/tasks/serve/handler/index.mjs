@@ -3,10 +3,9 @@ import URL from 'url'
 
 import { addTrailingSlash, getContentType } from '../../../lib/index.mjs'
 
-
 export const handler = app => (req, res) => {
   const { isProd } = config
-  const { css, client, stat: stat, lambdas } = app
+  const { css, client, static: stat, lambdas } = app
   const WEB_ROOT = addTrailingSlash(config.WEB_ROOT)
   const url = URL.parse(req.url)
   let { pathname } = url
@@ -72,10 +71,9 @@ export const handler = app => (req, res) => {
     return
   }
 
-  const page = pages[url.pathname]
-  if (page) {
+  if (pages[url.pathname]) {
     res.writeHead(200, { ...headers, 'Content-Type': 'text/html' })
-    res.end(page)
+    res.end(pages[url.pathname])
     return
   }
 

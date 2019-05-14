@@ -48,5 +48,20 @@ magic dev --watch src
   },
 }
 
-const res = cli(args)
-runCluster(res)
+const run = async () => {
+  const res = cli(args)
+
+  if (!global.config) {
+    const { runConfig } = await import('./config.mjs')
+    global.config = await runConfig()
+  }
+
+  if (!global.CHECK_PROPS) {
+    const { CHECK_PROPS } = await import('./lib/index.mjs')
+    global.CHECK_PROPS = CHECK_PROPS
+  }
+
+  runCluster(res, config, CHECK_PROPS)
+}
+
+run()

@@ -1,6 +1,6 @@
 import log from '@magic/log'
 
-import tasks from '../tasks/index.mjs'
+import * as tasks from '../tasks/index.mjs'
 
 const runCmd = async (cmd, ...args) => {
   log.time(cmd)

@@ -3,7 +3,7 @@ import log from '@magic/log'
 // git subtree push --prefix example/public origin gh-pages
 import { getGitConfig, xc } from '../../lib/index.mjs'
 
-const connect = async () => {
+export const connect = async () => {
   const git = await getGitConfig()
 
   // const outDir = OUT_DIR.replace(`${process.cwd()}/`, '')

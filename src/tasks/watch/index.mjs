@@ -3,7 +3,7 @@ import path from 'path'
 
 import { getDirectories } from '../../lib/index.mjs'
 
-const watch = async dir => {
+export const watch = async dir => {
   const dirs = await getDirectories(dir)
 
   dirs.map(dir => {

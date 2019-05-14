@@ -4,25 +4,15 @@ import path from 'path'
 import log from '@magic/log'
 import is from '@magic/types'
 
-import tasks from '../tasks/index.mjs'
+import * as tasks from '../tasks/index.mjs'
 import runApp from '../modules/app.mjs'
 
 import runCmd from './runCmd.mjs'
 
-export const runCluster = async ({ cmds, argv }) => {
+export const runCluster = async ({ cmds, argv }, config, CHECK_PROPS) => {
   if (cluster.isMaster) {
-    if (!global.config) {
-      const { runConfig } = await import('../config.mjs')
-      global.config = await runConfig()
-    }
-
-    if (!global.CHECK_PROPS) {
-      const { CHECK_PROPS } = await import('../lib/index.mjs')
-      global.CHECK_PROPS = CHECK_PROPS
-    }
-
-    if (config.URL_WARNING) {
-      log.warn('Autodetected URL:', remote)
+    if (global.config.URL_WARNING) {
+      log.warn('Autodetected URL:', `https://${global.config.URL}`)
       log.info(`
 to hide this warning and make startup ${config.URL_WARNING}ms faster,
 add the following to your config.js file (and adjust the values if needed)
@@ -91,6 +81,7 @@ add the following to your config.js file (and adjust the values if needed)
     })
   } else if (cluster.isWorker) {
     if (cmds.serve && cluster.worker.id === 1) {
+      // watcher
       const watchDirs = argv['--watch']
       let dirs = [config.ROOT]
       if (is.array(watchDirs) && !is.empty(watchDirs)) {
@@ -100,7 +91,8 @@ add the following to your config.js file (and adjust the values if needed)
       dirs = dirs.map(dir => (dir.startsWith(cwd) ? dir : path.join(cwd, dir)))
       tasks.watch(dirs)
     } else {
-      const App = await runApp()
+      // builder
+      const App = await runApp(config)
       const app = await runCmd('prepare', App)
 
       const { pages, bundle, css } = await runCmd('transpile', app)
@@ -121,10 +113,10 @@ add the following to your config.js file (and adjust the values if needed)
 
     process
       .on('unhandledRejection', error => {
-        process.send({ evt: 'error', error: error.toString() })
+        process.send({ evt: 'error', error: error.toString(), stack: error.stack })
       })
       .on('uncaughtException', error => {
-        process.send({ evt: 'error', error: error.toString() })
+        process.send({ evt: 'error', error: error.toString(), stack: error.stack })
       })
   }
 }

@@ -1,6 +1,6 @@
 import path from 'path'
 
-const {
+import {
   minifyImages,
   compress,
   writeFile,
@@ -8,14 +8,12 @@ const {
   mkdirp,
   fs,
   getFileType,
-} = require('../../lib')
+} from '../../lib/index.mjs'
 
-const isProd = config.ENV === 'production'
-
-const write = async app => {
+export const write = async app => {
+  const { isProd } = config
   const zippable = config.FILETYPES.ZIPPABLE
   const images = config.FILETYPES.IMAGES
-
 
   const { css, client, pages, static: stat } = app
   await mkdirp(config.DIR.PUBLIC)

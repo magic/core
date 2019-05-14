@@ -1,4 +1,4 @@
-const Link = ({ to, ...p }, children) => (_, actions) => {
+export const Link = ({ to, ...p }, children) => (_, actions) => {
   const { href, text, nofollow, noreferrer, onclick, ...props } = p
   to = to || href || ''
   props.href = to

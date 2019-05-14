@@ -1,4 +1,4 @@
-export default state =>
+export const Header = state =>
   (state.logo || state.menu || state.tagline) &&
   header({ class: 'Header' }, [
     (state.logo || state.logotext) &&
@@ -8,3 +8,5 @@ export default state =>
       ]),
     state.menu && Menu,
   ])
+
+export default Header

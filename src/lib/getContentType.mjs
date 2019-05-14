@@ -1,5 +1,5 @@
-import getFileType from './getFileType.mjs'
-import contentTypes from './contentTypes.mjs'
+import { getFileType } from './getFileType.mjs'
+import { contentTypes } from './contentTypes.mjs'
 
 export const getContentType = uri => {
   const fileType = getFileType(uri)

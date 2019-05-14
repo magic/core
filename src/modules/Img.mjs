@@ -1,4 +1,4 @@
-export default props => () => {
+export const Img = props => () => {
   if (typeof props === 'string') {
     props = {
       src: props,
@@ -20,3 +20,5 @@ export default props => () => {
 
   return img(props)
 }
+
+export default Img

@@ -31,7 +31,12 @@ export const handleDependencies = (name, component) => {
 
       if (config.ENV === 'development') {
         if (component[view.name].props) {
-          comp += `${name}.${view.name}.props = ${stringifyObject(component[view.name].props)}\n`
+          const propString = stringifyObject(component[view.name].props)
+          if (is.fn(component)) {
+            comp += `${name}.${view.name}.props = ${propString}\n`
+          } else {
+            comp += `props: ${propString},\n`
+          }
         }
       }
     })

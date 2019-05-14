@@ -7,7 +7,7 @@ import client from './client.mjs'
 import style from './css.mjs'
 import { createFileHash } from '../../lib/index.mjs'
 
-const transpile = async app => {
+export const transpile = async app => {
   const bundle = await client(app.client)
   const css = await style(app.style)
 

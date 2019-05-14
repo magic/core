@@ -4,7 +4,7 @@ import log from '@magic/log'
 
 import handler from './handler/index.mjs'
 
-const listen = async server =>
+export const listen = async server =>
   await {
     then(r, f) {
       server.on('listening', r)
@@ -12,7 +12,7 @@ const listen = async server =>
     },
   }
 
-const startServer = async (server, options) => {
+export const startServer = async (server, options) => {
   try {
     server.listen(options)
     await listen(server)
@@ -29,7 +29,7 @@ const startServer = async (server, options) => {
   return options
 }
 
-const serve = async app => {
+export const serve = async app => {
   const handle = await handler(app)
 
   const server = http.createServer(handle)

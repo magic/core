@@ -1,9 +1,10 @@
 import is from '@magic/types'
 import path from 'path'
 
-const preparePages = files => {
-  const pages = files.map(file => {
-    let page = require(file)
+export const preparePages = async files => {
+  const pagePromises = files.map(async file => {
+    const pageTmp = await import(file)
+    let page = { ...pageTmp }
     if (is.function(page)) {
       page = {
         ...page,
@@ -14,8 +15,8 @@ const preparePages = files => {
     page.file = file
     const pageName = file
       .replace(config.DIR.PAGES, '')
-      .replace(/index.js/gm, '')
-      .replace('.js', '/')
+      .replace(/index.[m]?js/gm, '')
+      .replace(/[m]?.js/gm, '/')
 
     if (config.WEB_ROOT !== '/') {
       let ROOT = config.WEB_ROOT
@@ -44,6 +45,8 @@ does not export a view function or page.View key.`)
 
     return page
   })
+
+  const pages = await Promise.all(pagePromises)
 
   const has404 = pages.some(p => p.name === '/404/')
 

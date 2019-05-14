@@ -2,13 +2,15 @@ import path from 'path'
 
 import is from '@magic/types'
 import deep from '@magic/deep'
-import hyper from 'hyperapp/src/index.js'
+import { default as app } from 'hyperapp'
 
 import { fs } from '../lib/index.mjs'
 
-const { WEB_ROOT = '/', LANG = 'en' } = config
+const { h } = app
 
-const run = async () => {
+const run = async config => {
+  const { WEB_ROOT = '/', LANG = 'en' } = config
+
   // default app state. gets merged with /assets/app.js if it exists.
   // /assets/app.js overwrites the values defined here.
   let app = {

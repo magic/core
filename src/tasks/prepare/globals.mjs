@@ -1,11 +1,12 @@
 import path from 'path'
 
-import * as deep from '@magic/deep'
-import * as is from '@magic/types'
+import deep from '@magic/deep'
+import is from '@magic/types'
 import log from '@magic/log'
 
 import { getDirectories, getFiles, isUpperCase, toPascal } from '../../lib/index.mjs'
-import builtinModules from '../../modules/index.mjs'
+
+import { builtins } from '../../modules/index.mjs'
 
 const findNodeModules = async () => {
   let modules = {}
@@ -51,16 +52,16 @@ const findNodeModules = async () => {
   return modules
 }
 
-const findInstalledModules = async () => {
+const findLocalModules = async () => {
   let modules = {}
 
   const assetModules = await getFiles(config.DIR.ASSETS)
   const assetPromises = assetModules
     .filter(m => isUpperCase(path.basename(m)))
-    .filter(m => ['.js', '.mjs'].some(ext => m.endsWith(ext)))
+    .filter(m => ['.mjs'].some(ext => m.endsWith(ext)))
     .map(async m => {
       try {
-        const mod = await import(m)
+        const { default: mod } = await import(m)
         const name = path.basename(m).replace(path.extname(m), '')
         modules[name] = mod
       } catch (e) {
@@ -75,7 +76,7 @@ const findInstalledModules = async () => {
 
 const findAssetFile = async () => {
   try {
-    const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.js')
+    const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.mjs')
     const assets = await import(maybeAssetFile)
     let modules = {}
     Object.entries(assets).forEach(([name, mod]) => {
@@ -89,7 +90,7 @@ const findAssetFile = async () => {
 
 const findBuiltins = () => {
   let modules = {}
-  Object.entries(builtinModules).forEach(([name, mod]) => {
+  Object.entries(builtins).forEach(([name, mod]) => {
     // tags are and object that duplicates the tags, unneeded
     if (name !== 'tags') {
       modules[name] = mod
@@ -125,7 +126,7 @@ const globals = async app => {
 
   modules = deep.merge(modules, await findBuiltins(modules))
   modules = deep.merge(modules, await findAssetFile(modules))
-  modules = deep.merge(modules, await findInstalledModules(modules))
+  modules = deep.merge(modules, await findLocalModules(modules))
   modules = deep.merge(modules, await findNodeModules(modules))
 
   let lib = app.lib

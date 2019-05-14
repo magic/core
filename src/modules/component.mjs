@@ -1,6 +1,8 @@
-import { h } from 'hyperapp'
+import { default as app } from 'hyperapp'
 
-const component = name => (props = {}, children = false) => {
+const { h } = app
+
+export const component = name => (props = {}, children = false) => {
   const is = (ele, ...types) => types.some(type => type === typeof ele)
 
   if (!children) {

@@ -1,9 +1,8 @@
+import path from 'path'
+
 export const getFileType = name => {
   if (!name || !name.includes('.')) {
     return 'txt'
   }
-  const typeArray = name.split('.')
-  return typeArray[typeArray.length - 1]
+  return path.extname(name)
 }
-
-export default getFileType

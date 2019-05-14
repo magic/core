@@ -23,7 +23,7 @@ input[type="file"] > input[type="button"]`
 // define the original style as a Map to keep key inheritance working.
 // all other styles will be added as keys onto this map,
 // which means that order should be preserved
-const reset = {
+export const reset = {
   [all]: {
     margin: 0,
     padding: 0,
@@ -132,5 +132,3 @@ const reset = {
     fontSize: '1.1em',
   },
 }
-
-export default reset
