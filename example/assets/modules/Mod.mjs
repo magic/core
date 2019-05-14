@@ -1,0 +1,68 @@
+import path from 'path'
+
+let View = state =>
+  div({ class: 'Mod' }, [
+    h3('Mod.Mod'),
+    p([
+      'this is Mod. it gets loaded from ',
+      Link({ to: 'https://github.com/magic/core/example/assets/module.js' }, '/assets/module.js'),
+    ]),
+    p([
+      'and imported in ',
+      Link({ to: 'https://github.com/magic/core/example/assets/index.js' }, '/assets/index.js'),
+    ]),
+    p(['the state of this module: ', JSON.stringify(state.module)]),
+  ])
+
+View.state = {
+  module: {
+    test: 'testing',
+  },
+}
+
+View.style = {
+  margin: '0 0 1em',
+  padding: '0.5em',
+  border: '1px solid',
+  borderColor: 'green',
+
+  h3: {
+    margin: 0,
+  },
+}
+
+View.global = {
+  state: {
+    module: true,
+  },
+}
+
+View.Component = props => () => {
+  props = typeof props === 'string' ? { header: props } : props
+  CHECK_PROPS(props, Mod.Component.props, 'Mod.Component')
+  const header = props.header || props.title
+
+  return div({ class: 'ModComponent' }, [
+    header && h5(header),
+    p([
+      'Mod.Component, a second component in ',
+      Link({ to: 'https://github.com/magic/core/example/assets/module.mjs' }, '/assets/module.mjs'),
+    ]),
+  ])
+}
+
+const dirName = path.dirname(new URL(import.meta.url).pathname)
+View.Component.lib = {
+  ModComponentTest: path.join(dirName, '..', 'lib', 'module-exports.mjs'),
+}
+
+View.Component.style = {
+  border: '1px solid orange',
+}
+
+View.Component.props = [{ key: 'header', type: ['string', 'array'], required: ['title'] }]
+
+export default {
+  Mod: View,
+  ...View,
+}
