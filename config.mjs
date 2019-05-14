@@ -1,6 +1,6 @@
 export default {
   ROOT: 'example',
-  THEME: 'docs',
+  // THEME: 'docs',
   WEB_ROOT: '/core/',
 
   PUBLIC: 'docs',
