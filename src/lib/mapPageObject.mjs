@@ -14,5 +14,3 @@ export const mapPageObject = (o, key, c) => ([k, v]) => {
   }
   return o
 }
-
-export default mapPageObject

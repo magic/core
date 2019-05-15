@@ -8,7 +8,7 @@ import { getDirectories, getFiles, isUpperCase, toPascal } from '../../lib/index
 
 import { builtins } from '../../modules/index.mjs'
 
-const findNodeModules = async () => {
+export const findNodeModules = async () => {
   let modules = {}
 
   const nodeModuleDir = path.join(process.cwd(), 'node_modules')
@@ -52,7 +52,7 @@ const findNodeModules = async () => {
   return modules
 }
 
-const findLocalModules = async () => {
+export const findLocalModules = async () => {
   let modules = {}
 
   const assetModules = await getFiles(config.DIR.ASSETS)
@@ -61,7 +61,7 @@ const findLocalModules = async () => {
     .filter(m => ['.mjs'].some(ext => m.endsWith(ext)))
     .map(async m => {
       try {
-        const { default: mod } = await import(m)
+        const mod = await import(m)
         const name = path.basename(m).replace(path.extname(m), '')
         modules[name] = mod
       } catch (e) {
@@ -74,7 +74,7 @@ const findLocalModules = async () => {
   return modules
 }
 
-const findAssetFile = async () => {
+export const findAssetFile = async () => {
   try {
     const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.mjs')
     const assets = await import(maybeAssetFile)
@@ -88,7 +88,7 @@ const findAssetFile = async () => {
   }
 }
 
-const findBuiltins = () => {
+export const findBuiltins = () => {
   let modules = {}
   Object.entries(builtins).forEach(([name, mod]) => {
     // tags are and object that duplicates the tags, unneeded
@@ -99,7 +99,7 @@ const findBuiltins = () => {
   return modules
 }
 
-const findLib = ([name, mod]) => {
+export const findLib = ([name, mod]) => {
   let lib = {}
   if (mod.lib) {
     lib = deep.merge(lib, mod.lib)
@@ -107,18 +107,21 @@ const findLib = ([name, mod]) => {
 
   const views = Object.entries(mod).filter(([n]) => isUpperCase(n))
   views.forEach(([n, m]) => {
-    lib = deep.merge(findLib([n, m]))
+    // functional modules can not have lib fields
+    if (!is.fn(m)) {
+      lib = deep.merge(findLib([n, m]))
+    }
   })
 
   return lib
 }
 
-const findLibs = modules =>
+export const findLibs = modules =>
   Object.entries(modules)
     .map(findLib)
     .filter(a => !is.empty(a))
 
-const globals = async app => {
+export const prepareGlobals = async app => {
   global.keys = global.keys || new Set()
   global.LIB = global.LIB || {}
 
@@ -132,7 +135,13 @@ const globals = async app => {
   let lib = app.lib
 
   Object.entries(modules).forEach(([name, mod]) => {
-    global[name] = mod
+    let View
+    if (is.fn(mod)) {
+      View = mod
+    } else {
+      View = mod.View
+    }
+    global[name] = View
 
     const views = Object.entries(mod).filter(([k]) => isUpperCase(k))
     views.forEach(([k, v]) => {
@@ -158,5 +167,3 @@ const globals = async app => {
     lib,
   }
 }
-
-export default globals

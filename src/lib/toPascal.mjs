@@ -4,5 +4,3 @@ export const toPascal = s =>
     .split(snakeRegex)
     .map(s => `${s[0].toUpperCase()}${s.substr(1)}`)
     .join('')
-
-export default toPascal

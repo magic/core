@@ -66,5 +66,3 @@ export const CHECK_PROPS = (props, propTypeDecl, name = 'Module') => {
 
   return true
 }
-
-export default CHECK_PROPS

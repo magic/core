@@ -2,11 +2,11 @@ import path from 'path'
 
 import is from '@magic/types'
 import deep from '@magic/deep'
-import { default as app } from 'hyperapp'
+import { default as hyper } from 'hyperapp'
 
 import { fs } from '../lib/index.mjs'
 
-const { h } = app
+const { h } = hyper
 
 const run = async config => {
   const { WEB_ROOT = '/', LANG = 'en' } = config
@@ -97,16 +97,18 @@ const run = async config => {
           app.lib[name] = file
         }
       } catch (e) {
-        throw new Error(`Error in assets/lib.js: Could not find imported lib '${name}' in ${file}`)
+        throw new Error(`Error in assets/lib.mjs: Could not find imported lib '${name}' in ${file}`)
       }
     })
     await Promise.all(libPromises)
   }
 
   try {
-    const maybeAppFile = path.join(config.ROOT, 'app.js')
-    if (maybeAppFile !== __filename && fs.existsSync(maybeAppFile)) {
-      const maybeApp = await import(maybeAppFile)
+    const maybeAppFile = path.join(config.ROOT, 'app.mjs')
+    const exists = await fs.exists(maybeAppFile)
+
+    if (exists) {
+      const { default: maybeApp } = await import(maybeAppFile)
       if (is.object(maybeApp) && !is.empty(maybeApp)) {
         app = deep.merge(app, maybeApp)
       }

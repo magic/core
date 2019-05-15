@@ -4,19 +4,21 @@ import path from 'path'
 export const preparePages = async files => {
   const pagePromises = files.map(async file => {
     const pageTmp = await import(file)
-    let page = { ...pageTmp }
-    if (is.function(page)) {
+    let page
+    if (is.fn(pageTmp)) {
       page = {
         ...page,
         View: page,
       }
+    } else {
+      page = { ...pageTmp }
     }
 
     page.file = file
     const pageName = file
       .replace(config.DIR.PAGES, '')
       .replace(/index.[m]?js/gm, '')
-      .replace(/[m]?.js/gm, '/')
+      .replace(/.[m]?js/gm, '/')
 
     if (config.WEB_ROOT !== '/') {
       let ROOT = config.WEB_ROOT
@@ -39,7 +41,7 @@ export const preparePages = async files => {
 
     if (!page.View || !is.function(page.View.toString)) {
       throw new Error(`
-${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(/\//g, '')}.js
+${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(/\//g, '')}.mjs
 does not export a view function or page.View key.`)
     }
 

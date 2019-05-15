@@ -26,5 +26,3 @@ export const fs = {
   writeFileSync: fso.writeFileSync,
   unlinkSync: fso.unlinkSync,
 }
-
-export default fs

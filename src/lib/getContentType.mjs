@@ -10,5 +10,3 @@ export const getContentType = uri => {
 
   return contentType
 }
-
-export default getContentType

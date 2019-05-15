@@ -5,8 +5,8 @@ import imageminSvgo from 'imagemin-svgo'
 import imageminMozjpeg from 'imagemin-mozjpeg'
 import imageminGifsicle from 'imagemin-gifsicle'
 
-import getDirectories from './getDirectories.mjs'
-import fs from './fs.mjs'
+import { getDirectories } from './getDirectories.mjs'
+import { fs } from './fs.mjs'
 
 export const minifyImages = async images => {
   const imageGlob = `*.{${images.join(',')}}`
@@ -33,4 +33,3 @@ export const minifyImages = async images => {
     }),
   )
 }
-export default minifyImages

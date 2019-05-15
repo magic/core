@@ -9,10 +9,10 @@ import runApp from '../modules/app.mjs'
 
 import runCmd from './runCmd.mjs'
 
-export const runCluster = async ({ cmds, argv }, config, CHECK_PROPS) => {
+export const runCluster = async ({ cmds, argv }, config) => {
   if (cluster.isMaster) {
-    if (global.config.URL_WARNING) {
-      log.warn('Autodetected URL:', `https://${global.config.URL}`)
+    if (config.URL_WARNING) {
+      log.warn('Autodetected URL:', `https://${config.URL}`)
       log.info(`
 to hide this warning and make startup ${config.URL_WARNING}ms faster,
 add the following to your config.js file (and adjust the values if needed)

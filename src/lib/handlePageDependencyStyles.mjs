@@ -32,5 +32,3 @@ export const handlePageDependencyStyles = dep => {
 
   return style
 }
-
-export default handlePageDependencyStyles

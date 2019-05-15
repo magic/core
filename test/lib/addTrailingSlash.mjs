@@ -1,4 +1,4 @@
-import addTrailingSlash from '../../src/lib/addTrailingSlash.mjs'
+import { addTrailingSlash } from '../../src/lib/addTrailingSlash.mjs'
 
 export default [
   { fn: addTrailingSlash(''), expect: '/', info: 'empty string turns into /' },

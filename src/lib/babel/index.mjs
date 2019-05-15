@@ -67,5 +67,3 @@ export const runBabel = config => {
 
   return babelLib
 }
-
-export default runBabel

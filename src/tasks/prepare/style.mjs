@@ -6,14 +6,14 @@ import { findModuleStyles } from '../../lib/index.mjs'
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
-export default async ({ app, modules }) => {
+export const prepareStyle = async ({ app, modules }) => {
   const styles = []
 
   const theme = config.THEME || ''
 
   let resetStyles
 
-  // merge user created custom rest.css into styles, if it exists
+  // merge user created custom reset.css into styles, if it exists
   try {
     // merge default reset css into styles
     const libResetCssFile = path.join(dirName, '..', '..', 'themes', 'reset.css.mjs')
@@ -109,5 +109,6 @@ export default async ({ app, modules }) => {
   }
 
   const finalStyles = [resetStyles, styles]
+  console.log('finalStyles', finalStyles)
   return finalStyles
 }

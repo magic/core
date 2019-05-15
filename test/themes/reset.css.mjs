@@ -1,7 +1,7 @@
 import { is } from '@magic/test'
 
 import css from '@magic/css'
-import reset from '../../src/themes/reset.css.mjs'
+import { reset } from '../../src/themes/reset.css.mjs'
 
 const string = css(reset)
 // console.log(string)

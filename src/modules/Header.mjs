@@ -8,5 +8,3 @@ export const Header = state =>
       ]),
     state.menu && Menu,
   ])
-
-export default Header

@@ -2,9 +2,9 @@ import path from 'path'
 
 import log from '@magic/log'
 
-import fs from './fs.mjs'
-import mkdirp from './mkdirp.mjs'
-import getFiles from './getFiles.mjs'
+import { fs } from './fs.mjs'
+import { mkdirp } from './mkdirp.mjs'
+import { getFiles } from './getFiles.mjs'
 
 export const getPages = async () => {
   try {
@@ -17,7 +17,7 @@ export const getPages = async () => {
     if (config.DIR.PAGES.startsWith(process.cwd())) {
       log.warn('NOEXIST', `${config.DIR.PAGES} does not exist or does not contain pages`)
       // const indexPage = "div('hello world')"
-      // const pagePath = path.join(config.DIR.PAGES, 'index.js')
+      // const pagePath = path.join(config.DIR.PAGES, 'index.mjs')
       // await mkdirp(config.DIR.PAGES)
       // await fs.writeFile(pagePath, indexPage)
       return await getPages()
@@ -26,5 +26,3 @@ export const getPages = async () => {
     throw e
   }
 }
-
-export default getPages

@@ -8,5 +8,3 @@ export const handleStyleFunctions = s => {
 
   return s
 }
-
-export default handleStyleFunctions

@@ -1,8 +1,8 @@
-import { Page } from './Page.mjs'
-import { Menu } from './Menu.mjs'
+import * as Page from './Page.mjs'
+import * as Menu from './Menu.mjs'
 import { Link } from './Link.mjs'
 import { Footer } from './Footer.mjs'
-import { Magic } from './admin/index.mjs'
+import * as Magic from './admin/index.mjs'
 import { Header } from './Header.mjs'
 import { Img } from './Img.mjs'
 

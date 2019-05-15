@@ -1,6 +1,7 @@
 import is from '@magic/types'
-import isUpperCase from './isUpperCase.mjs'
-import stringifyObject from './stringifyObject.mjs'
+
+import { isUpperCase } from './isUpperCase.mjs'
+import { stringifyObject } from './stringifyObject.mjs'
 
 export const handleDependencies = (name, component) => {
   if (is.fn(component) && !isUpperCase(name)) {
@@ -52,5 +53,3 @@ export const handleDependencies = (name, component) => {
   }
   return `${comp}\n`
 }
-
-export default handleDependencies

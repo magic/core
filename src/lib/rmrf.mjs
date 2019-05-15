@@ -1,5 +1,6 @@
-import fs from './fs.mjs'
 import path from 'path'
+
+import { fs } from './fs.mjs'
 
 export const rmrf = async dir => {
   if (!dir) {
@@ -25,5 +26,3 @@ export const rmrf = async dir => {
     await fs.rmdir(dir)
   }
 }
-
-export default rmrf

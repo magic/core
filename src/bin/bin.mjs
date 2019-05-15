@@ -1,8 +1,7 @@
-#!/usr/bin/env node
+import { cli } from '@magic/cli/src/index.mjs'
 
-import cli from '@magic/cli'
-
-import { runCluster } from './cluster/index.mjs'
+import { runCluster } from '../cluster/index.mjs'
+import { runConfig } from '../config.mjs'
 
 const args = {
   options: [
@@ -49,19 +48,17 @@ magic dev --watch src
 }
 
 const run = async () => {
+  console.log(process.argv)
   const res = cli(args)
 
-  if (!global.config) {
-    const { runConfig } = await import('./config.mjs')
-    global.config = await runConfig()
-  }
+  global.config = await runConfig()
 
   if (!global.CHECK_PROPS) {
-    const { CHECK_PROPS } = await import('./lib/index.mjs')
+    const { CHECK_PROPS } = await import('../lib/index.mjs')
     global.CHECK_PROPS = CHECK_PROPS
   }
 
-  runCluster(res, config, CHECK_PROPS)
+  runCluster(res, config)
 }
 
 run()

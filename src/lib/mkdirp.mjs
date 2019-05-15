@@ -1,5 +1,6 @@
 import path from 'path'
-import fs from './fs.mjs'
+
+import { fs } from './fs.mjs'
 
 export const mkdirp = async p => {
   if (!p) {
@@ -22,5 +23,3 @@ export const mkdirp = async p => {
     }
   }
 }
-
-export default mkdirp

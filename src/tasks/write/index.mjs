@@ -47,7 +47,8 @@ export const write = async app => {
   await fs.writeFile(path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.css`), usedCss)
 
   if (isProd) {
-    await compress(zippable, images)
+    const comp = await compress()
+    await comp(zippable, images)
     await minifyImages(images)
   }
 

@@ -19,5 +19,3 @@ export const stringifyObject = (obj, indent = '') => {
 
   return obj
 }
-
-export default stringifyObject

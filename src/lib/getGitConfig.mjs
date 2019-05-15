@@ -1,6 +1,6 @@
 import log from '@magic/log'
 
-import xc from '../lib/xc.mjs'
+import { xc } from '../lib/xc.mjs'
 
 export const getGitConfig = async () => {
   if (config.GIT && config.GIT.ORIGIN) {
@@ -25,5 +25,3 @@ export const getGitConfig = async () => {
     return git
   }
 }
-
-export default getGitConfig

@@ -1,8 +1,9 @@
-import fs from './fs.mjs'
 import path from 'path'
 
 import is from '@magic/types'
 import deep from '@magic/deep'
+
+import { fs } from './fs.mjs'
 
 // recursively find all directories in a directory.
 // returns array of paths relative to dir
@@ -42,5 +43,3 @@ export const getDirectories = async (directories, recurse = true) => {
 
   return flattened.filter(a => a)
 }
-
-export default getDirectories

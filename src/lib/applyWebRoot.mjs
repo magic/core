@@ -16,5 +16,3 @@ export const applyWebRoot = ({ ENV, WEB_ROOT }, str) => {
     .replace(/src="\//gm, `src="${WEB_ROOT}`)
     .replace(/src='\//gm, `src='${WEB_ROOT}`)
 }
-
-export default applyWebRoot

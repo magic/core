@@ -2,6 +2,23 @@ import is from '@magic/types'
 
 import { runBabel, fs, handleDependencies, isUpperCase, stringifyObject } from '../../lib/index.mjs'
 
+const prepareCl = async app => {
+  const clientImports = ['hyperapp']
+
+  const { CHECK_PROPS } = global
+
+  const { lib, state, actions, pages, style, View, ...rest } = app
+  console.log(
+    {
+      lib,
+      state,
+      actions,
+      pages,
+    },
+    Object.keys(rest),
+  )
+}
+
 const prepareClient = async app => {
   // importing hyperapp
   const hyperappImport = "const { app, h } = require('hyperapp')\n"
@@ -24,7 +41,7 @@ const prepareClient = async app => {
 
   let libString = ''
 
-  // define every lib import at the top of magic.js
+  // define every lib import at the top of magic.mjs
   if (!is.empty(app.lib)) {
     if (!is.object(app.lib) || is.array(app.lib)) {
       throw new Error(`Expected app.lib to be an object, received ${typeof app.lib}, ${app.lib}`)
@@ -93,7 +110,7 @@ const view = (state, actions) => {
     }
   }
 
-  return Page(page)(state, actions)
+  return Page.View(page)(state, actions)
 }
 `
 
@@ -146,12 +163,13 @@ app(state, actions, view, mD)\n`
         ]
         if (!excludedParentTypes.some(t => parent.type === t)) {
           usedModules.add(node.name)
+          if (node.name === 's') console.log(node, parent)
         }
       } else if (isUpperCase(node.name)) {
         const { object } = parent
         if (object && moduleNames.includes(object.name)) {
-          const name = `${object.name}.${node.name}`
-          usedModules.add(name)
+          console.log(node.name)
+          usedModules.add(node.name)
         }
       }
     },
@@ -210,17 +228,18 @@ app(state, actions, view, mD)\n`
     // make subModules apply last
     .sort(key => (key.includes('.') ? 1 : -1))
     .forEach(key => {
+      console.log({ key })
       if (!key.includes('.')) {
         cleanDependencies[key] = app.modules[key]
       } else {
-        // submodules
-        const [parName, modName] = key.split('.')
-
-        // if the module is not referenced directly in the source, we default to an object
-        const parComp = cleanDependencies[parName] || {}
-
-        parComp[modName] = app.modules[parName][modName]
-        cleanDependencies[parName] = parComp
+        // submodule, import parent.
+        // ??? maybe find a way to only import the child in those cases
+        const par = key.split('.')[0]
+        console.log(par, key)
+        if (par === 'Menu') {
+          console.log(key, app.modules[par])
+        }
+        cleanDependencies[par] = app.modules[par]
       }
     })
 
@@ -280,4 +299,4 @@ app(state, actions, view, mD)\n`
   return clientString
 }
 
-export default prepareClient
+export default prepareCl

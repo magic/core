@@ -1,6 +1,7 @@
 import is from '@magic/types'
 import deep from '@magic/deep'
-import isUpperCase from './isUpperCase.mjs'
+
+import { isUpperCase } from './isUpperCase.mjs'
 
 export const findModuleStyles = (modules, vars, parent) => {
   let styles = {}
@@ -59,4 +60,3 @@ export const findModuleStyles = (modules, vars, parent) => {
 
   return styles
 }
-export default findModuleStyles

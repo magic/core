@@ -6,5 +6,3 @@ export const createFileHash = str => {
   const value = hash.digest('base64')
   return `sha384-${value}`
 }
-
-export default createFileHash

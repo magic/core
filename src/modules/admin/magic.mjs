@@ -1,4 +1,4 @@
-export const Magic = page => (state, actions) =>
+export const View = page => (state, actions) =>
   div(
     { id: 'magic' },
     div(
@@ -19,5 +19,3 @@ export const Magic = page => (state, actions) =>
       ],
     ),
   )
-
-export default Magic

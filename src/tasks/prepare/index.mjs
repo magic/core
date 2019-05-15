@@ -2,10 +2,10 @@ import is from '@magic/types'
 
 import { getFiles, getPages, isUpperCase, fs, createFileHash } from '../../lib/index.mjs'
 
-import prepareGlobals from './globals.mjs'
+import { prepareGlobals } from './globals.mjs'
 import prepareClient from './client.mjs'
 import preparePages from './pages.mjs'
-import prepareStyle from './style.mjs'
+import { prepareStyle } from './style.mjs'
 import prepareMetaFiles from './meta.mjs'
 
 export const prepare = async app => {

@@ -1,4 +1,4 @@
-import applyWebRoot from '../../src/lib/applyWebRoot.mjs'
+import { applyWebRoot } from '../../src/lib/applyWebRoot.mjs'
 
 const config = {
   WEB_ROOT: 'WEB_ROOT',

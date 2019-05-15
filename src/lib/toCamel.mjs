@@ -5,5 +5,3 @@ export const toCamel = s =>
       .replace('-', '')
       .replace('_', ''),
   )
-
-export default toCamel
