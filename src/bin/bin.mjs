@@ -48,7 +48,6 @@ magic dev --watch src
 }
 
 const run = async () => {
-  console.log(process.argv)
   const res = cli(args)
 
   global.config = await runConfig()
