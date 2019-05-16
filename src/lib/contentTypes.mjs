@@ -1,6 +1,7 @@
 export const contentTypes = {
   css: 'text/css',
   js: 'application/javascript',
+  mjs: 'application/javascript',
   html: 'text/html',
   json: 'application/json',
   xml: 'application/xml',
