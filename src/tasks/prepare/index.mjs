@@ -17,6 +17,8 @@ export const prepare = async app => {
 
   app.state = app.state || {}
   app.actions = app.actions || {}
+  app.effects = app.effects || {}
+  app.subscriptions = app.subscriptions || {}
 
   // collect the pages, create their states
   app.pages = await preparePages(files)
@@ -28,12 +30,14 @@ export const prepare = async app => {
       }
       app.state.pages[page.name] = page.state
     }
-    if (!is.empty(page.actions)) {
-      if (!app.actions.pages) {
-        app.actions.pages = {}
-      }
-      app.actions.pages[page.name] = page.actions
-    }
+
+    const actionTypes = ['actions', 'effects', 'subscriptions']
+    actionTypes
+      .filter(type => !page[type])
+      .forEach(type => {
+        app[type].pages = app[type].pages || {}
+        app[type].pages[page.name] = page[type]
+      })
 
     return page
   })
@@ -78,16 +82,20 @@ export const prepare = async app => {
         })
       }
 
-      if (!is.empty(component.actions)) {
-        Object.entries(component.actions).forEach(([key, val]) => {
-          if (glob.actions && glob.actions[key] === true) {
-            app.actions[key] = val
-          } else {
-            app.actions[lowerName] = app.actions[lowerName] || {}
-            app.actions[lowerName][key] = val
-          }
+      const actionTypes = ['actions', 'effects', 'subscriptions']
+      actionTypes
+        .filter(type => !is.empty(component[type]))
+        .forEach(type => {
+          Object.entries(component[type])
+            .forEach(([key, val]) => {
+              if (glob[type] && glob[type][key] === true) {
+                app[type][key] = val
+              } else {
+                app[type][lowerName] = app[type][lowerName] || {}
+                app[type][lowerName][key] = val
+              }
+            })
         })
-      }
     })
 
   app.modules = modules
