@@ -53,7 +53,7 @@ const run = async () => {
   global.config = await runConfig()
 
   if (!global.CHECK_PROPS) {
-    const { CHECK_PROPS } = await import('../lib/index.mjs')
+    const { CHECK_PROPS } = await import('../lib/CHECK_PROPS.mjs')
     global.CHECK_PROPS = CHECK_PROPS
   }
 
