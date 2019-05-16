@@ -11,19 +11,6 @@ import { builtins } from '../../modules/index.mjs'
 export const findNodeModules = async () => {
   let modules = {}
 
-  Object.defineProperty(global, '__dirname', {
-    get() {
-      let dir = new URL(import.meta.url).pathname
-      if (!dir.endsWith('/')) {
-        dir = dir
-          .split('/')
-          .filter((a, i, dirs) => i < dirs.length - 1)
-          .join('/')
-      }
-      return dir
-    },
-  })
-
   const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 
   const recursiveSearch = false
