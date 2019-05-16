@@ -8,6 +8,8 @@ import { Img } from './Img.mjs'
 
 import { tags } from './tags.mjs'
 
+export { component } from './component.mjs'
+
 export const builtins = {
   Page,
   Menu,

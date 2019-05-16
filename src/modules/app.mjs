@@ -2,11 +2,9 @@ import path from 'path'
 
 import is from '@magic/types'
 import deep from '@magic/deep'
-import { default as hyper } from 'hyperapp'
+import { h } from 'hyperapp/src/index.mjs'
 
 import { fs } from '../lib/index.mjs'
-
-const { h } = hyper
 
 const run = async config => {
   const { WEB_ROOT = '/', LANG = 'en' } = config
@@ -20,7 +18,7 @@ const run = async config => {
     },
 
     // this View gets server rendered.
-    View: (page, hashes) => (state, actions) => {
+    View: (page, hashes) => state => {
       state.url = page.name
 
       return [
@@ -45,23 +43,23 @@ const run = async config => {
             !is.empty(state.author) && meta({ name: 'author', content: state.author }),
             link({
               rel: 'stylesheet',
-              href:
-                '/' +
-                config.CLIENT_LIB_NAME +
-                '.css' +
-                `?${hashes.css.split('-')[1].substr(0, 11)}`,
-              integrity: hashes.css,
-              crossorigin: 'anonymous',
+              href: '/' + `${config.CLIENT_LIB_NAME}.css?${hashes.css.split('-')[1].substr(0, 11)}`,
+              // integrity: hashes.css,
+              // crossorigin: 'anonymous',
             }),
-            page.Head && page.Head(state, actions),
+            page.Head && page.Head(state),
           ]),
           body([
-            div({ id: 'Magic' }, Page(page.View)),
+            div({ id: 'Magic' }, Page({ page: page.View, state })),
             script({
+              type: 'module',
               src:
-                '/' + config.CLIENT_LIB_NAME + '.js' + `?${hashes.js.split('-')[1].substr(0, 11)}`,
-              integrity: hashes.js,
-              crossorigin: 'anonymous',
+                '/' +
+                config.CLIENT_LIB_NAME +
+                '.mjs' +
+                `?${hashes.mjs.split('-')[1].substr(0, 11)}`,
+              // integrity: hashes.mjs,
+              // crossorigin: 'anonymous',
             }),
           ]),
         ]),

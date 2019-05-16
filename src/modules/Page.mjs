@@ -1,12 +1,12 @@
-export const Page = page => (state, actions) =>
+export const Page = ({ page, state }) =>
   div(
     {
       class: 'Wrapper',
-      oncreate: () => {
-        if (typeof window !== 'undefined' && actions.go) {
-          window.addEventListener('popstate', actions.go)
-        }
-      },
+      // oncreate: () => {
+      //   if (typeof window !== 'undefined' && actions && actions.go) {
+      //     window.addEventListener('popstate', actions.go)
+      //   }
+      // },
     },
-    [Header, div({ class: 'Page' }, page ? page(state, actions) : '404 - not found'), Footer],
+    [Header({ state }), div({ class: 'Page' }, page ? page(state) : '404 - not found'), Footer()],
   )

@@ -1,4 +1,4 @@
-export const Header = state =>
+export const Header = ({ state }) =>
   (state.logo || state.menu || state.tagline) &&
   header({ class: 'Header' }, [
     (state.logo || state.logotext) &&
@@ -6,5 +6,5 @@ export const Header = state =>
         state.logo && Img({ class: 'Logo', src: state.logo }),
         state.logotext && span({ class: 'LogoText' }, state.logotext),
       ]),
-    state.menu && Menu,
+    state.menu && Menu({ ...state, items: state.menu }),
   ])

@@ -1,4 +1,4 @@
-import component from './component.mjs'
+import { component } from './component.mjs'
 
 export const htmlTags = [
   'a',

@@ -1,4 +1,4 @@
-export const View = ({ to, ...p }, children) => (_, actions) => {
+export const View = ({ to, ...p }, children) => {
   const { href, text, nofollow, noreferrer, onclick, ...props } = p
   to = to || href || ''
   props.href = to
@@ -6,9 +6,9 @@ export const View = ({ to, ...p }, children) => (_, actions) => {
   if (to && to.startsWith('/') && !to.startsWith(`//`)) {
     props.onclick = e => {
       if (onclick) {
-        onclick({ e, to })
+        return [onclick, { e, to }]
       }
-      actions.go({ e, to })
+      return [actions.go, { e, to }]
     }
   } else {
     props.target = '_blank'

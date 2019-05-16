@@ -1,4 +1,4 @@
-export const Img = props => () => {
+export const Img = props => {
   if (typeof props === 'string') {
     props = {
       src: props,

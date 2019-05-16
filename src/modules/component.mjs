@@ -1,6 +1,4 @@
-import { default as app } from 'hyperapp'
-
-const { h } = app
+import { h } from 'hyperapp/src/index.mjs'
 
 export const component = name => (props = {}, children = false) => {
   const is = (ele, ...types) => types.some(type => type === typeof ele)
@@ -14,7 +12,6 @@ export const component = name => (props = {}, children = false) => {
       props = {}
     }
   }
+
   return h(name, props, children)
 }
-
-export default component

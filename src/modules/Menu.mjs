@@ -1,21 +1,15 @@
-export const View = (props = 'menu') => state => {
-  if (typeof props === 'string') {
-    props = { name: props }
-  }
-
-  let { name = 'menu', class: cl = 'Menu', items = [], collapse = true } = props
-  let { url, [name]: maybeItems = [] } = state
-  items = !items.length ? maybeItems : items
+export const View = ({ items, hash, url, root, ...props }) => {
+  let { class: cl = 'Menu', collapse = true } = props
 
   if (!items.length) {
     return
   }
 
-  if (state.hash) {
-    url += `#${state.hash}`
+  if (hash) {
+    url += `#${hash}`
   }
 
-  return nav({ class: cl }, ul(items.map(i => MenuItem({ ...i, url, collapse }))))
+  return nav({ class: cl }, ul(items.map(i => MenuItem({ ...i, url, root, collapse }))))
 }
 
 export const style = {
@@ -37,8 +31,9 @@ export let MenuItem = ({
   items = [],
   parentTo = undefined,
   collapse,
+  root,
   ...item
-}) => state => {
+}) => {
   // if the item has no values, we quit
   if (!item.to && !text) {
     return
@@ -61,16 +56,15 @@ export let MenuItem = ({
     }
   }
 
-  const rooted = item.to.startsWith(state.root) ? item.to : `${state.root}${item.to.substr(1)}`
-  const active = url.startsWith(rooted)
-  const current = url === rooted
-  if (current) {
+  item.to = item.to.startsWith(root) ? item.to : `${root}${item.to.substr(1)}`
+  const active = url.startsWith(item.to)
+  if (url === item.to) {
     p.class += ' active'
   }
 
   let children = []
   if ((items.length && active) || !collapse) {
-    children = ul(items.map(i => MenuItem({ parentTo: item.to, url, collapse, ...i })))
+    children = ul(items.map(i => MenuItem({ parentTo: item.to, url, root, collapse, ...i })))
   }
 
   return li(p, [item.to ? Link(item, text) : span(item, text), children])
