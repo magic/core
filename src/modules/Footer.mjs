@@ -1,4 +1,4 @@
-const View = () =>
+export const View = () =>
   footer({ class: 'Footer' }, [
     div({ class: 'Container' }, [
       'made with a few bits of ',
@@ -6,12 +6,10 @@ const View = () =>
     ]),
   ])
 
-View.style = {
+export const style = {
   '.Footer': {
     position: 'relative',
     textAlign: 'center',
     padding: '5em 0 .5em',
   },
 }
-
-export const Footer = View

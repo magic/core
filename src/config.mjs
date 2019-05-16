@@ -43,9 +43,10 @@ export const runConfig = async () => {
 
   try {
     const hashPath = path.join(PUBLIC, conf.HASH_FILE_NAME)
-    conf.HASHES = await import(hashPath)
+    const { default: HASHES } = await import(hashPath)
+    conf.HASHES = HASHES
   } catch (e) {
-    if (e.code === 'MODULE_NOT_FOUND') {
+    if (e.code === 'ERR_MODULE_NOT_FOUND') {
       conf.HASHES = {
         pages: {},
         static: {},

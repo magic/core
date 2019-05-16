@@ -21,6 +21,7 @@ export const findNodeModules = async () => {
     .map(async nodeModule => {
       try {
         const name = nodeModule.split('magic-module-')[1]
+        const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
         const mod = await import(nodeModule)
         modules[name] = mod
       } catch (e) {
@@ -39,7 +40,8 @@ export const findNodeModules = async () => {
       if (magicModuleDir !== nodeModule) {
         try {
           const name = toPascal(path.basename(nodeModule))
-          const mod = await import(nodeModule)
+          const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
+          const mod = await import(loadPath)
           modules[name] = mod
         } catch (e) {
           log.error('Error', `requiring node_module: ${nodeModule}, error: ${e.message}`)
@@ -61,8 +63,8 @@ export const findLocalModules = async () => {
     .filter(m => ['.mjs'].some(ext => m.endsWith(ext)))
     .map(async m => {
       try {
-        const mod = await import(m)
         const name = path.basename(m).replace(path.extname(m), '')
+        const mod = await import(m)
         modules[name] = mod
       } catch (e) {
         log.error('Error', `requiring local magic-module: ${m}, error: ${e.message}`)
@@ -135,17 +137,19 @@ export const prepareGlobals = async app => {
   let lib = app.lib
 
   Object.entries(modules).forEach(([name, mod]) => {
-    let View
     if (is.fn(mod)) {
-      View = mod
+      global[name] = mod
     } else {
-      View = mod.View
+      global[name] = mod.View
     }
-    global[name] = View
 
-    const views = Object.entries(mod).filter(([k]) => isUpperCase(k))
+    const views = Object.entries(mod).filter(([k]) => isUpperCase(k) && k !== 'View')
     views.forEach(([k, v]) => {
-      global[name][k] = v
+      if (is.function(v)) {
+        global[name][k] = v
+      } else {
+        global[name][k] = v.View
+      }
     })
   })
 

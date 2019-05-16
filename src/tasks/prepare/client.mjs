@@ -8,15 +8,15 @@ const prepareCl = async app => {
   const { CHECK_PROPS } = global
 
   const { lib, state, actions, pages, style, View, ...rest } = app
-  console.log(
-    {
-      lib,
-      state,
-      actions,
-      pages,
-    },
-    Object.keys(rest),
-  )
+  // console.log(
+  //   {
+  //     lib,
+  //     state,
+  //     actions,
+  //     pages,
+  //   },
+  //   Object.keys(rest),
+  // )
 }
 
 const prepareClient = async app => {

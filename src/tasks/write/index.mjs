@@ -1,8 +1,8 @@
 import path from 'path'
 
 import {
-  minifyImages,
-  compress,
+  //  minifyImages,
+  //  compress,
   writeFile,
   writeServer,
   mkdirp,
@@ -22,7 +22,7 @@ export const write = async app => {
   // even if there is a name clash
   await Promise.all(
     Object.entries(stat)
-      .filter(([name]) => !images.includes(getFileType(name)))
+      // .filter(([name]) => !images.includes(getFileType(name)))
       .map(async file => {
         await writeFile(file)
       }),

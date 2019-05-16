@@ -13,6 +13,10 @@ export const CHECK_PROPS = (props, propTypeDecl, name = 'Module') => {
   is.null = e => e === null
   is.promise = e => e instanceof Promise
 
+  if (!is.array(propTypeDecl)) {
+    console.error('invalid propTypes received from:', name, propTypeDecl)
+  }
+
   let propTypes = propTypeDecl
   if (!propTypeDecl[0].key) {
     let [FALLBACK, ...pT] = propTypeDecl

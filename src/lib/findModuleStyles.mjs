@@ -15,7 +15,7 @@ export const findModuleStyles = (modules, vars, parent) => {
       let style = mod.style
 
       if (parent) {
-        selector = `.${parent}${name}`
+        selector = `.${name}`
       }
 
       if (!mod.style[selector]) {

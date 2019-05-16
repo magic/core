@@ -9,7 +9,7 @@ const dirName = path.dirname(url.pathname)
 export const prepareStyle = async ({ app, modules }) => {
   const styles = []
 
-  const theme = config.THEME || ''
+  const { THEME = '' } = config
 
   let resetStyles
 
@@ -19,7 +19,7 @@ export const prepareStyle = async ({ app, modules }) => {
     const libResetCssFile = path.join(dirName, '..', '..', 'themes', 'reset.css.mjs')
     const { reset } = await import(libResetCssFile)
     resetStyles = reset
-    const maybeResetCssFile = path.join(config.DIR.THEMES, theme, 'reset.css.mjs')
+    const maybeResetCssFile = path.join(config.DIR.THEMES, THEME, 'reset.css.mjs')
     const maybeResetCssStyles = await import(maybeResetCssFile)
     if (is.fn(maybeResetCssStyles)) {
       maybeResetCssStyles = maybeResetCssStyles(config.THEME_VARS)
@@ -37,20 +37,6 @@ export const prepareStyle = async ({ app, modules }) => {
 
   // load user's chosen theme, if it is set and exists, and merge it over the styles
   if (config.THEME) {
-    // look if it exists in node_modules
-    try {
-      let theme = await import(`@magic-themes/${config.THEME}`)
-      if (is.fn(theme)) {
-        theme = theme(config.THEME_VARS)
-      }
-      styles.push(theme)
-    } catch (e) {
-      if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-        throw e
-      }
-      // theme does not exist in node_modules, continue happily.
-    }
-
     // first look if we have this theme preinstalled, if so, merge it into the styles
     const libThemeFile = path.join(dirName, '..', '..', 'themes', config.THEME, 'index.mjs')
 
@@ -64,6 +50,21 @@ export const prepareStyle = async ({ app, modules }) => {
       if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
         throw e
       }
+    }
+
+    // look if it exists in node_modules
+    try {
+      const themePath = `@magic-themes/${config.THEME}`
+      let { default: theme } = await import(themePath)
+      if (is.fn(theme)) {
+        theme = theme(config.THEME_VARS)
+      }
+      styles.push(theme)
+    } catch (e) {
+      if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+        throw e
+      }
+      // theme does not exist in node_modules, continue happily.
     }
 
     // load user's custom theme, overwriting both preinstalled and node_modules themes
@@ -109,6 +110,5 @@ export const prepareStyle = async ({ app, modules }) => {
   }
 
   const finalStyles = [resetStyles, styles]
-  console.log('finalStyles', finalStyles)
   return finalStyles
 }

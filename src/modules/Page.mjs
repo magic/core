@@ -1,4 +1,4 @@
-export const View = page => (state, actions) =>
+export const Page = page => (state, actions) =>
   div(
     {
       class: 'Wrapper',

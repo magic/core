@@ -8,7 +8,7 @@ const exampleModules = {
       color: 'green',
     },
   },
-  OtherModule: {},
+  ModuleOther: {},
 }
 const expectExampleModules = { '.Module': { color: 'green' } }
 
@@ -34,7 +34,7 @@ const moduleWithMediaExpect = { '@media screen': { '.Module': { color: 'green' }
 
 const moduleWithSubModule = {
   Module: {
-    SubModule: {
+    ModuleSubModule: {
       style: {
         color: 'green',
       },

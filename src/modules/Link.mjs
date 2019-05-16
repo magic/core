@@ -1,4 +1,4 @@
-const View = ({ to, ...p }, children) => (_, actions) => {
+export const View = ({ to, ...p }, children) => (_, actions) => {
   const { href, text, nofollow, noreferrer, onclick, ...props } = p
   to = to || href || ''
   props.href = to
@@ -24,7 +24,7 @@ const View = ({ to, ...p }, children) => (_, actions) => {
   return a(props, [text, children])
 }
 
-View.actions = {
+export const actions = {
   go: props => state => {
     // trigger event if history api does not exist
     if (typeof window === 'undefined' || !window.history) {
@@ -79,10 +79,8 @@ View.actions = {
   },
 }
 
-View.global = {
+export const global = {
   actions: {
     go: true,
   },
 }
-
-export const Link = View
