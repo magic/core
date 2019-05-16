@@ -1,4 +1,5 @@
 import { default as render } from 'hyperapp-render'
+import { h } from 'hyperapp/src/index.mjs'
 
 import log from '@magic/log'
 import deep from '@magic/deep'
@@ -11,11 +12,17 @@ export default (app, hashes) =>
       app.state.url = page.name
       const state = deep.merge(page.state, app.state)
       const actions = deep.merge(page.actions, app.actions)
-      const rendered = applyWebRoot(
-        config,
-        render.renderToString(app.View(page, hashes), state, actions),
-      )
 
+      const view = app.View(page, hashes)
+
+      const rendered = render.renderToString(view(state))
+
+      // const rendered = applyWebRoot(
+      //   config,
+      //   render.renderToString(app.View(page, hashes)(state)),
+      // )
+
+      // console.log({ rendered })
       return {
         ...page,
         rendered,
