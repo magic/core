@@ -16,10 +16,10 @@
     "test": "t",
     "calls": "calls"
   },
-  "main": "src/index.mjs",
   "module": "src/index.mjs",
+  "type": "module",
   "bin": {
-    "magic": "src/bin.mjs"
+    "magic": "src/bin/bin.js"
   },
   "files": [
     "src"
@@ -35,10 +35,11 @@
     "@babel/core": "7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "7.4.4",
     "@babel/plugin-transform-arrow-functions": "7.2.0",
+    "@babel/plugin-transform-react-jsx": "7.3.0",
     "@babel/preset-env": "7.4.4",
     "@magic/cli": "0.0.2",
     "@magic/css": "0.7.0",
-    "@magic/deep": "0.0.1",
+    "@magic/deep": "0.1.0",
     "@magic/log": "0.1.0",
     "@magic/types": "0.1.2",
     "babel-plugin-minify-builtins": "0.5.0",
@@ -52,7 +53,7 @@
     "babel-plugin-transform-remove-debugger": "6.9.4",
     "babelify": "10.0.0",
     "browserify": "16.2.3",
-    "hyperapp": "1.2.9",
+    "hyperapp": "github:magic/hyperapp#mjs",
     "hyperapp-render": "3.1.0"
   },
   "devDependencies": {
@@ -62,7 +63,7 @@
     "@magic-modules/pre": "github:magic-modules/pre",
     "@magic-modules/theme-list": "github:magic-modules/theme-list",
     "@magic-themes/docs": "github:magic-themes/docs",
-    "@magic/test": "0.1.4"
+    "@magic/test": "0.1.5"
   },
   "keywords": [
     "magic",
