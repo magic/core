@@ -2,7 +2,7 @@ import http from 'http'
 
 import log from '@magic/log'
 
-import handler from './handler/index.mjs'
+import handler from './handler.mjs'
 
 export const listen = async server =>
   await {

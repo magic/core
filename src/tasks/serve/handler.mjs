@@ -1,7 +1,7 @@
 import path from 'path'
 import URL from 'url'
 
-import { addTrailingSlash, getContentType } from '../../../lib/index.mjs'
+import { addTrailingSlash, getContentType } from '../../lib/index.mjs'
 
 export const handler = app => (req, res) => {
   const { isProd } = config
@@ -57,7 +57,7 @@ export const handler = app => (req, res) => {
     return
   }
 
-  const jsUrl = `/${config.CLIENT_LIB_NAME}.js`
+  const jsUrl = `/${config.CLIENT_LIB_NAME}.mjs`
   if (rawUrl === jsUrl) {
     res.writeHead(200, { ...headers, 'Content-Type': 'application/javascript' })
     res.end(js)
