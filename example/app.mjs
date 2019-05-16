@@ -10,7 +10,6 @@ export const state = {
       to: '/concepts/',
       text: 'concepts',
       items: [
-        { to: '#philosophy', text: 'philosophy' },
         { to: '/concepts/#modules', text: 'modules' },
         {
           to: '#state',
@@ -142,10 +141,8 @@ export const state = {
   logotext: '@magic',
 }
 
-const dirName = path.dirname(new URL(import.meta.url).pathname)
-
 export const lib = {
-  test: path.join(dirName, 'assets', 'lib', 'module-exports.js'),
+  test: 'module-exports.mjs',
 }
 
 export default {

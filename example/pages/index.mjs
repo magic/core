@@ -64,8 +64,3 @@ export const View = state => [
     ]),
   ]),
 ]
-
-export default {
-  state,
-  View,
-}

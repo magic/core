@@ -236,7 +236,7 @@ const exampleModule = {
         ' to make sure resolution works, require.resolve has to be used for local libs.',
       ]),
       Pre(`
-// /assets/lib.js or /assets/lib/index.js
+/assets/lib.js or /assets/lib/index.js
 export default {
   local: require.resolve('./local.js'),
   npm: 'npm-lib',
@@ -244,20 +244,18 @@ export default {
       h3({ id: 'libs-example-file' }, 'example lib file'),
       Pre(`
 // /assets/lib/local.js
-export default name => \`hello, \${name}\`
-`),
+export default name => \`hello, \${name}\``),
 
       h3({ id: 'libs-app' }, 'app.lib'),
       Pre(`
 // /assets/app.js
 export default {
   // ... other app props
-  lib: {
+    lib: {
     local: require.resolve('./lib'),
     npm: 'npm-lib',
   },
-}
-`),
+}`),
       h3({ id: 'libs-module' }, 'module.lib'),
       p('any page or module can export a lib key'),
 
@@ -270,10 +268,10 @@ export default {
   ${indent(example.lib)}
 },
 View: () => div(LIB.local('name')),
-}
+      }
 
-// renders
-<div>hello, name</div>`),
+      // renders
+      <div>hello, name</div>`),
     ]),
 
     div([
@@ -282,9 +280,4 @@ View: () => div(LIB.local('name')),
       Pre(combined),
     ]),
   ]
-}
-
-export default {
-  state,
-  View,
 }

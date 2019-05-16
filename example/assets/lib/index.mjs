@@ -1,3 +1,1 @@
-export default {
-  exportsTesting: require.resolve('./exports-testing'),
-}
+export const exportsTesting = 'exports-testing.mjs'

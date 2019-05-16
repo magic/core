@@ -1,6 +1,6 @@
 import path from 'path'
 
-let View = state =>
+export const View = state =>
   div({ class: 'Mod' }, [
     h3('Mod.Mod'),
     p([
@@ -14,13 +14,13 @@ let View = state =>
     p(['the state of this module: ', JSON.stringify(state.module)]),
   ])
 
-View.state = {
+export const state = {
   module: {
     test: 'testing',
   },
 }
 
-View.style = {
+export const style = {
   margin: '0 0 1em',
   padding: '0.5em',
   border: '1px solid',
@@ -31,13 +31,13 @@ View.style = {
   },
 }
 
-View.global = {
+export const global = {
   state: {
     module: true,
   },
 }
 
-View.Component = props => () => {
+export const Component = props => () => {
   props = typeof props === 'string' ? { header: props } : props
   CHECK_PROPS(props, Mod.Component.props, 'Mod.Component')
   const header = props.header || props.title
@@ -52,17 +52,20 @@ View.Component = props => () => {
 }
 
 const dirName = path.dirname(new URL(import.meta.url).pathname)
-View.Component.lib = {
+Component.lib = {
   ModComponentTest: path.join(dirName, '..', 'lib', 'module-exports.mjs'),
 }
 
-View.Component.style = {
+Component.style = {
   border: '1px solid orange',
 }
 
-View.Component.props = [{ key: 'header', type: ['string', 'array'], required: ['title'] }]
+Component.props = [{ key: 'header', type: ['string', 'array'], required: ['title'] }]
 
 export default {
-  Mod: View,
-  ...View,
+  View,
+  state,
+  style,
+  global,
+  Component,
 }
