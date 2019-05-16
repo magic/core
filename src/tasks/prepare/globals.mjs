@@ -4,28 +4,55 @@ import deep from '@magic/deep'
 import is from '@magic/types'
 import log from '@magic/log'
 
-import { getDirectories, getFiles, isUpperCase, toPascal } from '../../lib/index.mjs'
+import { fs, getDirectories, getFiles, isUpperCase, toPascal } from '../../lib/index.mjs'
 
 import { builtins } from '../../modules/index.mjs'
 
 export const findNodeModules = async () => {
   let modules = {}
 
+  Object.defineProperty(global, '__dirname', {
+    get() {
+      let dir = new URL(import.meta.url).pathname
+      if (!dir.endsWith('/')) {
+        dir = dir
+          .split('/')
+          .filter((a, i, dirs) => i < dirs.length - 1)
+          .join('/')
+      }
+      return dir
+    },
+  })
+
   const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 
   const recursiveSearch = false
+
+  const localLibIndexPath = path.join('src', 'lib', 'index.mjs')
 
   const dirs = await getDirectories(nodeModuleDir, recursiveSearch)
   const dirPromises = dirs
     .filter(dir => dir.includes('magic-module-'))
     .map(async nodeModule => {
+      const name = toPascal(nodeModule.split('magic-module-')[1])
+      const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
+
+      // find module itself
       try {
-        const name = nodeModule.split('magic-module-')[1]
-        const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
-        const mod = await import(nodeModule)
-        modules[name] = mod
+        const mod = await import(loadPath)
+        // copy the imported module into a new object to be able to extend it below
+        modules[name] = {
+          ...mod,
+        }
       } catch (e) {
         log.error('Error', `requiring node_module: ${nodeModule}, error: ${e.message}`)
+      }
+
+      // find lib file of module if it exists
+      const libPath = path.join(nodeModule, localLibIndexPath)
+      const exists = await fs.exists(libPath)
+      if (exists) {
+        modules[name].lib = path.join(loadPath, localLibIndexPath)
       }
     })
 
@@ -38,13 +65,23 @@ export const findNodeModules = async () => {
     .filter(n => nodeModuleDir !== n)
     .map(async nodeModule => {
       if (magicModuleDir !== nodeModule) {
+        const name = toPascal(path.basename(nodeModule))
+        const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
+
         try {
-          const name = toPascal(path.basename(nodeModule))
-          const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
           const mod = await import(loadPath)
-          modules[name] = mod
+          // copy the imported module into a new object to be able to extend it below
+          modules[name] = {
+            ...mod,
+          }
         } catch (e) {
           log.error('Error', `requiring node_module: ${nodeModule}, error: ${e.message}`)
+        }
+
+        const libPath = path.join(nodeModule, localLibIndexPath)
+        const exists = await fs.exists(libPath)
+        if (exists) {
+          modules[name].lib = path.join(loadPath, localLibIndexPath)
         }
       }
     })
@@ -101,31 +138,8 @@ export const findBuiltins = () => {
   return modules
 }
 
-export const findLib = ([name, mod]) => {
-  let lib = {}
-  if (mod.lib) {
-    lib = deep.merge(lib, mod.lib)
-  }
-
-  const views = Object.entries(mod).filter(([n]) => isUpperCase(n))
-  views.forEach(([n, m]) => {
-    // functional modules can not have lib fields
-    if (!is.fn(m)) {
-      lib = deep.merge(findLib([n, m]))
-    }
-  })
-
-  return lib
-}
-
-export const findLibs = modules =>
-  Object.entries(modules)
-    .map(findLib)
-    .filter(a => !is.empty(a))
-
 export const prepareGlobals = async app => {
   global.keys = global.keys || new Set()
-  global.LIB = global.LIB || {}
 
   let modules = {}
 
@@ -133,8 +147,6 @@ export const prepareGlobals = async app => {
   modules = deep.merge(modules, await findAssetFile(modules))
   modules = deep.merge(modules, await findLocalModules(modules))
   modules = deep.merge(modules, await findNodeModules(modules))
-
-  let lib = app.lib
 
   Object.entries(modules).forEach(([name, mod]) => {
     if (is.fn(mod)) {
@@ -153,21 +165,47 @@ export const prepareGlobals = async app => {
     })
   })
 
-  const libs = await findLibs(modules)
-  libs.forEach(l => {
-    Object.entries(l).forEach(([name, value]) => {
-      lib[name] = value
-    })
-  })
+  const libPaths = {}
 
-  const libPromises = Object.entries(lib).map(async ([name, impl]) => {
-    global.LIB[name] = await import(impl)
+  Object.entries(modules)
+    .filter(([_, { lib }]) => lib)
+    .forEach(([name, { lib }]) => {
+      libPaths[name] = lib
+    })
+
+  try {
+    const indexLibPath = path.join(config.ROOT, 'assets', 'lib', 'index.mjs')
+    const indexLib = await import(indexLibPath)
+    Object.entries(indexLib).forEach(async ([name, value]) => {
+      libPaths[name] = path.join(path.dirname(indexLibPath), value)
+    })
+
+    Object.entries(app.lib).forEach(([name, libFile]) => {
+      libPaths[name] = path.join(path.dirname(indexLibPath), libFile)
+    })
+  } catch (e) {
+    // we do not require a lib file to exist
+  }
+
+  global.config.LIB_PATHS = libPaths
+
+  const libFns = {}
+
+  const libPromises = Object.entries(libPaths).map(async ([name, libPath]) => {
+    const { default: lib, ...mainLib } = await import(libPath)
+    if (!lib) {
+      libFns[name] = mainLib
+    } else {
+      libFns[name] = lib
+    }
   })
 
   await Promise.all(libPromises)
 
+  global.LIB = libFns
+
   return {
     modules,
-    lib,
+    lib: libFns,
   }
 }
