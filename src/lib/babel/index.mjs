@@ -8,10 +8,9 @@ export const runBabel = config => {
       '@babel/preset-env',
       {
         targets: '>0.25%, not dead',
-        // useBuiltIns: 'entry',
         forceAllTransforms: true,
         ignoreBrowserslistConfig: true,
-        modules: false,
+        modules: true,
         debug: isDev,
       },
     ],
@@ -20,6 +19,7 @@ export const runBabel = config => {
   const plugins = [
     '@babel/plugin-transform-arrow-functions',
     '@babel/plugin-proposal-object-rest-spread',
+    [['@babel/plugin-transform-react-jsx', { pragma: 'h' }]],
   ]
 
   if (isProd) {
