@@ -13,7 +13,7 @@ export const transpile = async app => {
 
   const hashes = {
     css: createFileHash(config.ENV === 'production' ? css.minified : css.css),
-    js: createFileHash(bundle),
+    mjs: createFileHash(bundle),
     pages: {},
     static: {},
   }
