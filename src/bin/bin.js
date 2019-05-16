@@ -4,4 +4,5 @@ const path = require('path')
 
 const spawn = require('@magic/cli')
 
-spawn([path.join(__dirname, './bin.mjs')])
+const p = path.join(__dirname, 'bin.mjs')
+spawn([p])
