@@ -39,7 +39,7 @@ export const write = async app => {
     await fs.writeFile(page.path, page.rendered)
   })
 
-  const jsFile = path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.js`)
+  const jsFile = path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.mjs`)
 
   await fs.writeFile(jsFile, client.bundle)
 
