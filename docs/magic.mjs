@@ -897,51 +897,6 @@ const Item = props => {
     Link({ to: `https://${org}.${host}.io/${name}` }, 'docs / demo'),
   ])
 }
-const LibraryList = (props = {}) =>
-    GitList({
-    org: 'magic-libraries',
-    header: [Link({ to: 'https://magic-libraries.github.io' }, '@magic-libraries')],
-    desc: ['below is a collection of the available @magic client libraries.'],
-    items: [
-      {
-        name: 'json',
-        description: [
-          'the @magic-libraries/json module parses and stringifies json.',
-          ' it also returns errors instead of throwing them.',
-        ],
-      },
-      {
-        name: 'is',
-        description: 'the @magic-libraries/is module unifies the javascript type testing apis.',
-      },
-      {
-        name: 'uri',
-        description: [
-          'the @magic-libraries/uri module ',
-          ' encodes objects to uri strings and decodes uri strings to objects.',
-        ],
-      },
-    ],
-    ...props,
-  })
-const Pre = props => {
-  if (typeof props === 'string') {
-    props = {
-      content: props,
-      theme: 'light',
-      fixed: !!props.theme,
-    }
-  }
-    const { theme, content, fixed } = props
-  return div({ class: `Pre ${theme}` }, [
-    div({ class: 'menu' }, [
-      !fixed &&
-        button({ onclick: [actions.pre.changeTheme] }, theme === 'dark' ? 'light' : 'dark'),
-      button({ onclick: [actions.pre.clip, content] }, 'copy'),
-    ]),
-    pre(LIB.Pre.format(content)),
-  ])
-}
 const ModuleList = (props = {}) =>
     GitList({
     class: 'ModuleList',
@@ -996,6 +951,51 @@ const ModuleList = (props = {}) =>
     // overload
     ...props,
   })
+const LibraryList = (props = {}) =>
+    GitList({
+    org: 'magic-libraries',
+    header: [Link({ to: 'https://magic-libraries.github.io' }, '@magic-libraries')],
+    desc: ['below is a collection of the available @magic client libraries.'],
+    items: [
+      {
+        name: 'json',
+        description: [
+          'the @magic-libraries/json module parses and stringifies json.',
+          ' it also returns errors instead of throwing them.',
+        ],
+      },
+      {
+        name: 'is',
+        description: 'the @magic-libraries/is module unifies the javascript type testing apis.',
+      },
+      {
+        name: 'uri',
+        description: [
+          'the @magic-libraries/uri module ',
+          ' encodes objects to uri strings and decodes uri strings to objects.',
+        ],
+      },
+    ],
+    ...props,
+  })
+const Pre = props => {
+  if (typeof props === 'string') {
+    props = {
+      content: props,
+      theme: 'light',
+      fixed: !!props.theme,
+    }
+  }
+    const { theme, content, fixed } = props
+  return div({ class: `Pre ${theme}` }, [
+    div({ class: 'menu' }, [
+      !fixed &&
+        button({ onclick: [actions.pre.changeTheme] }, theme === 'dark' ? 'light' : 'dark'),
+      button({ onclick: [actions.pre.clip, content] }, 'copy'),
+    ]),
+    pre(LIB.Pre.format(content)),
+  ])
+}
 const ThemeList = (props = {}) =>
     GitList({
     org: 'magic-themes',
