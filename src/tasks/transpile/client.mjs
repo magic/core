@@ -6,27 +6,22 @@ import browserify from 'browserify'
 import { runBabel, fs } from '../../lib/index.mjs'
 
 export default async ({ str }) => {
-  const filePath = path.join(process.cwd(), '.__browserify_empty.js')
-  fs.writeFileSync(filePath, str)
+  const hyperappPath = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.mjs')
+  const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
-  const babel = runBabel(config)
+  const hyperapp = `
+const { h, app } = (() => {
+  ${hyperappContent.replace(/export /g, '')}
 
-  try {
-    return new Promise((res, rej) =>
-      browserify(filePath)
-        .transform('babelify', { ...babel.opts })
-        .bundle((err, src) => {
-          if (!config.KEEP_CLIENT && !process.argv.includes('--keep-client')) {
-            fs.unlinkSync(filePath)
-          }
-          if (err) {
-            rej(err)
-          } else {
-            res(src.toString())
-          }
-        }),
-    )
-  } catch (e) {
-    log.error(e, `error in page ${filePath}`)
+  return {
+    h,
+    app,
   }
+})()
+`
+
+  const filePath = path.join(config.DIR.PUBLIC, 'magic.mjs')
+  str = `// hyperapp\n${hyperapp}\n// magic\n${str}`
+  // console.log({ str })
+  return str
 }

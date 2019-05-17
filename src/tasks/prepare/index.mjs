@@ -86,15 +86,14 @@ export const prepare = async app => {
       actionTypes
         .filter(type => !is.empty(component[type]))
         .forEach(type => {
-          Object.entries(component[type])
-            .forEach(([key, val]) => {
-              if (glob[type] && glob[type][key] === true) {
-                app[type][key] = val
-              } else {
-                app[type][lowerName] = app[type][lowerName] || {}
-                app[type][lowerName][key] = val
-              }
-            })
+          Object.entries(component[type]).forEach(([key, val]) => {
+            if (glob[type] && glob[type][key] === true) {
+              app[type][key] = val
+            } else {
+              app[type][lowerName] = app[type][lowerName] || {}
+              app[type][lowerName][key] = val
+            }
+          })
         })
     })
 
