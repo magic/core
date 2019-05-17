@@ -26,7 +26,7 @@ export default {
 `),
 
   h2({ id: 'magic-themes' }, 'list of magic themes'),
-  ThemeList,
+  ThemeList(),
 ]
 
 export default View

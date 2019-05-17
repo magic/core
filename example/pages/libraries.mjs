@@ -56,7 +56,7 @@ export default {
     ' when using module.exports, structuring the LIB[name] object is up to you.',
   ]),
 
-  LibraryList,
+  LibraryList(),
 ]
 
 export const state = {

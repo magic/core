@@ -294,7 +294,7 @@ Footer.style: {
 export default Footer
 `),
 
-  ModuleList,
+  ModuleList(),
 ]
 
 export default {
