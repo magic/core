@@ -33,7 +33,7 @@ export const prepare = async app => {
 
     const actionTypes = ['actions', 'effects', 'subscriptions']
     actionTypes
-      .filter(type => !page[type])
+      .filter(type => page[type])
       .forEach(type => {
         app[type].pages = app[type].pages || {}
         app[type].pages[page.name] = page[type]
@@ -90,8 +90,11 @@ export const prepare = async app => {
             if (glob[type] && glob[type][key] === true) {
               app[type][key] = val
             } else {
-              app[type][lowerName] = app[type][lowerName] || {}
-              app[type][lowerName][key] = val
+              if (Object.keys(val).includes(key)) {
+                app[type][lowerName] = val[key]
+              } else {
+                app[type][lowerName] = val
+              }
             }
           })
         })

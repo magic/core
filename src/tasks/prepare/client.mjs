@@ -77,12 +77,11 @@ const prepareClient = async magic => {
     .join('\n')
 
   // handle global magic state
-  const stateString = `const initialState = ${stringifyObject(magic.state)}`
+  let stateString = `const initialState = ${stringifyObject(magic.state)}`
 
   // set state.url, can not be done above
-  const urlString = `state.url = window.location.pathname`
-
-  const rootString = `state.root = '${config.WEB_ROOT}'`
+  const urlString = `initialState.url = window.location.pathname`
+  const rootString = `initialState.root = '${config.WEB_ROOT}'`
 
   let actionString = ''
   if (!is.empty(magic.actions)) {
@@ -99,6 +98,23 @@ const prepareClient = async magic => {
   let subscriptionString = ''
   if (!is.empty(magic.subscriptions)) {
     subscriptionString = `const subscriptions = ${stringifyObject(magic.subscriptions)}`
+  }
+
+  let libString = ''
+  if (!is.empty(magic.lib)) {
+    let libSubString = ''
+    Object.entries(magic.lib)
+      .forEach(([name, lib]) => {
+        if (is.fn(lib)) {
+          libSubString += `\n  ${name}: ${lib.toString()},`
+        } else if (is.object(lib)) {
+          libSubString += `\n  ${name}: ${stringifyObject(lib)},`
+        }
+      })
+
+    if (libSubString) {
+      libString = `const LIB = {${libSubString}\n}`
+    }
   }
 
   // create pages object, each Page is a html View
@@ -131,7 +147,7 @@ const view = (state) => {
 
   const appString = `
 app({
-  init: () => (${stringifyObject(magic.state || {})}),
+  init: () => initialState,
   view,
   node: document.getElementById("Magic")
 })
@@ -142,9 +158,12 @@ app({
     componentString,
     depString,
     stateString,
+    urlString,
+    rootString,
     actionString,
     effectString,
     subscriptionString,
+    libString,
     pageString,
     routerString,
     appString,
