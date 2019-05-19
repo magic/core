@@ -19,8 +19,10 @@ export const prepareStyle = async ({ app, modules }) => {
     const libResetCssFile = path.join(dirName, '..', '..', 'themes', 'reset.css.mjs')
     const { reset } = await import(libResetCssFile)
     resetStyles = reset
+
+    // find reset css in theme dir if it exists
     const maybeResetCssFile = path.join(config.DIR.THEMES, THEME, 'reset.css.mjs')
-    const maybeResetCssStyles = await import(maybeResetCssFile)
+    const { default: maybeResetCssStyles } = await import(maybeResetCssFile)
     if (is.fn(maybeResetCssStyles)) {
       maybeResetCssStyles = maybeResetCssStyles(config.THEME_VARS)
     }
@@ -41,7 +43,7 @@ export const prepareStyle = async ({ app, modules }) => {
     const libThemeFile = path.join(dirName, '..', '..', 'themes', config.THEME, 'index.mjs')
 
     try {
-      let theme = await import(libThemeFile)
+      let { default: theme } = await import(libThemeFile)
       if (is.fn(theme)) {
         theme = theme(config.THEME_VARS)
       }
@@ -70,7 +72,7 @@ export const prepareStyle = async ({ app, modules }) => {
     // load user's custom theme, overwriting both preinstalled and node_modules themes
     try {
       const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.mjs')
-      let theme = await import(maybeThemeFile)
+      let { default: theme } = await import(maybeThemeFile)
       if (is.fn(theme)) {
         theme = theme(config.THEME_VARS)
       }
