@@ -2,7 +2,7 @@ import path from 'path'
 
 import is from '@magic/types'
 import deep from '@magic/deep'
-import { h } from 'hyperapp/src/index.mjs'
+import { h } from 'hyperapp/src/index.js'
 
 import { fs } from '../lib/index.mjs'
 
@@ -43,9 +43,9 @@ const run = async config => {
             !is.empty(state.author) && meta({ name: 'author', content: state.author }),
             link({
               rel: 'stylesheet',
-              href: '/' + `${config.CLIENT_LIB_NAME}.css?${hashes.css.split('-')[1].substr(0, 11)}`,
-              // integrity: hashes.css,
-              // crossorigin: 'anonymous',
+              href: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.css`,
+              integrity: hashes.css,
+              crossorigin: 'anonymous',
             }),
             page.Head && page.Head(state),
           ]),
@@ -53,13 +53,9 @@ const run = async config => {
             div({ id: 'Magic' }, Page({ page: page.View, state })),
             script({
               type: 'module',
-              src:
-                '/' +
-                config.CLIENT_LIB_NAME +
-                '.mjs' +
-                `?${hashes.mjs.split('-')[1].substr(0, 11)}`,
-              // integrity: hashes.mjs,
-              // crossorigin: 'anonymous',
+              src: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.js`,
+              integrity: hashes.js,
+              crossorigin: 'anonymous',
             }),
           ]),
         ]),
