@@ -62,8 +62,8 @@ export const prepare = async app => {
 
   app.style = await prepareStyle({ app, modules })
 
-  // merge component states and actions into app.state[componentName].
-  // this makes all identical components share their state and actions.
+  // merge component states into app.state[componentName].
+  // this makes all identical components share their state.
   Object.entries(modules)
     .filter(([name]) => isUpperCase(name))
     .forEach(([name, component]) => {
@@ -103,9 +103,7 @@ export const prepare = async app => {
   app.modules = modules
 
   // create client magic.js file
-  app.client = {
-    str: await prepareClient(app),
-  }
+  app.client = await prepareClient(app)
 
   // extract lambdas and prepare them
   app.lambdas = {}
