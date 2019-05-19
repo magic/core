@@ -89,14 +89,19 @@ export const findLocalModules = async () => {
       try {
         const name = path.basename(m).replace(path.extname(m), '')
         const mod = await import(m)
-        modules[name] = mod
+        if (mod.default) {
+          modules[name] = mod.default
+        } else if (is.fn(mod)) {
+          modules[name] = mod
+        } else {
+          modules[name] = { ...mod }
+        }
       } catch (e) {
         log.error('Error', `requiring local magic-module: ${m}, error: ${e.message}`)
       }
     })
 
   await Promise.all(assetPromises)
-
   return modules
 }
 
@@ -106,12 +111,17 @@ export const findAssetFile = async () => {
     const assets = await import(maybeAssetFile)
     let modules = {}
     Object.entries(assets).forEach(([name, mod]) => {
-      modules[name] = mod
+      if (is.fn(mod)) {
+        modules[name] = mod
+      } else {
+        modules[name] = { ...mod }
+      }
     })
     return modules
   } catch (e) {
     // we are happy without assetfile
   }
+  return {}
 }
 
 export const findBuiltins = () => {
@@ -128,23 +138,39 @@ export const findBuiltins = () => {
 export const prepareGlobals = async app => {
   global.keys = global.keys || new Set()
 
+
   let modules = {}
 
-  modules = deep.merge(modules, await findBuiltins(modules))
-  modules = deep.merge(modules, await findAssetFile(modules))
-  modules = deep.merge(modules, await findLocalModules(modules))
-  modules = deep.merge(modules, await findNodeModules(modules))
+  const builtinFiles = await findBuiltins(modules)
+  if (builtinFiles) {
+    modules = deep.merge(modules, builtinFiles)
+  }
+  const assetFiles = await findAssetFile(modules)
+  if (assetFiles) {
+    modules = deep.merge(modules, assetFiles)
+  }
+  const localModuleFiles = await findLocalModules(modules)
+  if (localModuleFiles) {
+    modules = deep.merge(modules, { ...localModuleFiles })
+  }
+  const nodeModuleFiles = await findNodeModules(modules)
+  if (nodeModuleFiles) {
+    modules = deep.merge(modules, nodeModuleFiles)
+  }
 
   Object.entries(modules).forEach(([name, mod]) => {
     if (is.fn(mod)) {
       global[name] = mod
-    } else {
+    } else if (is.fn(mod.View)) {
       global[name] = mod.View
+    } else if (is.fn(mod[name])) {
+      global[name] = mod[name]
     }
 
-    const views = Object.entries(mod).filter(([k]) => isUpperCase(k) && k !== 'View')
+    const views = Object.entries(mod).filter(([k]) => k !== name && isUpperCase(k) && k !== 'View')
     views.forEach(([k, v]) => {
       if (is.function(v)) {
+        console.log({ name, k, v })
         global[name][k] = v
       } else {
         global[name][k] = v.View
