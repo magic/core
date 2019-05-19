@@ -18,7 +18,6 @@ export const prepare = async app => {
   app.state = app.state || {}
   app.actions = app.actions || {}
   app.effects = app.effects || {}
-  app.subscriptions = app.subscriptions || {}
 
   // collect the pages, create their states
   app.pages = await preparePages(files)
@@ -31,13 +30,20 @@ export const prepare = async app => {
       app.state.pages[page.name] = page.state
     }
 
-    const actionTypes = ['actions', 'effects', 'subscriptions']
+    const actionTypes = ['actions', 'effects']
     actionTypes
+      // do nothing if page has no actions or effects (type)
       .filter(type => page[type])
       .forEach(type => {
         app[type].pages = app[type].pages || {}
         app[type].pages[page.name] = page[type]
       })
+
+    if (page.subscriptions) {
+      const pages = app.subscriptions.pages || {}
+      pages[page.name] = pages[page.name] ? [...pages[page.name], ...page.subscriptions] : [...page.subscriptions]
+      app.subscriptionspages = pages
+    }
 
     return page
   })
@@ -82,8 +88,9 @@ export const prepare = async app => {
         })
       }
 
-      const actionTypes = ['actions', 'effects', 'subscriptions']
+      const actionTypes = ['actions', 'effects']
       actionTypes
+        // if component has no actions or effects do nothing
         .filter(type => !is.empty(component[type]))
         .forEach(type => {
           Object.entries(component[type]).forEach(([key, val]) => {
@@ -98,6 +105,13 @@ export const prepare = async app => {
             }
           })
         })
+
+      if (!is.empty(component.subscriptions)) {
+        app.subscriptions = app.subscriptions || []
+        component.subscriptions.forEach(sub => {
+          app.subscriptions.push(sub)
+        })
+      }
     })
 
   app.modules = modules
