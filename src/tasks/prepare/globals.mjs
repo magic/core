@@ -170,7 +170,6 @@ export const prepareGlobals = async app => {
     const views = Object.entries(mod).filter(([k]) => k !== name && isUpperCase(k) && k !== 'View')
     views.forEach(([k, v]) => {
       if (is.function(v)) {
-        console.log({ name, k, v })
         global[name][k] = v
       } else {
         global[name][k] = v.View
