@@ -36,17 +36,11 @@ export const handler = app => (req, res) => {
 
   const style = isProd ? css.minified : css.css
 
-  const js = client.bundle
-
   const expiryTime = new Date(new Date().getTime() - 1000).toUTCString()
   const headers = {
     Expires: expiryTime,
     'Cache-Control': 'no-cache, must-revalidate',
     Pragma: 'no-cache',
-  }
-
-  if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {
-    headers['X-Clacks-Overhead'] = 'GNU Terry Pratchet'
   }
 
   const cssUrl = `/${config.CLIENT_LIB_NAME}.css`
@@ -57,10 +51,10 @@ export const handler = app => (req, res) => {
     return
   }
 
-  const jsUrl = `/${config.CLIENT_LIB_NAME}.mjs`
+  const jsUrl = `/${config.CLIENT_LIB_NAME}.js`
   if (rawUrl === jsUrl) {
     res.writeHead(200, { ...headers, 'Content-Type': 'application/javascript' })
-    res.end(js)
+    res.end(client)
     return
   }
 
@@ -72,6 +66,10 @@ export const handler = app => (req, res) => {
   }
 
   if (pages[url.pathname]) {
+    if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {
+      headers['X-Clacks-Overhead'] = 'GNU Terry Pratchet'
+    }
+
     res.writeHead(200, { ...headers, 'Content-Type': 'text/html' })
     res.end(pages[url.pathname])
     return
