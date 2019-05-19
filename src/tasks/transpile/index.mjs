@@ -11,9 +11,10 @@ export const transpile = async app => {
   const bundle = await client(app.client)
   const css = await style(app.style)
 
+
   const hashes = {
     css: createFileHash(config.ENV === 'production' ? css.minified : css.css),
-    mjs: createFileHash(bundle),
+    js: createFileHash(bundle.code),
     pages: {},
     static: {},
   }
