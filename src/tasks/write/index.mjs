@@ -11,7 +11,7 @@ import {
 } from '../../lib/index.mjs'
 
 export const write = async app => {
-  const { isProd } = config
+  const { IS_PROD } = config
   const zippable = config.FILETYPES.ZIPPABLE
   const images = config.FILETYPES.IMAGES
 
@@ -39,14 +39,13 @@ export const write = async app => {
     await fs.writeFile(page.path, page.rendered)
   })
 
-  const jsFile = path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.mjs`)
+  const jsFile = path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.js`)
+  await fs.writeFile(jsFile, client)
 
-  await fs.writeFile(jsFile, client.bundle)
-
-  const usedCss = isProd ? css.minified : css.css
+  const usedCss = IS_PROD ? css.minified : css.css
   await fs.writeFile(path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.css`), usedCss)
 
-  if (isProd) {
+  if (IS_PROD) {
     // const comp = await compress()
     // await comp(zippable, images)
     // await minifyImages(images)
