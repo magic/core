@@ -1,87 +1,61 @@
+import path from 'path'
+
 import is from '@magic/types'
 
-import {
-  CHECK_PROPS,
-  runBabel,
-  fs,
-  handleDependencies,
-  isUpperCase,
-  stringifyObject,
-} from '../../lib/index.mjs'
+import { fs, isUpperCase, stringifyObject } from '../../lib/index.mjs'
 
 const prepareClient = async magic => {
-  let checkProps = ''
-  // first we have to import propTypes for all modules below
-  // if (config.ENV === 'development') {
-  //   checkProps = `const CHECK_PROPS = ${CHECK_PROPS.toString()}`
-  // }
+  const hyperappPath = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
+  const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
+
+  const hyperapp = `
+const { h, Lazy, app } = (() => {
+${hyperappContent.replace(/export /g, ' ')}
+
+return {
+  h,
+  app,
+  Lazy,
+}
+})()`
 
   // add the Component module that wraps all other html tags
-  const componentString = `const C = ${global.component.toString()}`
+  const componentString = `const C = ${global.component.toString()}\n`
     // replace names of variables to enforce minification
     .replace(/attributes/gm, 'a')
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
 
-  const depString = Object.entries(magic.modules)
-    .map(([k, v]) => {
-      if (k === 'component') {
-        return ''
-      }
+  let checkProps = ''
+  if (config.IS_DEV) {
+    checkProps = `const CHECK_PROPS = ${global.CHECK_PROPS.toString()}`
+  }
+
+  let depString = ''
+  let htmlTagString = ''
+  Object.entries(magic.modules)
+    .filter(([k]) => k !== 'Magic' && k !== 'component')
+    .forEach(([k, v]) => {
       if (!isUpperCase(k)) {
-        return `const ${k} = C('${k}')`
+        htmlTagString += `const ${k} = C('${k}')\n`
+      } else {
+        let str
+        if (is.function(v)) {
+          str = `\nconst ${k} = ${v.toString()}\n`
+        } else {
+          str = `\nconst ${k} = ${v.View.toString()}\n`
+        }
+
+        const subStr = Object.entries(v)
+          .filter(([sk]) => isUpperCase(sk) && sk !== 'View')
+          .map(([sk, sv]) => `${k}.${sk} = ${sv.toString()}`)
+          .join('\n')
+
+        depString += `${str}\n${subStr}`
       }
-      let componentString = ''
-      if (is.function(v)) {
-        componentString = v.toString()
-      } else if (is.function(v.View)) {
-        componentString = v.View.toString()
-      }
-
-      if (!componentString) {
-        log.error('Invalid Module', k, typeof v, 'is not a function and has no .View key')
-        return
-      }
-
-      let append = ''
-      const Views = Object.entries(v).filter(([k]) => isUpperCase(k) && k !== 'View')
-
-      if (is.object(v) && !is.empty(Views)) {
-        append = Views.map(([sk, sv]) => {
-          let subModuleString = ''
-          if (is.function(sv)) {
-            subModuleString = sv.toString()
-          } else if (is.function(sv.View)) {
-            subModuleString = sv.View.toString()
-          }
-
-          if (!subModuleString) {
-            log.error(
-              'Invalid SubModule',
-              'parent:',
-              k,
-              'submodule:',
-              sk,
-              typeof sv,
-              'is not a function and has no .View key',
-            )
-            return
-          }
-
-          return `const ${sk} = ${subModuleString}`
-        }).join('\n')
-      }
-
-      return `const ${k} = ${componentString}${append ? `\n${append}` : ''}`
     })
-    .join('\n')
 
-  // handle global magic state
   let stateString = `const initialState = ${stringifyObject(magic.state)}`
-
-  // set state.url, can not be done above
-  const urlString = `initialState.url = window.location.pathname`
-  const rootString = `initialState.root = '${config.WEB_ROOT}'`
 
   let actionString = ''
   if (!is.empty(magic.actions)) {
@@ -97,24 +71,28 @@ const prepareClient = async magic => {
 
   let subscriptionString = ''
   if (!is.empty(magic.subscriptions)) {
-    subscriptionString = `const subscriptions = ${stringifyObject(magic.subscriptions)}`
+    subscriptionString = `const subscriptions = state => [${Object.values(magic.subscriptions).join(
+      ',\n',
+    )}]`
+    console.log(subscriptionString)
   }
 
   let libString = ''
   if (!is.empty(magic.lib)) {
-    let libSubString = ''
-    Object.entries(magic.lib)
-      .forEach(([name, lib]) => {
-        if (is.fn(lib)) {
-          libSubString += `\n  ${name}: ${lib.toString()},`
-        } else if (is.object(lib)) {
-          libSubString += `\n  ${name}: ${stringifyObject(lib)},`
-        }
-      })
+    libString = 'const LIB = {'
+    const libPromises = Object.entries(magic.lib).map(async ([name, lib]) => {
+      if (lib.startsWith('@')) {
+        lib = path.join(process.cwd(), 'node_modules', lib)
+      }
+      const contents = await fs.readFile(lib, 'utf8')
+      return `  ${name}: (() => {${contents
+        .replace(/export default/g, `return`)
+        .replace(/export /g, '')}})(),`
+    })
 
-    if (libSubString) {
-      libString = `const LIB = {${libSubString}\n}`
-    }
+    const libArray = await Promise.all(libPromises)
+    libString += libArray.join('\n')
+    libString += '\n}'
   }
 
   // create pages object, each Page is a html View
@@ -126,52 +104,52 @@ const prepareClient = async magic => {
 
   pageString += '\n}\n'
 
-  // routing view
-  const routerString = `
-const view = (state) => {
-  const url = pages[state.url] ? state.url : '/404/'
-  // used below, is kind of a global!
-  const page = pages[url]
-
-  // map pageState into state
-  if (state.pages) {
-    const pageState = state.pages[url]
-    for (let key in pageState) {
-      state[key] = pageState[key]
-    }
-  }
-
-  return Page({ page, state })
-}
-`
-
   const appString = `
 app({
-  init: () => initialState,
-  view,
-  node: document.getElementById("Magic")
+  init: () => ({
+    ...initialState,
+    url: window.location.pathname,
+  }),
+  ${
+    !is.empty(magic.subscriptions)
+      ? `subscriptions: state => [${Object.values(magic.subscriptions).join(',\n')}],`
+      : ''
+  }
+  view: (state) => {
+    const url = pages[state.url] ? state.url : '/404/'
+    // used below, is kind of a global!
+    const page = pages[url]
+
+    // map pageState into state
+    if (state.pages) {
+      const pageState = state.pages[url]
+      for (let key in pageState) {
+        state[key] = pageState[key]
+      }
+    }
+
+    return div({ id: 'Magic' }, Page({ page, state }))
+  },
+  node: document.getElementById("Magic"),
 })
 `
   // console.log(clientString)
   const clientString = [
-    checkProps,
+    hyperapp,
     componentString,
-    depString,
+    htmlTagString,
     stateString,
-    urlString,
-    rootString,
     actionString,
-    effectString,
-    subscriptionString,
+    depString,
     libString,
+    effectString,
+    // subscriptionString,
     pageString,
-    routerString,
     appString,
   ]
     .join('\n')
-    .replace(/\n\n/g, '\n')
     .trim()
-    .replace(/CHECK_PROPS((.*))\n/g, '')
+  // .replace(/CHECK_PROPS((.*))\n/g, '')
 
   return clientString
 }
