@@ -1,10 +1,10 @@
-export const Header = ({ state }) =>
-  (state.logo || state.menu || state.tagline) &&
+export const Header = ({ logo, menu, tagline, logotext, ...state }) =>
+  (logo || menu || tagline) &&
   header({ class: 'Header' }, [
-    (state.logo || state.logotext) &&
+    (logo || logotext) &&
       Link({ to: '/', class: 'LogoWrapper' }, [
-        state.logo && Img({ class: 'Logo', src: state.logo }),
-        state.logotext && span({ class: 'LogoText' }, state.logotext),
+        logo && Img({ class: 'Logo', src: logo }),
+        logotext && span({ class: 'LogoText' }, logotext),
       ]),
-    state.menu && Menu({ ...state, items: state.menu }),
+    menu && Menu({ ...state, items: menu }),
   ])
