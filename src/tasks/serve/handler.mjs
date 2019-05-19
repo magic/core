@@ -4,7 +4,7 @@ import URL from 'url'
 import { addTrailingSlash, getContentType } from '../../lib/index.mjs'
 
 export const handler = app => (req, res) => {
-  const { isProd } = config
+  const { IS_PROD } = config
   const { css, client, static: stat, lambdas } = app
   const WEB_ROOT = addTrailingSlash(config.WEB_ROOT)
   const url = URL.parse(req.url)
@@ -34,7 +34,7 @@ export const handler = app => (req, res) => {
     pages[page.name] = page.rendered
   })
 
-  const style = isProd ? css.minified : css.css
+  const style = IS_PROD ? css.minified : css.css
 
   const expiryTime = new Date(new Date().getTime() - 1000).toUTCString()
   const headers = {
