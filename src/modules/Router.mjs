@@ -1,10 +1,24 @@
-export const View = ({ to, ...p }, children) => {
+export const View = () => {}
+
+export const Page = ({ page, state }) =>
+  div(
+    {
+      class: 'Wrapper',
+    },
+    [
+      Header({ state }),
+      div({ class: 'Page' }, page ? page(state) : '404 - not found'),
+      Footer({ state }),
+    ],
+  )
+
+export const Link = ({ to, ...p }, children) => {
   const { href, text, nofollow, noreferrer, onclick = false, ...props } = p
   to = to || href || ''
   props.href = to
 
   if (to && to.startsWith('/') && !to.startsWith(`//`)) {
-    props.onclick = [actions.go, e => ({ e, to })]
+    props.onclick = [actions.go, actions.wrapEventGo(to)]
   } else {
     props.target = '_blank'
     props.rel = 'noopener'
@@ -20,9 +34,12 @@ export const View = ({ to, ...p }, children) => {
 }
 
 export const actions = {
+  wrapEventGo: to => e => ({ e, to }),
   go: (state, { e, to }) => {
     // trigger event (page reload with new url) if history api does not exist
     if (typeof window === 'undefined' || !window.history) {
+      // do not return state, return true,
+      // we have to break context here, that's the intend
       return true
     }
 
@@ -55,7 +72,6 @@ export const actions = {
     } else {
       // in case of popstate events firing, we do not have props.to
       // but instead the e is a history event
-      console.log(e.state)
       if (e.state) {
         uri = e.state.uri
       } else {
@@ -85,5 +101,6 @@ export const actions = {
 export const global = {
   actions: {
     go: true,
+    wrapEventGo: true,
   },
 }
