@@ -1,5 +1,5 @@
 import { default as render } from 'hyperapp-render'
-import { h } from 'hyperapp/src/index.mjs'
+import { h } from 'hyperapp/src/index.js'
 
 import log from '@magic/log'
 import deep from '@magic/deep'
