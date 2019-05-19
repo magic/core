@@ -1,4 +1,4 @@
-export const View = ({ items, hash, url, root, ...props }) => {
+export const Menu = ({ items, hash, url, root, ...props }) => {
   let { class: cl = 'Menu', collapse = true } = props
 
   if (!items.length) {
@@ -9,7 +9,7 @@ export const View = ({ items, hash, url, root, ...props }) => {
     url += `#${hash}`
   }
 
-  return nav({ class: cl }, ul(items.map(i => MenuItem({ ...i, url, root, collapse }))))
+  return nav({ class: cl }, ul(items.map(i => Menu.Item({ ...i, url, root, collapse }))))
 }
 
 export const style = {
@@ -25,15 +25,7 @@ export const style = {
   },
 }
 
-export let MenuItem = ({
-  url,
-  text,
-  items = [],
-  parentTo = undefined,
-  collapse,
-  root,
-  ...item
-}) => {
+Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, root, ...item }) => {
   // if the item has no values, we quit
   if (!item.to && !text) {
     return
@@ -64,22 +56,24 @@ export let MenuItem = ({
 
   let children = []
   if ((items.length && active) || !collapse) {
-    children = ul(items.map(i => MenuItem({ parentTo: item.to, url, root, collapse, ...i })))
+    children = ul(items.map(i => Menu.Item({ parentTo: item.to, url, root, collapse, ...i })))
   }
 
   return li(p, [item.to ? Link(item, text) : span(item, text), children])
 }
 
-MenuItem.style = {
-  float: 'left',
-  margin: '0 .5em 0 0',
+Menu.Item.style = {
+  '.MenuItem': {
+    float: 'left',
+    margin: '0 .5em 0 0',
 
-  '&.active': {
-    '> a': {
-      textDecoration: 'underline',
+    '&.active': {
+      '> a': {
+        textDecoration: 'underline',
+      },
     },
-  },
-  a: {
-    display: 'block',
+    a: {
+      display: 'block',
+    },
   },
 }
