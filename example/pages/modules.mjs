@@ -10,23 +10,25 @@ export const View = state => [
   h2({ id: 'definition' }, 'module definition:'),
   p('the minimal module is a function that returns some html.'),
   Pre(`
-// /assets/ModuleName.js
+// /assets/ModuleName.mjs
 
 // simplest module
-export default () => div('hello, world')
+export const View = () => div('hello, world')
 
 // complete signature
-export default (props, children) => (state, actions) => div('hello, world')
+export const View = (props = {}, children = []) => div('hello, world')
 `),
 
   h2({ id: 'usage' }, 'usage'),
   p([
-    'if the npm package name starts with @magic-modules/ or magic-module, it will get imported automagically.',
+    'if the npm package name starts with @magic-modules/ or magic-module-, it will get imported automagically.',
+    ' the name of the Module will be set to a PascalCased version of the remainder of the module name',
+    ' for example, @magic-modules/git-badges turns into GitBadges.',
     ' the same is true for all uppercased files in your /assets directory.',
-    ' in the rare case where you want to install a npm module that can not be found, you can import it in /assets/index.js',
+    ' in the rare case where you want to install a npm module that can not be found, you can import it in /assets/index.mjs',
   ]),
   Pre(`
-// /assets/index.js
+// /assets/index.mjs
 export default {
   // ...otherModules
 
@@ -48,33 +50,42 @@ export default () => div([
 
   h2({ id: 'custom-module' }, 'Mod and Mod.Component:'),
 
-  Mod,
+  Mod(state),
 
   Mod.Component({ title: 'Mod Component Title, passed via props' }),
 
   h3('Mod sourcecode:'),
 
   Pre(`const Mod = {
-  View: state =>
-    div({ class: 'Mod View' }, [
-      h3('Mod.View'),
-      p([
-        'this is Mod.View. it gets loaded from ',
-        Link({ to: 'https://github.com/magic/core/blob/master/example/assets/Mod.js' }, '/assets/Mod.js'),
-      ]),
-      p([
-        'and imported in ',
-        Link({ to: 'https://github.com/magic/core/blob/master/example/assets/index.js' }, '/assets/index.js'),
-      ]),
-      p(['the state of this module: ', JSON.stringify(state.module)]),
+export const View = state =>
+  div({ class: 'Mod View' }, [
+    h3('Mod.View'),
+    p([
+      'this is Mod.View. it gets loaded from ',
+      Link({
+        to: 'https://github.com/magic/core/blob/master/example/assets/Mod.mjs',
+        text: '/assets/Mod.mjs'
+      }),
     ]),
+    p([
+      'and imported in ',
+      Link({
+        to: 'https://github.com/magic/core/blob/master/example/assets/index.mjs',
+        text: '/assets/index.mjs',
+      }),
+    ]),
+    p(['the state of this module: ', JSON.stringify(state.module)]),
+  ]),
 
   Component: () =>
     div({ class: 'Mod Component' }, [
       h3('Mod.Component'),
       p([
         'Mod.Component, a second component in ',
-        Link({ to: 'https://github.com/magic/core/blob/master/example/assets/Mod.js' }, '/assets/Mod.js'),
+        Link({
+          to: 'https://github.com/magic/core/blob/master/example/assets/Mod.mjs',
+          text: '/assets/Mod.mjs',
+        }),
       ]),
     ]),
 
@@ -124,24 +135,22 @@ export default Mod`),
     'this is the main app module. it has magically inherited properties and all of it is customizable.',
   ),
   p([
-    'to add actions/state/style to the app you can just create an /assets/app.js file.',
+    'to add actions/state/style to the app you can just create an /assets/app.mjs file.',
     'the contents of this file get ',
     Link({ to: 'https://github.com/magic/deep', text: 'deep .merged' }),
     ' into the app',
   ]),
   Pre(`
-// /assets/app.js
-export default {
-  state: {
-    merge: 'gets merged into state',
-  },
-  actions: {
-    mergedActions: () => ({ merge: 'merged action executed' }),
-  },
-  style: {
-    body: {
-      backgroundColor: 'white',
-    },
+// /assets/app.mjs
+export const state = {
+  merge: 'gets merged into state',
+}
+export const actions = {
+  mergedActions: () => ({ merge: 'merged action executed' }),
+}
+export const style = {
+  body: {
+    backgroundColor: 'white',
   },
 }
 `),
@@ -150,14 +159,14 @@ export default {
   p('the Menu module provides... menus.'),
   p([
     'just pass it a string which is the state key of the menu,',
-    ' then add that menu to the /assets/app.js file.',
+    ' then add that menu to the /assets/app.mjs file.',
   ]),
   p([
     'by default, the menu will only show submenu items if their parent link is active.',
     ' to force submenu items to show at all times, just pass a collapse: false prop',
   ]),
   Pre(`
-// assets/app.js
+// assets/app.mjs
 export default {
   state: {
     // ...state
@@ -167,7 +176,7 @@ export default {
       { to: 'https://example.com', nofollow: true, noreferrer: true, target: 'utopia', text: 'nofollow and noref" },
     ],
   },
-  // ... rest of app.js
+  // ... rest of app.mjs
 }`),
 
   p('then, in a page or module'),
@@ -216,7 +225,7 @@ const menuItem = ({
   h3({ id: 'menu-sub-menus' }, 'sub menus'),
   p('to define a submenu, simply define a .items array on the menu item'),
   Pre(`
-// assets/app.js
+// assets/app.mjs
 export default {
   state: {
     // ...state
@@ -229,7 +238,7 @@ export default {
       ] },
     ],
   },
-  // ... rest of app.js
+  // ... rest of app.mjs
 }`),
 
   h2({ id: 'link' }, 'link'),
@@ -271,10 +280,10 @@ export default () => [
   h2({ id: 'footer' }, 'footer'),
   p('the footer module contains a small info text and a link to the magic github repository.'),
   p(
-    'to overwrite this behaviour, just place a Footer.js file in your assets and require it in /assets/index.js.',
+    'to overwrite this behaviour, just place a Footer.mjs file in your assets and require it in /assets/index.mjs.',
   ),
   Pre(`
-// /assets/Footer.js:
+// /assets/Footer.mjs:
 const Footer = () =>
 footer({ class: 'main' }, [
   div({ class: 'wrapper' }, [

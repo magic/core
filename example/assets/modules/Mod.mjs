@@ -1,5 +1,3 @@
-import path from 'path'
-
 export const View = state =>
   div({ class: 'Mod' }, [
     h3('Mod.Mod'),
@@ -49,11 +47,6 @@ export const Component = props => () => {
       Link({ to: 'https://github.com/magic/core/example/assets/module.mjs' }, '/assets/module.mjs'),
     ]),
   ])
-}
-
-const dirName = path.dirname(new URL(import.meta.url).pathname)
-Component.lib = {
-  ModComponentTest: path.join(dirName, '..', 'lib', 'module-exports.mjs'),
 }
 
 Component.style = {
