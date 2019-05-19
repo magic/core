@@ -138,7 +138,6 @@ export const findBuiltins = () => {
 export const prepareGlobals = async app => {
   global.keys = global.keys || new Set()
 
-
   let modules = {}
 
   const builtinFiles = await findBuiltins(modules)
