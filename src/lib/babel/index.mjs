@@ -1,7 +1,7 @@
 import babelLib from '@babel/core'
 
 export const runBabel = config => {
-  const { isProd, isDev, CLIENT_LIB_NAME } = config
+  const { IS_PROD, IS_DEV, CLIENT_LIB_NAME } = config
 
   const presets = [
     [
@@ -10,8 +10,8 @@ export const runBabel = config => {
         targets: '>0.25%, not dead',
         forceAllTransforms: true,
         ignoreBrowserslistConfig: true,
-        modules: true,
-        debug: isDev,
+        modules: false,
+        debug: IS_DEV,
       },
     ],
   ]
@@ -19,10 +19,18 @@ export const runBabel = config => {
   const plugins = [
     '@babel/plugin-transform-arrow-functions',
     '@babel/plugin-proposal-object-rest-spread',
-    [['@babel/plugin-transform-react-jsx', { pragma: 'h' }]],
+    ['@babel/plugin-transform-react-jsx', { pragma: 'h' }],
+    '@babel/plugin-proposal-export-namespace-from',
   ]
 
-  if (isProd) {
+  plugins.push([
+    'remove-code',
+    {
+      function: ['CHECK_PROPS'],
+    },
+  ])
+
+  if (IS_PROD) {
     const minify = !process.argv.includes('--no-minify')
     if (minify && !process.argv.includes('--no-mangle-names')) {
       plugins.push(['minify-mangle-names', { topLevel: true }])
@@ -40,30 +48,20 @@ export const runBabel = config => {
       plugins.push('transform-remove-debugger')
     }
 
-    plugins.push([
-      'remove-code',
-      {
-        function: ['CHECK_PROPS'],
-      },
-    ])
-
     if (minify) {
       plugins.push('minify-simplify')
       plugins.push('minify-type-constructors')
       plugins.push('minify-builtins')
-      plugins.push('transform-minify-booleans')
     }
   }
 
-  babelLib.opts = {
+  return {
     filename: `${CLIENT_LIB_NAME}.js`,
-    minified: isProd,
-    comments: isDev,
+    minified: IS_PROD,
+    comments: IS_DEV,
     configFile: false,
     sourceMaps: false,
-    presets: isProd ? presets : [],
+    presets: IS_PROD ? presets : [],
     plugins,
   }
-
-  return babelLib
 }

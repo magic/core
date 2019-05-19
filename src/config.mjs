@@ -106,6 +106,9 @@ export const runConfig = async () => {
     ENV: process.env.MAGIC_ENV || process.env.NODE_ENV || 'development',
   })
 
+  conf.IS_PROD = conf.ENV === 'production'
+  conf.IS_DEV = conf.ENV === 'development'
+
   if (!conf.WEB_ROOT || !conf.URL) {
     const startTime = new Date().getTime()
     const stdout = cp.execSync('git remote -v').toString()
