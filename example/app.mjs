@@ -1,5 +1,3 @@
-import path from 'path'
-
 export const state = {
   app: {
     title: 'Custom App Title',
@@ -127,12 +125,6 @@ export const state = {
       to: '/libraries/',
       text: 'libraries',
       items: [
-        { to: '#require', text: 'require from' },
-        { to: '#require-assets', text: '/assets/lib.js' },
-        { to: '#require-app', text: '/app.js' },
-        { to: '#require-page', text: 'modules / pages' },
-        { to: '#example', text: 'example' },
-        { to: '#caveat', text: 'caveat' },
         { to: '#gl-magic-libraries', text: '@magic-libraries' },
       ],
     },
