@@ -174,8 +174,6 @@ export const prepareGlobals = async app => {
     // we do not require a lib file to exist
   }
 
-  global.config.LIB_PATHS = libPaths
-
   const libFns = {}
 
   const libPromises = Object.entries(libPaths).map(async ([name, libPath]) => {
@@ -193,6 +191,6 @@ export const prepareGlobals = async app => {
 
   return {
     modules,
-    lib: libFns,
+    lib: libPaths,
   }
 }
