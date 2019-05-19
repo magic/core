@@ -6,9 +6,9 @@ export const Page = ({ page, state }) =>
       class: 'Wrapper',
     },
     [
-      Header({ state }),
+      Header(state),
       div({ class: 'Page' }, page ? page(state) : '404 - not found'),
-      Footer({ state }),
+      Footer(state),
     ],
   )
 
