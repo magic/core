@@ -1,5 +1,3 @@
-import babelLib from '@babel/core'
-
 export const runBabel = config => {
   const { IS_PROD, IS_DEV, CLIENT_LIB_NAME } = config
 
@@ -10,7 +8,7 @@ export const runBabel = config => {
         targets: '>0.25%, not dead',
         forceAllTransforms: true,
         ignoreBrowserslistConfig: true,
-        modules: false,
+        // modules: false,
         debug: IS_DEV,
       },
     ],
@@ -32,26 +30,8 @@ export const runBabel = config => {
 
   if (IS_PROD) {
     const minify = !process.argv.includes('--no-minify')
-    if (minify && !process.argv.includes('--no-mangle-names')) {
-      plugins.push(['minify-mangle-names', { topLevel: true }])
-    }
-
-    if (!process.argv.includes('--keep-dead-code')) {
-      plugins.push(['minify-dead-code-elimination'])
-    }
-
-    if (!process.argv.includes('--keep-console')) {
-      plugins.push('transform-remove-console')
-    }
-
-    if (!process.argv.includes('--keep-debugger')) {
-      plugins.push('transform-remove-debugger')
-    }
-
     if (minify) {
-      plugins.push('minify-simplify')
-      plugins.push('minify-type-constructors')
-      plugins.push('minify-builtins')
+      presets.push('minify')
     }
   }
 
