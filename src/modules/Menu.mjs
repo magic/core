@@ -1,4 +1,4 @@
-export const Menu = ({ items, hash, url, root, ...props }) => {
+export const Menu = ({ items, hash, url = '', root, ...props }) => {
   let { class: cl = 'Menu', collapse = true } = props
 
   if (!items.length) {
@@ -49,7 +49,7 @@ Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, root, ...i
   }
 
   item.to = item.to.startsWith(root) ? item.to : `${root}${item.to.substr(1)}`
-  const active = url.startsWith(item.to)
+  const active = url && url.startsWith(item.to)
   if (url === item.to) {
     p.class += ' active'
   }
