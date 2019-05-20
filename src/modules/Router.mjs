@@ -18,7 +18,7 @@ export const Link = ({ to, ...p }, children) => {
   props.href = to
 
   if (to && to.startsWith('/') && !to.startsWith(`//`)) {
-    props.onclick = [actions.go, actions.wrapEventGo(to)]
+    props.onclick = [actions.go, helpers.mapClickToGo(to)]
   } else {
     props.target = '_blank'
     props.rel = 'noopener'
@@ -34,73 +34,99 @@ export const Link = ({ to, ...p }, children) => {
 }
 
 export const actions = {
-  wrapEventGo: to => e => ({ e, to }),
-  go: (state, { e, to }) => {
-    // trigger event (page reload with new url) if history api does not exist
-    if (typeof window === 'undefined' || !window.history) {
-      // do not return state, return true,
-      // we have to break context here, that's the intend
-      return true
+  pop: (state, e) => {
+    let { pathname: url, hash } = window.location
+    hash = hash.substring(1)
+
+    if (e.state) {
+      url = e.state.url
+      hash = e.state.hash
     }
 
-    e.preventDefault()
-
-    let url = state.url
-    let [uri, hash = ''] = url.split('#')
-
-    if (to) {
-      // if we have clicked a link, we have a to
-      url = to.replace(window.location.origin, '')
-      url = url.startsWith(state.root) ? url : `${state.root}${url}`.replace(/\/\//g, '/')
-      const [u, h = ''] = url.split('#')
-      uri = u
-      // only set the hash if it is set and not set to '/'
-      hash = !h || h === '/' ? '' : h
-
-      const stateHash = state.hash ? `#${state.hash}` : window.location.hash
-      const stateUrl = state.url + stateHash
-
-      if (url !== stateUrl || hash !== stateHash) {
-        window.history && window.history.pushState({ uri }, '', url)
-
-        // make sure we scroll to the top if there is no hash
-        // this simulates the page reload
-        if (!hash) {
-          window.scrollTo(0, 0)
-        }
-      }
+    if (hash) {
+      window.location.hash = hash
     } else {
-      // in case of popstate events firing, we do not have props.to
-      // but instead the e is a history event
-      if (e.state) {
-        uri = e.state.uri
-      } else {
-        uri = '/'
-      }
-    }
-
-    // window exists for sure, but make sure window.location also does
-    if (window.location && hash) {
-      const target = document.getElementById(hash)
-      if (target) {
-        const top = target.offsetTop
-        window.scrollTo(0, top)
-        window.location.hash = hash
-      }
+      window.scrollTo(0, 0)
     }
 
     return {
       ...state,
-      url: uri,
+      url,
+      hash,
+    }
+  },
+
+  go: (state, { to }) => {
+    // make sure our to never includes the origin
+    // this makes sure we can distinguish between local and external links below
+    to = to.replace(window.location.origin, '')
+
+    const isLocal = to.startsWith('/') || to.startsWith('#')
+    const isRooted = to.startsWith(state.root)
+    if (isLocal) {
+      if (!isRooted) {
+        to = `${state.root}${to}`.replace(/\/\//g, '/')
+      }
+    }
+
+    const [url, hash = ''] = to.split('#')
+
+    // do nothing if url would not change
+    if (url === state.url && hash === state.hash) {
+      return state
+    }
+
+    window.history.pushState({ url, hash }, '', to)
+
+    if (hash) {
+      // window.scrollTo without window.location.hash will not work
+      // :target css pseudoclasses won't work without
+      // resetting the hash here
+      const t = document.getElementById(hash)
+      if (t) {
+        window.scrollTo(0, t.scrollTop)
+      }
+      window.location.hash = hash
+    } else {
+      // we want to scroll to the top if there is no hash
+      window.scrollTo(0, 0)
+    }
+
+    return {
+      ...state,
+      url,
       hash,
       prev: state.url,
     }
   },
 }
 
+export const helpers = {
+  mapClickToGo: to => e => {
+    e.preventDefault()
+    return {
+      to,
+      e,
+    }
+  },
+
+
+  listenPopState: (dispatch, action) => {
+    const listener = e => dispatch(action, e)
+
+    addEventListener('popstate', listener)
+
+    return () => removeEventListener('popstate', listener)
+  },
+}
+
+export const subscriptions = [
+  ["helpers.listenPopState", 'actions.pop'],
+]
+
 export const global = {
   actions: {
     go: true,
-    wrapEventGo: true,
+    pop: true,
   },
 }
