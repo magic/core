@@ -24,13 +24,16 @@ export const write = async app => {
     Object.entries(stat)
       // .filter(([name]) => !images.includes(getFileType(name)))
       .map(async file => {
+        const [name] = file
+        const dir = path.join(config.DIR.PUBLIC, path.dirname(name))
+        await mkdirp(dir)
         await writeFile(file)
       }),
   )
 
   pages.forEach(async page => {
     const oldHash = config.HASHES.pages[page.name]
-    if (oldHash === page.hash) {
+    if (oldHash && oldHash === page.hash) {
       return
     }
 
