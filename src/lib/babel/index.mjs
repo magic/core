@@ -31,7 +31,14 @@ export const runBabel = config => {
   if (IS_PROD) {
     const minify = !process.argv.includes('--no-minify')
     if (minify) {
-      presets.push('minify')
+      const argv = process.argv
+      presets.push([
+        'minify',
+        {
+          removeConsole: !argv.includes('--keep-console'),
+          removeDebugger: !argv.includes('--keep-debugger'),
+        },
+      ])
     }
   }
 
