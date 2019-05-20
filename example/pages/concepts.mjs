@@ -106,8 +106,8 @@ export const View = state => [
 
     p([
       'once there is a lib key in at least one component,',
-      ' window.LIB (browser) and global.LIB (nodejs) will be set,',
-      ' aliasing LIB as a global variable in both environments',
+      ' window.lib (browser) and global.lib (nodejs) will be set,',
+      ' aliasing lib as a global variable in both environments',
     ]),
 
     h3({ id: 'libs-dir-or-file' }, 'lib dir or file'),
@@ -115,10 +115,10 @@ export const View = state => [
       'if you need libraries in multiple otherwise independent modules,',
       ' it might be easier to keep your library dependencies in a central place.',
       ' to achieve this, one can simply create /assets/lib.mjs and export an object from it.',
-      ' this object will get merged into the globalThis.LIB object that is available throughout your app.',
-      Pre('export default { NAME: () => {} }'),
+      ' this object will get merged into the globalThis.lib object that is available throughout your app.',
+      Pre('export default { name: () => {} }'),
       'will turn into',
-      Pre('LIB.NAME = () => {}'),
+      Pre('lib.name = () => {}'),
     ]),
   ]),
 ]
