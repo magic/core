@@ -88,6 +88,10 @@ return {
       if (lib.startsWith('@')) {
         lib = path.join(process.cwd(), 'node_modules', lib)
       }
+      if (!lib.endsWith('index.mjs')) {
+        lib = path.join(lib, 'src', 'index.mjs')
+      }
+
       const contents = await fs.readFile(lib, 'utf8')
       return `  ${name}: (() => {${contents
         .replace(/export default/g, `return`)
