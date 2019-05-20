@@ -111,12 +111,3 @@ export const state = {
   logo: '/logo.png',
   logotext: '@magic',
 }
-
-export const lib = {
-  test: 'module-exports.mjs',
-}
-
-export default {
-  lib,
-  state,
-}
