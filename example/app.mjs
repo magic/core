@@ -12,50 +12,31 @@ export const state = {
         {
           to: '#state',
           text: 'state',
-          items: [{ to: '-example', text: 'example state' }],
         },
         {
           to: '#actions',
           text: 'actions',
-          items: [{ to: '-example', text: 'example actions' }],
         },
         {
           to: '#views',
           text: 'views',
-          items: [{ to: '-example', text: 'example view' }],
         },
         {
           to: '#styles',
           text: 'styles',
-          items: [
-            { to: '-example', text: 'example styles' },
-            { to: '-magic-css', text: '@magic/css' },
-          ],
         },
         {
           to: '#globals',
           text: 'global',
-          items: [{ to: '-example', text: 'example global' }],
         },
         {
           to: '#lambdas',
           text: 'server lambdas',
-          items: [
-            { to: '-example', text: 'single lambda' },
-            { to: '-example-multi', text: 'multiple lambdas' },
-          ],
         },
         {
           to: '#libs',
           text: 'external libs',
-          items: [
-            { to: '-dir-or-file', text: 'lib dir or file' },
-            { to: '-example-file', text: 'example lib file' },
-            { to: '-app', text: 'app.lib' },
-            { to: '-module', text: 'module.lib' },
-          ],
         },
-        { to: '/concepts/#full-example', text: 'example' },
       ],
     },
     {
