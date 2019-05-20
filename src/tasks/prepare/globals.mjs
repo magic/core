@@ -6,7 +6,9 @@ import log from '@magic/log'
 
 import { fs, getDirectories, getFiles, isUpperCase, toPascal } from '../../lib/index.mjs'
 
-import { builtins } from '../../modules/index.mjs'
+import { builtins, component, tags } from '../../modules/index.mjs'
+
+const localLibIndexPath = path.join('src', 'lib', 'index.mjs')
 
 export const findNodeModules = async () => {
   let modules = {}
@@ -15,7 +17,6 @@ export const findNodeModules = async () => {
 
   const recursiveSearch = false
 
-  const localLibIndexPath = path.join('src', 'lib', 'index.mjs')
 
   const dirs = await getDirectories(nodeModuleDir, recursiveSearch)
   const dirPromises = dirs
@@ -96,6 +97,13 @@ export const findLocalModules = async () => {
         } else {
           modules[name] = { ...mod }
         }
+
+        const libPath = path.join(path.dirname(m), localLibIndexPath)
+        const exists = await fs.exists(libPath)
+        if (exists) {
+          modules[name].lib = path.join(libPath)
+        }
+
       } catch (e) {
         log.error('Error', `requiring local magic-module: ${m}, error: ${e.message}`)
       }
@@ -127,11 +135,13 @@ export const findAssetFile = async () => {
 export const findBuiltins = () => {
   let modules = {}
   Object.entries(builtins).forEach(([name, mod]) => {
-    // tags are and object that duplicates the tags, unneeded
-    if (name !== 'tags') {
-      modules[name] = mod
-    }
+    modules[name] = mod
   })
+  Object.entries(tags).forEach(([name, mod]) => {
+    modules[name] = mod
+  })
+
+  modules.component = component
   return modules
 }
 
