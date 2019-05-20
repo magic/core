@@ -148,8 +148,14 @@ export const findBuiltins = () => {
   return modules
 }
 
-export const findDefinedLibraries = async modules => {
+export const findDefinedLibraries = async (app, modules) => {
   const libraries = {}
+
+  if (app.lib) {
+    Object.entries(app.lib).forEach(([name, val]) => {
+      libraries[name] = path.resolve(val)
+    })
+  }
 
   const assetLibMjsFile = path.join(config.ROOT, 'assets', 'lib.mjs')
   const assetLibIndexFile = path.join(config.ROOT, 'assets', 'lib', 'index.mjs')
@@ -216,9 +222,9 @@ export const findDefinedLibraries = async modules => {
   global.lib = global.lib || {}
 
   const libFnPromises = Object.entries(libraries).map(async ([key, val]) => {
-    let { default: def, ...lib } = await import(val)
-    if (def) {
-      lib = { ...def }
+    let lib = await import(val)
+    if (lib.default) {
+      lib = lib.default
     }
 
     global.lib[key] = lib
@@ -276,7 +282,7 @@ export const prepareGlobals = async app => {
     })
   })
 
-  const libs = await findDefinedLibraries(modules)
+  const libs = await findDefinedLibraries(app, modules)
 
   return {
     modules,
