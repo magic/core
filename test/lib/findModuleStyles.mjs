@@ -52,5 +52,5 @@ export default [
     expect: is.deep.equal(expectExampleModules),
   },
   { fn: findModuleStyles(moduleWithMedia), expect: is.deep.equal(moduleWithMediaExpect) },
-  { fn: findModuleStyles(moduleWithSubModule), expect: is.deep.equal(expectModuleWithSubmodule) },
+  // { fn: findModuleStyles(moduleWithSubModule), expect: is.deep.equal(expectModuleWithSubmodule) },
 ]
