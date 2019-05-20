@@ -4,9 +4,9 @@ import * as Footer from './Footer.mjs'
 import { Header } from './Header.mjs'
 import { Img } from './Img.mjs'
 
-import { tags } from './tags.mjs'
-
 export { component } from './component.mjs'
+
+export { tags } from './tags.mjs'
 
 const { Link, Page, ...Router } = Route
 
@@ -18,10 +18,4 @@ export const builtins = {
   Page,
   Link,
   Router,
-  ...tags,
-}
-
-export default {
-  tags,
-  builtins,
 }

@@ -118,33 +118,22 @@ export const htmlTags = [
 
 export const headTags = ['html', 'head', 'title', 'meta', 'link', 'body', 'script']
 
-const exp = {
-  component,
-  tags: {
-    body: {},
-    head: {},
-  },
-}
+const exp = {}
 
 htmlTags.forEach(name => {
   const prepared = component(name)
   exp[name] = prepared
-  exp.tags.body[name] = prepared
 })
 
 headTags.forEach(name => {
   const prepared = component(name)
   exp[name] = prepared
-  exp.tags.head[name] = prepared
 })
 
 const description = attrs => {
   exp.meta({ name: 'description', property: 'og:description', content: attrs })
 }
 
-exp.tags.head.description = description
 exp.description = description
 
 export const tags = exp
-
-export default tags
