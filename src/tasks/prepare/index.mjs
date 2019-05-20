@@ -10,7 +10,7 @@ import { prepareStyle } from './style.mjs'
 import prepareMetaFiles from './meta.mjs'
 
 export const prepare = async app => {
-  const { modules, lib } = await prepareGlobals(app)
+  const { modules, libs } = await prepareGlobals(app)
 
   const files = await getPages()
 
@@ -71,7 +71,10 @@ export const prepare = async app => {
     }
   }
 
-  app.lib = lib
+  app.lib = app.lib || {}
+  libs.forEach(lib => {
+    app.lib[lib.key] = lib.path
+  })
 
   app.style = await prepareStyle({ app, modules })
 

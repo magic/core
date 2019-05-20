@@ -83,7 +83,7 @@ return {
 
   let libString = ''
   if (!is.empty(magic.lib)) {
-    libString = 'const LIB = {'
+    libString = 'const lib = {'
     const libPromises = Object.entries(magic.lib).map(async ([name, lib]) => {
       if (lib.startsWith('@')) {
         lib = path.join(process.cwd(), 'node_modules', lib)

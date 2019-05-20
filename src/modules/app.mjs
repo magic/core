@@ -63,40 +63,6 @@ const run = async config => {
     },
   }
 
-  let libFiles
-  try {
-    libFiles = await import(path.join(config.DIR.ASSETS, 'lib'))
-  } catch (e) {
-    // continue happily, we do not need to have a lib
-  }
-
-  app.lib = {}
-  if (!is.empty(libFiles)) {
-    const libPromises = Object.entries(libFiles).map(async ([name, file]) => {
-      if (typeof global[name] !== 'undefined') {
-        throw new Error(`Name clash: global.${name} would be overwritten by lib import`)
-      }
-
-      const localLibFile = path.join(config.DIR.ASSETS, file)
-      try {
-        let lib
-        try {
-          lib = await import(localLibFile)
-          file = localLibFile
-        } catch (e) {
-          lib = await import(file)
-        }
-
-        if (lib) {
-          app.lib[name] = file
-        }
-      } catch (e) {
-        throw new Error(`Error in assets/lib.mjs: Could not find imported lib '${name}' in ${file}`)
-      }
-    })
-    await Promise.all(libPromises)
-  }
-
   try {
     const maybeAppFile = path.join(config.ROOT, 'app.mjs')
     const exists = await fs.exists(maybeAppFile)

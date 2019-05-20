@@ -9,20 +9,18 @@ import { fs, getDirectories, getFiles, isUpperCase, toPascal } from '../../lib/i
 import { builtins, component, tags } from '../../modules/index.mjs'
 
 const localLibIndexPath = path.join('src', 'lib', 'index.mjs')
+const localLibMjsPath = path.join('src', 'lib.mjs')
+const nodeModuleDir = path.join(process.cwd(), 'node_modules')
+const recursiveSearch = false
 
 export const findNodeModules = async () => {
   let modules = {}
 
-  const nodeModuleDir = path.join(process.cwd(), 'node_modules')
-
-  const recursiveSearch = false
-
-
   const dirs = await getDirectories(nodeModuleDir, recursiveSearch)
   const dirPromises = dirs
-    .filter(dir => dir.includes('magic-module-'))
+    .filter(dir => dir.includes('magic-module-') || dir.includes('magic-modules-'))
     .map(async nodeModule => {
-      const name = toPascal(nodeModule.split('magic-module-')[1])
+      const name = toPascal(nodeModule.split(/magic-module(s)?/)[1])
       const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
 
       // find module itself
@@ -41,6 +39,11 @@ export const findNodeModules = async () => {
       const exists = await fs.exists(libPath)
       if (exists) {
         modules[name].lib = path.join(loadPath, localLibIndexPath)
+      }
+      const libMjsPath = path.join(nodeModule, localLibMjsPath)
+      const mjsExists = await fs.exists(libMjsPath)
+      if (mjsExists) {
+        modules[name].lib = path.join(loadPath, localLibMjsPath)
       }
     })
 
@@ -71,6 +74,11 @@ export const findNodeModules = async () => {
         if (exists) {
           modules[name].lib = path.join(loadPath, localLibIndexPath)
         }
+        const libMjsPath = path.join(nodeModule, localLibMjsPath)
+        const mjsExists = await fs.exists(libMjsPath)
+        if (mjsExists) {
+          modules[name].lib = path.join(loadPath, localLibMjsPath)
+        }
       }
     })
 
@@ -97,13 +105,6 @@ export const findLocalModules = async () => {
         } else {
           modules[name] = { ...mod }
         }
-
-        const libPath = path.join(path.dirname(m), localLibIndexPath)
-        const exists = await fs.exists(libPath)
-        if (exists) {
-          modules[name].lib = path.join(libPath)
-        }
-
       } catch (e) {
         log.error('Error', `requiring local magic-module: ${m}, error: ${e.message}`)
       }
@@ -133,6 +134,8 @@ export const findAssetFile = async () => {
 }
 
 export const findBuiltins = () => {
+  // we do not have to look for libs here,
+  // our builtins do not export any.
   let modules = {}
   Object.entries(builtins).forEach(([name, mod]) => {
     modules[name] = mod
@@ -143,6 +146,93 @@ export const findBuiltins = () => {
 
   modules.component = component
   return modules
+}
+
+export const findDefinedLibraries = async modules => {
+  const libraries = {}
+
+  const assetLibMjsFile = path.join(config.ROOT, 'assets', 'lib.mjs')
+  const assetLibIndexFile = path.join(config.ROOT, 'assets', 'lib', 'index.mjs')
+
+  const libMjsExists = await fs.exists(assetLibMjsFile)
+  const libIndexExists = await fs.exists(assetLibIndexFile)
+  if (libMjsExists) {
+    let { default: def, ...addLibs } = await import(assetLibMjsFile)
+    if (def) {
+      addLibs = def
+    }
+    libraries = deep.merge(libraries, { ...addLibs })
+  }
+
+  if (libIndexExists) {
+    let { default: def, ...addLibs } = await import(assetLibIndexFile)
+    if (def) {
+      addLibs = def
+    }
+    libraries = deep.merge(libraries, { ...addLibs })
+  }
+
+  const libNodeModuleDir = path.join(nodeModuleDir, '@magic-libraries')
+  let libOfficialNodeModuleFiles = await getDirectories(libNodeModuleDir, recursiveSearch)
+  libOfficialNodeModuleFiles = libOfficialNodeModuleFiles.filter(n => n !== libNodeModuleDir)
+
+  const nodeModules = await getDirectories(nodeModuleDir, recursiveSearch)
+  const libInofficialNodeModuleFiles = nodeModules.filter(n => n.includes('magic-library-') || n.includes('magic-libraries-'))
+
+  const libDirs = [...libOfficialNodeModuleFiles, ...libInofficialNodeModuleFiles]
+
+  const libPromises = libDirs.map(async libDir => {
+    let libName = ''
+    if (libDir.includes('@magic-libraries')) {
+      libName = libDir.split('@magic-libraries/')[1]
+      libDir = `@magic-libraries/${libName}`
+    } else if (libDir.includes('magic-libraries-')) {
+      libName = libDir.split('magic-libraries-')[1]
+      libDir = `magic-libraries-${libName}`
+    } else if (libDir.includes('magic-library')) {
+      libName = libDir.split('magic-library-')[1]
+      libDir = `magic-library-${libName}`
+    }
+
+    libraries[libName] = libDir
+  })
+
+  await Promise.all(libPromises)
+
+  Object.entries(modules).forEach(([key, val]) => {
+    key = `${key[0].toLowerCase()}${key.substring(1)}`
+    if (val.lib) {
+      libraries[key] = val.lib
+    }
+
+    Object.entries(val).forEach(([viewKey, view]) => {
+      if (view.lib) {
+        viewKey = `${viewKey[0].toLowerCase()}${key.substring(1)}`
+        libraries[viewKey] = view.lib
+      }
+    })
+  })
+
+  global.lib = global.lib || {}
+
+  const libFnPromises = Object.entries(libraries).map(async ([key, val]) => {
+    let { default: def, ...lib } = await import(val)
+    if (def) {
+      lib = { ...def }
+    }
+
+    global.lib[key] = lib
+
+    return {
+      key,
+      path: val,
+      lib,
+    }
+  })
+
+  const libs = await Promise.all(libFnPromises)
+
+  return libs
 }
 
 export const prepareGlobals = async app => {
@@ -186,45 +276,10 @@ export const prepareGlobals = async app => {
     })
   })
 
-  const libPaths = {}
-
-  Object.entries(modules)
-    .filter(([_, { lib }]) => lib)
-    .forEach(([name, { lib }]) => {
-      libPaths[name] = lib
-    })
-
-  try {
-    const indexLibPath = path.join(config.ROOT, 'assets', 'lib', 'index.mjs')
-    const indexLib = await import(indexLibPath)
-    Object.entries(indexLib).forEach(async ([name, value]) => {
-      libPaths[name] = path.join(path.dirname(indexLibPath), value)
-    })
-
-    Object.entries(app.lib).forEach(([name, libFile]) => {
-      libPaths[name] = path.join(path.dirname(indexLibPath), libFile)
-    })
-  } catch (e) {
-    // we do not require a lib file to exist
-  }
-
-  const libFns = {}
-
-  const libPromises = Object.entries(libPaths).map(async ([name, libPath]) => {
-    const { default: lib, ...mainLib } = await import(libPath)
-    if (!lib) {
-      libFns[name] = mainLib
-    } else {
-      libFns[name] = lib
-    }
-  })
-
-  await Promise.all(libPromises)
-
-  global.LIB = libFns
+  const libs = await findDefinedLibraries(modules)
 
   return {
     modules,
-    lib: libPaths,
+    libs,
   }
 }
