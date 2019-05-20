@@ -157,27 +157,6 @@ export const findDefinedLibraries = async (app, modules) => {
     })
   }
 
-  const assetLibMjsFile = path.join(config.ROOT, 'assets', 'lib.mjs')
-  const assetLibIndexFile = path.join(config.ROOT, 'assets', 'lib', 'index.mjs')
-
-  const libMjsExists = await fs.exists(assetLibMjsFile)
-  const libIndexExists = await fs.exists(assetLibIndexFile)
-  if (libMjsExists) {
-    let { default: def, ...addLibs } = await import(assetLibMjsFile)
-    if (def) {
-      addLibs = def
-    }
-    libraries = deep.merge(libraries, { ...addLibs })
-  }
-
-  if (libIndexExists) {
-    let { default: def, ...addLibs } = await import(assetLibIndexFile)
-    if (def) {
-      addLibs = def
-    }
-    libraries = deep.merge(libraries, { ...addLibs })
-  }
-
   const libNodeModuleDir = path.join(nodeModuleDir, '@magic-libraries')
   let libOfficialNodeModuleFiles = await getDirectories(libNodeModuleDir, recursiveSearch)
   libOfficialNodeModuleFiles = libOfficialNodeModuleFiles.filter(n => n !== libNodeModuleDir)
