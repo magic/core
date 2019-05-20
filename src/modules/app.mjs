@@ -102,15 +102,14 @@ const run = async config => {
     const exists = await fs.exists(maybeAppFile)
 
     if (exists) {
-      const maybeApp = await import(maybeAppFile)
+      const { default: def, ...maybeApp } = await import(maybeAppFile)
 
-      if (maybeApp.default) {
-        maybeApp = maybeApp.default
-      }
-
-      if (is.object(maybeApp) && !is.empty(maybeApp)) {
+      if (def) {
+        app = deep.merge(app, { ...def })
+      } else {
         app = deep.merge(app, { ...maybeApp })
       }
+
     }
   } catch (e) {
     // happy without maybApp
