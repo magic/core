@@ -1,4 +1,5 @@
 import is from '@magic/types'
+import deep from '@magic/deep'
 
 import { getFiles, getPages, isUpperCase, fs, createFileHash } from '../../lib/index.mjs'
 
@@ -18,6 +19,8 @@ export const prepare = async app => {
   app.state = app.state || {}
   app.actions = app.actions || {}
   app.effects = app.effects || {}
+  app.helpers = app.helpers || {}
+  app.subscriptions = app.subscriptions || []
 
   // collect the pages, create their states
   app.pages = await preparePages(files)
@@ -33,16 +36,20 @@ export const prepare = async app => {
     const actionTypes = ['actions', 'effects']
     actionTypes
       // do nothing if page has no actions or effects (type)
-      .filter(type => page[type])
+      .filter(type => !is.empty(page[type]))
       .forEach(type => {
         app[type].pages = app[type].pages || {}
         app[type].pages[page.name] = page[type]
       })
 
-    if (page.subscriptions) {
-      const pages = app.subscriptions.pages || {}
-      pages[page.name] = pages[page.name] ? [...pages[page.name], ...page.subscriptions] : [...page.subscriptions]
-      app.subscriptionspages = pages
+    if (!is.empty(page.subscriptions)) {
+      page.subscriptions.forEach(sub => {
+        app.subscriptions.push(sub)
+      })
+    }
+
+    if (!is.empty(page.helpers)) {
+      app.helpers = deep.merge(app.helpers, page.helpers)
     }
 
     return page
@@ -106,8 +113,11 @@ export const prepare = async app => {
           })
         })
 
+      if (!is.empty(component.helpers)) {
+        app.helpers = deep.merge(app.helpers, component.helpers)
+      }
+
       if (!is.empty(component.subscriptions)) {
-        app.subscriptions = app.subscriptions || []
         component.subscriptions.forEach(sub => {
           app.subscriptions.push(sub)
         })

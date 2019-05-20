@@ -57,6 +57,12 @@ return {
 
   let stateString = `const initialState = ${stringifyObject(magic.state)}`
 
+
+  let helperString = ''
+  if (!is.empty(magic.helpers)) {
+    helperString = `const helpers = ${stringifyObject(magic.helpers)}`
+  }
+
   let actionString = ''
   if (!is.empty(magic.actions)) {
     // create global actions object
@@ -71,10 +77,9 @@ return {
 
   let subscriptionString = ''
   if (!is.empty(magic.subscriptions)) {
-    subscriptionString = `const subscriptions = state => [${Object.values(magic.subscriptions).join(
-      ',\n',
-    )}]`
-    console.log(subscriptionString)
+    subscriptionString = `  subscriptions: state => [\n    `
+    subscriptionString += `[${magic.subscriptions.join('],\n    [')}],`
+    subscriptionString += '\n  ],'
   }
 
   let libString = ''
@@ -110,11 +115,7 @@ app({
     ...initialState,
     url: window.location.pathname,
   }),
-  ${
-    !is.empty(magic.subscriptions)
-      ? `subscriptions: state => [${Object.values(magic.subscriptions).join(',\n')}],`
-      : ''
-  }
+  ${subscriptionString}
   view: (state) => {
     const url = pages[state.url] ? state.url : '/404/'
     // used below, is kind of a global!
@@ -139,11 +140,11 @@ app({
     componentString,
     htmlTagString,
     stateString,
-    actionString,
+    helperString,
     depString,
     libString,
+    actionString,
     effectString,
-    // subscriptionString,
     pageString,
     appString,
   ]
