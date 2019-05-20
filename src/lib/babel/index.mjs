@@ -35,6 +35,9 @@ export const runBabel = config => {
       presets.push([
         'minify',
         {
+          mangle: {
+            topLevel: true,
+          },
           removeConsole: !argv.includes('--keep-console'),
           removeDebugger: !argv.includes('--keep-debugger'),
         },
