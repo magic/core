@@ -1,11 +1,4 @@
 import cluster from 'cluster'
-import path from 'path'
-
-import log from '@magic/log'
-import is from '@magic/types'
-
-import * as tasks from '../tasks/index.mjs'
-import runApp from '../modules/app.mjs'
 
 import { master } from './master.mjs'
 import { build } from './build.mjs'
