@@ -105,9 +105,7 @@ export const state = {
     {
       to: '/libraries/',
       text: 'libraries',
-      items: [
-        { to: '#gl-magic-libraries', text: '@magic-libraries' },
-      ],
+      items: [{ to: '#gl-magic-libraries', text: '@magic-libraries' }],
     },
   ],
   logo: '/logo.png',

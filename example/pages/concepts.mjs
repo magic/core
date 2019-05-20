@@ -100,7 +100,9 @@ export const View = state => [
       Link({ to: 'https://github.com/jorgebucharan/hyperapp' }, 'hyperapp'),
       ", [~400 lines that provide our ui state machine]. thats it. and it won't change.",
     ]),
-    p('we also have the tendency to write libraries specialized for our usecase, see @magic/css, @magic/test, @magic/'),
+    p(
+      'we also have the tendency to write libraries specialized for our usecase, see @magic/css, @magic/test, @magic/',
+    ),
 
     p([
       'once there is a lib key in at least one component,',

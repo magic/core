@@ -57,7 +57,6 @@ return {
 
   let stateString = `const initialState = ${stringifyObject(magic.state)}`
 
-
   let helperString = ''
   if (!is.empty(magic.helpers)) {
     helperString = `const helpers = ${stringifyObject(magic.helpers)}`

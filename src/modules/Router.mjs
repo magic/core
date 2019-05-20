@@ -5,11 +5,7 @@ export const Page = ({ page, state }) =>
     {
       class: 'Wrapper',
     },
-    [
-      Header(state),
-      div({ class: 'Page' }, page ? page(state) : '404 - not found'),
-      Footer(state),
-    ],
+    [Header(state), div({ class: 'Page' }, page ? page(state) : '404 - not found'), Footer(state)],
   )
 
 export const Link = ({ to, ...p }, children) => {
@@ -110,7 +106,6 @@ export const helpers = {
     }
   },
 
-
   listenPopState: (dispatch, action) => {
     const listener = e => dispatch(action, e)
 
@@ -120,9 +115,7 @@ export const helpers = {
   },
 }
 
-export const subscriptions = [
-  ["helpers.listenPopState", 'actions.pop'],
-]
+export const subscriptions = [['helpers.listenPopState', 'actions.pop']]
 
 export const global = {
   actions: {
