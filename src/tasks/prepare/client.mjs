@@ -133,7 +133,6 @@ app({
   node: document.getElementById("Magic"),
 })
 `
-  // console.log(clientString)
   const clientString = [
     hyperapp,
     componentString,
@@ -149,7 +148,6 @@ app({
   ]
     .join('\n')
     .trim()
-  // .replace(/CHECK_PROPS((.*))\n/g, '')
 
   return clientString
 }
