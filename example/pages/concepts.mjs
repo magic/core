@@ -100,7 +100,7 @@ export const View = state => [
       Link({ to: 'https://github.com/jorgebucharan/hyperapp' }, 'hyperapp'),
       ", [~400 lines that provide our ui state machine]. thats it. and it won't change.",
     ]),
-    p('anyways, rant over. if you really need to use external packages, there is a way.'),
+    p('we also have the tendency to write libraries specialized for our usecase, see @magic/css, @magic/test, @magic/'),
 
     p([
       'once there is a lib key in at least one component,',
@@ -110,11 +110,13 @@ export const View = state => [
 
     h3({ id: 'libs-dir-or-file' }, 'lib dir or file'),
     p([
-      'if you need libraries in internally developed modules,',
+      'if you need libraries in multiple otherwise independent modules,',
       ' it might be easier to keep your library dependencies in a central place.',
-      ' to achieve this, one can simply create /assets/lib.js and export an object from it.',
-      ' the keys of the object are the function name, the values are the paths to the lib.js file.',
-      ' to make sure resolution works, require.resolve has to be used for local libs.',
+      ' to achieve this, one can simply create /assets/lib.mjs and export an object from it.',
+      ' this object will get merged into the globalThis.LIB object that is available throughout your app.',
+      Pre('export default { NAME: () => {} }'),
+      'will turn into',
+      Pre('LIB.NAME = () => {}'),
     ]),
   ]),
 ]
