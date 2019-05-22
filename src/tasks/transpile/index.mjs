@@ -1,14 +1,10 @@
-import path from 'path'
-
-import is from '@magic/types'
-
 import html from './html.mjs'
 import client from './client.mjs'
 import style from './css.mjs'
 import { createFileHash } from '../../lib/index.mjs'
 
 export const transpile = async app => {
-  const bundle = await client(app.client)
+  const bundle = await client(app)
   const css = await style(app.style)
 
   const hashes = {
