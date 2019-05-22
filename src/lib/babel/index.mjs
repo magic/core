@@ -1,11 +1,16 @@
-export const runBabel = config => {
+// import { tags } from '../../modules/tags.mjs'
+import magic from './dead_code.mjs'
+
+export const runBabel = (app, config) => {
   const { IS_PROD, IS_DEV, CLIENT_LIB_NAME } = config
 
   const presets = [
     [
       '@babel/preset-env',
       {
-        targets: '>0.25%, not dead',
+        targets: {
+          browsers: 'last 2 versions',
+        },
         forceAllTransforms: true,
         ignoreBrowserslistConfig: true,
         // modules: false,
@@ -15,9 +20,10 @@ export const runBabel = config => {
   ]
 
   const plugins = [
+    ['@babel/plugin-transform-react-jsx', { pragma: 'h' }],
+    magic(app, config),
     '@babel/plugin-transform-arrow-functions',
     '@babel/plugin-proposal-object-rest-spread',
-    ['@babel/plugin-transform-react-jsx', { pragma: 'h' }],
     '@babel/plugin-proposal-export-namespace-from',
   ]
 
