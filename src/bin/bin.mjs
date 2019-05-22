@@ -6,12 +6,7 @@ import { runConfig } from '../config.mjs'
 const args = {
   options: [
     ['--help', '-help', 'help', '--h', '-h'],
-    ['--no-mangle-names'],
-    ['--keep-dead-code', '--keep-dead'],
-    ['--keep-console'],
-    ['--keep-debugger', '--keep-debug'],
     ['--no-minify'],
-    ['--keep-client'],
     ['--watch', '-w'],
   ],
   env: [[['--production', '--prod', '--p', '-p'], 'NODE_ENV', 'production']],
@@ -25,8 +20,8 @@ const args = {
       build: 'builds the client app',
       serve: 'build and serve the bundle',
       clean: 'delete public dir',
+      publish: 'publish to github (only needed if publishing to different branch)',
       connect: 'connect to github (only needs to be done once)',
-      publish: 'publish to github',
     },
     options: {
       '--keep-console': 'keep console.log in production javascript',
@@ -41,7 +36,7 @@ const args = {
 production:
 NODE_ENV=production magic [...TASKS]
 
-dev, watch src directory:
+create development bundles && watch src directory:
 magic dev --watch src
 `,
   },
