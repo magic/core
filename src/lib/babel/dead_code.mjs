@@ -165,10 +165,10 @@ const removeUnused = (t, app) => path => {
               return
             }
 
-            // log.info('removed html tag', name)
+            // console.log('removed html tag', name)
             path.remove()
           } else {
-            // log.info('removed @magic-module', name)
+            // console.log('removed @magic-module', name)
             path.remove()
           }
         }
