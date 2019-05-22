@@ -8,6 +8,7 @@
   "scripts": {
     "start": "t -p",
     "build": "NODE_ENV=production node src/bin/bin.js build",
+    "devbuild": "node src/bin/bin.js build",
     "serve": "node src/bin/bin.js serve --watch src",
     "prod": "NODE_ENV=production node src/bin/bin.js build serve --watch src",
     "clean": "node src/bin/bin.js clean",
