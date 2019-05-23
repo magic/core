@@ -143,8 +143,3 @@ export default {
     ),
   ]
 }
-
-export default {
-  state,
-  View,
-}

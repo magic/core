@@ -54,11 +54,3 @@ Component.style = {
 }
 
 Component.props = [{ key: 'header', type: ['string', 'array'], required: ['title'] }]
-
-export default {
-  View,
-  state,
-  style,
-  global,
-  Component,
-}

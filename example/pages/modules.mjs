@@ -305,8 +305,3 @@ export default Footer
 
   ModuleList(),
 ]
-
-export default {
-  state,
-  View,
-}
