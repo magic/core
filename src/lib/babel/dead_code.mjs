@@ -8,7 +8,7 @@ const used = {
   effects: {},
   helpers: {},
   lib: {},
-  tags: new Set()
+  tags: new Set(),
 }
 
 const handleEventFunctions = (path, t) => {
@@ -23,7 +23,7 @@ const handleEventFunctions = (path, t) => {
 
       used[actionObjectName][actionPropertyName][actionName] = {}
     }
-    if(helper.object && helper.object.object) {
+    if (helper.object && helper.object.object) {
       const helperObjectName = helper.object.object.name
       const helperPropertyName = helper.object.property && helper.object.property.name
       const helperName = helper.property.name
@@ -46,12 +46,11 @@ const findInteractionsByType = (app, t, path, type) => {
   }
 }
 
-
 // collect all used modules, htmlTags, actions, effects, helpers
 const findUsedSpells = (t, app, config) => path => {
   // find used modules and html tags in app
   const moduleNames = Object.keys(app.modules)
-  if(t.isCallExpression(path.node)) {
+  if (t.isCallExpression(path.node)) {
     if (t.isIdentifier(path.node.callee)) {
       const name = path.node.callee.name
       const isModule = isModuleTag(name, moduleNames)
@@ -142,6 +141,22 @@ const findUsedSpells = (t, app, config) => path => {
         }
       }
     }
+    // } else if (t.isAssignmentExpression(path.node)) {
+    //   const { left, right } = path.node
+    //   let objName
+    //   let propName
+
+    //   if (t.isMemberExpression(left)) {
+    //     // props.onclick = action
+    //     // console.log('member expression', left)
+    //     objName = left.object.name
+    //     propName = left.property.name
+    //   } else if (t.isIdentifier(left)) {
+    //     // props = { onclick: action }
+    //     objName = left.name
+    //   }
+
+    //   console.log({ objName, propName })
   }
 }
 
@@ -152,7 +167,7 @@ const removeUnused = (t, app) => path => {
   if (t.isVariableDeclarator(path.node)) {
     const { name } = path.node.id
     if (name && isModuleTag(name, moduleNames)) {
-      if(!usedTagNames.includes(name)) {
+      if (!usedTagNames.includes(name)) {
         if (isModuleTag(name, moduleNames)) {
           if (!isUpperCase(name)) {
             const init = path.node.init
@@ -190,14 +205,18 @@ const removeUnused = (t, app) => path => {
               // console.log('not remove fn', name)
             }
           } else if (t.isObjectExpression(prop.value)) {
-           const { value: propName } = prop.value.properties[0].key
+            const { value: propName } = prop.value.properties[0].key
 
-           if (!used.actions || !used.actions[name] || !used.actions[name].hasOwnProperty(propName)) {
-            //  console.log('remove actions', name, propName)
-            //  prop.remove()
-           } else {
-            //  console.log('not remove action', name, propName)
-           }
+            if (
+              !used.actions ||
+              !used.actions[name] ||
+              !used.actions[name].hasOwnProperty(propName)
+            ) {
+              //  console.log('remove actions', name, propName)
+              //  prop.remove()
+            } else {
+              //  console.log('not remove action', name, propName)
+            }
           } else {
             // console.log('unexpected action type', prop)
           }
