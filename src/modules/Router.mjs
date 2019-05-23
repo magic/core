@@ -14,7 +14,7 @@ export const Link = ({ to, ...p }, children) => {
   props.href = to
 
   if (to && to.startsWith('/') && !to.startsWith(`//`)) {
-    props.onclick = [actions.go, helpers.mapClickToGo(to)]
+    props.onclick = [actions.go, helpers.mapClickToGo]
   } else {
     props.target = '_blank'
     props.rel = 'noopener'
@@ -52,10 +52,10 @@ export const actions = {
     }
   },
 
-  go: (state, { to }) => {
+  go: (state, e) => {
     // make sure our to never includes the origin
     // this makes sure we can distinguish between local and external links below
-    to = to.replace(window.location.origin, '')
+    let to = e.target.href.replace(window.location.origin, '')
 
     const isLocal = to.startsWith('/') || to.startsWith('#')
     const isRooted = to.startsWith(state.root)
@@ -98,12 +98,9 @@ export const actions = {
 }
 
 export const helpers = {
-  mapClickToGo: to => e => {
+  mapClickToGo: e => {
     e.preventDefault()
-    return {
-      to,
-      e,
-    }
+    return e
   },
 
   listenPopState: (dispatch, action) => {
