@@ -9,13 +9,12 @@ const prepareClient = async magic => {
   const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
   const hyperapp = `
-const { h, Lazy, app } = (() => {
+const { h, app, LAZY_NODE } = (() => {
 ${hyperappContent.replace(/export /g, ' ')}
-
 return {
   h,
   app,
-  Lazy,
+  LAZY_NODE,
 }
 })()`
 
