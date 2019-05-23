@@ -75,7 +75,6 @@ const run = async config => {
       } else {
         app = deep.merge(app, { ...maybeApp })
       }
-
     }
   } catch (e) {
     // happy without maybApp

@@ -4,11 +4,7 @@ import { runCluster } from '../cluster/index.mjs'
 import { runConfig } from '../config.mjs'
 
 const args = {
-  options: [
-    ['--help', '-help', 'help', '--h', '-h'],
-    ['--no-minify'],
-    ['--watch', '-w'],
-  ],
+  options: [['--help', '-help', 'help', '--h', '-h'], ['--no-minify'], ['--watch', '-w']],
   env: [[['--production', '--prod', '--p', '-p'], 'NODE_ENV', 'production']],
   commands: [['serve', 'dev', 'development', 'start'], 'clean', 'connect', 'publish', 'build'],
   help: {

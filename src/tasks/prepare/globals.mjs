@@ -162,7 +162,9 @@ export const findDefinedLibraries = async (app, modules) => {
   libOfficialNodeModuleFiles = libOfficialNodeModuleFiles.filter(n => n !== libNodeModuleDir)
 
   const nodeModules = await getDirectories(nodeModuleDir, recursiveSearch)
-  const libInofficialNodeModuleFiles = nodeModules.filter(n => n.includes('magic-library-') || n.includes('magic-libraries-'))
+  const libInofficialNodeModuleFiles = nodeModules.filter(
+    n => n.includes('magic-library-') || n.includes('magic-libraries-'),
+  )
 
   const libDirs = [...libOfficialNodeModuleFiles, ...libInofficialNodeModuleFiles]
 
