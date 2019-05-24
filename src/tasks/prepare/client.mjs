@@ -33,6 +33,7 @@ return {
     propTypeString = 'const propTypes = {\n'
     propTypeString += Object.entries(magic.modules)
       .filter(([_,{ propTypes }]) => propTypes)
+      .sort(([a], [b]) => a > b ? 1 : -1)
       .map(([name, { propTypes }]) =>
         Object.entries(propTypes).map(([key, type]) => `${key}: ${JSON.stringify(type, null, 2)}`).join(',\n')
       )
