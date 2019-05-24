@@ -79,7 +79,7 @@ const findUsedSpells = (t, app, config) => path => {
 
   const handleLink = (node, config) => {
     const href = node.value.value
-    if (href.startsWith('#') || (href.startsWith('#') && !href.startsWith(config.WEB_ROOT))) {
+    if (!href.startsWith('#') && !href.startsWith('-') && !href.startsWith(config.WEB_ROOT)) {
       node.value.value = `${config.WEB_ROOT}${href}`.replace(/\/\//g, '/')
     }
   }
