@@ -45,6 +45,7 @@ return {
   let htmlTagString = ''
   Object.entries(magic.modules)
     .filter(([k]) => k !== 'Magic' && k !== 'component')
+    .sort(([a], [b]) => a > b ? 1 : -1)
     .forEach(([k, v]) => {
       if (!isUpperCase(k)) {
         htmlTagString += `const ${k} = C('${k}')\n`
@@ -58,6 +59,7 @@ return {
 
         const subStr = Object.entries(v)
           .filter(([sk]) => isUpperCase(sk) && sk !== 'View')
+          .sort(([a], [b]) => a > b ? 1 : -1)
           .map(([sk, sv]) => `${k}.${sk} = ${sv.toString()}`)
           .join('\n')
 
@@ -94,19 +96,21 @@ return {
   let libString = ''
   if (!is.empty(magic.lib)) {
     libString = 'const lib = {'
-    const libPromises = Object.entries(magic.lib).map(async ([name, lib]) => {
-      if (lib.startsWith('@')) {
-        lib = path.join(process.cwd(), 'node_modules', lib)
-      }
-      if (!lib.endsWith('index.mjs')) {
-        lib = path.join(lib, 'src', 'index.mjs')
-      }
+    const libPromises = Object.entries(magic.lib)
+      .sort(([a], [b]) => a > b ? 1 : -1)
+      .map(async ([name, lib]) => {
+        if (lib.startsWith('@')) {
+          lib = path.join(process.cwd(), 'node_modules', lib)
+        }
+        if (!lib.endsWith('index.mjs')) {
+          lib = path.join(lib, 'src', 'index.mjs')
+        }
 
-      const contents = await fs.readFile(lib, 'utf8')
-      return `  ${name}: (() => {${contents
-        .replace(/export default/g, `return`)
-        .replace(/export /g, '')}})(),`
-    })
+        const contents = await fs.readFile(lib, 'utf8')
+        return `  ${name}: (() => {${contents
+          .replace(/export default/g, `return`)
+          .replace(/export /g, '')}})(),`
+      })
 
     const libArray = await Promise.all(libPromises)
     libString += libArray.join('\n')
@@ -116,9 +120,11 @@ return {
   // create pages object, each Page is a html View
   let pageString = 'const pages = {\n'
 
-  magic.pages.forEach(page => {
-    pageString += `\n  '${page.name}': ${page.View.toString()},`
-  })
+  magic.pages
+    .sort(({ name: n1 }, {name: n2 }) => n1 > n2 ? 1 : -1)
+    .forEach(page => {
+      pageString += `\n  '${page.name}': ${page.View.toString()},`
+    })
 
   pageString += '\n}\n'
 
