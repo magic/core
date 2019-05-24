@@ -1,5 +1,6 @@
 import * as Route from './Router.mjs'
-import { Menu } from './Menu.mjs'
+import * as Menu from './Menu.mjs'
+import * as MenuItem from './MenuItem.mjs'
 import * as Footer from './Footer.mjs'
 import * as Header from './Header.mjs'
 import * as Img from './Img.mjs'
@@ -13,6 +14,7 @@ export { tags } from './tags.mjs'
 const { Link, Page, ...Router } = Route
 
 export const builtins = {
+  MenuItem,
   Menu,
   Footer,
   Header,
