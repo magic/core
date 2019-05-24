@@ -21,4 +21,4 @@ script:
   - npm test
 
 after_success:
-  - npm run calls
+  - npm run coveralls

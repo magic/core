@@ -15,7 +15,7 @@
     "dev": "node src/bin/bin.js dev --watch src",
     "format": "f -w --exclude docs",
     "test": "t",
-    "calls": "calls"
+    "coveralls": "coveralls"
   },
   "module": "src/index.mjs",
   "type": "module",
