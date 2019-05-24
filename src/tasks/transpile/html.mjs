@@ -17,12 +17,6 @@ export default (app, hashes) =>
 
       const rendered = render.renderToString(view(state))
 
-      // const rendered = applyWebRoot(
-      //   config,
-      //   render.renderToString(app.View(page, hashes)(state)),
-      // )
-
-      // console.log({ rendered })
       return {
         ...page,
         rendered,
