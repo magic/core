@@ -1,5 +1,6 @@
-export const Menu = ({ items, hash, url = '', root, ...props }) => {
-  let { class: cl = 'Menu', collapse = true } = props
+export const Menu = p => {
+  CHECK_PROPS(p, propTypes, 'Menu')
+  let { items, hash, url = '', root, class: cl = 'Menu', collapse = true, ...props } = p
 
   if (!items.length) {
     return
@@ -12,7 +13,7 @@ export const Menu = ({ items, hash, url = '', root, ...props }) => {
   return nav({ class: cl }, ul(items.map(i => Menu.Item({ ...i, url, root, collapse }))))
 }
 
-export const style = {
+Menu.style = {
   float: 'right',
   margin: '1.5em 0 0',
   position: 'relative',
@@ -25,7 +26,29 @@ export const style = {
   },
 }
 
-Menu.Item = ({ url, text, items = [], parentTo = undefined, collapse, root, ...item }) => {
+export const propTypes = Menu.propTypes = {
+  Menu: [
+    { key: 'items', type: 'array', required: true },
+    { key: 'hash', type: 'string' },
+    { key: 'url', type: 'string' },
+    { key: 'root', type: 'string' },
+    { key: 'collapse', type: 'boolean' },
+    { key: 'class', type: 'string' },
+  ],
+  MenuItem: [
+    { key: 'url', type: 'string' },
+    { key: 'text', type: ['string', 'array'] },
+    { key: 'items', type: 'array' },
+    { key: 'parentTo', type: 'string' },
+    { key: 'collapse', type: 'boolean' },
+    { key: 'root', type: 'string' },
+    { key: 'to', type: 'string' },
+  ]
+}
+
+Menu.Item = props => {
+  CHECK_PROPS(props, propTypes, 'MenuItem')
+  const { url, text, items = [], parentTo = undefined, collapse, root, ...item } = props
   // if the item has no values, we quit
   if (!item.to && !text) {
     return

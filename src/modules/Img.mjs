@@ -1,9 +1,11 @@
-export const Img = props => {
+export const View = props => {
   if (typeof props === 'string') {
     props = {
       src: props,
     }
   }
+
+  CHECK_PROPS(props, propTypes, 'Img')
 
   if (!props.src) {
     return
@@ -19,4 +21,13 @@ export const Img = props => {
   }
 
   return img(props)
+}
+
+export const propTypes = {
+  Img: [
+    { key: 'src', type: 'string', required: true },
+    { key: 'alt', type: 'string' },
+    { key: 'role', type: 'string' },
+    { key: 'title', type: 'string' },
+  ]
 }

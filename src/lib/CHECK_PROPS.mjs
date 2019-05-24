@@ -5,6 +5,12 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
     return
   }
 
+  if (!propTypeDecl) {
+    const err = new Error()
+    console.error('CHECK_PROPS: expected propTypes as second argument', err.stack)
+    return
+  }
+
   const is = (e, ...types) =>
     types.some(type => (typeof is[type] === 'function' ? is[type](e) : typeof e === type))
 
@@ -23,6 +29,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
 
   if (!is.array(propTypes)) {
     console.error('invalid propTypes received from:', name, propTypes)
+    return
   }
 
   if (!propTypes[0].key) {
@@ -40,11 +47,12 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
 
     const types = Array.isArray(type) ? type : [type]
 
-    if (!required) {
+    if (!required && !types.includes('undefined')) {
       types.push('undefined')
     }
     const match = is(value, ...types)
 
+    // console.log(match, value, types)
     if (Array.isArray(required)) {
       if (!match) {
         const altExists = required.filter(key => is(props[key], ...types))

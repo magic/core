@@ -2,7 +2,7 @@ import * as Route from './Router.mjs'
 import { Menu } from './Menu.mjs'
 import * as Footer from './Footer.mjs'
 import * as Header from './Header.mjs'
-import { Img } from './Img.mjs'
+import * as Img from './Img.mjs'
 
 export { component } from './component.mjs'
 

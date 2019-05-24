@@ -31,11 +31,12 @@ return {
     checkProps = `const CHECK_PROPS = ${global.CHECK_PROPS.toString()}`
 
     propTypeString = 'const propTypes = {\n'
-    Object.entries(magic.modules)
+    propTypeString += Object.entries(magic.modules)
       .filter(([_,{ propTypes }]) => propTypes)
-      .forEach(([name, { propTypes }]) => {
-        propTypeString += `  ${name}: ${JSON.stringify(propTypes[name], null, 2)},\n`
-      })
+      .map(([name, { propTypes }]) =>
+        Object.entries(propTypes).map(([key, type]) => `${key}: ${JSON.stringify(type, null, 2)}`).join(',\n')
+      )
+      .join(',\n')
     propTypeString += '\n}'
   }
 
