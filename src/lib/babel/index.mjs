@@ -27,12 +27,14 @@ export const runBabel = (app, config) => {
     '@babel/plugin-proposal-export-namespace-from',
   ]
 
-  plugins.push([
-    'remove-code',
-    {
-      function: ['CHECK_PROPS'],
-    },
-  ])
+  if (IS_PROD) {
+    plugins.push([
+      'remove-code',
+      {
+        function: ['CHECK_PROPS'],
+      },
+    ])
+  }
 
   if (IS_PROD) {
     const minify = !process.argv.includes('--no-minify')

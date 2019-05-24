@@ -26,8 +26,17 @@ return {
     .replace(/children/gm, 'c')
 
   let checkProps = ''
+  let propTypeString = ''
   if (config.IS_DEV) {
     checkProps = `const CHECK_PROPS = ${global.CHECK_PROPS.toString()}`
+
+    propTypeString = 'const propTypes = {\n'
+    Object.entries(magic.modules)
+      .filter(([_,{ propTypes }]) => propTypes)
+      .forEach(([name, { propTypes }]) => {
+        propTypeString += `  ${name}: ${JSON.stringify(propTypes[name], null, 2)},\n`
+      })
+    propTypeString += '\n}'
   }
 
   let depString = ''
@@ -136,8 +145,11 @@ app({
   node: document.getElementById("Magic"),
 })
 `
+
   const clientString = [
     hyperapp,
+    checkProps,
+    propTypeString,
     componentString,
     htmlTagString,
     stateString,

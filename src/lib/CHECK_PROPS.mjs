@@ -1,4 +1,10 @@
-export const CHECK_PROPS = (props, propTypeDecl, name = 'Module') => {
+export const CHECK_PROPS = (props, propTypeDecl, name) => {
+  if (!name) {
+    const err = new Error()
+    console.error('CHECK_PROPS: expected Module name as third argument', err.stack)
+    return
+  }
+
   const is = (e, ...types) =>
     types.some(type => (typeof is[type] === 'function' ? is[type](e) : typeof e === type))
 
@@ -13,13 +19,14 @@ export const CHECK_PROPS = (props, propTypeDecl, name = 'Module') => {
   is.null = e => e === null
   is.promise = e => e instanceof Promise
 
-  if (!is.array(propTypeDecl)) {
-    console.error('invalid propTypes received from:', name, propTypeDecl)
+  let propTypes = propTypeDecl[name]
+
+  if (!is.array(propTypes)) {
+    console.error('invalid propTypes received from:', name, propTypes)
   }
 
-  let propTypes = propTypeDecl
-  if (!propTypeDecl[0].key) {
-    let [FALLBACK, ...pT] = propTypeDecl
+  if (!propTypes[0].key) {
+    let [FALLBACK, ...pT] = propTypes
     propTypes = pT
 
     if (FALLBACK && typeof props === FALLBACK.type) {
@@ -50,7 +57,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name = 'Module') => {
     if (!is(value, ...types)) {
       const typeInfo = types.length > 1 ? 'one of' : 'a'
       const typeString = types.length > 1 ? `["${types.join(', "')}"]` : types[0]
-      console.error(`${name} needs props.${key} to be ${typeInfo} ${typeString}`)
+      console.error(`${name} needs props.${key} to be ${typeInfo} ${typeString}. received ${typeof value}`)
     } else if (required) {
       if (typeof value === 'object' && !Object.keys(value).length) {
         let typeString = ''
