@@ -1,4 +1,4 @@
-import * as Route from './Router.mjs'
+import * as Router from './Router.mjs'
 import * as Menu from './Menu.mjs'
 import * as MenuItem from './MenuItem.mjs'
 import * as Footer from './Footer.mjs'
@@ -11,7 +11,7 @@ export { Lazy } from './Lazy.mjs'
 
 export { tags } from './tags.mjs'
 
-const { Link, Page, ...Router } = Route
+const { Link, ...Page } = Router
 
 export const builtins = {
   MenuItem,
@@ -21,5 +21,4 @@ export const builtins = {
   Img,
   Page,
   Link,
-  Router,
 }

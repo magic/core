@@ -1,6 +1,8 @@
-export const View = () => {}
-
-export const Page = ({ page, state }) =>
+// this will soon not be needed.
+// we make sure to import a valid View from this Module,
+// since it will be removed by dead code removal anyways.
+// should refactor to instead export the Page as View
+export const View = ({ page, state }) =>
   div(
     {
       class: 'Wrapper',
@@ -55,7 +57,7 @@ export const actions = {
   go: (state, e) => {
     // make sure our to never includes the origin
     // this makes sure we can distinguish between local and external links below
-    let to = e.target.href.replace(window.location.origin, '')
+    let to = e.currentTarget.href.replace(window.location.origin, '')
 
     const isLocal = to.startsWith('/') || to.startsWith('#')
     const isRooted = to.startsWith(state.root)
