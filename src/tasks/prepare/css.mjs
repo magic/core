@@ -6,7 +6,7 @@ import { findModuleStyles } from '../../lib/index.mjs'
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
-export const prepareStyle = async ({ app, modules }) => {
+export const prepareCss = async ({ app, modules }) => {
   const styles = []
 
   const { THEME = '' } = config
