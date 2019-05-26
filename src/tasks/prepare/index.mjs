@@ -4,7 +4,7 @@ import deep from '@magic/deep'
 import { getFiles, getPages, isUpperCase, fs, createFileHash } from '../../lib/index.mjs'
 
 import { prepareGlobals } from './globals.mjs'
-import prepareClient from './client.mjs'
+import prepareJs from './client.mjs'
 import preparePages from './pages.mjs'
 import { prepareCss } from './css.mjs'
 import prepareMetaFiles from './meta.mjs'
@@ -130,7 +130,7 @@ export const prepare = async app => {
   app.modules = modules
 
   // create client magic.js file
-  app.client = await prepareClient(app)
+  app.client = await prepareJs(app)
 
   // extract lambdas and prepare them
   app.lambdas = {}

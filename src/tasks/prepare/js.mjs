@@ -4,7 +4,7 @@ import is from '@magic/types'
 
 import { fs, isUpperCase, stringifyObject } from '../../lib/index.mjs'
 
-const prepareClient = async magic => {
+const prepareJs = async magic => {
   const hyperappPath = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
   const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
@@ -174,4 +174,4 @@ app({
 
   return clientString
 }
-export default prepareClient
+export default prepareJs
