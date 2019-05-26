@@ -1,10 +1,10 @@
 import html from './html.mjs'
-import client from './client.mjs'
+import js from './js.mjs'
 import style from './css.mjs'
 import { createFileHash } from '../../lib/index.mjs'
 
 export const transpile = async app => {
-  const bundle = await client(app)
+  const bundle = await js(app)
   const css = await style(app.style)
 
   const hashes = {

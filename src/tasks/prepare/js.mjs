@@ -32,10 +32,12 @@ return {
 
     propTypeString = 'const propTypes = {\n'
     propTypeString += Object.entries(magic.modules)
-      .filter(([_,{ propTypes }]) => propTypes)
-      .sort(([a], [b]) => a > b ? 1 : -1)
+      .filter(([_, { propTypes }]) => propTypes)
+      .sort(([a], [b]) => (a > b ? 1 : -1))
       .map(([name, { propTypes }]) =>
-        Object.entries(propTypes).map(([key, type]) => `${key}: ${JSON.stringify(type, null, 2)}`).join(',\n')
+        Object.entries(propTypes)
+          .map(([key, type]) => `${key}: ${JSON.stringify(type, null, 2)}`)
+          .join(',\n'),
       )
       .join(',\n')
     propTypeString += '\n}'
@@ -45,7 +47,7 @@ return {
   let htmlTagString = ''
   Object.entries(magic.modules)
     .filter(([k]) => k !== 'Magic' && k !== 'component')
-    .sort(([a], [b]) => a > b ? 1 : -1)
+    .sort(([a], [b]) => (a > b ? 1 : -1))
     .forEach(([k, v]) => {
       if (!isUpperCase(k)) {
         htmlTagString += `const ${k} = C('${k}')\n`
@@ -59,7 +61,7 @@ return {
 
         const subStr = Object.entries(v)
           .filter(([sk]) => isUpperCase(sk) && sk !== 'View')
-          .sort(([a], [b]) => a > b ? 1 : -1)
+          .sort(([a], [b]) => (a > b ? 1 : -1))
           .map(([sk, sv]) => `${k}.${sk} = ${sv.toString()}`)
           .join('\n')
 
@@ -97,7 +99,7 @@ return {
   if (!is.empty(magic.lib)) {
     libString = 'const lib = {'
     const libPromises = Object.entries(magic.lib)
-      .sort(([a], [b]) => a > b ? 1 : -1)
+      .sort(([a], [b]) => (a > b ? 1 : -1))
       .map(async ([name, lib]) => {
         if (lib.startsWith('@')) {
           lib = path.join(process.cwd(), 'node_modules', lib)
@@ -121,7 +123,7 @@ return {
   let pageString = 'const pages = {\n'
 
   magic.pages
-    .sort(({ name: n1 }, {name: n2 }) => n1 > n2 ? 1 : -1)
+    .sort(({ name: n1 }, { name: n2 }) => (n1 > n2 ? 1 : -1))
     .forEach(page => {
       pageString += `\n  '${page.name}': ${page.View.toString()},`
     })

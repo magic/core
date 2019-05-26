@@ -1,10 +1,10 @@
 import is from '@magic/types'
 import deep from '@magic/deep'
 
-import { getFiles, getPages, isUpperCase, fs, createFileHash } from '../../lib/index.mjs'
+import { getFiles, getPages, isUpperCase, fs } from '../../lib/index.mjs'
 
 import { prepareGlobals } from './globals.mjs'
-import prepareJs from './client.mjs'
+import prepareJs from './js.mjs'
 import preparePages from './pages.mjs'
 import { prepareCss } from './css.mjs'
 import prepareMetaFiles from './meta.mjs'
