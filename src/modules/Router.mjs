@@ -2,13 +2,30 @@
 // we make sure to import a valid View from this Module,
 // since it will be removed by dead code removal anyways.
 // should refactor to instead export the Page as View
-export const View = ({ page, state }) =>
-  div(
+export const View = ({ page, state }) => {
+  page = page ? page(state) : '404 - not found'
+
+  const props = {
+    class: `Page`,
+  }
+  if (state.class) {
+    props.class += ` ${state.class}`
+  }
+
+  return div(
     {
       class: 'Wrapper',
     },
-    [Header(state), div({ class: 'Page' }, page ? page(state) : '404 - not found'), Footer(state)],
+    [
+      Header(state),
+      div(
+        props,
+        page,
+      ),
+      Footer(state),
+    ],
   )
+}
 
 export const Link = ({ to, ...p }, children) => {
   const { href, text, nofollow, noreferrer, onclick = false, ...props } = p
