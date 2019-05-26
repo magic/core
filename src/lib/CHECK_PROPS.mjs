@@ -65,7 +65,9 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
     if (!is(value, ...types)) {
       const typeInfo = types.length > 1 ? 'one of' : 'a'
       const typeString = types.length > 1 ? `["${types.join(', "')}"]` : types[0]
-      console.error(`${name} needs props.${key} to be ${typeInfo} ${typeString}. received ${typeof value}`)
+      console.error(
+        `${name} needs props.${key} to be ${typeInfo} ${typeString}. received ${typeof value}`,
+      )
     } else if (required) {
       if (typeof value === 'object' && !Object.keys(value).length) {
         let typeString = ''

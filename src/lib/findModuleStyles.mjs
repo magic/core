@@ -6,7 +6,7 @@ import { isUpperCase } from './isUpperCase.mjs'
 export const findModuleStyles = (modules, vars, parent) => {
   let styles = {}
   Object.entries(modules)
-    .sort(([a], [b]) => a > b ? 1 : -1)
+    .sort(([a], [b]) => (a > b ? 1 : -1))
     .forEach(([name, mod]) => {
       if (!is.empty(mod.style)) {
         if (is.fn(mod.style)) {
@@ -24,7 +24,7 @@ export const findModuleStyles = (modules, vars, parent) => {
           const modStyle = {}
           const metaStyle = {}
           Object.entries(mod.style)
-            .sort(([a], [b]) => a > b ? 1 : -1)
+            .sort(([a], [b]) => (a > b ? 1 : -1))
             .forEach(([k, v]) => {
               if (k.startsWith('@')) {
                 if (k.startsWith('@media')) {

@@ -1,6 +1,6 @@
 export { addTrailingSlash } from './addTrailingSlash.mjs'
 export { applyWebRoot } from './applyWebRoot.mjs'
-export { runBabel } from './babel/index.mjs'
+export { getBabelConf } from './babel/index.mjs'
 export { CHECK_PROPS } from './CHECK_PROPS.mjs'
 // export { compress } from './compress.mjs'
 export { contentTypes } from './contentTypes.mjs'

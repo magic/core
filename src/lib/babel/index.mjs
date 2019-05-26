@@ -1,7 +1,6 @@
-// import { tags } from '../../modules/tags.mjs'
 import magic from './dead_code.mjs'
 
-export const runBabel = (app, config) => {
+export const getBabelConf = (app, config) => {
   const { IS_PROD, IS_DEV, CLIENT_LIB_NAME } = config
 
   const presets = [

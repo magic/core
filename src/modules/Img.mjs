@@ -29,5 +29,5 @@ export const propTypes = {
     { key: 'alt', type: 'string' },
     { key: 'role', type: 'string' },
     { key: 'title', type: 'string' },
-  ]
+  ],
 }

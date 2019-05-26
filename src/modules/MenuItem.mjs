@@ -6,7 +6,7 @@ export const propTypes = {
     { key: 'parentTo', type: 'string' },
     { key: 'collapse', type: 'boolean' },
     { key: 'to', type: 'string' },
-  ]
+  ],
 }
 export const View = props => {
   CHECK_PROPS(props, propTypes, 'MenuItem')
@@ -19,7 +19,6 @@ export const View = props => {
   const p = {
     class: 'MenuItem',
   }
-
 
   if (parentTo) {
     const first = item.to[0]
@@ -64,4 +63,3 @@ export const style = {
     },
   },
 }
-
