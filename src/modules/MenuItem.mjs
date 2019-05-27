@@ -19,18 +19,24 @@ export const View = props => {
   const p = {
     class: 'MenuItem',
   }
+  const first = item.to[0]
+  const isLocal = first === '#' || first === '/' || first === '-'
 
   if (parentTo) {
-    const first = item.to[0]
-    const isLocal = first === '#' || first === '/' || first === '-'
-    const startsLikeParent = item.to.startsWith(parentTo)
-    if (!startsLikeParent && isLocal) {
+    const startsLikeParentEnds = parentTo.endsWith(item.to.split('#')[0])
+
+    if (!startsLikeParentEnds && isLocal) {
       if (parentTo.endsWith('/') && item.to.endsWith('/')) {
         item.to = item.to.substr(1)
       }
 
       item.to = parentTo + item.to
     }
+  }
+
+  const isRooted = item.to.startsWith(root)
+  if (isLocal && !isRooted) {
+    item.to = `${root}${item.to}`.replace(/\/\//g, '/')
   }
 
   const active = url && url.includes(item.to)
@@ -40,7 +46,7 @@ export const View = props => {
 
   let children = []
   if ((items.length && active) || !collapse) {
-    children = ul(items.map(i => MenuItem({ parentTo: item.to, url, collapse, ...i })))
+    children = ul(items.map(i => MenuItem({ parentTo: item.to, root, url, collapse, ...i })))
   }
 
   return li(p, [item.to ? Link(item, text) : span(item, text), children])
