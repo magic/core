@@ -30,7 +30,7 @@ export const View = props => {
 
   if (parentTo && isLocal) {
     if (first === '-') {
-      to = parentTo + to.substr(1)
+      to = parentTo + to
     } else if (first === '#') {
       to = parentTo + to
     } else {
