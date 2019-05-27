@@ -19,25 +19,39 @@ export const View = props => {
   const p = {
     class: 'MenuItem',
   }
+  let to = item.to
+
+  if (to.startsWith('/#')) {
+    to = to.substr(1)
+  }
+
   const first = item.to[0]
-  const isLocal = first === '#' || first === '/' || first === '-'
+  const isLocal = first === '/' || first === '-' || first === '#'
 
-  if (parentTo) {
-    const startsLikeParentEnds = parentTo.endsWith(item.to.split('#')[0])
+  if (parentTo && isLocal) {
+    if (first === '-') {
+      to = parentTo + to.substr(1)
+    } else if (first === '#') {
+      to = parentTo + to
+    } else {
+      const start = to.split('/')[1]
+      if (start) {
+        const startsLikeParentEnds = parentTo.endsWith(`/${start}/`)
 
-    if (!startsLikeParentEnds && isLocal) {
-      if (parentTo.endsWith('/') && item.to.endsWith('/')) {
-        item.to = item.to.substr(1)
+        if (!startsLikeParentEnds && isLocal) {
+          console.log({ parentTo, to, startsLikeParentEnds, start })
+          to = parentTo + to
+        }
       }
-
-      item.to = parentTo + item.to
     }
   }
 
-  const isRooted = item.to.startsWith(root)
-  if (isLocal && !isRooted) {
-    item.to = `${root}${item.to}`.replace(/\/\//g, '/')
+  const isRooted = to.startsWith(root)
+  if (root && isLocal && !isRooted) {
+    to = root + to
   }
+
+  item.to = to.replace(/\/\//g, '/')
 
   const active = url && url.includes(item.to)
   if (url.endsWith(item.to)) {
