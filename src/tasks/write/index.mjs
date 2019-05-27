@@ -12,8 +12,8 @@ import {
 
 export const write = async app => {
   const { IS_PROD } = config
-  const zippable = config.FILETYPES.ZIPPABLE
-  const images = config.FILETYPES.IMAGES
+  // const zippable = config.FILETYPES.ZIPPABLE
+  // const images = config.FILETYPES.IMAGES
 
   const { css, client, pages, static: stat } = app
   await mkdirp(config.DIR.PUBLIC)
