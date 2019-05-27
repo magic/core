@@ -1,7 +1,3 @@
-// this will soon not be needed.
-// we make sure to import a valid View from this Module,
-// since it will be removed by dead code removal anyways.
-// should refactor to instead export the Page as View
 export const View = ({ page, state }) => {
   page = page ? page(state) : '404 - not found'
 
@@ -25,7 +21,7 @@ export const Link = ({ to, ...p }, children) => {
   to = to || href || ''
   props.href = to
 
-  const isLocal = to.startsWith('/') || to.startsWith('#')
+  const isLocal = to.startsWith('/')
   if (isLocal) {
     props.onclick = [actions.go, helpers.mapClickToGo]
   } else {
