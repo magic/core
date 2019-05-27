@@ -16,14 +16,7 @@ export const View = ({ page, state }) => {
     {
       class: 'Wrapper',
     },
-    [
-      Header(state),
-      div(
-        props,
-        page,
-      ),
-      Footer(state),
-    ],
+    [Header(state), div(props, page), Footer(state)],
   )
 }
 
@@ -32,7 +25,8 @@ export const Link = ({ to, ...p }, children) => {
   to = to || href || ''
   props.href = to
 
-  if (to && to.startsWith('/') && !to.startsWith(`//`)) {
+  const isLocal = to.startsWith('/') || to.startsWith('#')
+  if (isLocal) {
     props.onclick = [actions.go, helpers.mapClickToGo]
   } else {
     props.target = '_blank'
@@ -49,6 +43,42 @@ export const Link = ({ to, ...p }, children) => {
 }
 
 export const actions = {
+  // page: {
+  //   addClass: (state, cl) => {
+  //     if (state.class.includes(cl)) {
+  //       return state
+  //     }
+
+  //     return {
+  //       ...state,
+  //       class: `${state.class} ${cl}`,
+  //     }
+  //   },
+
+  //   removeClass: (state, cl) => {
+  //     if (!state.class.includes(cl)) {
+  //       return state
+  //     }
+
+  //     cl = state.class
+  //       .replace(cl, '')
+  //       .replace(/\s\s+/g, ' ')
+
+  //     return {
+  //       ...state,
+  //       class: cl,
+  //     }
+  //   },
+
+  //   toggleClass: (state, cl) => {
+  //     if (state.class.includes(cl)) {
+  //       return addPageClass(state, cl)
+  //     } else {
+  //       return removePageClass(state, cl)
+  //     }
+  //   },
+  // },
+
   pop: (state, e) => {
     let { pathname: url, hash } = window.location
     hash = hash.substring(1)
@@ -75,14 +105,6 @@ export const actions = {
     // make sure our to never includes the origin
     // this makes sure we can distinguish between local and external links below
     let to = e.currentTarget.href.replace(window.location.origin, '')
-
-    const isLocal = to.startsWith('/') || to.startsWith('#')
-    const isRooted = to.startsWith(state.root)
-    if (isLocal) {
-      if (!isRooted) {
-        to = `${state.root}${to}`.replace(/\/\//g, '/')
-      }
-    }
 
     const [url, hash = ''] = to.split('#')
 
