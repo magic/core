@@ -22,6 +22,7 @@ export const Link = ({ to, ...p }, children) => {
   props.href = to
 
   const isLocal = to.startsWith('/')
+
   if (isLocal) {
     props.onclick = [actions.go, helpers.mapClickToGo]
   } else {
