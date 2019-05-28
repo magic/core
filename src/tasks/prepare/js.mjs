@@ -8,14 +8,17 @@ const prepareJs = async magic => {
   const hyperappPath = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
   const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
+  let imports = 'h, app'
+  if (magic.modules.Lazy) {
+    imports += ', Lazy'
+  }
+
+  delete magic.modules.Lazy
+
   const hyperapp = `
-const { h, app, LAZY_NODE } = (() => {
+const { ${imports} } = (() => {
 ${hyperappContent.replace(/export /g, ' ')}
-return {
-  h,
-  app,
-  LAZY_NODE,
-}
+return { ${imports} }
 })()`
 
   // add the Component module that wraps all other html tags
