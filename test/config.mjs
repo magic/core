@@ -1,6 +1,6 @@
 import path from 'path'
 import { is } from '@magic/test'
-import config from '../src/config.mjs'
+// import { runConfig } from '../src/config.mjs'
 
 export default [
   // { fn: config, expect: is.object, info: 'config is an object' },

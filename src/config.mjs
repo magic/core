@@ -153,6 +153,3 @@ export const runConfig = async () => {
   return conf
 }
 
-export const config = runConfig()
-
-export default config
