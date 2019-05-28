@@ -9,8 +9,8 @@ import preparePages from './pages.mjs'
 import { prepareCss } from './css.mjs'
 import prepareMetaFiles from './meta.mjs'
 
-export const prepare = async app => {
-  const { modules, libs } = await prepareGlobals(app)
+export const prepare = async (app, config) => {
+  const { modules, libs } = await prepareGlobals(app, config)
 
   const files = await getPages()
 

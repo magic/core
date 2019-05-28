@@ -222,8 +222,9 @@ export const findDefinedLibraries = async (app, modules) => {
   return libs
 }
 
-export const prepareGlobals = async app => {
+export const prepareGlobals = async (app, config) => {
   global.keys = global.keys || new Set()
+  global.config = config
 
   let modules = {}
 
