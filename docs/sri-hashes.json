@@ -2,18 +2,18 @@
   "css": "sha384-uJvFF1ewWZENJEDOYNiVa2I5thhX+27BBxQ2Feo46hUrnjnCYH9o8iZxEJ1j1dPr",
   "js": "sha384-diO5lZgOP8W51joQ5nhQ90b6ownyVd+miPFnxuhvnY5UTIcokE8XqYxfLa+A01d6",
   "pages": {
-    "/core/": "sha384-CUCG476/1D/8wSOyo5LDUrxgg+zsJajw1maHcv+JLt7sOBM2QELljOIywt1IFDod",
-    "/core/404/": "sha384-tfknR7IB+a7kQDnYYUSlwi37VgOMD2FKPTLY1y1v3TXbL3yqVS1s+POJjahhLBMz",
-    "/core/concepts/": "sha384-lR4U9xAMAdGVkM8kIwnoUBkZNOaHIv26VP6IdmkRS/SkDk3k3dgHJTpKLAoQrm4O",
-    "/core/files/": "sha384-Nb4InZciLxoNBvbqt4f/YbHvpl+8nKqDno8cNTXYj95aCGIeKLjQerajiWfAImTu",
-    "/core/libraries/": "sha384-ybKpQflIjZ/FuqJmONKYlcXTqCFBG/tAJoPNKsoX0G3Sv07CEydJQFReZwYGHdtJ",
-    "/core/modules/": "sha384-ijCs1iLBWiQ8565gjW95KYTEt/LTNVRGH2YdeDMn3lo7IpUoTXN1IR/aL0yovC6e",
-    "/core/themes/": "sha384-2jBXVQl6Rv7hJnE4OuH06FosF3IFwUZ/3kS3b9le5gzfwx3xY9H9EBr1d3JtXe3I"
+    "/core/": "sha384-iQQWQAxSVUZFBE6t20j7qQ9KvVTSTKX5NjIdpXiuWbu7iYFN+2OVWZ9BkxhenH6Y",
+    "/core/404/": "sha384-xpInD+SKcU8KazL2qHzPNR+k6MYM5WjEV+M61WMGwCt6iAhVaRpVlEkaUFrJgaYT",
+    "/core/concepts/": "sha384-Pv4QXyrJPG1/iFgDcGfI+eEXsmsJgYxOIaujx2NHXqZcKRMuLMaTzHAg9OC/ME6M",
+    "/core/files/": "sha384-zd455oBK1qEyS4ceM9upQ5SceVTdZMc45gY08fG6ejLi64rqtnpGZcG1BzrPDSzq",
+    "/core/libraries/": "sha384-mggbzE/T/mEpNv7zizaIrcEN/NbPKYPUW9pINS/lLMIGAZw55hfGyT7D5cjN+gQb",
+    "/core/modules/": "sha384-ueaHoHYSRaUat0X8n2z2CSP3YrAV9DQldpWX6lQSJBDIqCDAu4+w5TM82rUVGzLR",
+    "/core/themes/": "sha384-pOl32RMLj5dq/v6xdGwHyw/UvxVnETd4cPR5I5MHoclaTnAZ7GmDzslA2LpYOc1u"
   },
   "static": {
     "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+",
     "/logo.png": "sha384-mosOoczFXyMjpHLfSyz0DWwJO3qE+XQl3uW94lHE/BX1rpI2m/n+dsBu67djqyUq",
     "/robots.txt": "sha384-UJ99rKaWQNOb1b2yL4/2XX6B6Gjr6ZeSk6CJfZ5lw/AUGmwgmUfFx1v0bnK+q/0O",
-    "/sitemap.xml": "sha384-WrTinKLMQawZvyzJdfSmKlbydRIKbgoG0G/44qXaRVRuyLonlv8TtioGgTex1rni"
+    "/sitemap.xml": "sha384-DbkRQ4i2QM9tWlHigxHThnViocC6YNsw10/3kXsOozZ9C2EURKxU4lL+74PEVbnr"
   }
 }
