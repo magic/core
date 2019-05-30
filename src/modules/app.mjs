@@ -21,6 +21,9 @@ const run = async config => {
     View: (page, hashes) => state => {
       state.url = page.name
 
+      const shortJsHash = hashes.js.split('-')[1].substr(0, 10)
+      const shortCssHash = hashes.css.split('-')[1].substr(0, 10)
+
       return [
         h('', { innerHTML: '<!DOCTYPE html>' }),
         html({ lang: state.lang || LANG }, [
@@ -43,7 +46,7 @@ const run = async config => {
             !is.empty(state.author) && meta({ name: 'author', content: state.author }),
             link({
               rel: 'stylesheet',
-              href: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.css`,
+              href: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.css?${shortCssHash}`,
               integrity: hashes.css,
               crossorigin: 'anonymous',
             }),
@@ -53,7 +56,7 @@ const run = async config => {
             div({ id: 'Magic' }, Page({ page: page.View, state })),
             script({
               type: 'module',
-              src: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.js`,
+              src: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.js?${shortJsHash}`,
               integrity: hashes.js,
               crossorigin: 'anonymous',
             }),
