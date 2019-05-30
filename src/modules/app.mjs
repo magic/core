@@ -2,7 +2,7 @@ import path from 'path'
 
 import is from '@magic/types'
 import deep from '@magic/deep'
-import { h } from 'hyperapp/src/index.js'
+import { h } from 'hyperapp'
 
 import { fs } from '../lib/index.mjs'
 

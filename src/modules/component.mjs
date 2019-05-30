@@ -1,4 +1,4 @@
-import { h } from 'hyperapp/src/index.js'
+import { h } from 'hyperapp'
 
 export const component = name => (props = {}, children = false) => {
   const is = (ele, ...types) => types.some(type => type === typeof ele)

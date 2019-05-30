@@ -1,1 +1,1 @@
-export { Lazy } from 'hyperapp/src/index.js'
+export { Lazy } from 'hyperapp'

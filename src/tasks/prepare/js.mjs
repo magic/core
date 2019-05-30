@@ -5,7 +5,7 @@ import is from '@magic/types'
 import { fs, isUpperCase, stringifyObject } from '../../lib/index.mjs'
 
 const prepareJs = async magic => {
-  const hyperappPath = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.js')
+  const hyperappPath = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.mjs')
   const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
   let imports = 'h, app'
