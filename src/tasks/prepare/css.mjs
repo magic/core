@@ -8,7 +8,10 @@ const dirName = path.dirname(url.pathname)
 export const prepareCss = async ({ app, modules }) => {
   const styles = []
 
-  const { THEME = '' } = config
+  let { THEME = '', THEME_VARS } = config
+  if (is.string(THEME)) {
+    THEME = [THEME]
+  }
 
   // merge user created custom reset.css into styles, if it exists
   try {
@@ -17,13 +20,17 @@ export const prepareCss = async ({ app, modules }) => {
     const { reset } = await import(libResetCssFile)
     styles.push(reset)
 
-    // find reset css in theme dir if it exists
-    const maybeResetCssFile = path.join(config.DIR.THEMES, THEME, 'reset.css.mjs')
-    const { default: maybeResetCssStyles } = await import(maybeResetCssFile)
-    if (is.fn(maybeResetCssStyles)) {
-      maybeResetCssStyles = maybeResetCssStyles(config.THEME_VARS)
-    }
-    styles.push(maybeResetCssStyles)
+    const themePromises = THEME.map(async theme_name => {
+      // find reset css in theme dir if it exists
+      const maybeResetCssFile = path.join(config.DIR.THEMES, theme_name, 'reset.css.mjs')
+      const { default: maybeResetCssStyles } = await import(maybeResetCssFile)
+      if (is.fn(maybeResetCssStyles)) {
+        maybeResetCssStyles = maybeResetCssStyles(THEME_VARS)
+      }
+      styles.push(maybeResetCssStyles)
+    })
+
+    await Promise.all(themePromises)
   } catch (e) {
     if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
       throw e
@@ -31,61 +38,65 @@ export const prepareCss = async ({ app, modules }) => {
   }
 
   // load all styles from all modules
-  const moduleStyles = findModuleStyles(modules, config.THEME_VARS)
+  const moduleStyles = findModuleStyles(modules, THEME_VARS)
   styles.push(moduleStyles)
 
   // load user's chosen theme, if it is set and exists, and merge it over the styles
-  if (config.THEME) {
-    // first look if we have this theme preinstalled, if so, merge it into the styles
-    const libThemeFile = path.join(dirName, '..', '..', 'themes', config.THEME, 'index.mjs')
+  if (THEME) {
+    const themePromises = THEME.map(async theme_name => {
+      // first look if we have this theme preinstalled, if so, merge it into the styles
+      const libThemeFile = path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs')
 
-    try {
-      let { default: theme } = await import(libThemeFile)
-      if (is.fn(theme)) {
-        theme = theme(config.THEME_VARS)
+      try {
+        let { default: theme } = await import(libThemeFile)
+        if (is.fn(theme)) {
+          theme = theme(THEME_VARS)
+        }
+        styles.push(theme)
+      } catch (e) {
+        if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+          throw e
+        }
       }
-      styles.push(theme)
-    } catch (e) {
-      if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-        throw e
-      }
-    }
 
-    // look if it exists in node_modules
-    try {
-      const themePath = `@magic-themes/${config.THEME}`
-      let { default: theme } = await import(themePath)
-      if (is.fn(theme)) {
-        theme = theme(config.THEME_VARS)
+      // look if it exists in node_modules
+      try {
+        const themePath = `@magic-themes/${theme_name}`
+        let { default: theme } = await import(themePath)
+        if (is.fn(theme)) {
+          theme = theme(THEME_VARS)
+        }
+        styles.push(theme)
+      } catch (e) {
+        if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+          throw e
+        }
+        // theme does not exist in node_modules, continue happily.
       }
-      styles.push(theme)
-    } catch (e) {
-      if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-        throw e
-      }
-      // theme does not exist in node_modules, continue happily.
-    }
 
-    // load user's custom theme, overwriting both preinstalled and node_modules themes
-    try {
-      const maybeThemeFile = path.join(config.DIR.THEMES, config.THEME, 'index.mjs')
-      let { default: theme } = await import(maybeThemeFile)
-      if (is.fn(theme)) {
-        theme = theme(config.THEME_VARS)
+      // load user's custom theme, overwriting both preinstalled and node_modules themes
+      try {
+        const maybeThemeFile = path.join(config.DIR.THEMES, theme_name, 'index.mjs')
+        let { default: theme } = await import(maybeThemeFile)
+        if (is.fn(theme)) {
+          theme = theme(THEME_VARS)
+        }
+        styles.push(theme)
+      } catch (e) {
+        if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+          throw e
+        }
       }
-      styles.push(theme)
-    } catch (e) {
-      if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-        throw e
-      }
-    }
+    })
+
+    await Promise.all(themePromises)
   }
 
   app.pages
     .filter(p => p.style)
     .forEach(page => {
       if (is.fn(page.style)) {
-        page.style = page.style(config.THEME_VARS)
+        page.style = page.style(THEME_VARS)
       }
       styles.push(page.style)
     })
@@ -97,7 +108,7 @@ export const prepareCss = async ({ app, modules }) => {
       const { style } = await import(maybeAppFile)
       if (style) {
         if (is.fn(style)) {
-          style = style(config.THEME_VARS)
+          style = style(THEME_VARS)
         }
         styles.push(style)
       }
