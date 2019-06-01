@@ -80,7 +80,7 @@ const findUsedSpells = (t, app, config) => path => {
   const handleLink = (node, config) => {
     const href = node.value.value
     if (href.startsWith('/') && !href.startsWith(config.WEB_ROOT)) {
-      // node.value.value = `${config.WEB_ROOT}${href}`.replace(/\/\//g, '/')
+      node.value.value = `${config.WEB_ROOT}${href}`.replace(/\/\//g, '/')
     }
   }
 
@@ -89,13 +89,13 @@ const findUsedSpells = (t, app, config) => path => {
       if (path.node.key.name) {
         const { name } = path.node.key
         if (path.node.value.value) {
-          if (name === 'to' || name === 'src') {
+          if (name === 'src') {
             handleLink(path.node, config)
           }
         }
       } else if (path.node.key.value) {
         const { value: name } = path.node.key
-        if (name === 'to' || name === 'src') {
+        if (name === 'src') {
           handleLink(path.node, config)
         }
       }
