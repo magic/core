@@ -152,4 +152,3 @@ export const runConfig = async () => {
 
   return conf
 }
-
