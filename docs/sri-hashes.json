@@ -1,19 +1,19 @@
 {
-  "css": "sha384-uJvFF1ewWZENJEDOYNiVa2I5thhX+27BBxQ2Feo46hUrnjnCYH9o8iZxEJ1j1dPr",
-  "js": "sha384-diO5lZgOP8W51joQ5nhQ90b6ownyVd+miPFnxuhvnY5UTIcokE8XqYxfLa+A01d6",
+  "css": "sha384-az3e49ICrplbDZ0PfDOhnh+r9HnLupOVxkYrUCgE/SDMhl1mRtfAzbvKefqeGkig",
+  "js": "sha384-0epTZTLv+5DbPNWzqeC6KKs3ZT5MnA3qmPzYzJ+A9bNZGLF32dKhzzVnDnKsy/2f",
   "pages": {
-    "/core/": "sha384-iQQWQAxSVUZFBE6t20j7qQ9KvVTSTKX5NjIdpXiuWbu7iYFN+2OVWZ9BkxhenH6Y",
-    "/core/404/": "sha384-xpInD+SKcU8KazL2qHzPNR+k6MYM5WjEV+M61WMGwCt6iAhVaRpVlEkaUFrJgaYT",
-    "/core/concepts/": "sha384-Pv4QXyrJPG1/iFgDcGfI+eEXsmsJgYxOIaujx2NHXqZcKRMuLMaTzHAg9OC/ME6M",
-    "/core/files/": "sha384-zd455oBK1qEyS4ceM9upQ5SceVTdZMc45gY08fG6ejLi64rqtnpGZcG1BzrPDSzq",
-    "/core/libraries/": "sha384-mggbzE/T/mEpNv7zizaIrcEN/NbPKYPUW9pINS/lLMIGAZw55hfGyT7D5cjN+gQb",
-    "/core/modules/": "sha384-ueaHoHYSRaUat0X8n2z2CSP3YrAV9DQldpWX6lQSJBDIqCDAu4+w5TM82rUVGzLR",
-    "/core/themes/": "sha384-pOl32RMLj5dq/v6xdGwHyw/UvxVnETd4cPR5I5MHoclaTnAZ7GmDzslA2LpYOc1u"
+    "/core/": "sha384-/mkjDwW0PjFrMbeo9qptCvy5s3/mNiGdKUQKmCHvNzXe7/NFauUFZmBFt55Xnivq",
+    "/core/404/": "sha384-HSb9KHRhokFYMMmPB0qTTVe248CnlIrRfszHXqkS0irTi/GrYXXSxa0aaI1d2+9O",
+    "/core/concepts/": "sha384-i/197VPll5/vEuiZ2oiBY8V8PDPlebevrkm6/7SlYM9X3tZchdT5Z1cDjFpKleqr",
+    "/core/files/": "sha384-j97ltVpeAaw/da6meFtYyCxWxCYffu5t6zeWG2AZ3vNu6VDDPbRhH3yMZR8ATNWs",
+    "/core/libraries/": "sha384-41Gf7nQmfi8SFXXP3iu1jQgo8SNanWYqXh+bhgTWDFDGDBNbmiW0Y/OA+TSbC4lt",
+    "/core/modules/": "sha384-z+SE3hgJ6J1p0q8nYVx3i4eah7w+5SuTBDa1OO24v7T0aMSq4KtPqHMTMqsF/6FB",
+    "/core/themes/": "sha384-6Xs1ob04EUkniCmomlHPebXLJb3z0VjkhM1WEL0KjwsoQydB/ZSCGHxV3aT0mLuE"
   },
   "static": {
     "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+",
-    "/logo.png": "sha384-mosOoczFXyMjpHLfSyz0DWwJO3qE+XQl3uW94lHE/BX1rpI2m/n+dsBu67djqyUq",
+    "/logo.png": "sha384-yRxX8nlWNCvk7+PidWDtP1jLxTmtbHm7tCW6TszNfZ7R5DTDMmXyxhKC/JmX3r1u",
     "/robots.txt": "sha384-UJ99rKaWQNOb1b2yL4/2XX6B6Gjr6ZeSk6CJfZ5lw/AUGmwgmUfFx1v0bnK+q/0O",
-    "/sitemap.xml": "sha384-DbkRQ4i2QM9tWlHigxHThnViocC6YNsw10/3kXsOozZ9C2EURKxU4lL+74PEVbnr"
+    "/sitemap.xml": "sha384-NJlL9td4ChIl5rUYAcjbShel29uXN3YtyFM+0IIcNcyUdiob1OGxOfwkFTamz9xj"
   }
 }
