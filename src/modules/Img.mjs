@@ -25,6 +25,8 @@ export const View = props => {
 
 export const propTypes = {
   Img: [
+    { type: 'string' },
+
     { key: 'src', type: 'string', required: true },
     { key: 'alt', type: 'string' },
     { key: 'role', type: 'string' },
