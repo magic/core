@@ -304,4 +304,6 @@ export default Footer
 `),
 
   ModuleList(),
+
+  LightSwitch(state),
 ]

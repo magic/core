@@ -121,4 +121,6 @@ export const View = state => [
       Pre('lib.name = () => {}'),
     ]),
   ]),
+
+  LightSwitch(state),
 ]

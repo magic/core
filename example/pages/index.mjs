@@ -63,4 +63,6 @@ export const View = state => [
       ' this makes visitor statistics, user authentication and authorization, chat, and all other server side services possible.',
     ]),
   ]),
+
+  LightSwitch(state),
 ]
