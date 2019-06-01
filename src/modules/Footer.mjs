@@ -10,6 +10,6 @@ export const style = {
   '.Footer': {
     position: 'relative',
     textAlign: 'center',
-    padding: '5em 0 .5em',
+    padding: '2em 0 .5em',
   },
 }

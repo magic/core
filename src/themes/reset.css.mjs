@@ -42,7 +42,6 @@ export const reset = {
     lineHeight: 1.5,
     margin: 0,
     padding: 0,
-    minHeight: '100vh',
     // always show scrollbar to prevent layout glitch if page resizes
     overflowY: 'scroll',
   },
@@ -78,8 +77,9 @@ export const reset = {
   },
 
   '#Magic': {
-    width: '100%',
     height: '100%',
+    minHeight: '100vh',
+    width: '100%',
   },
 
   '.Wrapper': {
