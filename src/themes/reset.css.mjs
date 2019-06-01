@@ -31,6 +31,7 @@ export const reset = {
     fontSize: '100%',
     font: 'inherit',
     verticalAlign: 'baseline',
+    boxSizing: 'border-box',
   },
   /* HTML5 display-role reset for older browsers */
   [html5Reset]: {
@@ -77,8 +78,14 @@ export const reset = {
   },
 
   '#Magic': {
-    margin: '0 auto',
+    width: '100%',
+    height: '100%',
+  },
+
+  '.Wrapper': {
     width: '90%',
+    margin: '0 auto',
+    maxWidth: '1300px',
   },
 
   // header and menu in header
