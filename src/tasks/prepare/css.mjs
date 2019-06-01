@@ -1,5 +1,4 @@
 import is from '@magic/types'
-import deep from '@magic/deep'
 import path from 'path'
 import { findModuleStyles } from '../../lib/index.mjs'
 
@@ -11,14 +10,12 @@ export const prepareCss = async ({ app, modules }) => {
 
   const { THEME = '' } = config
 
-  let resetStyles
-
   // merge user created custom reset.css into styles, if it exists
   try {
     // merge default reset css into styles
     const libResetCssFile = path.join(dirName, '..', '..', 'themes', 'reset.css.mjs')
     const { reset } = await import(libResetCssFile)
-    resetStyles = reset
+    styles.push(reset)
 
     // find reset css in theme dir if it exists
     const maybeResetCssFile = path.join(config.DIR.THEMES, THEME, 'reset.css.mjs')
@@ -26,7 +23,7 @@ export const prepareCss = async ({ app, modules }) => {
     if (is.fn(maybeResetCssStyles)) {
       maybeResetCssStyles = maybeResetCssStyles(config.THEME_VARS)
     }
-    resetStyles = maybeResetCssStyles
+    styles.push(maybeResetCssStyles)
   } catch (e) {
     if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
       throw e
@@ -111,6 +108,5 @@ export const prepareCss = async ({ app, modules }) => {
     }
   }
 
-  const finalStyles = [resetStyles, styles]
-  return finalStyles
+  return styles
 }
