@@ -53,7 +53,7 @@ const run = async config => {
             page.Head && page.Head(state),
           ]),
           body([
-            div({ id: 'Magic' }, Page({ page: page.View, state })),
+            Page({ page: page.View, state }),
             script({
               type: 'module',
               src: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.js?${shortJsHash}`,

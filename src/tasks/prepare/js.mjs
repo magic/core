@@ -153,7 +153,7 @@ app({
       }
     }
 
-    return div({ id: 'Magic' }, Page({ page, state }))
+    return Page({ page, state })
   },
   node: document.getElementById("Magic"),
 })
