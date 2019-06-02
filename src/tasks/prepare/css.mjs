@@ -1,6 +1,7 @@
 import is from '@magic/types'
 import path from 'path'
 import { findModuleStyles } from '../../lib/index.mjs'
+import colors from '../../themes/colors.mjs'
 
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
@@ -8,7 +9,8 @@ const dirName = path.dirname(url.pathname)
 export const prepareCss = async ({ app, modules }) => {
   const styles = []
 
-  let { THEME = '', THEME_VARS } = config
+  let { THEME = '', THEME_VARS = {} } = config
+  THEME_VARS.colors = colors
   if (is.string(THEME)) {
     THEME = [THEME]
   }
