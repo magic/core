@@ -89,13 +89,13 @@ const findUsedSpells = (t, app, config) => path => {
       if (path.node.key.name) {
         const { name } = path.node.key
         if (path.node.value.value) {
-          if (name === 'src') {
+          if (name === 'src' || name === 'logo') {
             handleLink(path.node, config)
           }
         }
       } else if (path.node.key.value) {
         const { value: name } = path.node.key
-        if (name === 'src') {
+        if (name === 'src' || name === 'logo') {
           handleLink(path.node, config)
         }
       }
