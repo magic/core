@@ -2,9 +2,15 @@
   "name": "@magic/core",
   "version": "0.0.1",
   "author": "Wizards & Witches",
-  "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
-  "license": "AGPL-3.0",
   "homepage": "https://magic.github.io/core",
+  "license": "AGPL-3.0",
+  "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
+  "main": "src/index.mjs",
+  "module": "src/index.mjs",
+  "type": "module",
+  "engines": {
+    "node": ">=12.2.0"
+  },
   "scripts": {
     "start": "t -p",
     "build": "NODE_ENV=production node src/bin/bin.js build",
@@ -17,8 +23,6 @@
     "test": "t",
     "calls": "calls"
   },
-  "module": "src/index.mjs",
-  "type": "module",
   "bin": {
     "magic": "src/bin/bin.js"
   },
