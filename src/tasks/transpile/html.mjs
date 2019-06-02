@@ -13,7 +13,29 @@ export default (app, hashes) => {
 
       const view = app.View(page, hashes)
 
-      const rendered = render.renderToString(view(state))
+      let rendered = render.renderToString(view(state))
+
+      if (config.WEB_ROOT !== '/') {
+        rendered = rendered
+          .split('href="')
+          .map(s => {
+            if (!s.startsWith('/') || s.startsWith(config.WEB_ROOT)) {
+              return s
+            }
+
+            return config.WEB_ROOT.slice(0, -1) + s
+          })
+          .join('href="')
+          .split('src="')
+          .map(s => {
+            if (!s.startsWith('/') || s.startsWith(config.WEB_ROOT)) {
+              return s
+            }
+
+            return config.WEB_ROOT.slice(0, -1) + s
+          })
+          .join('src="')
+      }
 
       return {
         ...page,
