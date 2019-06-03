@@ -37,7 +37,7 @@ return { ${imports} }
     propTypeString += Object.entries(magic.modules)
       .filter(([_, { propTypes }]) => propTypes)
       .sort(([a], [b]) => (a > b ? 1 : -1))
-      .map(([name, { propTypes }]) =>
+      .map(([_, { propTypes }]) =>
         Object.entries(propTypes)
           .map(([key, type]) => `${key}: ${JSON.stringify(type, null, 2)}`)
           .join(',\n'),
@@ -65,7 +65,7 @@ return { ${imports} }
         const subStr = Object.entries(v)
           .filter(([sk]) => isUpperCase(sk) && sk !== 'View')
           .sort(([a], [b]) => (a > b ? 1 : -1))
-          .map(([sk, sv]) => `${k}.${sk} = ${sv.toString()}`)
+          .map(([sk, sv]) => `\n${k}.${sk} = ${is.fn(sv) ? sv.toString() : sv.View.toString()}`)
           .join('\n')
 
         depString += `${str}\n${subStr}`
