@@ -20,13 +20,15 @@ export const getFilePath = (dir, recurse = true) => async file => {
 }
 
 export const getFiles = async (dir, recurse = true) => {
-  const exists = await fs.exists(dir)
-  if (!exists) {
-    return []
+  try {
+    const dirContent = await fs.readdir(dir)
+    const files = await Promise.all(dirContent.map(getFilePath(dir, recurse)))
+
+    return deep.flatten(files).filter(a => a)
+  } catch(e) {
+    if (e.code === 'ENOENT') {
+      return []
+    }
+    throw e
   }
-
-  const dirContent = await fs.readdir(dir)
-  const files = await Promise.all(dirContent.map(getFilePath(dir, recurse)))
-
-  return deep.flatten(files).filter(a => a)
 }

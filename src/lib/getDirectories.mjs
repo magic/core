@@ -21,25 +21,40 @@ export const getFilePath = async (dir, file, recurse = true) => {
   }
 }
 
+export const fileExists = async f => {
+  try {
+    await fs.stat(f)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
 export const getDirectories = async (directories, recurse = true) => {
   if (is.array(directories)) {
+    const dirPromises = directories
+        .filter(fileExists)
+        .map(async f => await getDirectories(f, recurse))
+        .filter(a => a)
+
+    const dirs = await Promise.all(dirPromises)
+    return deep.flatten(...dirs)
+  }
+
+  try {
+    let flattened = [directories]
+    const dirContent = await fs.readdir(directories)
     const dirs = await Promise.all(
-      directories.filter(fs.exists).map(f => getDirectories(f, recurse)),
+      dirContent.map(async file => await getFilePath(directories, file, recurse)),
     )
-    return deep.flatten(...dirs).filter(a => a)
+    flattened = deep.flatten(flattened, dirs)
+
+    return flattened.filter(a => a)
+  } catch(e) {
+    if (e.code === 'ENOENT') {
+      return []
+    }
+
+    throw e
   }
-
-  const exists = await fs.exists(directories)
-  if (!exists) {
-    return []
-  }
-
-  let flattened = [directories]
-  const dirContent = await fs.readdir(directories)
-  const dirs = await Promise.all(
-    dirContent.map(async file => await getFilePath(directories, file, recurse)),
-  )
-  flattened = deep.flatten(flattened, dirs)
-
-  return flattened.filter(a => a)
 }

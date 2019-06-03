@@ -35,19 +35,26 @@ export const findNodeModules = async () => {
       }
 
       // find lib file of module if it exists
-      const libPath = path.join(nodeModule, localLibIndexPath)
-      const exists = await fs.exists(libPath)
-      if (exists) {
+      try {
+        const libPath = path.join(nodeModule, localLibIndexPath)
+        await fs.stat(libPath)
         modules[name].lib = path.join(loadPath, localLibIndexPath)
+      } catch(e) {
+        if (e.code !== 'ENOENT') {
+          throw e
+        }
       }
-      const libMjsPath = path.join(nodeModule, localLibMjsPath)
-      const mjsExists = await fs.exists(libMjsPath)
-      if (mjsExists) {
+
+      try {
+        const libMjsPath = path.join(nodeModule, localLibMjsPath)
+        await fs.stat(libMjsPath)
         modules[name].lib = path.join(loadPath, localLibMjsPath)
+      } catch(e) {
+        if (e.code !== 'ENOENT') {
+          throw e
+        }
       }
     })
-
-  await Promise.all(dirs)
 
   const magicModuleDir = path.join(nodeModuleDir, '@magic-modules')
   const nodeModules = await getDirectories(magicModuleDir, recursiveSearch)
@@ -69,15 +76,24 @@ export const findNodeModules = async () => {
           log.error('Error', `requiring node_module: ${nodeModule}, error: ${e.message}`)
         }
 
-        const libPath = path.join(nodeModule, localLibIndexPath)
-        const exists = await fs.exists(libPath)
-        if (exists) {
+        try {
+          const libPath = path.join(nodeModule, localLibIndexPath)
+          await fs.stat(libPath)
           modules[name].lib = path.join(loadPath, localLibIndexPath)
+        } catch(e) {
+          if (e.code !== 'ENOENT') {
+            throw e
+          }
         }
-        const libMjsPath = path.join(nodeModule, localLibMjsPath)
-        const mjsExists = await fs.exists(libMjsPath)
-        if (mjsExists) {
+
+        try {
+          const libMjsPath = path.join(nodeModule, localLibMjsPath)
+          await fs.stat(libMjsPath)
           modules[name].lib = path.join(loadPath, localLibMjsPath)
+        } catch(e) {
+          if (e.code !== 'ENOENT') {
+            throw e
+          }
         }
       }
     })

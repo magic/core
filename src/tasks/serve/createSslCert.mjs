@@ -8,9 +8,26 @@ const dirName = path.dirname(url.pathname)
 const ssl = async () => {
   const privFilename = path.join(dirName, 'priv.pem')
   const certFilename = path.join(dirName, 'cert.pem')
-  const keyExists = await fs.exists(privFilename)
-  const certExists = await fs.exists(certFilename)
 
+  let keyExists = false
+  try {
+    await fs.stat(privFilename)
+    keyExists = true
+  } catch(e) {
+    if (e.code !== 'ENOENT') {
+      throw e
+    }
+  }
+
+  let certExists = false
+  try {
+    await fs.stat(certFilename)
+    const certExists = true
+  } catch(e) {
+    if (e.code !== 'ENOENT') {
+      throw e
+    }
+  }
   if (certExists && keyExists) {
     return {
       key: await fs.readFile(privFilename),
@@ -30,9 +47,9 @@ req -x509 \
 
     return await ssl()
   } else if (certExists) {
-    log.error(`${privFilename} missing`)
+    log.error('Missing Files', privFilename)
   } else if (keyExists) {
-    log.error(`${certFilename} missing`)
+    log.error('Missing Files', certFilename)
   }
 }
 

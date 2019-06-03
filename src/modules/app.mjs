@@ -4,8 +4,6 @@ import is from '@magic/types'
 import deep from '@magic/deep'
 import { h } from 'hyperapp'
 
-import { fs } from '../lib/index.mjs'
-
 const run = async config => {
   const { WEB_ROOT = '/', LANG = 'en' } = config
 
@@ -68,20 +66,17 @@ const run = async config => {
 
   try {
     const maybeAppFile = path.join(config.ROOT, 'app.mjs')
-    const exists = await fs.exists(maybeAppFile)
+    const { default: def, ...maybeApp } = await import(maybeAppFile)
 
-    if (exists) {
-      const { default: def, ...maybeApp } = await import(maybeAppFile)
-
-      if (def) {
-        app = deep.merge(app, { ...def })
-      } else {
-        app = deep.merge(app, { ...maybeApp })
-      }
+    if (def) {
+      app = deep.merge(app, { ...def })
+    } else {
+      app = deep.merge(app, { ...maybeApp })
     }
   } catch (e) {
     // happy without maybApp
   }
+
   // admin
   // if (config.ENV === 'development') {
   //  app.state = deep.merge(Magic.state, app.state)

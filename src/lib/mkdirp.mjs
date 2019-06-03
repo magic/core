@@ -11,7 +11,16 @@ export const mkdirp = async p => {
 
   try {
     const dir = path.dirname(p)
-    const exists = await fs.exists(dir)
+    let exists = false
+    try {
+      await fs.stat(dir)
+      exists = true
+    } catch(e) {
+      if (e.code !== 'ENOENT') {
+        throw e
+      }
+    }
+
     if (!exists) {
       await mkdirp(dir)
     }

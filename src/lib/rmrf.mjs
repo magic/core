@@ -11,9 +11,13 @@ export const rmrf = async dir => {
     throw new Error('rmrf will not work outside the cwd.')
   }
 
-  const exists = await fs.exists(dir)
-  if (!exists) {
-    return
+  try {
+    await fs.stat(dir)
+  } catch(e) {
+    if (e.code === 'ENOENT') {
+      return
+    }
+    throw e
   }
 
   const stat = await fs.stat(dir)

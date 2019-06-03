@@ -58,16 +58,27 @@ export const prepare = async (app, config) => {
   // collect all static files,
   // write their buffers into app.static
   app.static = await prepareMetaFiles(app)
-  if (await fs.exists(config.DIR.STATIC)) {
+
+  let exists = false
+  try {
+    await fs.stat(config.DIR.STATIC)
+    exists = true
+  } catch(e) {
+    if (e !== 'ENOENT') {
+      throw e
+    }
+  }
+
+  if (exists) {
     const staticFiles = await getFiles(config.DIR.STATIC)
     if (staticFiles) {
-      await Promise.all(
-        staticFiles.map(async f => {
-          const name = f.replace(config.DIR.STATIC, '')
-          // TODO: use streams here
-          app.static[name] = await fs.readFile(f)
-        }),
-      )
+      const staticPromises = staticFiles.map(async f => {
+        const name = f.replace(config.DIR.STATIC, '')
+        // TODO: use streams here
+        app.static[name] = await fs.readFile(f)
+      })
+
+      await Promise.all(staticPromises)
     }
   }
 
