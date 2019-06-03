@@ -1,4 +1,5 @@
-export const View = state =>
+const Mod = {
+  View: state =>
   div({ class: 'Mod' }, [
     h3('Mod.Mod'),
     p([
@@ -11,14 +12,15 @@ export const View = state =>
     ]),
     p(['the state of this module: ', JSON.stringify(state.module)]),
   ])
+}
 
-export const state = {
+Mod.state = {
   module: {
     test: 'testing',
   },
 }
 
-export const style = {
+Mod.style = {
   margin: '0 0 1em',
   padding: '0.5em',
   border: '1px solid',
@@ -29,15 +31,16 @@ export const style = {
   },
 }
 
-export const global = {
+Mod.global = {
   state: {
     module: true,
   },
 }
 
-export const Component = props => () => {
+Mod.Component = {
+  View: props => {
   props = typeof props === 'string' ? { header: props } : props
-  CHECK_PROPS(props, Mod.Component.props, 'Mod.Component')
+  CHECK_PROPS(props, Mod.Component.propTypes, 'ModComponent')
   const header = props.header || props.title
 
   return div({ class: 'ModComponent' }, [
@@ -47,10 +50,14 @@ export const Component = props => () => {
       Link({ to: 'https://github.com/magic/core/example/assets/module.mjs' }, '/assets/module.mjs'),
     ]),
   ])
-}
+}}
 
-Component.style = {
+Mod.Component.style = {
   border: '1px solid orange',
 }
 
-Component.props = [{ key: 'header', type: ['string', 'array'], required: ['title'] }]
+Mod.Component.propTypes = {
+  ModComponent: [{ key: 'header', type: ['string', 'array'], required: ['title'] }],
+}
+
+export default Mod
