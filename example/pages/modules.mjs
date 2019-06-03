@@ -56,72 +56,71 @@ export default () => div([
 
   h3('Mod sourcecode:'),
 
-  Pre(`const Mod = {
-export const View = state =>
-  div({ class: 'Mod View' }, [
-    h3('Mod.View'),
+  Pre(`
+const Mod = {
+  View: state =>
+  div({ class: 'Mod' }, [
+    h3('Mod.Mod'),
     p([
-      'this is Mod.View. it gets loaded from ',
-      Link({
-        to: 'https://github.com/magic/core/blob/master/example/assets/Mod.mjs',
-        text: '/assets/Mod.mjs'
-      }),
+      'this is Mod. it gets loaded from ',
+      Link({ to: 'https://github.com/magic/core/example/assets/module.js' }, '/assets/module.js'),
     ]),
     p([
       'and imported in ',
-      Link({
-        to: 'https://github.com/magic/core/blob/master/example/assets/index.mjs',
-        text: '/assets/index.mjs',
-      }),
+      Link({ to: 'https://github.com/magic/core/example/assets/index.js' }, '/assets/index.js'),
     ]),
     p(['the state of this module: ', JSON.stringify(state.module)]),
-  ]),
+  ])
+}
 
-  Component: () =>
-    div({ class: 'Mod Component' }, [
-      h3('Mod.Component'),
-      p([
-        'Mod.Component, a second component in ',
-        Link({
-          to: 'https://github.com/magic/core/blob/master/example/assets/Mod.mjs',
-          text: '/assets/Mod.mjs',
-        }),
-      ]),
-    ]),
-
-  state: {
-    module: {
-      test: 'testing',
-    },
-  },
-
-  style: {
-    '.Mod': {
-      margin: '0 0 1em',
-      padding: '0.5em',
-      border: '1px solid',
-
-      h3: {
-        margin: 0,
-      },
-
-      '&.View': {
-        borderColor: 'green',
-      },
-      '&.Component': {
-        borderColor: 'red',
-      },
-    },
-  },
-
-  global: {
-    state: {
-      module: true,
-    },
+Mod.state = {
+  module: {
+    test: 'testing',
   },
 }
 
-export default Mod`),
+Mod.style = {
+  margin: '0 0 1em',
+  padding: '0.5em',
+  border: '1px solid',
+  borderColor: 'green',
+
+  h3: {
+    margin: 0,
+  },
+}
+
+Mod.global = {
+  state: {
+    module: true,
+  },
+}
+
+Mod.Component = {
+  View: props => {
+  props = typeof props === 'string' ? { header: props } : props
+  CHECK_PROPS(props, Mod.Component.propTypes, 'ModComponent')
+  const header = props.header || props.title
+
+  return div({ class: 'ModComponent' }, [
+    header && h5(header),
+    p([
+      'Mod.Component, a second component in ',
+      Link({ to: 'https://github.com/magic/core/example/assets/module.mjs' }, '/assets/module.mjs'),
+    ]),
+  ])
+}}
+
+Mod.Component.style = {
+  border: '1px solid orange',
+}
+
+Mod.Component.propTypes = {
+  ModComponent: [{ key: 'header', type: ['string', 'array'], required: ['title'] }],
+}
+
+export default Mod
+`),
 
   h2({ id: 'check-props' }, 'check props'),
   p('@magic-modules can export a .props key with an array of prop types.'),
