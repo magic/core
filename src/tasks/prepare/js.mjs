@@ -38,6 +38,7 @@ return { ${imports} }
       .sort(([a], [b]) => (a > b ? 1 : -1))
       .map(([_, mod]) => {
         const subPropTypes = Object.entries(mod)
+          .sort(([a], [b]) => a > b ? 1 : -1)
           .filter(([k]) => isUpperCase(k) && k !== 'View')
           .filter(([_, { propTypes }]) => propTypes)
           .map(([sk, sm]) =>
