@@ -35,14 +35,33 @@ return { ${imports} }
 
     propTypeString = 'const propTypes = {\n'
     propTypeString += Object.entries(magic.modules)
-      .filter(([_, { propTypes }]) => propTypes)
       .sort(([a], [b]) => (a > b ? 1 : -1))
-      .map(([_, { propTypes }]) =>
-        Object.entries(propTypes)
-          .map(([key, type]) => `${key}: ${JSON.stringify(type, null, 2)}`)
-          .join(',\n'),
-      )
+      .map(([_, mod]) => {
+        const subPropTypes = Object.entries(mod)
+          .filter(([k]) => isUpperCase(k) && k !== 'View')
+          .filter(([_, { propTypes}]) => propTypes)
+          .map(([sk, sm]) =>
+            Object.entries(sm.propTypes)
+              .map(([k, t]) => `${k}: ${JSON.stringify(t, null, 2)}`)
+              .join(',\n')
+          )
+          .filter(a => a)
+          .join(',\n')
+
+        let propString = ''
+        if (mod.propTypes) {
+          propString = Object.entries(mod.propTypes)
+            .map(([key, type]) => `${key}: ${JSON.stringify(type, null, 2)}`)
+            .join(',\n')
+        }
+        if (subPropTypes) {
+          propString += `\n${subPropTypes}`
+        }
+        return propString
+      })
+      .filter(a=>a)
       .join(',\n')
+
     propTypeString += '\n}'
   }
 
