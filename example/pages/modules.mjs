@@ -57,8 +57,7 @@ export default () => div([
   h3('Mod sourcecode:'),
 
   Pre(`
-const Mod = {
-  View: state =>
+export const View = state =>
   div({ class: 'Mod' }, [
     h3('Mod.Mod'),
     p([
@@ -71,15 +70,14 @@ const Mod = {
     ]),
     p(['the state of this module: ', JSON.stringify(state.module)]),
   ])
-}
 
-Mod.state = {
+export const state = {
   module: {
     test: 'testing',
   },
 }
 
-Mod.style = {
+export const style = {
   margin: '0 0 1em',
   padding: '0.5em',
   border: '1px solid',
@@ -90,16 +88,15 @@ Mod.style = {
   },
 }
 
-Mod.global = {
+export const global = {
   state: {
     module: true,
   },
 }
 
-Mod.Component = {
-  View: props => {
+export const Component = props => {
   props = typeof props === 'string' ? { header: props } : props
-  CHECK_PROPS(props, Mod.Component.propTypes, 'ModComponent')
+  CHECK_PROPS(props, propTypes, 'ModComponent')
   const header = props.header || props.title
 
   return div({ class: 'ModComponent' }, [
@@ -109,21 +106,19 @@ Mod.Component = {
       Link({ to: 'https://github.com/magic/core/example/assets/module.mjs' }, '/assets/module.mjs'),
     ]),
   ])
-}}
+}
 
-Mod.Component.style = {
+Component.style = {
   border: '1px solid orange',
 }
 
-Mod.Component.propTypes = {
+export const propTypes = {
   ModComponent: [{ key: 'header', type: ['string', 'array'], required: ['title'] }],
 }
-
-export default Mod
 `),
 
   h2({ id: 'check-props' }, 'check props'),
-  p('@magic-modules can export a .props key with an array of prop types.'),
+  p('@magic-modules can export a .propTypes key with an array of prop types.'),
   p('more docs coming soon'),
 
   h2({ id: 'preinstalled' }, 'preinstalled magic modules'),
