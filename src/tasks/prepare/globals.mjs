@@ -39,7 +39,7 @@ export const findNodeModules = async () => {
         const libPath = path.join(nodeModule, localLibIndexPath)
         await fs.stat(libPath)
         modules[name].lib = path.join(loadPath, localLibIndexPath)
-      } catch(e) {
+      } catch (e) {
         if (e.code !== 'ENOENT') {
           throw e
         }
@@ -49,7 +49,7 @@ export const findNodeModules = async () => {
         const libMjsPath = path.join(nodeModule, localLibMjsPath)
         await fs.stat(libMjsPath)
         modules[name].lib = path.join(loadPath, localLibMjsPath)
-      } catch(e) {
+      } catch (e) {
         if (e.code !== 'ENOENT') {
           throw e
         }
@@ -80,7 +80,7 @@ export const findNodeModules = async () => {
           const libPath = path.join(nodeModule, localLibIndexPath)
           await fs.stat(libPath)
           modules[name].lib = path.join(loadPath, localLibIndexPath)
-        } catch(e) {
+        } catch (e) {
           if (e.code !== 'ENOENT') {
             throw e
           }
@@ -90,7 +90,7 @@ export const findNodeModules = async () => {
           const libMjsPath = path.join(nodeModule, localLibMjsPath)
           await fs.stat(libMjsPath)
           modules[name].lib = path.join(loadPath, localLibMjsPath)
-        } catch(e) {
+        } catch (e) {
           if (e.code !== 'ENOENT') {
             throw e
           }

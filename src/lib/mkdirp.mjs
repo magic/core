@@ -15,7 +15,7 @@ export const mkdirp = async p => {
     try {
       await fs.stat(dir)
       exists = true
-    } catch(e) {
+    } catch (e) {
       if (e.code !== 'ENOENT') {
         throw e
       }

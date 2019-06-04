@@ -13,7 +13,7 @@ export const rmrf = async dir => {
 
   try {
     await fs.stat(dir)
-  } catch(e) {
+  } catch (e) {
     if (e.code === 'ENOENT') {
       return
     }

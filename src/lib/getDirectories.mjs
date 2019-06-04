@@ -33,9 +33,9 @@ export const fileExists = async f => {
 export const getDirectories = async (directories, recurse = true) => {
   if (is.array(directories)) {
     const dirPromises = directories
-        .filter(fileExists)
-        .map(async f => await getDirectories(f, recurse))
-        .filter(a => a)
+      .filter(fileExists)
+      .map(async f => await getDirectories(f, recurse))
+      .filter(a => a)
 
     const dirs = await Promise.all(dirPromises)
     return deep.flatten(...dirs)
@@ -50,7 +50,7 @@ export const getDirectories = async (directories, recurse = true) => {
     flattened = deep.flatten(flattened, dirs)
 
     return flattened.filter(a => a)
-  } catch(e) {
+  } catch (e) {
     if (e.code === 'ENOENT') {
       return []
     }

@@ -25,7 +25,7 @@ export const getFiles = async (dir, recurse = true) => {
     const files = await Promise.all(dirContent.map(getFilePath(dir, recurse)))
 
     return deep.flatten(files).filter(a => a)
-  } catch(e) {
+  } catch (e) {
     if (e.code === 'ENOENT') {
       return []
     }

@@ -13,7 +13,7 @@ const ssl = async () => {
   try {
     await fs.stat(privFilename)
     keyExists = true
-  } catch(e) {
+  } catch (e) {
     if (e.code !== 'ENOENT') {
       throw e
     }
@@ -23,7 +23,7 @@ const ssl = async () => {
   try {
     await fs.stat(certFilename)
     const certExists = true
-  } catch(e) {
+  } catch (e) {
     if (e.code !== 'ENOENT') {
       throw e
     }

@@ -39,11 +39,11 @@ return { ${imports} }
       .map(([_, mod]) => {
         const subPropTypes = Object.entries(mod)
           .filter(([k]) => isUpperCase(k) && k !== 'View')
-          .filter(([_, { propTypes}]) => propTypes)
+          .filter(([_, { propTypes }]) => propTypes)
           .map(([sk, sm]) =>
             Object.entries(sm.propTypes)
               .map(([k, t]) => `${k}: ${JSON.stringify(t, null, 2)}`)
-              .join(',\n')
+              .join(',\n'),
           )
           .filter(a => a)
           .join(',\n')
@@ -59,7 +59,7 @@ return { ${imports} }
         }
         return propString
       })
-      .filter(a=>a)
+      .filter(a => a)
       .join(',\n')
 
     propTypeString += '\n}'

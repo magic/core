@@ -27,7 +27,7 @@ export const minifyImages = async images => {
         })
       }),
     )
-  } catch(e) {
+  } catch (e) {
     // do not throw if error is ENOENT
     if (e.code !== 'ENOENT') {
       throw e
