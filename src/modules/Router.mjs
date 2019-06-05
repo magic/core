@@ -25,7 +25,7 @@ export const View = ({ page, state }) => {
     class: 'Page',
   }
 
-  return div(magicProps, div(wrapperProps, [Header(state), div(props, page), Footer(state)]))
+  return div(magicProps, div(wrapperProps, Route({ state, page })))
 }
 
 export const Link = ({ to, ...p }, children) => {

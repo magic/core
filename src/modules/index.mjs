@@ -4,6 +4,7 @@ import * as MenuItem from './MenuItem.mjs'
 import * as Footer from './Footer.mjs'
 import * as Header from './Header.mjs'
 import * as Img from './Img.mjs'
+import * as Route from './Route.mjs'
 
 export { component } from './component.mjs'
 
@@ -21,4 +22,5 @@ export const builtins = {
   Img,
   Page,
   Link,
+  Route,
 }
