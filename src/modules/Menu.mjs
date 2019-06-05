@@ -1,6 +1,6 @@
-export const View = p => {
-  CHECK_PROPS(p, propTypes, 'Menu')
-  let { items, hash, url = '', root, class: cl = 'Menu', collapse = true } = p
+export const View = (props = {}) => {
+  CHECK_PROPS(props, propTypes, 'Menu')
+  let { items, hash, url = '', root, class: cl = 'Menu', collapse = true } = props
 
   if (!items.length) {
     return
