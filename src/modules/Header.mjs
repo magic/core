@@ -1,4 +1,4 @@
-export const View = props => {
+export const View = (props = {}, children = []) => {
   CHECK_PROPS(props, propTypes, 'Header')
 
   const { logo, menu, root, tagline, logotext, ...state } = props
@@ -13,6 +13,7 @@ export const View = props => {
         logotext && span({ class: 'LogoText' }, logotext),
       ]),
     menu && Menu({ ...state, root, items: menu }),
+    children,
   ])
 }
 
