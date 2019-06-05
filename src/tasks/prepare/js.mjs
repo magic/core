@@ -39,10 +39,10 @@ return { ${imports} }
       .map(([_, mod]) => {
         const subPropTypes = Object.entries(mod)
           .sort(([a], [b]) => (a > b ? 1 : -1))
-          .filter(([k]) => isUpperCase(k) && k !== 'View')
-          .filter(([_, { propTypes }]) => propTypes)
-          .map(([sk, sm]) =>
+          .filter(([k, { propTypes }]) => isUpperCase(k) && k !== 'View' && propTypes)
+          .map(([_, sm]) =>
             Object.entries(sm.propTypes)
+              .sort(([a], [b]) => (a > b ? 1 : -1))
               .map(([k, t]) => `${k}: ${JSON.stringify(t, null, 2)}`)
               .join(',\n'),
           )
@@ -52,6 +52,7 @@ return { ${imports} }
         let propString = ''
         if (mod.propTypes) {
           propString = Object.entries(mod.propTypes)
+            .sort(([a], [b]) => (a > b ? 1 : -1))
             .map(([key, type]) => `${key}: ${JSON.stringify(type, null, 2)}`)
             .join(',\n')
         }
@@ -146,7 +147,7 @@ return { ${imports} }
   let pageString = 'const pages = {\n'
 
   magic.pages
-    .sort(({ name: n1 }, { name: n2 }) => (n1 > n2 ? 1 : -1))
+    .sort(({ name: a }, { name: b }) => (a > b ? 1 : -1))
     .forEach(page => {
       pageString += `\n  '${page.name}': ${page.View.toString()},`
     })
