@@ -3,26 +3,19 @@ export const View = ({ page, state }) => {
 
   const magicProps = {
     id: 'Magic',
+    class: state.pageClass,
   }
 
   const wrapperProps = {
-    class: 'Wrapper',
-  }
-
-  if (state.pageClass) {
-    magicProps.class = state.pageClass
-  }
-
-  if (state.theme) {
-    if (!magicProps.class) {
-      magicProps.class = state.theme
-    } else if (!magicProps.class.includes(state.theme)) {
-      magicProps.class += ` ${state.theme}`
+    class: {
+      Wrapper: true,
     }
   }
 
   const props = {
-    class: 'Page',
+    class: {
+      Page: true,
+    }
   }
 
   return div(magicProps, div(wrapperProps, Route({ state, page })))
@@ -52,55 +45,10 @@ export const Link = ({ to, ...p }, children) => {
 }
 
 export const state = {
-  pageClass: '',
+  pageClass: {},
 }
 
 export const actions = {
-  page: {
-    addClass: (state, cl) => {
-      if (state.pageClass.includes(cl)) {
-        return state
-      }
-
-      return {
-        ...state,
-        pageClass: `${state.pageClass} ${cl}`,
-      }
-    },
-
-    removeClass: (state, cl) => {
-      if (!state.pageClass.includes(cl)) {
-        return state
-      }
-
-      cl = state.pageClass.replace(cl, '').replace(/\s\s+/g, ' ')
-
-      return {
-        ...state,
-        pageClass: cl,
-      }
-    },
-
-    toggleClass: (state, cl) => {
-      if (state.pageClass.includes(cl)) {
-        return actions.page.addClass(state, cl)
-      } else {
-        return actions.page.removeClass(state, cl)
-      }
-    },
-    replaceClass: (state, [cl1, cl2]) => {
-      if (state.pageClass.includes(cl1)) {
-        state = actions.page.removeClass(state, cl1)
-      }
-      if (!state.pageClass.includes(cl2)) {
-        state = actions.page.addClass(state, cl2)
-      }
-      return {
-        ...state,
-      }
-    },
-  },
-
   pop: (state, e) => {
     let { pathname: url, hash } = window.location
     hash = hash.substring(1)
