@@ -15,6 +15,7 @@ export const style = {
     textAlign: 'center',
     padding: '2em 0 .5em',
   },
+
   '.Credits': {
     display: 'block',
     clear: 'both',
