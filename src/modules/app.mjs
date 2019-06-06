@@ -53,7 +53,6 @@ const App = async config => {
           body([
             Page({ page: page.View, state }),
             script({
-              type: 'module',
               src: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.js?${shortJsHash}`,
               integrity: hashes.js,
               crossorigin: 'anonymous',
