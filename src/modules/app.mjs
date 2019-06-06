@@ -4,7 +4,7 @@ import is from '@magic/types'
 import deep from '@magic/deep'
 import { h } from 'hyperapp'
 
-const run = async config => {
+const App = async config => {
   const { WEB_ROOT = '/', LANG = 'en' } = config
 
   // default app state. gets merged with /assets/app.js if it exists.
@@ -85,4 +85,4 @@ const run = async config => {
   return app
 }
 
-export default run
+export default App
