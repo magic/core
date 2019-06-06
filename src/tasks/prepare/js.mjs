@@ -114,9 +114,11 @@ return { ${imports} }
 
   let subscriptionString = ''
   if (!is.empty(magic.subscriptions)) {
-    subscriptionString = `  subscriptions: state => [\n    `
-    subscriptionString += `[${magic.subscriptions.join('],\n    [')}],`
-    subscriptionString += '\n  ],'
+    subscriptionString = `
+  subscriptions: state => [
+    [${magic.subscriptions.join('],\n    [')}]
+  ],
+`.trim()
   }
 
   let libString = ''
@@ -161,22 +163,20 @@ app({
     url: window.location.pathname,
   }),
   ${subscriptionString}
-  view: (state) => {
+  view: state => {
     const url = pages[state.url] ? state.url : '/404/'
-    // used below, is kind of a global!
     const page = pages[url]
 
     // map pageState into state
-    if (state.pages) {
-      const pageState = state.pages[url]
-      for (let key in pageState) {
-        state[key] = pageState[key]
-      }
+    if (state.pages && state.pages[url]) {
+      Object.keys(state.pages[url]).forEach(key => {
+        state[key] = state.pages[url][key]
+      })
     }
 
     return Page({ page, state })
   },
-  node: document.getElementById("Magic"),
+  node: document.getElementById('Magic'),
 })
 `
 
