@@ -2,6 +2,7 @@ import cp from 'child_process'
 import path from 'path'
 import deep from '@magic/deep'
 import log from '@magic/log'
+import colors from './themes/colors.mjs'
 
 export const runConfig = async () => {
   let conf = {}
@@ -38,6 +39,11 @@ export const runConfig = async () => {
   const STATIC = path.join(ASSETS, 'static')
   const THEMES = path.join(ASSETS, 'themes')
   const API = path.join(process.cwd(), conf.DIR.API || 'api')
+
+  const THEME_VARS = conf.THEME_VARS || {}
+  if (!THEME_VARS.colors) {
+    THEME_VARS.colors = colors
+  }
 
   conf.HASH_FILE_NAME = conf.HASH_FILE_NAME || 'sri-hashes.json'
 
