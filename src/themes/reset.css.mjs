@@ -96,25 +96,20 @@ export const reset = {
     width: '90%',
 
     '.Logo': {
-      float: 'left',
-    },
-
-    '.LogoText': {
-      float: 'left',
-      fontSize: '1.5em',
-      margin: '.7em .2em',
-    },
-
-    '.LogoWrapper': {
       display: 'inline-block',
+      img: {
+        float: 'left',
+      },
+
+      span: {
+        float: 'left',
+        fontSize: '1.5em',
+        margin: '.7em .2em',
+      },
     },
   },
 
   '.Page': {
-    '.Header': {
-      margin: '0 0 .5em',
-    },
-
     h1: {
       padding: '1em 0 .2em',
     },

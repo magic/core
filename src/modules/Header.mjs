@@ -1,18 +1,18 @@
 export const View = (props = {}, children = []) => {
   CHECK_PROPS(props, propTypes, 'Header')
 
-  const { logo, menu, root, tagline, logotext, ...state } = props
+  const { logo, menu, tagline, logotext, ...state } = props
   if (!logo && !menu && !tagline) {
     return
   }
 
   return header({ class: 'Header' }, [
     (logo || logotext) &&
-      Link({ to: root, class: 'LogoWrapper' }, [
-        logo && Img({ class: 'Logo', src: logo }),
-        logotext && span({ class: 'LogoText' }, logotext),
+      Link({ to: state.root, class: 'Logo' }, [
+        logo && Img(logo),
+        logotext && span(logotext),
       ]),
-    menu && Menu({ ...state, root, items: menu }),
+    menu && Menu({ state, items: menu }),
     children,
   ])
 }
