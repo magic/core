@@ -13,8 +13,6 @@ export const View = (props = {}) => {
   return nav({ className }, ul(items.map(i => MenuItem({ ...i, state, collapse }))))
 }
 
-export const Item = () => div('item')
-
 export const style = {
   float: 'right',
   margin: '1.5em 0 0',
