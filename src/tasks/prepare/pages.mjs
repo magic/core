@@ -63,4 +63,5 @@ does not export a view function or page.View key.`)
 
   return pages
 }
+
 export default preparePages
