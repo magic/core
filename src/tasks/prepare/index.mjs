@@ -111,7 +111,7 @@ export const prepare = async (app, config) => {
 
       const actionTypes = ['actions', 'effects']
       actionTypes
-        // if component has no actions or effects do nothing
+        // if component has no actions or effects, do nothing
         .filter(type => !is.empty(component[type]))
         .forEach(type => {
           Object.entries(component[type]).forEach(([key, val]) => {
