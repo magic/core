@@ -1,19 +1,19 @@
 {
-  "css": "sha384-plYCDQrlZEf3uAZDGzTZgVKu5DiMZQX2C6EEX8gao/YnB6pfBy60hNincPivCaVb",
-  "js": "sha384-oZT5U2Qz8EMKSjN/a+25OwrGmwoixepahZJ1YOaciX3p08VK7ORlri3UVwZWMqrW",
+  "css": "sha384-Y4d4slRurtt/QQISYVA5I6raQfBxjPWEktg+Cs+4tFWyZZ97kH9OLEnQlGRXg7bX",
+  "js": "sha384-hXrvSN1IvrZICW6r7dz8VdkceQXV8pc8uLAz4L6qAWFEWy2u0du9U+lAYFH86/Ay",
   "pages": {
-    "/core/": "sha384-4gJzNoAUxUJ/WKuKDIzro+/g5hlotWbGAops8qkbYe3eA6ZggYftM5/CVO3C8FIF",
-    "/core/404/": "sha384-jrZAWBcdHfbp1zdRkxGHc29Fm9aKwgbr9ksOPEUIlGyNgePYc5N/IyhcWdxtSRJH",
-    "/core/concepts/": "sha384-AGSRyvCj7ADQCHvoWhuqWa2odc1SzmICQJd5n8nKZ+U1vsKjFtSlENpa6u0HavwK",
-    "/core/files/": "sha384-mt/eg8BKpAhgnWm+Ees/anS5vRELLJEbVWKnS+6oK7phje9RBn8EyXLIF5LkKvfH",
-    "/core/libraries/": "sha384-MhumGht1iO1ZtUOFpwpcq7gAHTCeKw1cWNBR/ET1y6+hggOqTL+lm/y1gzJtZJLp",
-    "/core/modules/": "sha384-4zT1P1EQd+JupFEk3qdteNySnB4+g+A2brWpWPFP7h0hdYr5w+MMVXP/CTuCa1xo",
-    "/core/themes/": "sha384-cGiYGKW/LGQ9sB18O64EiRjO4DQQGh+ESrgewPVl7JsafEWu8t6tzx/vpTigHuJg"
+    "/core/": "sha384-3FKwJU4TZ8GJwHf5lg1LTEPqoYQQgb7QgfgZm3YY1a7NiZwdYqBNxfhQ+IRodFFx",
+    "/core/404/": "sha384-1GO0g/BLTknxsY40ywpWL4O782qY1i6evAa1eu78rvSd+KDsUTnjbgaByBAm8Bze",
+    "/core/concepts/": "sha384-S9bI2hMzTCW3tapNiUSH8lTfCA/iTJcB+fO03GQ7gUZwCaY0OHMxwlFCSHLhNrV+",
+    "/core/files/": "sha384-4pBCL1SwPI8Lu0U7Jq2UczdkwmXyBdkY8FjyKymBzB+fqWT27RUPVLyOT58qe5sy",
+    "/core/libraries/": "sha384-fMiNiONzPZBdeZQX4CZ6OvVbLNdIiLKedZeC6x2Q1ghBXqY271XcDbf51qjpvkMp",
+    "/core/modules/": "sha384-/1UnJJG2c1/q4P6jXotKA2+bPZNbXOgxQkvsjTfZJxo6W5fJiFWC3BbrA444VH65",
+    "/core/themes/": "sha384-RKJ0iHtGrRfVBLF8Nihn8dDH287hDvdvNX4thss0a6juY6GvoUK4BL81VSY9H+pn"
   },
   "static": {
     "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+",
     "/logo.png": "sha384-yRxX8nlWNCvk7+PidWDtP1jLxTmtbHm7tCW6TszNfZ7R5DTDMmXyxhKC/JmX3r1u",
     "/robots.txt": "sha384-UJ99rKaWQNOb1b2yL4/2XX6B6Gjr6ZeSk6CJfZ5lw/AUGmwgmUfFx1v0bnK+q/0O",
-    "/sitemap.xml": "sha384-YqnEmukImqXeDrNEkIli9Gyrx3TGVHHQ0mvdfwKmGPwBRmbke3iqWMH9yKqPPOXy"
+    "/sitemap.xml": "sha384-cvWruSAUpzmNTp/xf0Vzqp6XpcdKDQKb+fuGIKbh9evUUZwpVxuLC8+XSrNL1J2x"
   }
 }
