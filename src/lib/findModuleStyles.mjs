@@ -20,10 +20,12 @@ export const findModuleStyles = (modules, vars, parent) => {
           selector = `.${parent}${name}`
         }
 
-        if (!mod.style[selector]) {
+        let finalStyle = {}
+        if (!style[selector]) {
           const modStyle = {}
           const metaStyle = {}
-          Object.entries(mod.style)
+
+          Object.entries(style)
             .sort(([a], [b]) => (a > b ? 1 : -1))
             .forEach(([k, v]) => {
               if (k.startsWith('@')) {
@@ -40,18 +42,19 @@ export const findModuleStyles = (modules, vars, parent) => {
               }
             })
 
-          style = {}
           if (!is.empty(modStyle)) {
-            style[selector] = modStyle
+            finalStyle[selector] = modStyle
           }
 
-          style = {
-            ...style,
+          finalStyle = {
+            ...finalStyle,
             ...metaStyle,
           }
+        } else {
+          finalStyle = style[selector]
         }
 
-        styles = deep.merge(styles, style)
+        styles = deep.merge(styles, finalStyle)
       }
 
       Object.entries(mod)
