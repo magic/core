@@ -1,4 +1,4 @@
-export const View = (_, children = []) =>
+export const View = (state, children = []) =>
   footer({ class: 'Footer' }, [
     div({ class: 'Container' }, [
       children,
@@ -7,13 +7,15 @@ export const View = (_, children = []) =>
         Link({ to: 'https://github.com/magic/core', target: '_blank', rel: 'noopener' }, 'magic'),
       ]),
     ]),
+    Gdpr(state.gdpr),
   ])
 
 export const style = {
-  '.Footer': {
-    position: 'relative',
+  position: 'relative',
+  padding: '2em 0 .5em',
+
+  '.Container': {
     textAlign: 'center',
-    padding: '2em 0 .5em',
   },
 
   '.Credits': {

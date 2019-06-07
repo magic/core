@@ -158,7 +158,7 @@ return { ${imports} }
 
   const appString = `
 app({
-  init: () => ({
+  init: () => actions.gdpr.load({
     ...initialState,
     url: window.location.pathname,
   }),
@@ -200,4 +200,5 @@ app({
 
   return clientString
 }
+
 export default prepareJs
