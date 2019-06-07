@@ -20,6 +20,7 @@ export const prepare = async (app, config) => {
   app.actions = app.actions || {}
   app.effects = app.effects || {}
   app.helpers = app.helpers || {}
+  app.cookies = app.cookies || {}
   app.subscriptions = app.subscriptions || []
 
   // collect the pages, create their states
@@ -51,6 +52,10 @@ export const prepare = async (app, config) => {
 
     if (!is.empty(page.helpers)) {
       app.helpers = deep.merge(app.helpers, page.helpers)
+    }
+
+    if (!is.empty(page.cookies)) {
+      app.cookies = deep.merge(app.cookies, page.cookies)
     }
 
     return page
@@ -137,6 +142,10 @@ export const prepare = async (app, config) => {
         component.subscriptions.forEach(sub => {
           app.subscriptions.push(sub)
         })
+      }
+
+      if (!is.empty(component.cookies)) {
+        app.cookies = deep.merge(app.cookies, component.cookies)
       }
     })
 
