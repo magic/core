@@ -17,6 +17,7 @@ const html5Reset = `article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section`
 
 const buttons = `button,
+.button,
 input[type="reset"],
 input[type="button"],
 input[type="submit"],
@@ -25,7 +26,7 @@ input[type="file"] > input[type="button"]`
 // define the original style as a Map to keep key inheritance working.
 // all other styles will be added as keys onto this map,
 // which means that order should be preserved
-export const reset = {
+export const reset = (vars = {}) => ({
   [all]: {
     margin: 0,
     padding: 0,
@@ -72,6 +73,15 @@ export const reset = {
 
   [buttons]: {
     cursor: 'pointer',
+    backgroundColor: vars.buttonBackgroundColor || vars.colors.gray[500],
+    color: vars.buttonColor || vars.colors.gray[900],
+    padding: '0.5em',
+
+    '&:hover': {
+      backgroundColor: vars.buttonBackgroundColorHover || vars.colors.gray[700],
+      color: vars.buttonColorHover || vars.colors.gray[100],
+    },
+
     '&::-moz-focus-inner': {
       padding: '0',
       border: '0 none',
@@ -135,4 +145,4 @@ export const reset = {
   h3: {
     fontSize: '1.1em',
   },
-}
+})
