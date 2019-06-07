@@ -25,6 +25,7 @@ export const prepare = async (app, config) => {
   // collect the pages, create their states
   app.pages = await preparePages(files)
 
+  // collect all page states, actions, effects, helpers and subscriptions
   app.pages.map(page => {
     if (!is.empty(page.state)) {
       if (!app.state.pages) {
@@ -118,10 +119,11 @@ export const prepare = async (app, config) => {
             if (glob[type] && glob[type][key] === true) {
               app[type][key] = val
             } else {
-              if (Object.keys(val).includes(key)) {
-                app[type][lowerName] = val[key]
-              } else {
+              app[type][lowerName] = app[type][lowerName] || {}
+              if (lowerName === key) {
                 app[type][lowerName] = val
+              } else {
+                app[type][lowerName][key] = val
               }
             }
           })
