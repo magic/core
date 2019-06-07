@@ -1,6 +1,5 @@
-import { is } from '@magic/test'
+import { is, css } from '@magic/test'
 
-import css from '@magic/css'
 import { reset } from '../../src/themes/reset.css.mjs'
 
 export default [
