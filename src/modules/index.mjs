@@ -5,6 +5,7 @@ import * as Footer from './Footer.mjs'
 import * as Header from './Header.mjs'
 import * as Img from './Img.mjs'
 import * as Route from './Route.mjs'
+import * as Gdpr from './Gdpr.mjs'
 
 export { component } from './component.mjs'
 
@@ -23,4 +24,5 @@ export const builtins = {
   Page,
   Link,
   Route,
+  Gdpr,
 }
