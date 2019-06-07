@@ -19,14 +19,18 @@ export const prepareCss = async ({ app, modules }) => {
   try {
     // merge default reset css into styles
     const libResetCssFile = path.join(dirName, '..', '..', 'themes', 'reset.css.mjs')
-    const { reset } = await import(libResetCssFile)
+    let { reset } = await import(libResetCssFile)
+    if (is.function(reset)) {
+      reset = reset(THEME_VARS)
+    }
+
     styles.push(reset)
 
     const themePromises = THEME.map(async theme_name => {
       // find reset css in theme dir if it exists
       const maybeResetCssFile = path.join(config.DIR.THEMES, theme_name, 'reset.css.mjs')
       const { default: maybeResetCssStyles } = await import(maybeResetCssFile)
-      if (is.fn(maybeResetCssStyles)) {
+      if (is.function(maybeResetCssStyles)) {
         maybeResetCssStyles = maybeResetCssStyles(THEME_VARS)
       }
       styles.push(maybeResetCssStyles)
@@ -51,7 +55,7 @@ export const prepareCss = async ({ app, modules }) => {
 
       try {
         let { default: theme } = await import(libThemeFile)
-        if (is.fn(theme)) {
+        if (is.function(theme)) {
           theme = theme(THEME_VARS)
         }
         styles.push(theme)
@@ -65,7 +69,7 @@ export const prepareCss = async ({ app, modules }) => {
       try {
         const themePath = `@magic-themes/${theme_name}`
         let { default: theme } = await import(themePath)
-        if (is.fn(theme)) {
+        if (is.function(theme)) {
           theme = theme(THEME_VARS)
         }
         styles.push(theme)
@@ -80,7 +84,7 @@ export const prepareCss = async ({ app, modules }) => {
       try {
         const maybeThemeFile = path.join(config.DIR.THEMES, theme_name, 'index.mjs')
         let { default: theme } = await import(maybeThemeFile)
-        if (is.fn(theme)) {
+        if (is.function(theme)) {
           theme = theme(THEME_VARS)
         }
         styles.push(theme)
@@ -97,7 +101,7 @@ export const prepareCss = async ({ app, modules }) => {
   app.pages
     .filter(p => p.style)
     .forEach(page => {
-      if (is.fn(page.style)) {
+      if (is.function(page.style)) {
         page.style = page.style(THEME_VARS)
       }
       styles.push(page.style)
@@ -109,7 +113,7 @@ export const prepareCss = async ({ app, modules }) => {
     try {
       const { style } = await import(maybeAppFile)
       if (style) {
-        if (is.fn(style)) {
+        if (is.function(style)) {
           style = style(THEME_VARS)
         }
         styles.push(style)
