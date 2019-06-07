@@ -51,7 +51,13 @@ export const findModuleStyles = (modules, vars, parent) => {
             ...metaStyle,
           }
         } else {
-          finalStyle = style[selector]
+          if (!style[selector]) {
+            style = {
+              [selector]: style
+            }
+          }
+
+          finalStyle = style
         }
 
         styles = deep.merge(styles, finalStyle)
