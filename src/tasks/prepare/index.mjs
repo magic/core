@@ -29,9 +29,7 @@ export const prepare = async (app, config) => {
   // collect all page states, actions, effects, helpers and subscriptions
   app.pages.map(page => {
     if (!is.empty(page.state)) {
-      if (!app.state.pages) {
-        app.state.pages = {}
-      }
+      app.state.pages = app.state.pages || {}
       app.state.pages[page.name] = page.state
     }
 
