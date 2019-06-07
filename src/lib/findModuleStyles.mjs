@@ -9,12 +9,12 @@ export const findModuleStyles = (modules, vars, parent) => {
     .sort(([a], [b]) => (a > b ? 1 : -1))
     .forEach(([name, mod]) => {
       if (!is.empty(mod.style)) {
+        let style = mod.style
         if (is.fn(mod.style)) {
-          mod.style = mod.style(vars)
+          style = mod.style(vars)
         }
 
         let selector = `.${name}`
-        let style = mod.style
 
         if (parent) {
           selector = `.${parent}${name}`
