@@ -44,7 +44,7 @@
     "@babel/plugin-transform-react-jsx": "7.3.0",
     "@babel/preset-env": "7.4.5",
     "@magic/cli": "0.0.5",
-    "@magic/css": "0.7.0",
+    "@magic/css": "0.7.1",
     "@magic/deep": "0.1.0",
     "@magic/log": "0.1.0",
     "@magic/types": "0.1.2",
