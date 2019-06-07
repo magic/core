@@ -156,10 +156,17 @@ return { ${imports} }
 
   pageString += '\n}\n'
 
+  let cookieString = ''
+
+  if (!is.empty(magic.cookies)) {
+    cookieString = `cookies: ${stringifyObject(magic.cookies)},`
+  }
+
   const appString = `
 app({
   init: () => actions.gdpr.load({
     ...initialState,
+    ${cookieString}
     url: window.location.pathname,
   }),
   ${subscriptionString}
