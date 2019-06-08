@@ -194,6 +194,7 @@ export const style = (vars = {}) => ({
 
   h3: {
     padding: 0,
+    margin: 0,
   },
 
   '.button': {
