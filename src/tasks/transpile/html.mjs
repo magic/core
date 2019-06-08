@@ -9,7 +9,7 @@ export default (app, hashes) => {
   return app.pages.map(page => {
     try {
       app.state.url = page.name
-      const state = deep.merge(page.state, app.state)
+      const state = deep.merge(app.state, page.state)
 
       const view = app.View(page, hashes)
 
