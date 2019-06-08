@@ -1,19 +1,19 @@
 {
   "css": "sha384-Y4d4slRurtt/QQISYVA5I6raQfBxjPWEktg+Cs+4tFWyZZ97kH9OLEnQlGRXg7bX",
-  "js": "sha384-hXrvSN1IvrZICW6r7dz8VdkceQXV8pc8uLAz4L6qAWFEWy2u0du9U+lAYFH86/Ay",
+  "js": "sha384-WA496neJUSjF2iruPfCLBoBDuN+GYjiTeWPhJhhMMQiCDDlCawMm6Eq3SmNf7afZ",
   "pages": {
-    "/core/": "sha384-3FKwJU4TZ8GJwHf5lg1LTEPqoYQQgb7QgfgZm3YY1a7NiZwdYqBNxfhQ+IRodFFx",
-    "/core/404/": "sha384-1GO0g/BLTknxsY40ywpWL4O782qY1i6evAa1eu78rvSd+KDsUTnjbgaByBAm8Bze",
-    "/core/concepts/": "sha384-S9bI2hMzTCW3tapNiUSH8lTfCA/iTJcB+fO03GQ7gUZwCaY0OHMxwlFCSHLhNrV+",
-    "/core/files/": "sha384-4pBCL1SwPI8Lu0U7Jq2UczdkwmXyBdkY8FjyKymBzB+fqWT27RUPVLyOT58qe5sy",
-    "/core/libraries/": "sha384-fMiNiONzPZBdeZQX4CZ6OvVbLNdIiLKedZeC6x2Q1ghBXqY271XcDbf51qjpvkMp",
-    "/core/modules/": "sha384-/1UnJJG2c1/q4P6jXotKA2+bPZNbXOgxQkvsjTfZJxo6W5fJiFWC3BbrA444VH65",
-    "/core/themes/": "sha384-RKJ0iHtGrRfVBLF8Nihn8dDH287hDvdvNX4thss0a6juY6GvoUK4BL81VSY9H+pn"
+    "/core/": "sha384-l6LcOdIXe+EtWbvJnSqJUwbXWJplhiKzr/ErpwKvVkyzLwKoCwEFmAVLsPL8zzc3",
+    "/core/404/": "sha384-a5WKR7OdCOMWdCQX+6jdBVPwXqGPR4E6UHGDyo/vHYZBmLm1KL1TL5WQQM/JkZI8",
+    "/core/concepts/": "sha384-FSVmKdwU6/Ukrq9aSTSxqZhRnAjHV1wb4pRMm5jqyQ0YZCr/azrYIh4YQZAJi7wZ",
+    "/core/files/": "sha384-siktjyJgPFPKtwdRdMk65BjS7+fAJgnyNnIY5F/hx+SxP8UVv3TgWu9+sWDB7ac3",
+    "/core/libraries/": "sha384-YMD5aCyfLWPxVXTsle+iHrDntvTG//06muhAx6U3qt+i4RKnACZ824p16QiANx2S",
+    "/core/modules/": "sha384-yqhI6mutQ6QncqBr2ZKvT3/Je9SB2pbm9nxuqVUrKXlu6I3L0elVTMa6R9jSszuN",
+    "/core/themes/": "sha384-W/e2J160+KS5QYCq5ciVws3lSPD9XRSfQvn+qPJtgk1G0wfxu8Ttwv6f3gK7dSFV"
   },
   "static": {
     "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+",
     "/logo.png": "sha384-yRxX8nlWNCvk7+PidWDtP1jLxTmtbHm7tCW6TszNfZ7R5DTDMmXyxhKC/JmX3r1u",
     "/robots.txt": "sha384-UJ99rKaWQNOb1b2yL4/2XX6B6Gjr6ZeSk6CJfZ5lw/AUGmwgmUfFx1v0bnK+q/0O",
-    "/sitemap.xml": "sha384-cvWruSAUpzmNTp/xf0Vzqp6XpcdKDQKb+fuGIKbh9evUUZwpVxuLC8+XSrNL1J2x"
+    "/sitemap.xml": "sha384-kL8hO6VgGankYYg8NHKVJuYYiW0QnO2cVrunBTvo3EJYpfTUD5nXXQVeUd1rCOEC"
   }
 }
