@@ -132,14 +132,14 @@ export const actions = {
 export const effects = {
   gdpr: {
     writeLocalStorage: (_, { key, value }) => {
-      window.localStorage = window.localStorage || {}
-      window.localStorage[key] = JSON.stringify(value)
+      const localStorage = window.localStorage || {}
+      localStorage[key] = JSON.stringify(value)
     },
 
     readLocalStorage: (dispatch, { key, action }) => {
-      window.localStorage = window.localStorage || {}
+      const localStorage = window.localStorage || {}
 
-      let value = window.localStorage[key]
+      let value = localStorage[key]
       if (typeof value !== 'undefined') {
         value = JSON.parse(value)
       }
