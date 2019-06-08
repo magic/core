@@ -162,6 +162,12 @@ return { ${imports} }
     cookieString = `cookies: ${stringifyObject(magic.cookies)},`
   }
 
+  const serviceWorkerString = `
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('${config.WEB_ROOT}service-worker.js')
+}
+`
+
   const appString = `
 app({
   init: () => actions.gdpr.load({
@@ -201,6 +207,7 @@ app({
     effectString,
     pageString,
     appString,
+    // serviceWorkerString,
   ]
     .join('\n')
     .trim()

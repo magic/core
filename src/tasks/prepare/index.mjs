@@ -8,6 +8,7 @@ import prepareJs from './js.mjs'
 import preparePages from './pages.mjs'
 import { prepareCss } from './css.mjs'
 import prepareMetaFiles from './meta.mjs'
+import prepareServiceWorker from './service-worker.mjs'
 
 export const prepare = async (app, config) => {
   const { modules, libs } = await prepareGlobals(app, config)
@@ -159,6 +160,8 @@ export const prepare = async (app, config) => {
     .forEach(([name, dep]) => {
       app.lambdas[name.toLowerCase()] = dep.server
     })
+
+    // app.serviceWorker = await prepareServiceWorker(app, config)
 
   return app
 }

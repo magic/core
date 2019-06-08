@@ -20,7 +20,26 @@ const App = async config => {
       state.url = page.name
 
       const shortJsHash = hashes.js.split('-')[1].substr(0, 10)
+      const magicJs = {
+        src: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.js?${shortJsHash}`,
+        integrity: hashes.js,
+        crossorigin: 'anonymous',
+      }
+
       const shortCssHash = hashes.css.split('-')[1].substr(0, 10)
+      const magicCss = {
+        rel: 'stylesheet',
+        href: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.css?${shortCssHash}`,
+        integrity: hashes.css,
+        crossorigin: 'anonymous',
+      }
+
+      // const shortSwHash = hashes.serviceWorker.split('-')[1].substr(0, 10)
+      // const serviceWorker = {
+      //   src: `${config.WEB_ROOT}${config.CLIENT_SERVICE_WORKER_NAME}.js?${shortSwHash}`,
+      //   integrity: hashes.serviceWorker,
+      //   crossorigin: 'anonymous',
+      // }
 
       return [
         h('', { innerHTML: '<!DOCTYPE html>' }),
@@ -42,21 +61,13 @@ const App = async config => {
                 content: is.array(state.keywords) ? state.keywords.join(' ') : state.keywords,
               }),
             !is.empty(state.author) && meta({ name: 'author', content: state.author }),
-            link({
-              rel: 'stylesheet',
-              href: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.css?${shortCssHash}`,
-              integrity: hashes.css,
-              crossorigin: 'anonymous',
-            }),
+            link(magicCss),
             page.Head && page.Head(state),
           ]),
           body([
             Page({ page: page.View, state }),
-            script({
-              src: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.js?${shortJsHash}`,
-              integrity: hashes.js,
-              crossorigin: 'anonymous',
-            }),
+            script(magicJs),
+            // script(serviceWorker),
           ]),
         ]),
       ]

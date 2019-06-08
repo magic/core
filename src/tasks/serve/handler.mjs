@@ -5,7 +5,7 @@ import { addTrailingSlash, getContentType } from '../../lib/index.mjs'
 
 export const handler = app => (req, res) => {
   const { IS_PROD } = config
-  const { css, client, static: stat, lambdas } = app
+  const { css, client, static: stat, lambdas, sw } = app
   const WEB_ROOT = addTrailingSlash(config.WEB_ROOT)
   const url = URL.parse(req.url)
   let { pathname } = url
@@ -57,6 +57,13 @@ export const handler = app => (req, res) => {
     res.end(client)
     return
   }
+
+  // const swUrl = `/${config.CLIENT_SERVICE_WORKER_NAME}.js`
+  // if (rawUrl === swUrl) {
+  //   res.writeHead(200, { ...headers, 'Content-Type': 'application/javascript' })
+  //   res.end(sw)
+  //   return
+  // }
 
   if (stat[rawUrl]) {
     const contentType = getContentType(rawUrl)

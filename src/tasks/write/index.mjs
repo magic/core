@@ -1,13 +1,13 @@
 import path from 'path'
 
 import {
-  //  minifyImages,
-  //  compress,
+  // compress,
+  fs,
+  // getFileType,
+  // minifyImages,
+  mkdirp,
   writeFile,
   writeServer,
-  mkdirp,
-  fs,
-  getFileType,
 } from '../../lib/index.mjs'
 
 export const write = async app => {
@@ -45,14 +45,18 @@ export const write = async app => {
   const jsFile = path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.js`)
   await fs.writeFile(jsFile, client)
 
+  const cssFile = path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.css`)
   const usedCss = IS_PROD ? css.minified : css.css
-  await fs.writeFile(path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.css`), usedCss)
+  await fs.writeFile(cssFile, usedCss)
 
-  if (IS_PROD) {
-    // const comp = await compress()
-    // await comp(zippable, images)
-    // await minifyImages(images)
-  }
+  // const serviceWorkerFile = path.join(config.DIR.PUBLIC, `${config.CLIENT_SERVICE_WORKER_NAME}.js`)
+  // await fs.writeFile(serviceWorkerFile, app.sw)
+
+  // if (IS_PROD) {
+  //   const comp = await compress()
+  //   await comp(zippable, images)
+  //   await minifyImages(images)
+  // }
 
   await writeServer(app)
 }

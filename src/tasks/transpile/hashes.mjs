@@ -2,9 +2,10 @@ import html from './html.mjs'
 import js from './js.mjs'
 import style from './css.mjs'
 import { createFileHash } from '../../lib/index.mjs'
+import hashes from './hashes.mjs'
 
-export const transpile = async (app, config) => {
-  const { bundle, serviceWorker } = await js(app)
+export const transpile = async app => {
+  const bundle = await js(app)
   const css = await style(app.style)
 
   const hashes = {
@@ -12,7 +13,6 @@ export const transpile = async (app, config) => {
     js: createFileHash(bundle.code),
     pages: {},
     static: {},
-    // serviceWorker: createFileHash(serviceWorker.code),
   }
 
   const pages = html(app, hashes)
@@ -38,7 +38,6 @@ export const transpile = async (app, config) => {
     pages,
     bundle,
     css,
-    serviceWorker,
   }
 }
 
