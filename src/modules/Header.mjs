@@ -1,8 +1,8 @@
 export const View = (props = {}, children = []) => {
   CHECK_PROPS(props, propTypes, 'Header')
 
-  const { logo, menu, tagline, logotext, ...state } = props
-  if (!logo && !menu && !tagline) {
+  const { logo, menu, logotext, ...state } = props
+  if (!logo && !menu && !logotext) {
     return
   }
 
