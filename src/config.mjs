@@ -23,6 +23,7 @@ export const runConfig = async () => {
   conf.DIR = conf.DIR || {}
 
   conf.CLIENT_LIB_NAME = conf.CLIENT_LIB_NAME || 'magic'
+  conf.CLIENT_SERVICE_WORKER_NAME = conf.CLIENT_SERVICE_WORKER_NAME || 'service-worker'
 
   conf.HOST = conf.HOST || 'localhost'
   conf.PORT = conf.PORT || 2323
