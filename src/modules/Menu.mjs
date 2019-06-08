@@ -6,11 +6,12 @@ export const View = (props = {}) => {
     return
   }
 
-  if (state.hash) {
-    state.url += `#${state.hash}`
+  let url = state.url || ''
+  if (state.hash && !url.endsWith(state.hash)) {
+    url += `#${state.hash}`
   }
 
-  return nav({ className }, ul(items.map(i => MenuItem({ ...i, state, collapse }))))
+  return nav({ className }, ul(items.map(i => MenuItem({ ...i, url, state, collapse }))))
 }
 
 export const style = {

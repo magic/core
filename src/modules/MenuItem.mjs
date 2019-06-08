@@ -1,7 +1,7 @@
 export const View = props => {
   CHECK_PROPS(props, propTypes, 'MenuItem')
-  const { text, items = [], state, parentTo = undefined, collapse, ...item } = props
-  const { url, root } = state
+  const { text, items = [], url, state, parentTo = undefined, collapse, ...item } = props
+  const { root } = state
   // if the item has no values, we quit
   if (!item.to && !text) {
     return
@@ -31,7 +31,6 @@ export const View = props => {
         const startsLikeParentEnds = parentTo.endsWith(`/${start}/`)
 
         if (!startsLikeParentEnds && isLocal) {
-          console.log({ parentTo, to, startsLikeParentEnds, start })
           to = parentTo + to
         }
       }
@@ -52,7 +51,7 @@ export const View = props => {
 
   let children = []
   if ((items.length && active) || !collapse) {
-    children = ul(items.map(i => MenuItem({ parentTo: item.to, state, collapse, ...i })))
+    children = ul(items.map(i => MenuItem({ parentTo: item.to, url, state, collapse, ...i })))
   }
 
   return li(p, [item.to ? Link(item, text) : span(item, text), children])
