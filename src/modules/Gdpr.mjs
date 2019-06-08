@@ -166,6 +166,7 @@ export const style = (vars = {}) => ({
     backgroundColor: vars.colors.gray[900],
     border: '1px solid',
     borderRadius: '.5em',
+    color: vars.colors.gray[100],
     display: 'inline-block',
     margin: '0 auto',
     padding: '1em',
@@ -173,7 +174,8 @@ export const style = (vars = {}) => ({
     textAlign: 'left',
 
     '.light&&': {
-      backgroundColor: vars.colors.gray[50],
+      backgroundColor: vars.colors.gray[100],
+      color: vars.colors.gray[900],
     },
   },
 
