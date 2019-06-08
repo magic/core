@@ -41,7 +41,7 @@ magic dev --watch src
 const run = async () => {
   const res = cli(args)
 
-  global.config = await runConfig()
+  const config = await runConfig()
 
   if (!global.CHECK_PROPS) {
     const { CHECK_PROPS } = await import('../lib/CHECK_PROPS.mjs')

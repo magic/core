@@ -15,15 +15,15 @@ export const master = async (cluster, cmds, argv, config) => {
   }
 
   if (cmds.clean) {
-    await runCmd('clean')
+    await runCmd('clean', config)
   }
 
   if (cmds.connect) {
-    await runCmd('connect')
+    await runCmd('connect', config)
   }
 
   if (cmds.publish) {
-    await runCmd('publish')
+    await runCmd('publish', config)
   }
 
   const bail = !cmds.build && !cmds.serve

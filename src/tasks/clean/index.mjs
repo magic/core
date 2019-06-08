@@ -3,7 +3,7 @@ import log from '@magic/log'
 import path from 'path'
 import { rmrf, isLocalPath } from '../../lib/index.mjs'
 
-export const clean = async () => {
+export const clean = async config => {
   const dir = config.DIR.PUBLIC
 
   if (is.string(dir) && !is.empty(dir)) {
