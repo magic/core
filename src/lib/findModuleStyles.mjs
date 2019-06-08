@@ -10,7 +10,7 @@ export const findModuleStyles = (modules, vars, parent) => {
     .forEach(([name, mod]) => {
       if (!is.empty(mod.style)) {
         let style = mod.style
-        if (is.fn(mod.style)) {
+        if (is.function(mod.style)) {
           style = mod.style(vars)
         }
 
@@ -24,6 +24,18 @@ export const findModuleStyles = (modules, vars, parent) => {
         if (!style[selector]) {
           const modStyle = {}
           const metaStyle = {}
+
+          if (is.array(style)) {
+            let s = {}
+            style.forEach(item => {
+              if (is.fn(item)) {
+                item = item(vars)
+              }
+
+              s = deep.merge(s, item)
+            })
+            style = s
+          }
 
           Object.entries(style)
             .sort(([a], [b]) => (a > b ? 1 : -1))
