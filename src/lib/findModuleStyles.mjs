@@ -65,7 +65,7 @@ export const findModuleStyles = (modules, vars, parent) => {
         } else {
           if (!style[selector]) {
             style = {
-              [selector]: style
+              [selector]: style,
             }
           }
 

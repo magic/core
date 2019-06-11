@@ -7,7 +7,7 @@ export const build = async (cmds, config) => {
   const App = await runApp(config)
   const app = await runCmd('prepare', App, config)
 
-  const { bundle, css, pages/*, serviceWorker */ } = await runCmd('transpile', app, config)
+  const { bundle, css, pages /*, serviceWorker */ } = await runCmd('transpile', app, config)
   app.pages = pages
   app.css = css
   app.client = bundle.code

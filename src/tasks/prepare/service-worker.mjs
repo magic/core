@@ -3,7 +3,7 @@ import { createFileHash } from '../../lib/index.mjs'
 export const prepareServiceWorker = async (app, config) => {
   const staticFiles = Object.keys(app.static)
     .filter(f => !f.endsWith('sitemap.xml') || !f.endsWith('robots.txt'))
-    .map(file =>  `'${config.WEB_ROOT}${file}',`.replace(/\/\//g, '/'))
+    .map(file => `'${config.WEB_ROOT}${file}',`.replace(/\/\//g, '/'))
 
   const cacheFileString = `[
     '${config.WEB_ROOT}',

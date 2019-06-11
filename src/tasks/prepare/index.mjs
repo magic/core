@@ -161,7 +161,7 @@ export const prepare = async (app, config) => {
       app.lambdas[name.toLowerCase()] = dep.server
     })
 
-    // app.serviceWorker = await prepareServiceWorker(app, config)
+  // app.serviceWorker = await prepareServiceWorker(app, config)
 
   return app
 }
