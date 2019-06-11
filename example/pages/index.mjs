@@ -42,7 +42,7 @@ export const View = state => [
     p([
       'most of the functionality works without javascript,',
       " some buttons and realtime user interactions obviously won't,",
-      ' but @magic always tries to provide a non-javascript fallback via css.'
+      ' but @magic always tries to provide a non-javascript fallback via css.',
     ]),
 
     h3('@magic generates static pages'),
