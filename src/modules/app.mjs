@@ -47,6 +47,7 @@ const App = async config => {
           head([
             meta({ charset: 'utf-8' }),
             link({ rel: 'icon', href: '/favicon.ico' }),
+            link(magicCss),
             !is.empty(state.title) && title(state.title),
             !is.empty(state.description) &&
               meta({
@@ -61,7 +62,6 @@ const App = async config => {
                 content: is.array(state.keywords) ? state.keywords.join(' ') : state.keywords,
               }),
             !is.empty(state.author) && meta({ name: 'author', content: state.author }),
-            link(magicCss),
             page.Head && page.Head(state),
           ]),
           body([
