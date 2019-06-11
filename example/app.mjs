@@ -8,35 +8,14 @@ export const state = {
       to: '/concepts/',
       text: 'concepts',
       items: [
-        { to: '/concepts/#modules', text: 'modules' },
-        {
-          to: '#state',
-          text: 'state',
-        },
-        {
-          to: '#actions',
-          text: 'actions',
-        },
-        {
-          to: '#views',
-          text: 'views',
-        },
-        {
-          to: '#styles',
-          text: 'styles',
-        },
-        {
-          to: '#globals',
-          text: 'global',
-        },
-        {
-          to: '#lambdas',
-          text: 'server lambdas',
-        },
-        {
-          to: '#libs',
-          text: 'external libs',
-        },
+        { to: '#modules', text: 'modules' },
+        { to: '#state', text: 'state' },
+        { to: '#actions', text: 'actions' },
+        { to: '#views', text: 'views' },
+        { to: '#styles', text: 'styles' },
+        { to: '#globals', text: 'global' },
+        { to: '#lambdas', text: 'server lambdas' },
+        { to: '#libs', text: 'external libs' },
       ],
     },
     {
@@ -85,16 +64,23 @@ export const state = {
       items: [
         { to: '#definition', text: 'definition' },
         { to: '#usage', text: 'usage' },
-        { to: '#custom-module', text: 'custom modules' },
-        { to: '#preinstalled', text: 'preinstalled' },
-        {
-          to: '#menu',
-          text: 'menu',
-          items: [{ to: '-props', text: 'props' }, { to: '-sub-menus', text: 'sub menus' }],
-        },
-        { to: '#link', text: 'link' },
-        { to: '#footer', text: 'footer' },
         { to: '#gl-magic-modules', text: '@magic-modules' },
+        { to: '/example/', text: 'custom modules' },
+        {
+          to: '/preinstalled/',
+          text: 'preinstalled',
+          items: [
+            {
+              to: '#menu',
+              text: 'menu',
+              items: [{ to: '-props', text: 'props' }, { to: '-sub-menus', text: 'sub menus' }],
+            },
+            { to: '#link', text: 'link' },
+            { to: '#img', text: 'img' },
+            { to: '#footer', text: 'footer' },
+            { to: '#gdpr', text: 'gdpr' },
+          ],
+        },
       ],
     },
     {
