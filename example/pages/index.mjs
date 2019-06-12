@@ -25,10 +25,11 @@ export const View = state => [
     ]),
 
     h2({ id: 'privacy' }, 'privacy'),
+    p('@magic does not spy.'),
     p([
-      "@magic does not spy on it's users.",
-      ' we not only try to be legally compliant,',
-      ' but to be ethical and do the right thing for all users of the web.',
+      'not only do we try to be legally compliant by default,',
+      ' but we also aim to be ethical',
+      ' and do the right thing for you AND the users of your homepage.',
     ]),
 
     h2({ id: 'buzzwords' }, 'why should i use magic?'),
