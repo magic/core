@@ -1,6 +1,10 @@
 export const state = {
   title: '@magic/core docs',
-  description: '@magic/core documentation directory.',
+  description: [
+    '@magic/core documentation.',
+    'tells you why, how and when to use @magic.',
+    'also provides an overview of all @magic functionality this ecosystem provides.',
+  ],
 }
 
 export const View = state => [

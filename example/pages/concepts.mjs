@@ -1,6 +1,9 @@
 export const state = {
   title: '@magic/core concepts',
-  description: '@magic/core conceptual information.',
+  description: [
+    '@magic/core conceptual information.',
+    'explains the main concepts that make the @magic work.',
+  ],
 }
 
 export const View = state => [

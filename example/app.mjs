@@ -1,15 +1,14 @@
 export const state = config => ({
-  app: {
-    title: 'Custom App Title',
-    description: 'Custom App Description',
-    seo: {
-      name: '@magic/core documentation',
-      url: `https://${config.URL}`,
-      about: '@magic/core javascript library',
-      author: {
-        name: 'Jascha Ehrenreich',
-        jobTitle: 'Technomancer',
-      },
+  seo: {
+    name: '@magic/core documentation',
+    url: `https://${config.URL}`,
+    // about: '@magic/core javascript library',
+    image: `${config.WEB_ROOT}logo.png`,
+     author: {
+      '@type': 'person',
+      name: 'Jascha Ehrenreich',
+      jobTitle: 'Technomancer',
+      image: 'https:/jaeh.at/img/jascha.ehrenreich.jpg',
     },
   },
 
