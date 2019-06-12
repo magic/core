@@ -91,7 +91,7 @@ export const actions = {
 
     load: state => [
       state,
-      [effects.gdpr.readLocalStorage, { key: 'gdpr', action: actions.gdpr.show }],
+      [effects.gdpr.readLocalStorage, { key: 'magic-gdpr', action: actions.gdpr.show }],
     ],
 
     close: (state, { allowed }) => {
@@ -116,7 +116,7 @@ export const actions = {
         },
         [
           effects.gdpr.writeLocalStorage,
-          { key: 'gdpr', value: { cookies: state.cookies || [], show: false } },
+          { key: 'magic-gdpr', value: { cookies: state.cookies || [], show: false } },
         ],
       ]
     },
