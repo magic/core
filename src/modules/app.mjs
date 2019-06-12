@@ -46,22 +46,8 @@ const App = async config => {
         html({ lang: state.lang || LANG }, [
           head([
             meta({ charset: 'utf-8' }),
-            link({ rel: 'icon', href: '/favicon.ico' }),
             link(magicCss),
-            !is.empty(state.title) && title(state.title),
-            !is.empty(state.description) &&
-              meta({
-                name: 'description',
-                content: is.array(state.description)
-                  ? state.description.join(' ')
-                  : state.description,
-              }),
-            !is.empty(state.keywords) &&
-              meta({
-                name: 'keywords',
-                content: is.array(state.keywords) ? state.keywords.join(' ') : state.keywords,
-              }),
-            !is.empty(state.author) && meta({ name: 'author', content: state.author }),
+            Seo(state),
             page.Head && page.Head(state),
           ]),
           body([
@@ -84,14 +70,16 @@ const App = async config => {
         state = def.state(config)
       }
 
-      app = deep.merge(app, { ...def, state })
+      const { seo, ...s } = state
+      app = deep.merge(app, { ...def, state: s })
     } else {
       let state = maybeApp.state
       if (is.fn(maybeApp.state)) {
         state = maybeApp.state(config)
       }
 
-      app = deep.merge(app, { ...maybeApp, state })
+      const { seo, ...s } = state
+      app = deep.merge(app, { ...maybeApp, state: s })
     }
   } catch (e) {
     // happy without maybApp

@@ -6,6 +6,7 @@ import * as Header from './Header.mjs'
 import * as Img from './Img.mjs'
 import * as Route from './Route.mjs'
 import * as Gdpr from './Gdpr.mjs'
+import * as Seo from './Seo.mjs'
 
 export { component } from './component.mjs'
 
@@ -25,4 +26,5 @@ export const builtins = {
   Link,
   Route,
   Gdpr,
+  Seo,
 }
