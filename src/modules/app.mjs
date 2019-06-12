@@ -79,17 +79,19 @@ const App = async config => {
     const { default: def, ...maybeApp } = await import(maybeAppFile)
 
     if (def) {
+      let state = def.state
       if (is.fn(def.state)) {
-        def.state = def.state(config)
+        state = def.state(config)
       }
 
-      app = deep.merge(app, { ...def })
+      app = deep.merge(app, { ...def, state })
     } else {
+      let state = maybeApp.state
       if (is.fn(maybeApp.state)) {
-        maybeApp.state = maybeApp.state(config)
+        state = maybeApp.state(config)
       }
 
-      app = deep.merge(app, { ...maybeApp })
+      app = deep.merge(app, { ...maybeApp, state })
     }
   } catch (e) {
     // happy without maybApp
