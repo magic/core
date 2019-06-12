@@ -29,6 +29,8 @@ input[type="file"] > input[type="button"]`
 export const reset = (vars = {}) => ({
   html: {
     scrollBehavior: 'smooth',
+    // always show scrollbar to prevent layout glitch if page resizes
+    overflowY: 'scroll',
   },
 
   [all]: {
@@ -49,8 +51,8 @@ export const reset = (vars = {}) => ({
     lineHeight: 1.5,
     margin: 0,
     padding: 0,
-    // always show scrollbar to prevent layout glitch if page resizes
-    overflowY: 'scroll',
+    maxWidth: '100vw',
+    overflowX: 'hidden',
   },
   'ol, ul': {
     listStyle: 'none',
