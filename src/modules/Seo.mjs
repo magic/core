@@ -1,13 +1,13 @@
 export const View = state => {
   const { seo = {} } = state
   const { author, type = 'website', context = 'http://schema.org', name = state.title } = seo
-  const description = Array.isArray(state.description) ? state.description.join(' ') : state.description
+  const description = Array.isArray(state.description)
+    ? state.description.join(' ')
+    : state.description
   const keywords = Array.isArray(state.keywords) ? state.keywords.join(' ') : state.keywords
 
   const favicon = state.favicon || `${config.WEB_ROOT}favicon.ico`
-  const head = [
-    link({ rel: 'icon', href: favicon }),
-  ]
+  const head = [link({ rel: 'icon', href: favicon })]
 
   const pageTitle = state.title || seo.name
 
@@ -16,22 +16,26 @@ export const View = state => {
   }
 
   if (description) {
-    head.push(meta({
-      name: 'description',
-      content: description,
-    }))
+    head.push(
+      meta({
+        name: 'description',
+        content: description,
+      }),
+    )
   }
 
   if (keywords) {
-    head.push(meta({
-      name: 'keywords',
-      content: keywords,
-    }))
+    head.push(
+      meta({
+        name: 'keywords',
+        content: keywords,
+      }),
+    )
   }
 
   if (author) {
     let authorName = ''
-    if(author.name) {
+    if (author.name) {
       authorName = state.seo.author.name
     } else if (author.givenName) {
       authorName = author.givenName
