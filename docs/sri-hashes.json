@@ -1,17 +1,17 @@
 {
   "css": "sha384-JiP5GkWo0lE2N6+4FWGQoHIlc3Vqha23IZsBih9jmA1WRQM3RYF3p9loaD4ZjQ5M",
-  "js": "sha384-S3Bsn/upB6O02EI2x2t/G66Kf8T2AI1mTEZKYcBFtlkwLqZJnyGXltHoHHHzWzsk",
+  "js": "sha384-yekLvXTfooSimISkQSbagfBLoEy9yldEv+BRn1PLkceQktjFNbAdiNKBUbpI/GIi",
   "pages": {
-    "/core/": "sha384-FtLLEwoOhN5RJmmyk+A7ozE6FF54TKBcINWRe1uR2IpenQfjiTsHBHQLg8VjLBjy",
-    "/core/404/": "sha384-lufCaNZJdEMaZ8PPxHeFdP98qEv+R94/MScwWOE+GCo75clO40AYyRWaiK1ZC4D9",
-    "/core/concepts/": "sha384-BLnZIQfTtEPVFkasItVurorGRDku3iK41JyPxYN+5s0lVgnTHAFYJoOmS3e80k1x",
-    "/core/files/": "sha384-E4U4jtNStSP9RMTCiDpAqGn8b3++tvr1JlLMYhouXv0bzfCfo/+ZjPd+yNDSnYij",
-    "/core/libraries/": "sha384-CJtDfl5KPoyOjddLOOZYPpIyrT0T5QXc2Q+Z+iOPh58FSKTnpkdH88Xw6tiAMPQI",
-    "/core/modules/": "sha384-CJE/JllQXXsMjOQEy5iRYRtbGzPf15+gapEaGRJ1Ult/yixRKydYCmUP0/Lt2Lc7",
-    "/core/modules/example/": "sha384-jrOSrRgU6UtdiGAW8EJ6RbNuA2AgB6aVyaLeufFLJbuDbVOjXe8wlnXmOVI3ESBU",
-    "/core/modules/preinstalled/": "sha384-ir6SYWuyivmYpr6X80wbO7MDirujtgku+nZkWnXkqJiT18sXbpFozJq52JCYtuMg",
-    "/core/modules/propTypes/": "sha384-6Q4LOrd0aHOeWlE+MM7lOoWogiSLaIcGU4Q5HCyIyWJ94A+N8uM6bDI8fM674cUl",
-    "/core/themes/": "sha384-BXvxPMzP+HnRvhXu8kyKI2YOwS6/EYdoRWvGaKNh5+8yW7P/zC6BB/1Ta3CT7xWV"
+    "/core/": "sha384-vtfdC6OiMJ1SoqKCyVzrLXA9WARSDqNvBjWyEezw/3SvdEDUVK9izGYDveR/rbP2",
+    "/core/404/": "sha384-WzYXgwtEem3A+APQym+6R591bXQV8ux4evpLAekxU/WUvyMiptQNSGCsvHcWeX1d",
+    "/core/concepts/": "sha384-YHdZKOvLVURQKMhn7MU1k/hFXdLcTWnVBdGESnyLbeiBZhgxCzKZZOD1uhXWqjas",
+    "/core/files/": "sha384-u2y2HSFp2l0tDta4VuDh46PGMCYiGGOR0E4cbmTUPxAO6iGbDFVKTE/+wh05XJWY",
+    "/core/libraries/": "sha384-hrrOtgMO9zsKAfzU1lVI1OLxJuDqPub4X5j7xcaBurEy81QeX/LLorh9LlLDSGdb",
+    "/core/modules/": "sha384-MdAKYpwkhMg6jW7ssZ7pWswwVlrZ25I+rMUgTs6EY5KWpTKZ2uuD4C35VJZnXHx1",
+    "/core/modules/example/": "sha384-h/OnfVB92QrL+G+/ubGbjdgDHwfWvARm1BeuCC0LvP8adi8cvUQKz90901/k8p6a",
+    "/core/modules/preinstalled/": "sha384-L0T08QF4ypnXMJ4zAO8UixbXI2HfYDh5b/XdQmjmMizfYdtK/SxGABgGjdw0tPoA",
+    "/core/modules/propTypes/": "sha384-xXD56Zb4mbuJw8GoFtgipV9+8WWDNKN7RxhTxCVF3EMpyZac3dJ3BSoApEX1PA1c",
+    "/core/themes/": "sha384-fSc3utjh5/CylYrBNAeyQAgYZdkoTFPV3MoAX/rNAcptye2y6xIBwOg5Sy001EET"
   },
   "static": {
     "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+",
