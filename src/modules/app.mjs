@@ -79,8 +79,16 @@ const App = async config => {
     const { default: def, ...maybeApp } = await import(maybeAppFile)
 
     if (def) {
+      if (is.fn(def.state)) {
+        def.state = def.state(config)
+      }
+
       app = deep.merge(app, { ...def })
     } else {
+      if (is.fn(maybeApp.state)) {
+        maybeApp.state = maybeApp.state(config)
+      }
+
       app = deep.merge(app, { ...maybeApp })
     }
   } catch (e) {
