@@ -27,6 +27,10 @@ input[type="file"] > input[type="button"]`
 // all other styles will be added as keys onto this map,
 // which means that order should be preserved
 export const reset = (vars = {}) => ({
+  html: {
+    scrollBehavior: 'smooth',
+  },
+
   [all]: {
     margin: 0,
     padding: 0,
