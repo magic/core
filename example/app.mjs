@@ -1,8 +1,18 @@
-export const state = {
+export const state = config => ({
   app: {
     title: 'Custom App Title',
     description: 'Custom App Description',
+    seo: {
+      name: '@magic/core documentation',
+      url: `https://${config.URL}`,
+      about: '@magic/core javascript library',
+      author: {
+        name: 'Jascha Ehrenreich',
+        jobTitle: 'Technomancer',
+      },
+    },
   },
+
   menu: [
     {
       to: '/concepts/',
@@ -96,4 +106,4 @@ export const state = {
   ],
   logo: '/logo.png',
   logotext: '@magic',
-}
+})
