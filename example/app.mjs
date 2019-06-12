@@ -4,7 +4,7 @@ export const state = config => ({
     url: `https://${config.URL}`,
     // about: '@magic/core javascript library',
     image: `${config.WEB_ROOT}logo.png`,
-     author: {
+    author: {
       '@type': 'person',
       name: 'Jascha Ehrenreich',
       jobTitle: 'Technomancer',
