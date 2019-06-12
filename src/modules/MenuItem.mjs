@@ -37,6 +37,10 @@ export const View = props => {
     }
   }
 
+  if ((item.to !== '/' && url.endsWith(item.to)) || item.to === url) {
+    p.class.active = true
+  }
+
   const isRooted = to.startsWith(root)
   if (root && isLocal && !isRooted) {
     to = root + to
@@ -44,12 +48,8 @@ export const View = props => {
 
   item.to = to.replace(/\/\//g, '/')
 
-  const active = url && url.includes(item.to)
-  if (url.endsWith(item.to)) {
-    p.class.active = true
-  }
-
   let children = []
+  const active = url && url.includes(item.to)
   if ((items.length && active) || !collapse) {
     children = ul(items.map(i => MenuItem({ parentTo: item.to, url, state, collapse, ...i })))
   }
