@@ -29,18 +29,32 @@ export const View = state => [
     p([
       'not only do we try to be legally compliant by default,',
       ' but we also aim to be ethical',
-      ' and do the right thing for you AND the users of your homepage.',
+      ' which means prioritizing your rights over our needs,',
+      ' but also means we prioritize the rights of your users over your needs.',
+      ' we believe that this is the best compromise.',
     ]),
 
     h2({ id: 'buzzwords' }, 'why should i use magic?'),
+
+    h3('features'),
+    ul([
+      li('static html pages with opengraph seo.'),
+      li('pages are hosted for free using gitlab, github or any other git-pages style hosting.'),
+      li('static css output with selector and rule deduplication.'),
+      li('no javascript required where possible.'),
+      li('minimal client boilerplate.'),
+      li('no spyware included.'),
+      li('WIP: lambda faas and graphql api generator.'),
+      li('WIP: server side rendering (if needed).'),
+    ]),
 
     h3('@magic is tiny'),
     p([
       '~4 kb javascript boilerplate.',
       ' usually, all the javascript in your homepage will be 30-60kb big (after unpacking),',
       ' 10-30kb get transmitted from the server to the client.',
-      ' this complete documentation page you are reading with all sub pages loads about 40kb of unpacked,',
-      ' 15kb of gzipped javascript.',
+      ' this documentation page you are reading loads about 15kb of javascript,',
+      ' which, when parsing, turns into 40kb of uncompressed javascript.',
     ]),
 
     h3('@magic works without javascript'),
