@@ -3,7 +3,7 @@ import log from '@magic/log'
 import { getGitConfig, xc } from '../../lib/index.mjs'
 
 export const publish = async config => {
-  const git = await getGitConfig()
+  const git = await getGitConfig(config)
   const outDir = config.DIR.PUBLIC.replace(`${process.cwd()}/`, '')
 
   const cmdPrefix = `--prefix=${outDir}`

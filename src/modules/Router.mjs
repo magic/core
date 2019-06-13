@@ -61,7 +61,7 @@ export const actions = {
     if (hash) {
       window.location.hash = hash
     } else {
-      window.scrollTo(0, 0)
+      window.scroll(0, 0)
     }
 
     return {
@@ -85,18 +85,10 @@ export const actions = {
 
     window.history.pushState({ url, hash }, '', to)
 
-    if (hash) {
-      // window.scrollTo without window.location.hash will not work
-      // :target css pseudoclasses won't work without
-      // resetting the hash here
-      const t = document.getElementById(hash)
-      if (t) {
-        window.scrollTo(0, t.scrollTop)
-      }
-      window.location.hash = hash
+    if (!hash) {
+      window.scroll(0, 0)
     } else {
-      // we want to scroll to the top if there is no hash
-      window.scrollTo(0, 0)
+      window.location.hash = hash
     }
 
     return {
