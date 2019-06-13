@@ -2,7 +2,7 @@ import log from '@magic/log'
 
 import { xc } from '../lib/xc.mjs'
 
-export const getGitConfig = async config => {
+export const getGitConfig = async (config = {}) => {
   if (config.GIT && config.GIT.ORIGIN) {
     if (!config.GIT.BRANCH) {
       config.GIT.BRANCH = 'gh-pages'

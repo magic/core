@@ -4,7 +4,7 @@ import log from '@magic/log'
 import { getGitConfig, xc } from '../../lib/index.mjs'
 
 export const connect = async config => {
-  const git = await getGitConfig()
+  const git = await getGitConfig(config)
 
   // const outDir = OUT_DIR.replace(`${process.cwd()}/`, '')
   const dir = config.DIR.PUBLIC.replace(`${process.cwd()}/`, '')
