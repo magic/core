@@ -1,1 +1,0 @@
-export { Lazy } from 'hyperapp'

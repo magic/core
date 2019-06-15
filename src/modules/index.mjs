@@ -10,8 +10,6 @@ import * as Seo from './Seo.mjs'
 
 export { component } from './component.mjs'
 
-export { Lazy } from './Lazy.mjs'
-
 export { tags } from './tags.mjs'
 
 const { Link, ...Page } = Router
