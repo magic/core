@@ -42,14 +42,12 @@ export const getDirectories = async (directories, recurse = true) => {
   }
 
   try {
-    let flattened = [directories]
+    const flattened = [directories]
     const dirContent = await fs.readdir(directories)
     const dirs = await Promise.all(
       dirContent.map(async file => await getFilePath(directories, file, recurse)),
     )
-    flattened = deep.flatten(flattened, dirs)
-
-    return flattened.filter(a => a)
+    return deep.flatten(flattened, dirs).filter(a => a)
   } catch (e) {
     if (e.code === 'ENOENT') {
       return []
