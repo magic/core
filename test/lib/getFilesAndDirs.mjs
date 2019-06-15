@@ -1,7 +1,7 @@
 import path from 'path'
 // import URL from 'url'
 
-import { is } from '@magic/test'
+import { is, tryCatch } from '@magic/test'
 
 import { fs, mkdirp, rmrf, getFiles, getDirectories } from '../../src/lib/index.mjs'
 
@@ -39,5 +39,26 @@ export default [
     before: before(2),
     expect: is.length.equal(5),
     info: 'finds all directories in directory. recursively',
+  },
+  {
+    fn: async () => await getDirectories([`${dirName}3`]),
+    before: before(3),
+    expect: is.length.equal(5),
+    info: 'finds all directories in directory. recursively',
+  },
+  {
+    fn: async () => await getDirectories('non_existing_path'),
+    expect: is.array,
+    info: 'returns empty array if given invalid path',
+  },
+  {
+    fn: async () => await getDirectories(['non_existing_path']),
+    expect: is.length.equal(0),
+    info: 'returns empty array if given invalid path',
+  },
+  {
+    fn: tryCatch(getDirectories, [0]),
+    expect: is.error,
+    info: 'returns empty array if given invalid path',
   },
 ]
