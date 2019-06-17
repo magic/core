@@ -134,9 +134,6 @@ export default {
     h3({ id: 'config-example' }, 'example /config.js'),
     Pre(examples.config),
 
-    h2({ id: 'menu' }, '/assets/Menu.js'),
-    p('the /assets/Menu.js file allows you to replace the default Menu component'),
-    h3({ id: 'menu-example' }, 'example /assets/Menu.js'),
     Link(
       { to: 'https://github.com/magic/core/blob/master/src/modules/Menu.js' },
       'Menu.js on github',

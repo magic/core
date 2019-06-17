@@ -60,11 +60,6 @@ export const state = config => ({
           text: '/config.js',
           items: [{ to: '-example', text: 'example' }],
         },
-        {
-          to: '#menu',
-          text: '/assets/Menu.js',
-          items: [{ to: '-example', text: 'example' }],
-        },
       ],
     },
     {
