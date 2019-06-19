@@ -11,8 +11,6 @@ export const View = state => {
 
   const pageTitle = state.title || seo.name
 
-  const mastodon = state.mastodon || ''
-
   if (pageTitle) {
     head.push(title(pageTitle))
   }
@@ -33,10 +31,6 @@ export const View = state => {
         content: keywords,
       }),
     )
-  }
-
-  if (mastodon.length) {
-    head.push(a({ rel: 'me', to: mastodon }, 'Mastodon'))
   }
 
   if (author) {
