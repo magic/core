@@ -35,7 +35,7 @@ export const actions = {
 
   Pre(`
 export const View = state => {
-  const items: [
+  const items = [
     { to: '/example-page', text: 'example page' },
     { to: 'https://example.com', text: 'example.com' },
     { to: 'https://example.com', nofollow: true, noreferrer: true, target: 'utopia', text: 'nofollow and noref" },

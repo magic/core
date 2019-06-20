@@ -2,6 +2,7 @@ export const View = props => {
   CHECK_PROPS(props, propTypes, 'MenuItem')
   const { text, items = [], url, state, parentTo = undefined, collapse, ...item } = props
   const { root } = state
+
   // if the item has no values, we quit
   if (!item.to && !text) {
     return
@@ -21,9 +22,7 @@ export const View = props => {
   const isLocal = first === '/' || first === '-' || first === '#'
 
   if (parentTo && isLocal) {
-    if (first === '-') {
-      to = parentTo + to
-    } else if (first === '#') {
+    if (first === '-' || first === '#') {
       to = parentTo + to
     } else {
       const start = to.split('/')[1]
