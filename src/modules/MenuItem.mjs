@@ -1,5 +1,5 @@
 export const View = props => {
-  CHECK_PROPS(props, propTypes, 'MenuItem')
+  CHECK_PROPS(props, propTypes, 'MenuItem', true)
   const { text, items = [], url, state, parentTo = undefined, collapse, ...item } = props
   const { root } = state
 
@@ -60,7 +60,14 @@ export const propTypes = {
   MenuItem: [
     { key: 'url', type: 'string' },
     { key: 'text', type: ['string', 'array'] },
-    { key: 'items', type: 'array' },
+    {
+      key: 'items',
+      type: 'array',
+      item: {
+        type: 'object',
+        keys: [{ key: 'to', type: 'string' }, { key: 'text', type: 'string' }],
+      },
+    },
     { key: 'parentTo', type: 'string' },
     { key: 'collapse', type: 'boolean' },
     { key: 'to', type: 'string' },
