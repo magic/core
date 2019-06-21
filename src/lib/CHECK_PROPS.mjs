@@ -1,13 +1,16 @@
 export const CHECK_PROPS = (props, propTypeDecl, name) => {
+  const currentPage = app.state.url.replace(config.WEB_ROOT, '/')
+
   if (!name) {
     const err = new Error()
-    console.error('CHECK_PROPS: expected Module name as third argument', err.stack)
+    console.error(`CHECK_PROPS: expected Module name as third argument ${err.stack} on page ${currentPage}`)
     return
   }
 
+
   if (!propTypeDecl) {
     const err = new Error()
-    console.error('CHECK_PROPS: expected propTypes as second argument', err.stack)
+    console.error(`CHECK_PROPS: expected propTypes as second argument ${err.stack} on page ${currentPage}`)
     return
   }
 
@@ -28,7 +31,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
   let propTypes = propTypeDecl[name]
 
   if (!is.array(propTypes)) {
-    console.error('invalid propTypes received from:', name, propTypes)
+    console.error(`CHECK_PROPS: expected propTypes to be an array. received: ${propTypes} on page ${currentPage} in component ${name}`)
     return
   }
 
@@ -62,9 +65,10 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
       }
     }
 
+    const typeInfo = types.length > 1 ? 'one of' : 'a'
+    const typeString = types.length > 1 ? `["${types.join(', "')}"]` : types[0]
+
     if (!is(value, ...types)) {
-      const typeInfo = types.length > 1 ? 'one of' : 'a'
-      const typeString = types.length > 1 ? `["${types.join(', "')}"]` : types[0]
       console.error(
         `${name} needs props.${key} to be ${typeInfo} ${typeString}. received ${typeof value}`,
       )
@@ -82,6 +86,38 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
         }
         console.error(`${name} needs props.${key} to be a non empty ${typeString}`)
       }
+    }
+
+    if (type === 'array' && propType.item && value) {
+      const { item } = propType
+
+      if (!is(value, 'array')) {
+        console.error(`${name} needs props.${key} to be an array. received ${typeof value}`)
+      }
+
+      value.forEach(val => {
+        const typeInfo = is(item.type, 'array') && item.type.length > 1 ? 'one of' : 'a'
+        const typeString = is(item.type, 'array') ? item.type.length > 1 ? `["${item.type.join(', "')}"]` : item.type[0] : item.type
+
+        if (!is(val, item.type)) {
+          console.error(`${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}`)
+        }
+
+        if (item.type === 'object') {
+          item.keys.forEach(iKey => {
+            const v = val[iKey.key]
+            if (!is(v, iKey.type)) {
+              const typeInfo = is(iKey.type, 'array') && iKey.type.length > 1 ? 'one of' : 'a'
+              const typeString = Array.isArray(iKey.type) ? iKey.type.length > 1 ? `["${iKey.type.join(', "')}"]` : iKey.type[0] : iKey.type
+
+              console.error(`${name} expects item.${iKey.key} to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`)
+            }
+          })
+        } else if (!is(val, item.type)) {
+          console.error(`${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}, on page ${currentPage}`)
+        }
+        // console.log({val, item: propType.item})
+      })
     }
   })
 
