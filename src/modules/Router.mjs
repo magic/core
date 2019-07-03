@@ -22,7 +22,7 @@ export const View = ({ page, state }) => {
 }
 
 export const Link = ({ to, ...p }, children) => {
-  const { href, text, nofollow, noreferrer, onclick = false, ...props } = p
+  const { href, text, nofollow, noreferrer, ...props } = p
   to = to || href || ''
   props.href = to
 
