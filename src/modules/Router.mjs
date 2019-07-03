@@ -12,12 +12,6 @@ export const View = ({ page, state }) => {
     },
   }
 
-  const props = {
-    class: {
-      Page: true,
-    },
-  }
-
   return main(magicProps, div(wrapperProps, Route({ state, page })))
 }
 
