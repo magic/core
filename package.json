@@ -21,7 +21,9 @@
     "dev": "node src/bin/bin.js dev --watch src",
     "format": "f -w --exclude docs",
     "test": "t",
-    "calls": "calls"
+    "calls": "calls",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "bin": {
     "magic": "src/bin/bin.js"
@@ -51,7 +53,8 @@
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.0",
     "hyperapp": "github:magic/hyperapp",
-    "hyperapp-render": "3.1.0"
+    "hyperapp-render": "3.1.0",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@magic-modules/git-badges": "github:magic-modules/git-badges",
@@ -103,5 +106,6 @@
       "name": "alexander weiss",
       "github": "ylem235"
     }
-  ]
+  ],
+  "snyk": true
 }
