@@ -1,9 +1,25 @@
 import path from 'path'
 import { is } from '@magic/test'
-// import { runConfig } from '../src/config.mjs'
+import { runConfig } from '../src/config.mjs'
+
+let config
+
+const before = async () => {
+  config = await runConfig()
+}
 
 export default [
-  // { fn: config, expect: is.object, info: 'config is an object' },
+  { before, fn: () => config, expect: is.object, info: 'config is an object' },
+  { before, fn: () => config.THEME, expect: is.string, info: 'config.THEME is a string' },
+  { before, fn: () => config.ENV, expect: is.string, info: 'config.ENV is a string' },
+  { before, fn: () => config.WEB_ROOT, expect: is.string, info: 'config.WEB_ROOT is a string' },
+  { before, fn: () => config.WEB_ROOT, expect: '/core/', info: 'config.WEB_ROOT equals /core/' },
+  {
+    before,
+    fn: () => config.URL,
+    expect: 'magic.github.io/core',
+    info: 'config.URL equals magic.github.io/core',
+  },
   // { fn: config.ROOT, expect: is.string, info: 'config.ROOT is a string' },
   // {
   //   fn: config.ROOT,
