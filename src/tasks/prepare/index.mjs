@@ -69,7 +69,7 @@ export const prepare = async (app, config) => {
     await fs.stat(config.DIR.STATIC)
     exists = true
   } catch (e) {
-    if (e !== 'ENOENT') {
+    if (e.code !== 'ENOENT') {
       throw e
     }
   }
