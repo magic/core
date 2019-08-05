@@ -61,7 +61,7 @@
     "@magic-modules/pre": "github:magic-modules/pre",
     "@magic-modules/theme-list": "github:magic-modules/theme-list",
     "@magic-themes/docs": "github:magic-themes/docs",
-    "@magic/test": "0.1.11"
+    "@magic/test": "0.1.12"
   },
   "keywords": [
     "magic",
