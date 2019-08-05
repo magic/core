@@ -37,12 +37,12 @@
     "url": "https://github.com/magic/core/issues"
   },
   "dependencies": {
-    "@babel/core": "7.4.5",
-    "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
-    "@babel/plugin-proposal-object-rest-spread": "7.4.4",
+    "@babel/core": "7.5.5",
+    "@babel/plugin-proposal-export-namespace-from": "7.5.2",
+    "@babel/plugin-proposal-object-rest-spread": "7.5.5",
     "@babel/plugin-transform-arrow-functions": "7.2.0",
     "@babel/plugin-transform-react-jsx": "7.3.0",
-    "@babel/preset-env": "7.4.5",
+    "@babel/preset-env": "7.5.5",
     "@magic/cli": "0.0.5",
     "@magic/css": "0.7.1",
     "@magic/deep": "0.1.0",
