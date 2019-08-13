@@ -1,5 +1,6 @@
 export const CHECK_PROPS = (props, propTypeDecl, name) => {
-  const currentPage = app && app.state ? app.state.url.replace(config.WEB_ROOT, '/') : 'Unknown on client.'
+  const currentPage =
+    app && app.state ? app.state.url.replace(config.WEB_ROOT, '/') : 'Unknown on client.'
 
   if (!name) {
     const err = new Error()
@@ -60,7 +61,6 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
     }
     const match = is(value, ...types)
 
-    // console.log(match, value, types)
     if (Array.isArray(required)) {
       if (!match) {
         const altExists = required.filter(key => is(props[key], ...types))
@@ -90,6 +90,27 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
           typeString += ' object'
         }
         console.error(`${name} needs props.${key} to be a non empty ${typeString}`)
+      }
+    }
+
+    if (is(value, 'number')) {
+      // handle range prop here
+      const { max = Number.MAX_SAFE_INTEGER, min = Number.MIN_SAFE_INTEGER } = propType
+
+      if (max && value > max) {
+        console.error(`${name}: number expected to be <= ${max}, was ${value}`)
+      } else if (min > 0 && value < min) {
+        console.error(`${name}: number expected to be >= ${min}, was ${value}`)
+      }
+    }
+
+    if (is(value, 'string')) {
+      const { max = 500, min = 0 } = propType
+
+      if (max && value.length > max) {
+        console.error(`${name}: string length expected to be <= ${max}, length was ${value.length}`)
+      } else if (min > 0 && value.length < min) {
+        console.error(`${name}: string length expected to be >= ${min}, length was ${value.length}`)
       }
     }
 
