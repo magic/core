@@ -49,7 +49,7 @@
     "@magic/log": "0.1.0",
     "@magic/types": "0.1.2",
     "babel-plugin-remove-code": "0.0.6",
-    "babel-preset-minify": "0.5.0",
+    "babel-preset-minify": "0.5.1",
     "hyperapp": "github:magic/hyperapp",
     "hyperapp-render": "3.1.0"
   },
@@ -61,7 +61,7 @@
     "@magic-modules/pre": "github:magic-modules/pre",
     "@magic-modules/theme-list": "github:magic-modules/theme-list",
     "@magic-themes/docs": "github:magic-themes/docs",
-    "@magic/test": "0.1.12"
+    "@magic/test": "0.1.13"
   },
   "keywords": [
     "magic",
