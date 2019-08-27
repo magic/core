@@ -3,6 +3,16 @@ import { default as render } from 'hyperapp-render'
 import log from '@magic/log'
 import deep from '@magic/deep'
 
+const maybePrependWebRoot = s => {
+  // non local links or already webrooted links
+  if (!s.startsWith('/') || s.startsWith(config.WEB_ROOT)) {
+    return s
+  }
+
+  // prepend WEB_ROOT to link 
+  return config.WEB_ROOT.slice(0, -1) + s
+}
+
 export default (app, hashes) => {
   app.state.root = config.WEB_ROOT
 
@@ -18,22 +28,10 @@ export default (app, hashes) => {
       if (config.WEB_ROOT !== '/') {
         rendered = rendered
           .split('href="')
-          .map(s => {
-            if (!s.startsWith('/') || s.startsWith(config.WEB_ROOT)) {
-              return s
-            }
-
-            return config.WEB_ROOT.slice(0, -1) + s
-          })
+          .map(maybePrependWebRoot)
           .join('href="')
           .split('src="')
-          .map(s => {
-            if (!s.startsWith('/') || s.startsWith(config.WEB_ROOT)) {
-              return s
-            }
-
-            return config.WEB_ROOT.slice(0, -1) + s
-          })
+          .map(maybePrependWebRoot)
           .join('src="')
       }
 
