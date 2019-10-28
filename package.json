@@ -5,9 +5,7 @@
   "homepage": "https://magic.github.io/core",
   "license": "AGPL-3.0",
   "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
-  "main": "src/index.mjs",
   "module": "src/index.mjs",
-  "type": "module",
   "engines": {
     "node": ">=12.2.0"
   },
