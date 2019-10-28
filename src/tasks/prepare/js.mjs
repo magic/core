@@ -8,6 +8,7 @@ const prepareJs = async magic => {
   const hyperappPath = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.mjs')
   const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
+  // only load Lazy if requested by user
   let imports = 'h, app'
   if (magic.modules.Lazy) {
     imports += ', Lazy'
@@ -15,6 +16,8 @@ const prepareJs = async magic => {
 
   delete magic.modules.Lazy
 
+  // replace hyperapp exports, wrap it in a closure 
+  // return needed exports only to allow dead code elimination
   const hyperapp = `
 const { ${imports} } = (() => {
 ${hyperappContent.replace(/export /g, ' ')}
@@ -31,6 +34,7 @@ return { ${imports} }
   let checkProps = ''
   let propTypeString = ''
   if (config.IS_DEV) {
+    // add proptype checking
     checkProps = `const CHECK_PROPS = ${global.CHECK_PROPS.toString()}`
 
     propTypeString = 'const propTypes = {\n'
@@ -112,6 +116,7 @@ return { ${imports} }
     effectString = `const effects = ${stringifyObject(magic.effects)}\n`
   }
 
+  // create global subscription object
   let subscriptionString = ''
   if (!is.empty(magic.subscriptions)) {
     subscriptionString = `
@@ -162,12 +167,14 @@ return { ${imports} }
     cookieString = `cookies: ${stringifyObject(magic.cookies)},`
   }
 
+  // unused for now
   const serviceWorkerString = `
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('${config.WEB_ROOT}service-worker.js')
 }
 `
 
+  // generate string to write to client js
   const appString = `
 app({
   init: () => actions.gdpr.load({
