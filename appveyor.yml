@@ -2,19 +2,21 @@
 
 version: "{build}"
 
-environment:
-  matrix:
-    - nodejs_version: "12"
-      platform: x64
-    - nodejs_version: "12"
-      platform: x86
+platform:
+  - x64
+  - x86
 
 matrix:
   fast_finish: true
 
 install:
   # Build
+  - ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild 12.13.0) $env:platform
   - npm install
+
+test_script:
+  - node --version
+  - npm --version
   - npm test
 
 cache:
@@ -24,7 +26,5 @@ cache:
   - '%APPDATA%\npm-cache'
 
 build: off
-
-test: off
 
 deploy: off
