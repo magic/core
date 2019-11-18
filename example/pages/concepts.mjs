@@ -22,12 +22,14 @@ export const View = state => [
     ]),
   ]),
 
+  h2('module building blocks'),
+
   div([
     h2({ id: 'state' }, 'state'),
     div([
       p('state is a javascript object.'),
       p('state can be mutated by actions or effects.'),
-      p('every rendering step, the state determines the output of the view'),
+      p('every rendering step, the state determines the output of the views'),
     ]),
   ]),
 
@@ -45,13 +47,16 @@ export const View = state => [
     p(
       'they behave like actions, get a state and props and may return a new full, but changed, state.',
     ),
-    p('alternatively, you can call any action from within any other action.'),
+    p([
+      'the big difference? ',
+      'effects may be impure and trigger sideeffects outside of hyperapp.',
+    ]),
   ]),
 
   div([
     h2({ id: 'views' }, 'views'),
     p('views render the state to html'),
-    p('whenever an action triggers a statechange, this statechange then triggers a view change.'),
+    p('whenever an action triggers a change in the state, this then triggers a view change.'),
   ]),
 
   div([
@@ -60,7 +65,7 @@ export const View = state => [
     p('magic will automagically merge all styles into one global css file.'),
     p('in the future, it will also remove unused styles for you.'),
 
-    p('style merge order from lowest to highest:'),
+    p('style merge order from lowest to highest, last overwrites first:'),
     p('module.style < page.style < app.style < theme.style'),
 
     h3({ id: 'styles-magic-css' }, '@magic/css'),
@@ -73,7 +78,7 @@ export const View = state => [
     h2({ id: 'globals' }, 'global'),
     p('every module can set a global object, containing state and action properties.'),
     p(
-      'every key in the mod.global object that is set to true gets merged into the main app state/actions.',
+      'every state and/or action name in the global object with a value that equals true gets merged into the main app state/actions.',
     ),
   ]),
 
@@ -81,7 +86,7 @@ export const View = state => [
     h2({ id: 'lambdas' }, 'server lambdas'),
     p('this is the serverside magic.'),
     p('you can define functions that get transpiled into serverside lambdas.'),
-    p('server side lambdas will be available for GET and POST requests.'),
+    p('server side lambdas will be available for GET and/or POST requests.'),
     p([
       'the server side function signature is (req, res) => {},',
       ' as in any nodejs http server, with the addition of req.body being async => awaited before execution of the lambda.',
@@ -96,16 +101,22 @@ export const View = state => [
       ' slow[ly] (pun intended) grow towards a footprint of 5 megabytes.',
     ]),
     p(
-      'as the sarcastic remark might demonstrate, we think that all of that bloat is unneeded, unheeded and, frankly, not optimal.',
+      'we think that all of that bloat is unneeded, unheeded and, frankly, not optimal.',
     ),
     p([
       'magic has one external client side dependency, ',
       Link({ to: 'https://github.com/jorgebucharan/hyperapp' }, 'hyperapp'),
       ", [~400 lines that provide our ui state machine]. thats it. and it won't change.",
     ]),
-    p(
-      'we also have the tendency to write libraries specialized for our usecase, see @magic/css, @magic/test, @magic/',
-    ),
+    p([
+      'we also have the tendency to write libraries specialized for our usecase, see ',
+      Link({ href:'https://github.com/magic/css' }, '@magic/css'), 
+      ' ',
+      Link({ href: 'https://github.com/magic/test' }, '@magic/test'), 
+      ' ',
+      Link({ href: 'https://github.com/magic/cli' }, '@magic/cli'),
+      ' and others.',
+    ]),
 
     p([
       'once there is a lib key in at least one component,',
