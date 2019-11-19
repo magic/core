@@ -42,7 +42,7 @@
     "@babel/plugin-transform-react-jsx": "7.7.0",
     "@babel/preset-env": "7.7.1",
     "@magic/cli": "0.0.7",
-    "@magic/css": "0.7.3",
+    "@magic/css": "0.7.4",
     "@magic/deep": "0.1.0",
     "@magic/log": "0.1.1",
     "@magic/types": "0.1.2",
@@ -59,7 +59,7 @@
     "@magic-modules/pre": "github:magic-modules/pre",
     "@magic-modules/theme-list": "github:magic-modules/theme-list",
     "@magic-themes/docs": "github:magic-themes/docs",
-    "@magic/test": "0.1.19"
+    "@magic/test": "0.1.20"
   },
   "keywords": [
     "magic",
