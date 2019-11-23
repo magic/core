@@ -39,7 +39,7 @@
     "@babel/plugin-proposal-export-namespace-from": "7.7.4",
     "@babel/plugin-proposal-object-rest-spread": "7.7.4",
     "@babel/plugin-transform-arrow-functions": "7.7.4",
-    "@babel/plugin-transform-react-jsx": "7.7.0",
+    "@babel/plugin-transform-react-jsx": "7.7.4",
     "@babel/preset-env": "7.7.1",
     "@magic/cli": "0.0.8",
     "@magic/css": "0.7.4",
