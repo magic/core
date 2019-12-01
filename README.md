@@ -21,8 +21,8 @@ other related github organizations:
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
 [npm-url]: https://www.npmjs.com/package/@magic/core
-[travis-image]: https://api.travis-ci.org/magic/core.svg?branch=master
-[travis-url]: https://travis-ci.org/magic/core
+[travis-image]: https://img.shields.io/travis/com/magic/core/master
+[travis-url]: https://travis-ci.com/magic/core
 [appveyor-image]: https://img.shields.io/appveyor/ci/magic/core/master.svg
 [appveyor-url]: https://ci.appveyor.com/project/magic/core/branch/master
 [coveralls-image]: https://coveralls.io/repos/github/magic/core/badge.svg
