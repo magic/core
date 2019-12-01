@@ -4,7 +4,7 @@ import is from '@magic/types'
 
 import { fs, isUpperCase, stringifyObject } from '../../lib/index.mjs'
 
-const prepareJs = async magic => {
+export const prepareJs = async magic => {
   const hyperappPath = path.join(process.cwd(), 'node_modules', 'hyperapp', 'src', 'index.mjs')
   const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
@@ -16,7 +16,7 @@ const prepareJs = async magic => {
 
   delete magic.modules.Lazy
 
-  // replace hyperapp exports, wrap it in a closure 
+  // replace hyperapp exports, wrap it in a closure
   // return needed exports only to allow dead code elimination
   const hyperapp = `
 const { ${imports} } = (() => {
@@ -221,5 +221,3 @@ app({
 
   return clientString
 }
-
-export default prepareJs

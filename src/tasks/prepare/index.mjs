@@ -1,14 +1,14 @@
 import is from '@magic/types'
-import deep from '@magic/deep'
 
-import { getFiles, getPages, isUpperCase, fs } from '../../lib/index.mjs'
+import { getFiles, getPages, fs } from '../../lib/index.mjs'
 
 import { prepareGlobals } from './globals.mjs'
-import prepareJs from './js.mjs'
-import preparePages from './pages.mjs'
+import { prepareJs } from './js.mjs'
+import { preparePages } from './pages.mjs'
 import { prepareCss } from './css.mjs'
-import prepareMetaFiles from './meta.mjs'
-import prepareServiceWorker from './service-worker.mjs'
+import { prepareModules } from './modules.mjs'
+import { prepareMetaFiles } from './meta.mjs'
+import { prepareServiceWorker } from './service-worker.mjs'
 
 export const prepare = async (app, config) => {
   const { modules, libs } = await prepareGlobals(app, config)
@@ -96,59 +96,7 @@ export const prepare = async (app, config) => {
 
   app.style = await prepareCss({ app, modules })
 
-  // merge component states into app.state[componentName].
-  // this makes all identical components share their state.
-  Object.entries(modules)
-    .filter(([name]) => isUpperCase(name))
-    .forEach(([name, component]) => {
-      const lowerName = name.toLowerCase()
-
-      const glob = component.global || {}
-
-      if (!is.empty(component.state)) {
-        Object.entries(component.state).forEach(([key, val]) => {
-          if (glob.state && glob.state[key] === true) {
-            app.state[key] = val
-          } else {
-            app.state[lowerName] = app.state[lowerName] || {}
-            app.state[lowerName][key] = val
-          }
-        })
-      }
-
-      const actionTypes = ['actions', 'effects']
-      actionTypes
-        // if component has no actions or effects, do nothing
-        .filter(type => !is.empty(component[type]))
-        .forEach(type => {
-          Object.entries(component[type]).forEach(([key, val]) => {
-            if (glob[type] && glob[type][key] === true) {
-              app[type][key] = val
-            } else {
-              app[type][lowerName] = app[type][lowerName] || {}
-              if (lowerName === key) {
-                app[type][lowerName] = val
-              } else {
-                app[type][lowerName][key] = val
-              }
-            }
-          })
-        })
-
-      if (!is.empty(component.helpers)) {
-        app.helpers = deep.merge(app.helpers, component.helpers)
-      }
-
-      if (!is.empty(component.subscriptions)) {
-        component.subscriptions.forEach(sub => {
-          app.subscriptions.push(sub)
-        })
-      }
-
-      if (!is.empty(component.cookies)) {
-        app.cookies = deep.merge(app.cookies, component.cookies)
-      }
-    })
+  prepareModules(app, modules)
 
   app.modules = modules
 

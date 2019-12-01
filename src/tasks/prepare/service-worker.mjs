@@ -30,5 +30,3 @@ self.addEventListener('fetch', e => {
 
   return serviceWorkerString
 }
-
-export default prepareServiceWorker

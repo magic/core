@@ -12,7 +12,7 @@ const sitemapFooter = `
 </urlset>
 `
 
-const prepareMetaFiles = async app => {
+export const prepareMetaFiles = async app => {
   const res = {}
 
   const remote = config.URL
@@ -64,5 +64,3 @@ const prepareMetaFiles = async app => {
 
   return res
 }
-
-export default prepareMetaFiles
