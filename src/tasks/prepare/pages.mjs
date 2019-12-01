@@ -40,9 +40,14 @@ export const preparePages = async files => {
     }
 
     if (!page.View || !is.function(page.View.toString)) {
+      const page = `${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(/\//g, '')}.mjs`
       throw new Error(`
-${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(/\//g, '')}.mjs
-does not export a view function or page.View key.`)
+${page}
+needs to either
+export default () => []
+or
+export const View = () => []
+`)
     }
 
     return page

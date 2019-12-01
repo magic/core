@@ -64,19 +64,21 @@ export const prepare = async (app, config) => {
   // write their buffers into app.static
   app.static = await prepareMetaFiles(app)
 
-  let exists = false
+  let staticExists = false
   try {
     await fs.stat(config.DIR.STATIC)
-    exists = true
+    staticExists = true
   } catch (e) {
+    // it's fine if the static dir does not exist,
+    // but all other errors will throw.
     if (e.code !== 'ENOENT') {
       throw e
     }
   }
 
-  if (exists) {
+  if (staticExists) {
     const staticFiles = await getFiles(config.DIR.STATIC)
-    if (staticFiles) {
+    if (!is.empty(staticFiles)) {
       const staticPromises = staticFiles.map(async f => {
         const name = f.replace(config.DIR.STATIC, '')
         // TODO: use streams here
