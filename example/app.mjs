@@ -85,6 +85,14 @@ export const state = config => ({
             { to: '#gdpr', text: 'gdpr' },
           ],
         },
+        {
+          to: '/markdown/',
+          text: 'markdown',
+        },
+        {
+          to: '/html/',
+          text: 'html',
+        },
       ],
     },
     {
