@@ -1,6 +1,6 @@
 import is from '@magic/types'
 
-import { getFiles, getPages, fs } from '../../lib/index.mjs'
+import { getPages, fs } from '../../lib/index.mjs'
 
 import { prepareGlobals } from './globals.mjs'
 import { prepareJs } from './js.mjs'
@@ -77,7 +77,7 @@ export const prepare = async (app, config) => {
   }
 
   if (staticExists) {
-    const staticFiles = await getFiles(config.DIR.STATIC)
+    const staticFiles = await fs.getFiles(config.DIR.STATIC)
     if (!is.empty(staticFiles)) {
       const staticPromises = staticFiles.map(async f => {
         const name = f.replace(config.DIR.STATIC, '')

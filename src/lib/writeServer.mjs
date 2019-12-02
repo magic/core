@@ -1,7 +1,6 @@
 import path from 'path'
 
-import { mkdirp } from './mkdirp.mjs'
-import { fs } from './fs.mjs'
+import fs from '@magic/fs'
 
 export const writeLambda = async ([name, fn]) => {
   const content = `const lambda = ${fn.toString()}
@@ -18,7 +17,7 @@ export const writeServer = async app => {
   const lambdas = Object.entries(app.lambdas)
   if (lambdas.length) {
     const apiDir = config.DIR.API || path.join(process.cwd(), 'api')
-    await mkdirp(apiDir)
+    await fs.mkdirp(apiDir)
 
     await Promise.all(lambdas.map(([name, val]) => [path.join(apiDir, name), val]).map(writeLambda))
   }

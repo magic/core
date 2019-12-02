@@ -5,7 +5,6 @@ import {
   fs,
   // getFileType,
   // minifyImages,
-  mkdirp,
   writeFile,
   writeServer,
 } from '../../lib/index.mjs'
@@ -16,7 +15,7 @@ export const write = async app => {
   // const images = config.FILETYPES.IMAGES
 
   const { css, client, pages, static: stat } = app
-  await mkdirp(config.DIR.PUBLIC)
+  await fs.mkdirp(config.DIR.PUBLIC)
 
   // write static first to make sure all other files below get written
   // even if there is a name clash
@@ -26,7 +25,7 @@ export const write = async app => {
       .map(async file => {
         const [name] = file
         const dir = path.join(config.DIR.PUBLIC, path.dirname(name))
-        await mkdirp(dir)
+        await fs.mkdirp(dir)
         await writeFile(file)
       }),
   )
@@ -38,7 +37,7 @@ export const write = async app => {
     }
 
     const dir = path.dirname(page.path)
-    await mkdirp(dir)
+    await fs.mkdirp(dir)
     await fs.writeFile(page.path, page.rendered)
   })
 

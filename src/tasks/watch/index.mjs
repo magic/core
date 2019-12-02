@@ -1,10 +1,9 @@
-import { fs } from '../../lib/index.mjs'
 import path from 'path'
 
-import { getDirectories } from '../../lib/index.mjs'
+import fs from '@magic/fs'
 
 export const watch = async dir => {
-  const dirs = await getDirectories(dir)
+  const dirs = await fs.getDirectories(dir)
 
   dirs.map(dir => {
     fs.watch(dir, (evt, file) => {

@@ -44,6 +44,7 @@
     "@magic/cli": "0.0.8",
     "@magic/css": "0.7.5",
     "@magic/deep": "0.1.0",
+    "@magic/fs": "0.0.1",
     "@magic/log": "0.1.1",
     "@magic/tags": "github:magic/tags",
     "@magic/transmute": "github:magic/transmute",

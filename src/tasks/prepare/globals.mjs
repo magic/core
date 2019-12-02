@@ -4,7 +4,7 @@ import deep from '@magic/deep'
 import is from '@magic/types'
 import log from '@magic/log'
 
-import { fs, getDirectories, getFiles, isUpperCase, toPascal } from '../../lib/index.mjs'
+import { fs, isUpperCase, toPascal } from '../../lib/index.mjs'
 
 import { builtins, component, tags } from '../../modules/index.mjs'
 
@@ -16,7 +16,7 @@ const recursiveSearch = false
 export const findNodeModules = async () => {
   let modules = {}
 
-  const dirs = await getDirectories(nodeModuleDir, recursiveSearch)
+  const dirs = await fs.getDirectories(nodeModuleDir, recursiveSearch)
   const dirPromises = dirs
     .filter(dir => dir.includes('magic-module-') || dir.includes('magic-modules-'))
     .map(async nodeModule => {
@@ -57,7 +57,7 @@ export const findNodeModules = async () => {
     })
 
   const magicModuleDir = path.join(nodeModuleDir, '@magic-modules')
-  const nodeModules = await getDirectories(magicModuleDir, recursiveSearch)
+  const nodeModules = await fs.getDirectories(magicModuleDir, recursiveSearch)
 
   const modulePromises = nodeModules
     .filter(n => nodeModuleDir !== n)
@@ -106,7 +106,7 @@ export const findNodeModules = async () => {
 export const findLocalModules = async () => {
   let modules = {}
 
-  const assetModules = await getFiles(config.DIR.ASSETS)
+  const assetModules = await fs.getFiles(config.DIR.ASSETS)
   const assetPromises = assetModules
     .filter(m => isUpperCase(path.basename(m)))
     .filter(m => ['.mjs'].some(ext => m.endsWith(ext)))
@@ -174,10 +174,10 @@ export const findDefinedLibraries = async (app, modules) => {
   }
 
   const libNodeModuleDir = path.join(nodeModuleDir, '@magic-libraries')
-  let libOfficialNodeModuleFiles = await getDirectories(libNodeModuleDir, recursiveSearch)
+  let libOfficialNodeModuleFiles = await fs.getDirectories(libNodeModuleDir, recursiveSearch)
   libOfficialNodeModuleFiles = libOfficialNodeModuleFiles.filter(n => n !== libNodeModuleDir)
 
-  const nodeModules = await getDirectories(nodeModuleDir, recursiveSearch)
+  const nodeModules = await fs.getDirectories(nodeModuleDir, recursiveSearch)
   const libInofficialNodeModuleFiles = nodeModules.filter(
     n => n.includes('magic-library-') || n.includes('magic-libraries-'),
   )

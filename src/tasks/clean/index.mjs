@@ -1,7 +1,7 @@
 import is from '@magic/types'
 import log from '@magic/log'
 import path from 'path'
-import { rmrf, isLocalPath } from '../../lib/index.mjs'
+import { fs, isLocalPath } from '../../lib/index.mjs'
 
 export const clean = async config => {
   const dir = config.DIR.PUBLIC
@@ -16,7 +16,7 @@ export const clean = async config => {
     }
 
     log.warn('remove', dir)
-    await rmrf(dir)
+    await fs.rmrf(dir)
   }
 }
 

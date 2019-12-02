@@ -1,7 +1,7 @@
 import path from 'path'
 import URL from 'url'
 
-import { addTrailingSlash, getContentType } from '../../lib/index.mjs'
+import { addTrailingSlash, fs } from '../../lib/index.mjs'
 
 export const handler = app => (req, res) => {
   const { IS_PROD } = config
@@ -66,7 +66,7 @@ export const handler = app => (req, res) => {
   // }
 
   if (stat[rawUrl]) {
-    const contentType = getContentType(rawUrl)
+    const contentType = fs.getContentType(rawUrl)
     res.writeHead(200, { ...headers, 'Content-Type': contentType })
     res.end(stat[rawUrl])
     return

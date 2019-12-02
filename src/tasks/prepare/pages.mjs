@@ -1,7 +1,7 @@
 import is from '@magic/types'
 import path from 'path'
 import transmute from '@magic/transmute'
-import { fs, mkdirp, rmrf } from '../../lib/index.mjs'
+import { fs } from '../../lib/index.mjs'
 
 const tmpDir = path.join(process.cwd(), '.temp')
 
@@ -28,7 +28,7 @@ export const preparePages = async files => {
     if (transmuted) {
       const viewString = `export const View = () => [${transmuted}]`
       const fileTmpPath = path.join(tmpDir, path.basename(file))
-      await mkdirp(tmpDir)
+      await fs.mkdirp(tmpDir)
       await fs.writeFile(fileTmpPath, viewString)
       pageTmp = await import(fileTmpPath)
     } else {
@@ -104,7 +104,7 @@ export const View = () => []
 
   const tmpExists = await fs.exists(tmpDir)
   if (tmpExists) {
-    await rmrf(tmpDir)
+    await fs.rmrf(tmpDir)
   }
 
   return pages
