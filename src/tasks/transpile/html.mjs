@@ -9,7 +9,7 @@ const maybePrependWebRoot = s => {
     return s
   }
 
-  // prepend WEB_ROOT to link 
+  // prepend WEB_ROOT to link
   return config.WEB_ROOT.slice(0, -1) + s
 }
 

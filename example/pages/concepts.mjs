@@ -100,9 +100,7 @@ export const View = state => [
       ' that you can easily install and make the average webpage ',
       ' slow[ly] (pun intended) grow towards a footprint of 5 megabytes.',
     ]),
-    p(
-      'we think that all of that bloat is unneeded, unheeded and, frankly, not optimal.',
-    ),
+    p('we think that all of that bloat is unneeded, unheeded and, frankly, not optimal.'),
     p([
       'magic has one external client side dependency, ',
       Link({ to: 'https://github.com/jorgebucharan/hyperapp' }, 'hyperapp'),
@@ -110,9 +108,9 @@ export const View = state => [
     ]),
     p([
       'we also have the tendency to write libraries specialized for our usecase, see ',
-      Link({ href:'https://github.com/magic/css' }, '@magic/css'), 
+      Link({ href: 'https://github.com/magic/css' }, '@magic/css'),
       ' ',
-      Link({ href: 'https://github.com/magic/test' }, '@magic/test'), 
+      Link({ href: 'https://github.com/magic/test' }, '@magic/test'),
       ' ',
       Link({ href: 'https://github.com/magic/cli' }, '@magic/cli'),
       ' and others.',

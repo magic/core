@@ -77,7 +77,10 @@ export const state = config => ({
             {
               to: '#menu',
               text: 'menu',
-              items: [{ to: '-props', text: 'props' }, { to: '-sub-menus', text: 'sub menus' }],
+              items: [
+                { to: '-props', text: 'props' },
+                { to: '-sub-menus', text: 'sub menus' },
+              ],
             },
             { to: '#link', text: 'link' },
             { to: '#img', text: 'img' },

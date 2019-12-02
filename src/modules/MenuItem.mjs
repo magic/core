@@ -65,7 +65,10 @@ export const propTypes = {
       type: 'array',
       item: {
         type: 'object',
-        keys: [{ key: 'to', type: 'string' }, { key: 'text', type: 'string' }],
+        keys: [
+          { key: 'to', type: 'string' },
+          { key: 'text', type: 'string' },
+        ],
       },
     },
     { key: 'parentTo', type: 'string' },

@@ -17,17 +17,12 @@ export const preparePages = async files => {
     if (markdownExtensions.includes(ext)) {
       const content = await fs.readFile(file, 'utf8')
       transmuted = transmute.markdown(content)
-      file = file
-        .replace('.md', '.mjs')
-        .replace('.markdown', '.mjs')
+      file = file.replace('.md', '.mjs').replace('.markdown', '.mjs')
     } else if (htmlExtensions.includes(ext)) {
       const content = await fs.readFile(file, 'utf8')
       transmuted = transmute.html(content)
-      file = file
-        .replace('.html', '.mjs')
-        .replace('.htm', '.mjs')
+      file = file.replace('.html', '.mjs').replace('.htm', '.mjs')
     }
-
 
     let pageTmp
     if (transmuted) {
@@ -78,7 +73,10 @@ export const preparePages = async files => {
     }
 
     if (!page.View || !is.function(page.View.toString)) {
-      const page = `${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(/\//g, '')}.mjs`
+      const page = `${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(
+        /\//g,
+        '',
+      )}.mjs`
       throw new Error(`
 ${page}
 needs to either
