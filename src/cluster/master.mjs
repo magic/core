@@ -6,11 +6,10 @@ export const master = async (cluster, cmds, argv, config) => {
     log.warn('Autodetected URL:', `https://${config.URL}`)
     log.info(`
   to hide this warning and make startup ${config.URL_WARNING}ms faster,
-  add the following to your config.js file (and adjust the values if needed)
+  add the following to your config.mjs file (and adjust the values if needed)
 
   URL: '${config.URL}',
   WEB_ROOT: '${config.WEB_ROOT}',
-
   `)
   }
 
