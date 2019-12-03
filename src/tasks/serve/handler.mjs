@@ -1,6 +1,8 @@
 import path from 'path'
 import URL from 'url'
 
+import is from '@magic/types'
+
 import { addTrailingSlash, fs } from '../../lib/index.mjs'
 
 export const handler = app => (req, res) => {
@@ -10,8 +12,6 @@ export const handler = app => (req, res) => {
   const url = URL.parse(req.url)
   let { pathname } = url
 
-  let Location = WEB_ROOT
-
   if (pathname.startsWith(WEB_ROOT)) {
     pathname = pathname.replace(WEB_ROOT, '/')
   }
@@ -20,7 +20,7 @@ export const handler = app => (req, res) => {
 
   if (rawUrl.startsWith('/api')) {
     const action = rawUrl.replace('/api/', '').replace('/', '')
-    if (typeof lambdas[action] === 'function') {
+    if (is.function(lambdas[action])) {
       req.body = ''
       req.on('data', chunk => (req.body += chunk))
 
@@ -83,6 +83,7 @@ export const handler = app => (req, res) => {
   }
 
   // 404. in development, we redirect to the root
+  let Location = WEB_ROOT
 
   res.writeHead(302, { Location })
   res.end()
