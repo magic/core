@@ -4,6 +4,7 @@ import log from '@magic/log'
 
 import handler from './handler.mjs'
 
+// return a thenable async/await struct
 export const listen = async server =>
   await {
     then(r, f) {
