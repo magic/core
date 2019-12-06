@@ -62,7 +62,7 @@
     "@magic-modules/module-list": "0.0.1",
     "@magic-modules/pre": "0.0.1",
     "@magic-modules/theme-list": "0.0.1",
-    "@magic-themes/docs": "0.0.1",
+    "@magic-themes/docs": "0.0.2",
     "@magic/test": "0.1.23"
   },
   "keywords": [
