@@ -59,7 +59,7 @@
     "@magic-modules/git-badges": "0.0.1",
     "@magic-modules/library-list": "0.0.1",
     "@magic-modules/light-switch": "0.0.1",
-    "@magic-modules/module-list": "0.0.1",
+    "@magic-modules/module-list": "0.0.2",
     "@magic-modules/pre": "0.0.1",
     "@magic-modules/theme-list": "0.0.1",
     "@magic-themes/docs": "0.0.1",
