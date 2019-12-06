@@ -4,6 +4,8 @@ This is the @magic core library.
 
 builds a webapp with deeply nested component structure and globally/locally shared state and actions.
 
+client html + css + js boilerplate = ~15kb uncompressed.
+
 To get more information,
 head to the [docs / demo](https://magic.github.io/core/)
 
