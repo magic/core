@@ -7,7 +7,8 @@ export const View = (state, children = []) =>
         Link({ to: 'https://github.com/magic/core', target: '_blank', rel: 'noopener' }, 'magic'),
       ]),
     ]),
-    Gdpr(state),
+
+    typeof Gdpr === 'function' && Gdpr(state),
   ])
 
 export const style = {

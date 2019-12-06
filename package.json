@@ -55,13 +55,14 @@
     "hyperapp-render": "3.1.0"
   },
   "devDependencies": {
-    "@magic-modules/git-badges": "github:magic-modules/git-badges",
-    "@magic-modules/library-list": "github:magic-modules/library-list",
-    "@magic-modules/light-switch": "github:magic-modules/light-switch",
-    "@magic-modules/module-list": "github:magic-modules/module-list",
-    "@magic-modules/pre": "github:magic-modules/pre",
-    "@magic-modules/theme-list": "github:magic-modules/theme-list",
-    "@magic-themes/docs": "github:magic-themes/docs",
+    "@magic-modules/gdpr": "0.0.1",
+    "@magic-modules/git-badges": "0.0.1",
+    "@magic-modules/library-list": "0.0.1",
+    "@magic-modules/light-switch": "0.0.1",
+    "@magic-modules/module-list": "0.0.1",
+    "@magic-modules/pre": "0.0.1",
+    "@magic-modules/theme-list": "0.0.1",
+    "@magic-themes/docs": "0.0.1",
     "@magic/test": "0.1.22"
   },
   "keywords": [
