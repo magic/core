@@ -45,13 +45,13 @@
     "@magic/css": "0.7.5",
     "@magic/deep": "0.1.0",
     "@magic/fs": "0.0.1",
+    "@magic/hyperapp": "2.0.3",
     "@magic/log": "0.1.2",
     "@magic/tags": "0.0.1",
     "@magic/transmute": "0.0.3",
     "@magic/types": "0.1.2",
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.1",
-    "hyperapp": "github:magic/hyperapp",
     "hyperapp-render": "3.1.0"
   },
   "devDependencies": {

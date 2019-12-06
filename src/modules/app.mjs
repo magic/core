@@ -2,7 +2,7 @@ import path from 'path'
 
 import is from '@magic/types'
 import deep from '@magic/deep'
-import { h } from 'hyperapp'
+import { h } from '@magic/hyperapp'
 
 const App = async config => {
   const { WEB_ROOT = '/', LANG = 'en' } = config
