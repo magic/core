@@ -5,7 +5,14 @@ import is from '@magic/types'
 import { fs, isUpperCase, stringifyObject } from '../../lib/index.mjs'
 
 export const prepareJs = async magic => {
-  const hyperappPath = path.join(process.cwd(), 'node_modules', '@magic', 'hyperapp', 'src', 'index.mjs')
+  const hyperappPath = path.join(
+    process.cwd(),
+    'node_modules',
+    '@magic',
+    'hyperapp',
+    'src',
+    'index.mjs',
+  )
   const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
   // only load Lazy if requested by user
