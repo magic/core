@@ -14,6 +14,15 @@ other related github organizations:
 * [@magic-themes](https://magic-themes.github.io) - themes for your app
 * [@magic-libraries](https://magic-libraries.github.io) - client libraries
 
+#### changelog
+
+##### 0.0.1
+first commit
+
+##### 0.0.2
+use @magic npm packages instead of github for installs
+
+
 [![NPM version][npm-image]][npm-url]
 [![Linux Build Status][travis-image]][travis-url]
 [![Windows Build Status][appveyor-image]][appveyor-url]
