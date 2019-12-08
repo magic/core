@@ -70,7 +70,9 @@
     "static",
     "page",
     "generator",
-    "serverless"
+    "serverless",
+    "lamda",
+    "hyperapp"
   ],
   "contributors": [
     {
