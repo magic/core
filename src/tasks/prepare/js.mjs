@@ -181,14 +181,24 @@ if ('serviceWorker' in navigator) {
 }
 `
 
+  let initFunc = `() =>`
+  if (app.actions.gdpr) {
+    initFunc += ` actions.gdpr.load({
+  ...initialState,
+  ${cookieString}
+  url: window.location.pathname,
+})`
+  } else {
+    initFunc += ` ({
+...initialState,
+url: window.location.pathname,
+})`
+  }
+
   // generate string to write to client js
   const appString = `
 app({
-  init: () => actions.gdpr.load({
-    ...initialState,
-    ${cookieString}
-    url: window.location.pathname,
-  }),
+  init: ${initFunc},
   ${subscriptionString}
   view: state => {
     const url = pages[state.url] ? state.url : '/404/'
