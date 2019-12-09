@@ -22,9 +22,12 @@ first commit
 ##### 0.0.2
 use @magic npm packages instead of github for installs
 
-##### 0.0.3 - unreleased
-update @magic/css, @magic/transmute
+##### 0.0.3
+update dependencies
+make @magic actually work in the client if @magic-modules/gdpr is not installed.
 
+##### 0.0.4 unreleased
+...
 
 [![NPM version][npm-image]][npm-url]
 [![Linux Build Status][travis-image]][travis-url]
