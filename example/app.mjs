@@ -52,12 +52,12 @@ export const state = config => ({
         },
         {
           to: '#app',
-          text: '/assets/app.js',
+          text: '/assets/app.mjs',
           items: [{ to: '-example', text: 'example' }],
         },
         {
           to: '#config',
-          text: '/config.js',
+          text: '/config.mjs',
           items: [{ to: '-example', text: 'example' }],
         },
       ],

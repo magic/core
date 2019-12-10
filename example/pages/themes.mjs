@@ -9,7 +9,7 @@ export const View = state => [
     'magic themes are themes for magic apps. you decide which theme to load by specifying the theme name in config.THEME',
   ),
   Pre(`
-// /config.js
+// /config.mjs
 export default {
   // ...rest of config,
   THEME: 'blue',
@@ -20,9 +20,9 @@ export default {
   p('themes get loaded from multiple places. last in the list overwrites earlier entries.'),
   Pre(`
 // ...default module styles get inserted here
-/node_modules/@magic/core/src/themes/THEME/index.js
+/node_modules/@magic/core/src/themes/THEME/index.mjs
 /node_modules/@magic-themes/THEME
-/assets/themes/THEME/index.js
+/assets/themes/THEME/index.mjs
 `),
 
   ThemeList(),

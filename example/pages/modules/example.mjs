@@ -20,11 +20,8 @@ export const View = state => [
     h3('Mod.Mod'),
     p([
       'this is Mod. it gets loaded from ',
-      Link({ to: 'https://github.com/magic/core/example/assets/module.js' }, '/assets/module.js'),
-    ]),
-    p([
-      'and imported in ',
-      Link({ to: 'https://github.com/magic/core/example/assets/index.js' }, '/assets/index.js'),
+      Link({ to: 'https://github.com/magic/core/blob/master/example/assets/modules/Mod.mjs' }, '/assets/modules/Mod.mjs'),
+      ' automatically, no need to import it.',
     ]),
     p(['the state of this module: ', JSON.stringify(state.module)]),
   ])

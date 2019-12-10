@@ -73,10 +73,10 @@ export default {
       li('/assets - custom components, @magic-modules get imported here'),
       li('/assets/static - static files'),
       li('/assets/themes - theme directory, @magic-themes get imported here'),
-      li('/assets/lib.js - imports npm and local but external packages into your app'),
-      li('/app.js - gets merged into the app, can set state, actions, style here'),
-      li('/config.js - custom config for your app'),
-      li('/assets/Menu.js - custom Menu for your app'),
+      li('/assets/lib.mjs - imports npm and local but external packages into your app'),
+      li('/app.mjs - gets merged into the app, can set state, actions, style here'),
+      li('/config.mjs - custom config for your app'),
+      li('/assets/Menu.mjs - custom Menu for your app'),
     ]),
 
     h2({ id: 'pages' }, '/pages'),
@@ -88,12 +88,12 @@ export default {
 
     h3({ id: 'pages-dir-structure' }, 'pages directory to url map, for the domain mag.ic:'),
     Pre(`
-/pages/index.js === http://mag.ic/
-/pages/pageName.js === http://mag.ic/pageName/
-/pages/page-name.js === http://mag.ic/page-name/
-/pages/page_name.js === http://mag.ic/page_name/
-/pages/dir/index.js === http://mag.ic/dir/
-/pages/dir/name.js === http://mag.ic/dir/name/
+/pages/index.mjs === http://mag.ic/
+/pages/pageName.mjs === http://mag.ic/pageName/
+/pages/page-name.mjs === http://mag.ic/page-name/
+/pages/page_name.mjs === http://mag.ic/page_name/
+/pages/dir/index.mjs === http://mag.ic/dir/
+/pages/dir/name.mjs === http://mag.ic/dir/name/
 `),
 
     h3({ id: 'pages-example' }, 'example page:'),
@@ -102,7 +102,7 @@ export default {
     h2({ id: 'assets' }, '/assets'),
     p('the assets dir contains custom components of your app.'),
     p('you can additionally import @magic-modules here'),
-    h3({ id: 'assets-example' }, 'example /assets/index.js'),
+    h3({ id: 'assets-example' }, 'example /assets/index.mjs'),
     Pre(examples.assets),
 
     h2({ id: 'static' }, '/assets/static'),
@@ -122,21 +122,21 @@ export default {
     h3({ id: 'themes-example' }, 'example theme'),
     Pre(examples.theme),
 
-    h2({ id: 'app' }, '/assets/app.js'),
-    p('the /app.js file allows you to set global state, actions, and styles'),
+    h2({ id: 'app' }, '/assets/app.mjs'),
+    p('the /app.mjs file allows you to set global state, actions, and styles'),
 
-    h3({ id: 'app-example' }, 'example /app.js'),
+    h3({ id: 'app-example' }, 'example /app.mjs'),
     Pre(examples.app),
 
-    h2({ id: 'config' }, '/config.js'),
-    p('the /config.js file allows you to set various aspects of your app'),
+    h2({ id: 'config' }, '/config.mjs'),
+    p('the /config.mjs file allows you to set various aspects of your app'),
 
-    h3({ id: 'config-example' }, 'example /config.js'),
+    h3({ id: 'config-example' }, 'example /config.mjs'),
     Pre(examples.config),
 
     Link(
-      { to: 'https://github.com/magic/core/blob/master/src/modules/Menu.js' },
-      'Menu.js on github',
+      { to: 'https://github.com/magic/core/blob/master/src/modules/Menu.mjs' },
+      'Menu.mjs on github',
     ),
 
     LightSwitch(state),
