@@ -85,6 +85,10 @@ export const handler = app => (req, res) => {
   // 404. in development, we redirect to the root
   let Location = WEB_ROOT
 
+  if (pages[`${url.pathname}/`]) {
+    Location = `${url.pathname}/`
+  }
+
   res.writeHead(302, { Location })
   res.end()
 }
