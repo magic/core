@@ -132,6 +132,25 @@ export const View = state => [
       'will turn into',
       Pre('lib.name = () => {}'),
     ]),
+
+    h3({ id: 'libs-npm' }, '@magic-libraries from npm'),
+    p(
+      'all @magic-libraries/* and all npm packages starting with magic-library-* will be loaded automatically. ',
+    ),
+
+    h4({ id: 'libs-example' }, 'Example'),
+    p('first, install a @magic-library'),
+    Pre(`
+npm install --save --save-exact @magic-libraries/is
+`),
+    p('then, in javascript'),
+    Pre(`
+export const View = props => div([
+  'value is ',
+  lib.is(props.value, 'string') ? '' : 'not',
+  ' a string'
+])
+      `),
   ]),
 
   LightSwitch(state),
