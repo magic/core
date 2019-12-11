@@ -106,7 +106,13 @@ export const state = config => ({
     {
       to: '/libraries/',
       text: 'libraries',
-      items: [{ to: '#gl-magic-libraries', text: '@magic-libraries' }],
+      items: [
+        { to: '#abstract', text: 'summary' },
+        { to: '#dir-or-file', text: 'local file' },
+        { to: '#npm', text: 'libs from npm' },
+        { to: '#example', text: 'example' },
+        { to: '#gl-magic-libraries', text: '@magic-libraries' },
+      ],
     },
   ],
   logo: '/logo.png',
