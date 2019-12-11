@@ -3,7 +3,10 @@ export const View = state =>
     h3('Mod.Mod'),
     p([
       'this is Mod. it gets loaded from ',
-      Link({ to: 'https://github.com/magic/core/blob/master/example/assets/module.mjs' }, '/assets/module.mjs'),
+      Link(
+        { to: 'https://github.com/magic/core/blob/master/example/assets/module.mjs' },
+        '/assets/module.mjs',
+      ),
     ]),
     p(['the state of this module: ', JSON.stringify(state.module)]),
   ])
@@ -40,7 +43,10 @@ export const Component = props => {
     header && h5(header),
     p([
       'Mod.Component, a second component in ',
-      Link({ to: 'https://github.com/magic/core/blob/master/example/assets/modules/Mod.mjs' }, '/assets/modules/Mod.mjs'),
+      Link(
+        { to: 'https://github.com/magic/core/blob/master/example/assets/modules/Mod.mjs' },
+        '/assets/modules/Mod.mjs',
+      ),
     ]),
   ])
 }
