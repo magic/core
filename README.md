@@ -27,7 +27,7 @@ update dependencies
 make @magic actually work in the client if @magic-modules/gdpr is not installed.
 
 ##### 0.0.4 unreleased
-...
+dev server now correctly redirects urls if the trailing slash is missing
 
 [![NPM version][npm-image]][npm-url]
 [![Linux Build Status][travis-image]][travis-url]
