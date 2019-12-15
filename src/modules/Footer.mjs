@@ -9,6 +9,7 @@ export const View = (state, children = []) =>
     ]),
 
     typeof Gdpr === 'function' && Gdpr(state),
+    typeof Messages === 'function' && Messages(state),
   ])
 
 export const style = {
