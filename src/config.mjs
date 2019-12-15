@@ -44,6 +44,11 @@ export const runConfig = async () => {
   const THEME_VARS = conf.THEME_VARS || {}
   if (!THEME_VARS.colors) {
     THEME_VARS.colors = colors
+  } else {
+    THEME_VARS.colors = {
+      ...colors,
+      ...THEME_VARS.colors,
+    }
   }
 
   conf.HASH_FILE_NAME = conf.HASH_FILE_NAME || 'sri-hashes.json'
