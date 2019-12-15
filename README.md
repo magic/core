@@ -26,8 +26,11 @@ use @magic npm packages instead of github for installs
 update dependencies
 make @magic actually work in the client if @magic-modules/gdpr is not installed.
 
-##### 0.0.4 unreleased
+##### 0.0.4
 dev server now correctly redirects urls if the trailing slash is missing
+html and markdown files can include state and variables
+
+##### 0.0.5 - unreleased
 
 [![NPM version][npm-image]][npm-url]
 [![Linux Build Status][travis-image]][travis-url]
