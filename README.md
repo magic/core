@@ -31,6 +31,8 @@ dev server now correctly redirects urls if the trailing slash is missing
 html and markdown files can include state and variables
 
 ##### 0.0.5 - unreleased
+@magic-themes can now add variables to the css colors without overwriting the default colors
+@magic-modules/messages gets autoloaded if it exists.
 
 [![NPM version][npm-image]][npm-url]
 [![Linux Build Status][travis-image]][travis-url]
