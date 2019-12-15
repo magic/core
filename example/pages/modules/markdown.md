@@ -1,4 +1,14 @@
-## markdown modules
+---
+@state
+{
+  "title": "markdown file example",
+  "description": "markdown file description"
+}
+---
+
+## ${state.title}
+
+${state.description}
 
 this module gets imported from a markdown file.
 
@@ -7,3 +17,18 @@ see [this file in the example dir](https://github.com/magic/core/blob/master/exa
 any kind of markdown can be used here,
 but if you use html natively,
 only tags valid in a html5 body, excluding &lt;script&gt; and &lt;style&gt; tags, are accepted.
+
+this markdown file also starts with a magic @state declaration.
+it is used internally to, for example, add the title and meta rel="description" tags to the head of this html file.
+
+the state looks like the following:
+
+```
+\-\-\-
+@state
+{
+  "title": "markdown file example",
+  "description": "markdown file description"
+}
+\-\-\-
+```
