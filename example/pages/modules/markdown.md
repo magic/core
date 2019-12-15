@@ -21,7 +21,7 @@ only tags valid in a html5 body, excluding &lt;script&gt; and &lt;style&gt; tags
 this markdown file also starts with a magic @state declaration.
 it is used internally to, for example, add the title and meta rel="description" tags to the head of this html file.
 
-the state looks like the following:
+the state looks like the following, and any valid json is allowed
 
 ```
 \-\-\-
