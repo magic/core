@@ -26,7 +26,7 @@ export const preparePages = async files => {
 
     let pageTmp
     if (transmuted) {
-      const viewString = `export const View = () => [${transmuted}]`
+      const viewString = `export const View = () => [${transmuted.rendered}]`
       const fileTmpPath = path.join(tmpDir, path.basename(file))
       await fs.mkdirp(tmpDir)
       await fs.writeFile(fileTmpPath, viewString)
@@ -46,6 +46,10 @@ export const preparePages = async files => {
     }
 
     page.file = file
+
+    if (!is.empty(transmuted.state)) {
+      page.state = transmuted.state
+    }
 
     const pageName = file
       .replace(config.DIR.PAGES, '')
@@ -73,10 +77,11 @@ export const preparePages = async files => {
     }
 
     if (!page.View || !is.function(page.View.toString)) {
-      const page = `${config.DIR.PAGES.replace(process.cwd(), '')}/${page.name.replace(
-        /\//g,
-        '',
-      )}.mjs`
+      const pageDir = config.DIR.PAGES.replace(process.cwd(), '')
+
+      // remove slashes
+      const pageName = page.name.replace(/\//g, '')
+      const page = `${pageDir}/${pageName}.mjs`
       throw new Error(`
 ${page}
 needs to either
