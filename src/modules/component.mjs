@@ -11,7 +11,7 @@ export const component = name => (props = {}, children = false) => {
       children = props.View
       props = {}
     } else if (props.props || props.children) {
-      return h(name, {}, component(props.name)(props.props || {}, props.children || []))
+      return h(name, {}, props)
     }
   }
 
