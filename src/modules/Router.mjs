@@ -20,7 +20,7 @@ export const Link = ({ to, ...p }, children) => {
   to = to || href || ''
   props.href = to
 
-  const isLocal = to.startsWith('/') || to.startsWith('#')
+  const isLocal = to[0] === '/' || to[0] === '#'
 
   if (isLocal) {
     props.onclick = [actions.go, helpers.mapClickToGo]
