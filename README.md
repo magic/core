@@ -34,7 +34,7 @@ html and markdown files can include state and variables
 @magic-themes can now add variables to the css colors without overwriting the default colors
 @magic-modules/messages gets autoloaded if it is installed.
 components now can be nested without array. div([p('text')]) can also be div(p('text'))
-
+Link({ to: '#hashLink' }) is local now
 
 ##### 0.0.6 - unreleased
 ...
