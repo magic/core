@@ -30,6 +30,7 @@ export const master = async (cluster, cmds, argv, config) => {
   if (bail) {
     return
   }
+
   let watchWorker
   if (cmds.serve) {
     watchWorker = cluster.fork()
