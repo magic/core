@@ -14,8 +14,8 @@ headTags.forEach(name => {
   exp[name] = prepared
 })
 
-const description = attrs => {
-  exp.meta({ name: 'description', property: 'og:description', content: attrs })
+const description = content => {
+  exp.meta({ name: 'description', property: 'og:description', content })
 }
 
 exp.description = description
