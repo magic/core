@@ -10,6 +10,8 @@ export const component = name => (props = {}, children = false) => {
     } else if (is(props.View, 'function')) {
       children = props.View
       props = {}
+    } else if (props.props || props.children) {
+      return h(name, {}, component(props.name)(props.props || {}, props.children || []))
     }
   }
 
