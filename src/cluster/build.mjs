@@ -19,7 +19,7 @@ export const build = async (cmds, config) => {
     if (cmds.build) {
       await runCmd('write', app, config)
     }
-  } catch(e) {
+  } catch (e) {
     log.error('error during build', e)
   }
 
