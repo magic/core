@@ -10,14 +10,15 @@ export const preparePages = async app => {
 
   const pages = await Promise.all(app.files.map(preparePage({ WEB_ROOT, PAGES: config.DIR.PAGES })))
 
-  const has404 = pages.some(p => p.name === '/404/')
+  const has404 = pages.some(p => p.name === `${config.WEB_ROOT}404/`)
 
   if (!has404) {
     const page404 = {
-      name: `${WEB_ROOT}/404/`,
-      path: path.join(config.DIR.PUBLIC, '404.html'),
+      name: `${config.WEB_ROOT}404/`,
+      path: `${config.WEB_ROOT}/404.html`,
       View: () => div('404 - not found'),
     }
+
     pages.push(page404)
   }
 
