@@ -35,6 +35,7 @@ html and markdown files can include state and variables
 @magic-modules/messages gets autoloaded if it is installed.
 components now can be nested without array. div([p('text')]) can also be div(p('text'))
 Link({ to: '#hashLink' }) is local now
+very early blog implementation. it works, but the archive pages need more work.
 
 ##### 0.0.6 - unreleased
 ...
