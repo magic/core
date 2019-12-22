@@ -2,7 +2,7 @@ export const state = config => ({
   seo: {
     name: '@magic/core documentation',
     url: `https://${config.URL}`,
-    // about: '@magic/core javascript library',
+    about: '@magic javascript library core.',
     image: `${config.WEB_ROOT}logo.png`,
     author: {
       '@type': 'person',
@@ -24,7 +24,6 @@ export const state = config => ({
         { to: '#styles', text: 'styles' },
         { to: '#globals', text: 'global' },
         { to: '#lambdas', text: 'server lambdas' },
-        { to: '#libs', text: 'external libs' },
       ],
     },
     {
