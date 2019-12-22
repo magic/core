@@ -36,9 +36,12 @@ export const write = async app => {
       return
     }
 
-    const dir = path.dirname(page.path)
+    const pagePath = page.path.replace(config.WEB_ROOT, `${config.DIR.PUBLIC}/`)
+    
+    const dir = path.dirname(pagePath)
     await fs.mkdirp(dir)
-    await fs.writeFile(page.path, page.rendered)
+
+    await fs.writeFile(pagePath, page.rendered)
   })
 
   const jsFile = path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.js`)
