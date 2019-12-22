@@ -40,7 +40,10 @@ very early blog implementation. it works, but the archive pages need more work.
 ##### 0.0.6
 always delete .tmp dir
 
-##### 0.0.7 - unreleased
+##### 0.0.7
+fix 404 page regression
+
+##### 0.0.8 - unreleased
 ...
 
 [![NPM version][npm-image]][npm-url]
