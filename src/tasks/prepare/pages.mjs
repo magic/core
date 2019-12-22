@@ -2,8 +2,6 @@ import path from 'path'
 import { fs } from '../../lib/index.mjs'
 import { preparePage } from './page.mjs'
 
-const tmpDir = path.join(process.cwd(), '.temp')
-
 export const preparePages = async app => {
   let WEB_ROOT = config.WEB_ROOT
   if (WEB_ROOT && WEB_ROOT.endsWith('/')) {
@@ -21,11 +19,6 @@ export const preparePages = async app => {
       View: () => div('404 - not found'),
     }
     pages.push(page404)
-  }
-
-  const tmpExists = await fs.exists(tmpDir)
-  if (tmpExists) {
-    await fs.rmrf(tmpDir)
   }
 
   return pages

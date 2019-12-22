@@ -10,7 +10,7 @@ import {
 } from '../../lib/index.mjs'
 
 export const write = async app => {
-  const { IS_PROD } = config
+  const { IS_PROD, TMP_DIR } = config
   // const zippable = config.FILETYPES.ZIPPABLE
   // const images = config.FILETYPES.IMAGES
 
@@ -37,7 +37,7 @@ export const write = async app => {
     }
 
     const pagePath = page.path.replace(config.WEB_ROOT, `${config.DIR.PUBLIC}/`)
-    
+
     const dir = path.dirname(pagePath)
     await fs.mkdirp(dir)
 
@@ -61,6 +61,11 @@ export const write = async app => {
   // }
 
   await writeServer(app)
+
+  const tmpExists = await fs.exists(TMP_DIR)
+  if (tmpExists) {
+    await fs.rmrf(TMP_DIR)
+  }
 }
 
 export default write

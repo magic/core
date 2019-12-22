@@ -3,8 +3,6 @@ import path from 'path'
 import transmute from '@magic/transmute'
 import { fs } from '../../lib/index.mjs'
 
-const tmpDir = path.join(process.cwd(), '.temp')
-
 export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
   const ext = path.extname(file)
 
@@ -26,8 +24,8 @@ export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
   let pageTmp
   if (transmuted) {
     const viewString = `export const View = () => [${transmuted.rendered}]`
-    const fileTmpPath = path.join(tmpDir, path.basename(file))
-    await fs.mkdirp(tmpDir)
+    const fileTmpPath = path.join(config.TMP_DIR, path.basename(file))
+    await fs.mkdirp(config.TMP_DIR)
     await fs.writeFile(fileTmpPath, viewString)
     pageTmp = await import(fileTmpPath)
   } else {
