@@ -170,8 +170,8 @@ export const runConfig = async () => {
   }
 
   conf.TMP_DIR = conf.TMP_DIR || '.tmp'
-  if (!conf.TMP_DIR.startsWith(conf.ROOT)) {
-    conf.TMP_DIR = path.join(conf.ROOT, '.tmp')
+  if (!conf.TMP_DIR.startsWith(process.cwd())) {
+    conf.TMP_DIR = path.join(process.cwd(), '.tmp')
   }
 
   return conf
