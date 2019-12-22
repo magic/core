@@ -1,10 +1,11 @@
 import is from '@magic/types'
 
-import { getPages, fs } from '../../lib/index.mjs'
+import { getBlog, getPages, fs } from '../../lib/index.mjs'
 
 import { prepareGlobals } from './globals.mjs'
 import { prepareJs } from './js.mjs'
 import { preparePages } from './pages.mjs'
+import { prepareBlog } from './blog.mjs'
 import { prepareCss } from './css.mjs'
 import { prepareModules } from './modules.mjs'
 import { prepareMetaFiles } from './meta.mjs'
@@ -13,11 +14,14 @@ import { prepareServiceWorker } from './service-worker.mjs'
 export const prepare = async (app, config) => {
   const { modules, libs } = await prepareGlobals(app, config)
 
-  const files = await getPages()
+  app.files = await getPages()
 
-  app.files = files
+  if (config.BLOG_DIR) {
+    app.blog = await getBlog(app.files)
+  }
 
   app.state = app.state || {}
+
   app.actions = app.actions || {}
   app.effects = app.effects || {}
   app.helpers = app.helpers || {}
@@ -25,7 +29,15 @@ export const prepare = async (app, config) => {
   app.subscriptions = app.subscriptions || []
 
   // collect the pages, create their states
-  app.pages = await preparePages(files)
+  app.pages = await preparePages(app)
+
+  if (config.BLOG_DIR) {
+    const { posts, index } = await prepareBlog(app)
+
+    app.state.blog = index
+
+    app.pages = [...app.pages, ...posts]
+  }
 
   // collect all page states, actions, effects, helpers and subscriptions
   app.pages.map(page => {

@@ -162,5 +162,12 @@ export const runConfig = async () => {
     conf.URL_WARNING = timeSpent
   }
 
+  // blog support
+  if (conf.BLOG_DIR) {
+    if (!conf.BLOG_DIR.startsWith(conf.ROOT)) {
+      conf.BLOG_DIR = path.join(conf.ROOT, conf.BLOG_DIR)
+    }
+  }
+
   return conf
 }
