@@ -12,10 +12,10 @@ export const getPages = async () => {
 
     return files
   } catch (e) {
-    if (config.DIR.PAGES.startsWith(process.cwd())) {
+    if (config.DIR.PAGES.startsWith(config.ROOT)) {
       throw new Error(`NOEXIST - ${config.DIR.PAGES} does not exist or does not contain pages`)
 
-      // TODO: automatically install an example and give the user a choice which one
+      // TODO: install an example and give the user a choice which one
       // const indexPage = "() => div('hello world')"
       // const pagePath = path.join(config.DIR.PAGES, 'index.mjs')
       // await fs.mkdirp(config.DIR.PAGES)
