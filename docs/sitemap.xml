@@ -7,84 +7,112 @@
 
 <url>
   <loc>https://magic.github.io/core/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/404/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/concepts/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/files/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/libraries/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/modules/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/modules/example/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/modules/html/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/modules/markdown/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/modules/preinstalled/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/modules/propTypes/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+</url>
+
+<url>
+  <loc>https://magic.github.io/core/news/</loc>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://magic.github.io/core/themes/</loc>
-  <lastmod>2019-12-16</lastmod>
+  <lastmod>2019-12-22</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+</url>
+
+<url>
+  <loc>https://magic.github.io/core/news/2019/</loc>
+  <lastmod>2019-12-22</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+</url>
+
+<url>
+  <loc>https://magic.github.io/core/news/2019/12</loc>
+  <lastmod>2019-12-22</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+</url>
+
+<url>
+  <loc>https://magic.github.io/core/news/2019/12/22/blogging/</loc>
+  <lastmod>2019-12-22</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
 </url>
