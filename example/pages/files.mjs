@@ -117,7 +117,11 @@ export default {
 
     h2({ id: 'themes' }, '/assets/themes'),
     p('the themes directory contains... themes.'),
-    p('at the moment this is file based, which means you have to manually import themes there.'),
+    p([
+      'a magic theme is an object of css rules, see ',
+      Link({ to: 'https://github.com/magic/css/' }, '@magic/css'),
+      ' for more examples and documentation.',
+    ]),
 
     h3({ id: 'themes-example' }, 'example theme'),
     Pre(examples.theme),
