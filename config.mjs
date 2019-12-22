@@ -6,6 +6,10 @@ export default {
 
   PUBLIC: 'docs',
 
+  // the directory in the pages directory that holds the blog posts
+  // if this is not set, no blog is created.
+  BLOG_DIR: 'news',
+
   // this option adds the
   // 'X-Clacks-Overhead', 'GNU Terry Pratchet'
   // http header
