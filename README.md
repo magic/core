@@ -37,7 +37,10 @@ components now can be nested without array. div([p('text')]) can also be div(p('
 Link({ to: '#hashLink' }) is local now
 very early blog implementation. it works, but the archive pages need more work.
 
-##### 0.0.6 - unreleased
+##### 0.0.6
+always delete .tmp dir
+
+##### 0.0.7 - unreleased
 ...
 
 [![NPM version][npm-image]][npm-url]
