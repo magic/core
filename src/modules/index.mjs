@@ -7,6 +7,11 @@ import * as Img from './Img.mjs'
 import * as Route from './Route.mjs'
 import * as Seo from './Seo.mjs'
 
+import * as BlogArchive from './BlogArchive.mjs'
+import * as BlogYear from './BlogYear.mjs'
+import * as BlogMonth from './BlogMonth.mjs'
+import * as BlogTeaser from './BlogTeaser.mjs'
+
 export { component } from './component.mjs'
 
 export { tags } from './tags.mjs'
@@ -23,4 +28,8 @@ export const builtins = {
   Link,
   Route,
   Seo,
+  BlogYear,
+  BlogMonth,
+  BlogTeaser,
+  BlogArchive,
 }
