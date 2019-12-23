@@ -12,6 +12,18 @@ import { prepareMetaFiles } from './meta.mjs'
 import { prepareServiceWorker } from './service-worker.mjs'
 
 export const prepare = async (app, config) => {
+  const defaultApp = {
+    state: {},
+    actions: {},
+    effects: {},
+    helpers: {},
+    cookies: {},
+    subscriptions: [],
+    lib: {},
+  }
+
+  app = { ...defaultApp, ...app }
+
   const { modules, libs } = await prepareGlobals(app, config)
 
   app.files = await getPages()
@@ -20,13 +32,6 @@ export const prepare = async (app, config) => {
     app.blog = await getBlog(app.files)
   }
 
-  app.state = app.state || {}
-
-  app.actions = app.actions || {}
-  app.effects = app.effects || {}
-  app.helpers = app.helpers || {}
-  app.cookies = app.cookies || {}
-  app.subscriptions = app.subscriptions || []
 
   // collect the pages, create their states
   app.pages = await preparePages(app)
@@ -101,7 +106,6 @@ export const prepare = async (app, config) => {
     }
   }
 
-  app.lib = app.lib || {}
   libs.forEach(lib => {
     app.lib[lib.key] = lib.path
   })
