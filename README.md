@@ -23,19 +23,19 @@ first commit
 use @magic npm packages instead of github for installs
 
 ##### 0.0.3
-update dependencies
-make @magic actually work in the client if @magic-modules/gdpr is not installed.
+* update dependencies
+* make @magic actually work in the client if @magic-modules/gdpr is not installed.
 
 ##### 0.0.4
-dev server now correctly redirects urls if the trailing slash is missing
-html and markdown files can include state and variables
+* dev server now correctly redirects urls if the trailing slash is missing
+* html and markdown files can include state and variables
 
 ##### 0.0.5
-@magic-themes can now add variables to the css colors without overwriting the default colors
-@magic-modules/messages gets autoloaded if it is installed.
-components now can be nested without array. div([p('text')]) can also be div(p('text'))
-Link({ to: '#hashLink' }) is local now
-very early blog implementation. it works, but the archive pages need more work.
+* @magic-themes can now add variables to the css colors without overwriting the default colors
+* @magic-modules/messages gets autoloaded if it is installed.
+* components now can be nested without array. div([p('text')]) can also be div(p('text'))
+* Link({ to: '#hashLink' }) is local now
+* very early blog implementation. it works, but the archive pages need more work.
 
 ##### 0.0.6
 always delete .tmp dir
@@ -44,9 +44,9 @@ always delete .tmp dir
 fix 404 page regression
 
 ##### 0.0.8 - unreleased
-blog/year/month archive pages are not 404'ing.
-blog archive pages now have links in them if needed 
-(year page links to each month archive page)
+* blog/year/month archive pages are not 404'ing.
+* blog archive pages now have links in them if needed
+  (year page links to each month archive page)
 
 [![NPM version][npm-image]][npm-url]
 [![Linux Build Status][travis-image]][travis-url]
