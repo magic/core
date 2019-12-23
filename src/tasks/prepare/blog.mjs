@@ -24,7 +24,6 @@ export const prepareBlog = async app => {
 
   const extensions = ['.markdown', '.js', '.htm', '.mjs', '.html', '.md']
 
-
   let WEB_ROOT = config.WEB_ROOT
   if (WEB_ROOT && WEB_ROOT.endsWith('/')) {
     WEB_ROOT = WEB_ROOT.slice(0, -1)
@@ -80,7 +79,6 @@ export const prepareBlog = async app => {
     }),
   )
 
-
   const file = app.blog.find(file => extensions.some(f => file === relativeBlogDir + f))
   if (!file) {
     const post = {
@@ -112,13 +110,12 @@ export const prepareBlog = async app => {
 
     Object.entries(months).forEach(([month, days]) => {
       const monthDir = path.join(config.BLOG_DIR, year, 'index')
-      const extensions = ['.markdown', '.js', '.htm', '.mjs', '.html', '.md']
       const file = app.blog.find(file => extensions.some(f => file === monthDir + f))
 
       if (!file) {
         const post = {
           View: state => BlogMonth(state),
-          name: `${WEB_ROOT}/${year}/${month}`,
+          name: `${WEB_ROOT}/${year}/${month}/`,
           path: `${WEB_ROOT}/${year}/${month}/index.html`,
           state: {
             year,
