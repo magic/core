@@ -1,15 +1,13 @@
 export const View = state =>
   div([
-    h4(
-      Link({ to: state.name }, [
-        state.day,
-        '-',
-        state.month,
-        '-',
-        state.year,
-        ' - ',
-        state.state.title,
-      ]),
-    ),
-    p(state.state.description),
+    h4([
+      state.day,
+      '-',
+      state.month,
+      '-',
+      state.year,
+      ' - ',
+      Link({ to: state.name }, state.title),
+    ]),
+    p(state.description),
   ])

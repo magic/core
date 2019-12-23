@@ -1,4 +1,2 @@
-export const View = state => {
-  const years = Object.entries(state.blog)
-  return years.map(([year]) => BlogYear({ ...state, year }))
-}
+export const View = state =>
+  Object.entries(state.blog).map(([year]) => BlogYear({ ...state, year, link: state.url }))
