@@ -32,7 +32,6 @@ export const prepare = async (app, config) => {
     app.blog = await getBlog(app.files)
   }
 
-
   // collect the pages, create their states
   app.pages = await preparePages(app)
 
