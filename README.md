@@ -47,6 +47,12 @@ fix 404 page regression
 * blog/year/month archive pages are not 404'ing.
 * blog archive pages now have links in them if needed
   (year page links to each month archive page)
+* blog posts are wrapped in BlogPost automagically.
+  BlogPost adds header and description automagically.
+
+
+##### 0.0.9 - unreleased
+...
 
 [![NPM version][npm-image]][npm-url]
 [![Linux Build Status][travis-image]][travis-url]
