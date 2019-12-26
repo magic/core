@@ -82,7 +82,7 @@ const App = async config => {
       app = deep.merge(app, { ...maybeApp, state: s })
     }
   } catch (e) {
-    // happy without maybApp
+    // happy without maybeApp
   }
 
   // admin
