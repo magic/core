@@ -1,7 +1,6 @@
 import { cli } from '@magic/cli/src/index.mjs'
 
 import { runCluster } from '../cluster/index.mjs'
-import { runConfig } from '../config.mjs'
 
 const args = {
   options: [['--help', '-help', 'help', '--h', '-h'], ['--no-minify'], ['--watch', '-w']],
@@ -41,14 +40,7 @@ magic dev --watch src
 const run = async () => {
   const res = cli(args)
 
-  const config = await runConfig()
-
-  if (!global.CHECK_PROPS) {
-    const { CHECK_PROPS } = await import('../lib/CHECK_PROPS.mjs')
-    global.CHECK_PROPS = CHECK_PROPS
-  }
-
-  runCluster(res, config)
+  runCluster(res)
 }
 
 run()
