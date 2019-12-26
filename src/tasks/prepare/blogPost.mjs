@@ -4,7 +4,7 @@ import log from '@magic/log'
 import transmute from '@magic/transmute'
 import { fs } from '../../lib/index.mjs'
 
-export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
+export const prepareBlogPost = ({ WEB_ROOT, PAGES }) => async file => {
   const ext = path.extname(file)
 
   const markdownExtensions = ['.md', '.markdown']
@@ -24,7 +24,7 @@ export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
 
   let pageTmp
   if (!is.empty(transmuted)) {
-    const viewString = `export const View = () => [${transmuted.rendered}]`
+    const viewString = `export const View = state => BlogPost(state, [${transmuted.rendered}])`
 
     const fileTmpPath = path.join(config.TMP_DIR, path.basename(file))
     await fs.mkdirp(config.TMP_DIR)
@@ -32,6 +32,20 @@ export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
     pageTmp = await import(fileTmpPath)
   } else {
     pageTmp = await import(file)
+
+    let children = []
+    if (is.fn(pageTmp)) {
+      children = page.toString().split('=>')[1]
+    } else if (is.fn(pageTmp.View)) {
+      children = page.View.toString().split('=>')[1]
+    }
+
+    viewString = `export const View = state => BlogPost(state, ${children})`
+
+    const fileTmpPath = path.join(config.TMP_DIR, path.basename(file))
+    await fs.mkdirp(config.TMP_DIR)
+    await fs.writeFile(fileTmpPath, viewString)
+    pageTmp = await import(fileTmpPath)
   }
 
   let page
@@ -41,8 +55,8 @@ export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
       View: pageTmp,
     }
   } else if (transmuted) {
-    const { rendered, ...t } = transmuted
-    page = { ...t, ...pageTmp }
+    const { rendered, ...trans } = transmuted
+    page = { ...trans, ...pageTmp }
   } else {
     page = { ...pageTmp }
   }

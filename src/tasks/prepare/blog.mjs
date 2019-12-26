@@ -1,23 +1,6 @@
 import path from 'path'
-import { preparePage } from './page.mjs'
+import { prepareBlogPost } from './blogPost.mjs'
 import fs from '@magic/fs'
-
-const indexYear = blogDir => ([year, months]) => {
-  const yearDir = path.join(blogDir, year)
-
-  return [yearDir, Object.entries(months).map(indexMonth(yearDir))]
-}
-
-const indexMonth = yearDir => ([month, days]) => {
-  const monthDir = path.join(yearDir, month)
-
-  return [monthDir, Object.entries(days).map(indexDay(monthDir))]
-}
-
-const indexDay = monthDir => ([day, posts]) => {
-  const dayDir = path.join(monthDir, day)
-  return [dayDir, posts]
-}
 
 export const prepareBlog = async app => {
   const relativeBlogDir = config.BLOG_DIR.replace(`${config.ROOT}/`, '')
@@ -35,7 +18,7 @@ export const prepareBlog = async app => {
 
   const posts = await Promise.all(
     app.blog.map(async file => {
-      const post = await preparePage({ WEB_ROOT, PAGES: config.BLOG_DIR })(file)
+      const post = await prepareBlogPost({ WEB_ROOT, PAGES: config.BLOG_DIR })(file)
       const rootedBlogPath = file.replace(config.BLOG_DIR, '')
       let [year, month, day, ...postPath] = rootedBlogPath.split('/').filter(a => a)
 
