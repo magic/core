@@ -5,10 +5,6 @@
 }
 ---
 
-## ${state.title}
-
-${state.description}
-
 so i guess i should start using it...
 
 it's pretty rough,
@@ -25,3 +21,5 @@ then just add the blogposts in that directory structure.
 
 @magic will automagically build a blog directory for you,
 including the archives for yearly, monthly and overall blog posts.
+
+more information following soon.
