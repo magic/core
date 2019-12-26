@@ -11,6 +11,7 @@ import * as BlogArchive from './BlogArchive.mjs'
 import * as BlogYear from './BlogYear.mjs'
 import * as BlogMonth from './BlogMonth.mjs'
 import * as BlogTeaser from './BlogTeaser.mjs'
+import * as BlogPost from './BlogPost.mjs'
 
 export { component } from './component.mjs'
 
@@ -32,4 +33,5 @@ export const builtins = {
   BlogMonth,
   BlogTeaser,
   BlogArchive,
+  BlogPost,
 }
