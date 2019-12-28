@@ -52,7 +52,9 @@ fix 404 page regression
 
 
 ##### 0.0.9 - unreleased
+config.HOIST allows adding any module at the bottom of the page (gdpr, messages will use that)
 ...
+
 
 [![NPM version][npm-image]][npm-url]
 [![Linux Build Status][travis-image]][travis-url]
