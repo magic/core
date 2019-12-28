@@ -49,10 +49,9 @@ fix 404 page regression
   (year page links to each month archive page)
 * blog posts are wrapped in BlogPost automagically.
   BlogPost adds header and description automagically.
-
+* config.HOIST allows adding any module at the bottom of the page (gdpr, messages will use that)
 
 ##### 0.0.9 - unreleased
-config.HOIST allows adding any module at the bottom of the page (gdpr, messages will use that)
 ...
 
 
