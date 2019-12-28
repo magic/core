@@ -196,15 +196,19 @@ url: window.location.pathname,
   }
 
   let hoisted = ''
-  if (config.HOIST) {
-    hoisted = config.HOIST.map(component => `${component}(state)`).join(',')
-  }
-
-  if (hoisted) {
-    if (config.HOIST.length > 1) {
-      hoisted = `[${hoisted}]`
-    } else if (config.HOIST.length === 0) {
-      hoisted = ''
+  if (!is.empty(config.HOIST)) {
+    if (is.array(config.HOIST)) {
+      hoisted = config.HOIST.map(component => `${component}(state)`).join(',')
+      if (config.HOIST.length > 1) {
+        hoisted = `[${hoisted}]`
+      } else if (config.HOIST.length === 0) {
+        hoisted = ''
+      }
+    } else if (is.string(config.HOIST)) {
+      hoisted = config.HOIST
+      if (!hoisted.includes('state')) {
+        hoisted = `${hoisted}(state)`
+      }
     }
   }
 
