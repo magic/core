@@ -175,18 +175,21 @@ if ('serviceWorker' in navigator) {
 }
 `
 
-  let initFunc = `() =>`
-  if (config.HOIST.includes('Gdpr') && app.actions.gdpr) {
-    initFunc += ` actions.gdpr.load({
+  let initState = `{
   ...initialState,
-  cookies: ${stringifyObject(magic.cookies)},
   url: window.location.pathname,
-})`
-  } else {
-    initFunc += ` ({
-...initialState,
-url: window.location.pathname,
-})`
+}`
+
+  let initFunc = ''
+
+  if (!is.empty(magic.init)) {
+    initFunc = `[${magic.init.join(',')}]`
+  }
+
+  let initString = initState
+
+  if (initFunc) {
+    initString = `[${initString}, ${initFunc}]`
   }
 
   let hoisted = ''
@@ -209,7 +212,7 @@ url: window.location.pathname,
   // generate string to write to client js
   const appString = `
 app({
-  init: ${initFunc},
+  init: ${initString},
   ${subscriptionString}
   view: state => {
     const url = pages[state.url] ? state.url : '/404/'

@@ -20,6 +20,7 @@ export const prepare = async (app, config) => {
     cookies: {},
     subscriptions: [],
     lib: {},
+    init: [],
   }
 
   app = { ...defaultApp, ...app }
@@ -71,6 +72,10 @@ export const prepare = async (app, config) => {
 
     if (!is.empty(page.cookies)) {
       app.cookies = deep.merge(app.cookies, page.cookies)
+    }
+
+    if (!is.empty(page.init)) {
+      app.init = deep.merge(app.init, page.init)
     }
 
     return page

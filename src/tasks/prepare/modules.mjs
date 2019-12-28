@@ -50,6 +50,10 @@ export const prepareModule = app => ([name, component]) => {
   if (!is.empty(component.cookies)) {
     app.cookies = deep.merge(app.cookies, component.cookies)
   }
+
+  if (!is.empty(component.init)) {
+    app.init = deep.merge(app.init, component.init)
+  }
 }
 
 export const prepareModules = (app, modules) => {
