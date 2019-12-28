@@ -182,7 +182,7 @@ if ('serviceWorker' in navigator) {
 `
 
   let initFunc = `() =>`
-  if (app.actions.gdpr) {
+  if (config.HOIST.includes('Gdpr') && app.actions.gdpr) {
     initFunc += ` actions.gdpr.load({
   ...initialState,
   ${cookieString}
