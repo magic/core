@@ -9,6 +9,5 @@ export const View = (state, children) => {
     h4('Blog Archives:'),
     p(Link({ to: `/${root}/${prefix}/${year}/` }, `year: ${year}`)),
     p(Link({ to: `/${root}/${prefix}/${year}/${month}/` }, `month: ${month} ${year}`)),
-
   ]
 }

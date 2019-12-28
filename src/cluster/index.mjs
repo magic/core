@@ -14,7 +14,6 @@ export const runCluster = async ({ cmds, argv }) => {
     global.CHECK_PROPS = CHECK_PROPS
   }
 
-
   if (cluster.isMaster) {
     await master(cluster, cmds, argv, config)
   } else if (cluster.isWorker) {
