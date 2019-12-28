@@ -59,6 +59,9 @@ fix 404 page regression
 * app.actions.gdpr will only be added if Gdpr is included in config.HOIST
 
 ##### 0.0.11
+* allow arbitrary, module and page level init effects for initialState
+
+##### 0.0.12 - unreleased
 ...
 
 
