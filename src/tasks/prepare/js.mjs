@@ -168,12 +168,6 @@ return { ${imports} }
 
   pageString += '\n}\n'
 
-  let cookieString = ''
-
-  if (!is.empty(magic.cookies)) {
-    cookieString = `cookies: ${stringifyObject(magic.cookies)},`
-  }
-
   // unused for now
   const serviceWorkerString = `
 if ('serviceWorker' in navigator) {
@@ -185,7 +179,7 @@ if ('serviceWorker' in navigator) {
   if (config.HOIST.includes('Gdpr') && app.actions.gdpr) {
     initFunc += ` actions.gdpr.load({
   ...initialState,
-  ${cookieString}
+  cookies: ${stringifyObject(magic.cookies)},
   url: window.location.pathname,
 })`
   } else {
