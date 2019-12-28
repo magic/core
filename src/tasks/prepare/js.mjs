@@ -195,6 +195,19 @@ url: window.location.pathname,
 })`
   }
 
+  let hoisted = ''
+  if (config.HOIST) {
+    hoisted = config.HOIST.map(component => `${component}(state)`).join(',')
+  }
+
+  if (hoisted) {
+    if (config.HOIST.length > 1) {
+      hoisted = `[${hoisted}]`
+    } else if (config.HOIST.length === 0) {
+      hoisted = ''
+    }
+  }
+
   // generate string to write to client js
   const appString = `
 app({
@@ -205,13 +218,14 @@ app({
     const page = pages[url]
 
     // map pageState into state
-    if (state.pages && state.pages[url]) {
-      Object.keys(state.pages[url]).forEach(key => {
-        state[key] = state.pages[url][key]
+    const s = state.pages && state.pages[url]
+    if (s) {
+      Object.keys(s).forEach(key => {
+        state[key] = s[key]
       })
     }
 
-    return Page({ page, state })
+    return Page({ page, state }${hoisted ? `, ${hoisted}` : ''} )
   },
   node: document.getElementById('Magic'),
 })
