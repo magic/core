@@ -174,5 +174,7 @@ export const runConfig = async () => {
     conf.TMP_DIR = path.join(process.cwd(), '.tmp')
   }
 
+  conf.HOIST = conf.HOIST || []
+
   return conf
 }
