@@ -54,7 +54,11 @@ fix 404 page regression
 ##### 0.0.9
 * config.HOIST can be an array or a string
 
-##### 0.0.10 - unreleased
+##### 0.0.10
+* config.HOIST defaults to empty array
+* app.actions.gdpr will only be added if Gdpr is included in config.HOIST
+
+##### 0.0.11
 ...
 
 
