@@ -52,6 +52,7 @@ fix 404 page regression
 * config.HOIST allows adding any module at the bottom of the page (gdpr, messages will use that)
 
 ##### 0.0.9 - unreleased
+* config.HOIST can be an array or a string
 ...
 
 
