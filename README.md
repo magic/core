@@ -51,8 +51,10 @@ fix 404 page regression
   BlogPost adds header and description automagically.
 * config.HOIST allows adding any module at the bottom of the page (gdpr, messages will use that)
 
-##### 0.0.9 - unreleased
+##### 0.0.9
 * config.HOIST can be an array or a string
+
+##### 0.0.10 - unreleased
 ...
 
 
