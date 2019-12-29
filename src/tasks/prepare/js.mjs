@@ -178,6 +178,7 @@ if ('serviceWorker' in navigator) {
   let initState = `{
   ...initialState,
   url: window.location.pathname,
+  hash: window.location.hash.substr(1),
 }`
 
   let initFunc = ''
