@@ -23,7 +23,7 @@ export const Link = ({ to, ...p }, children) => {
   const isLocal = to[0] === '/' || to[0] === '#'
 
   if (isLocal) {
-    props.onclick = [actions.go, helpers.mapClickToGo]
+    props.onclick = [actions.go, lib.preventDefault]
   } else {
     props.target = '_blank'
     props.rel = 'noopener'
@@ -95,11 +95,6 @@ export const actions = {
 }
 
 export const helpers = {
-  mapClickToGo: e => {
-    e.preventDefault()
-    return e
-  },
-
   listenPopState: (dispatch, action) => {
     const listener = e => dispatch(action, e)
 
