@@ -13,7 +13,7 @@ import * as BlogMonth from './BlogMonth.mjs'
 import * as BlogTeaser from './BlogTeaser.mjs'
 import * as BlogPost from './BlogPost.mjs'
 
-import * as SkipLink from './SkipLink'
+import * as SkipLink from './SkipLink.mjs'
 
 export { component } from './component.mjs'
 
