@@ -62,6 +62,10 @@ fix 404 page regression
 * allow arbitrary, module and page level init effects for initialState
 
 ##### 0.0.12 - unreleased
+* add SkipLink for screen readers. hash links to page start
+* libraries can now be named with a - in their name and get camelCased
+
+##### 0.0.13 - unreleased
 ...
 
 
