@@ -1,12 +1,6 @@
 export const View = props => {
   CHECK_PROPS(props, propTypes, 'MenuItem', true)
-  const { text, items = [], url, state, parentTo = undefined, collapse, ...item } = props
-  const { root } = state
-
-  // if the item has no values, we quit
-  if (!item.to && !text) {
-    return
-  }
+  const { text, items = [], url, root, parentTo = undefined, collapse, ...item } = props
 
   const p = {
     class: {},
@@ -36,10 +30,6 @@ export const View = props => {
     }
   }
 
-  if ((item.to !== '/' && url.endsWith(item.to)) || item.to === url) {
-    p.class.active = true
-  }
-
   const isRooted = to.startsWith(root)
   if (root && isLocal && !isRooted) {
     to = root + to
@@ -47,10 +37,15 @@ export const View = props => {
 
   item.to = to.replace(/\/\//g, '/')
 
+  if (item.to === url) {
+    p.class.active = true
+  }
+
   let children = []
-  const active = url && url.includes(item.to)
-  if ((items.length && active) || !collapse) {
-    children = ul(items.map(i => MenuItem({ parentTo: item.to, url, state, collapse, ...i })))
+  const active = url.startsWith(item.to) || !collapse
+
+  if (active) {
+    children = ul(items.map(i => MenuItem({ parentTo: item.to, url, root, collapse, ...i })))
   }
 
   return li(p, [item.to ? Link(item, text) : span(item, text), children])

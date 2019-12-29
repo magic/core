@@ -1,17 +1,13 @@
 export const View = (props = {}) => {
   CHECK_PROPS(props, propTypes, 'Menu')
-  const { items, class: className = 'Menu', collapse = true, state } = props
+  const { class: className = 'Menu', collapse = true, items, state } = props
+  let { url, hash, root } = state
 
-  if (!items.length) {
-    return
+  if (hash && !url.endsWith(hash)) {
+    url += `#${hash}`
   }
 
-  let url = state.url || ''
-  if (state.hash && !url.endsWith(state.hash)) {
-    url += `#${state.hash}`
-  }
-
-  return nav({ className }, ul(items.map(i => MenuItem({ ...i, url, state, collapse }))))
+  return nav({ className }, ul(items.map(item => MenuItem({ ...item, url, root, collapse }))))
 }
 
 export const style = {
