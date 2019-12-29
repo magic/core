@@ -51,6 +51,7 @@ const App = async config => {
             page.Head && page.Head(state),
           ]),
           body([
+            SkipLink(),
             Page({ page: page.View, state }),
             script(magicJs),
             // script(serviceWorker),
