@@ -2,7 +2,7 @@ import path from 'path'
 
 import is from '@magic/types'
 
-import { fs, isUpperCase, stringifyObject } from '../../lib/index.mjs'
+import { fs, isUpperCase, stringifyObject, toCamel } from '../../lib/index.mjs'
 
 export const prepareJs = async magic => {
   const hyperappPath = path.join(
@@ -147,6 +147,10 @@ return { ${imports} }
         }
 
         const contents = await fs.readFile(lib, 'utf8')
+        if (name.includes('-')) {
+          name = toCamel(name)
+        }
+
         return `  ${name}: (() => {${contents
           .replace(/export default/g, `return`)
           .replace(/export /g, '')}})(),`
