@@ -65,7 +65,10 @@ fix 404 page regression
 * add SkipLink for screen readers. hash links to page start
 * libraries can now be named with a - in their name and get camelCased
 
-##### 0.0.13 - unreleased
+##### 0.0.13
+* svg tags are actually usable now. except color-profile and switch.
+
+##### 0.0.14 - unreleased
 ...
 
 
