@@ -14,33 +14,59 @@ export const runConfig = async () => {
     log.warn('no local conf file found.')
   }
 
+  // make sure conf.ROOT starts with or is equal to process.cwd()
   if (!conf.ROOT) {
     conf.ROOT = process.cwd()
   } else if (!conf.ROOT.startsWith(process.cwd())) {
     conf.ROOT = path.resolve(process.cwd(), conf.ROOT)
   }
 
+  // object to collect various directories in.
   conf.DIR = conf.DIR || {}
 
+  // change to change the name of magic.js and magic.css
   conf.CLIENT_LIB_NAME = conf.CLIENT_LIB_NAME || 'magic'
+
+  // name of service-worker client file
   conf.CLIENT_SERVICE_WORKER_NAME = conf.CLIENT_SERVICE_WORKER_NAME || 'service-worker'
 
+  // the host to serve this @magic app at
   conf.HOST = conf.HOST || 'localhost'
+
+  // the port to serve this @magic app at
   conf.PORT = conf.PORT || 2323
 
+  // the URL this app will be served at
   conf.URL = conf.URL || false
+
+  // the CNAME of this app. domain.tld
   conf.CNAME = conf.hasOwnProperty('CNAME') ? conf.CNAME : false
+
+  // set to false to not emit a robots.txt file
   conf.ROBOTS_TXT = conf.hasOwnProperty('ROBOTS_TXT') ? conf.ROBOTS_TXT : true
+
+  // set to false to not emit a sitemap.xml file
   conf.SITEMAP = conf.hasOwnProperty('SITEMAP') ? conf.SITEMAP : true
 
+  // the pages directory with page files to build
   const PAGES = path.join(conf.ROOT, 'pages')
+
+  // the output dir that files get written to
   const PUBLIC = path.join(process.cwd(), conf.PUBLIC || conf.DIR.PUBLIC || 'public')
+
+  // assets dir, can include themes, modules, libraries
   const ASSETS = path.join(conf.ROOT, 'assets')
-  const MODULES = path.join(conf.ROOT, 'modules')
+  // module dir, modules get imported from here
+  const MODULES = path.join(ASSETS, 'modules')
+  // static directory, files in this dir get copied to conf.PUBLIC
   const STATIC = path.join(ASSETS, 'static')
+
+  // themes dir, files in this dir get used as themes
   const THEMES = path.join(ASSETS, 'themes')
+  // API dir for server side lambdas.
   const API = path.join(process.cwd(), conf.DIR.API || 'api')
 
+  // global css variables that get used by @magic/css
   const THEME_VARS = conf.THEME_VARS || {}
   if (!THEME_VARS.colors) {
     THEME_VARS.colors = colors
@@ -51,6 +77,7 @@ export const runConfig = async () => {
     }
   }
 
+  // name of the file with all sri hashes
   conf.HASH_FILE_NAME = conf.HASH_FILE_NAME || 'sri-hashes.json'
 
   try {
@@ -68,6 +95,8 @@ export const runConfig = async () => {
     }
   }
 
+
+  // the following files are zippable
   const ZIPPABLE = [
     'css',
     'js',
@@ -87,6 +116,8 @@ export const runConfig = async () => {
     'txt',
     'ico',
   ]
+
+  // those are image formats.
   const IMAGES = ['jpg', 'jpeg', 'png', 'svg', 'gif']
 
   conf = deep.merge(conf, {
@@ -118,9 +149,12 @@ export const runConfig = async () => {
     ENV: process.env.MAGIC_ENV || process.env.NODE_ENV || 'development',
   })
 
+  // get environment settings for prod and dev
   conf.IS_PROD = conf.ENV === 'production'
   conf.IS_DEV = conf.ENV === 'development'
 
+  // find WEB_ROOT manually from git.
+  // show warning if this has to be done, needs a few hundred ms
   if (!conf.WEB_ROOT || !conf.URL) {
     const startTime = new Date().getTime()
     const stdout = cp.execSync('git remote -v').toString()
@@ -179,7 +213,17 @@ export const runConfig = async () => {
   conf.HOIST = conf.HOIST || []
 
   // set to true to get babel build info
-  conf.BABEL_DEBUG = false
+  conf.BABEL = conf.BABEL || {}
+
+  conf.BABEL = {
+    DEBUG: false,
+    REMOVE_DEAD_CODE: true,
+    REMOVE_CHECK_PROPS: true,
+    MINIFY: false,
+    USE_PRESETS: true,
+    KEEP_COMMENTS: false,
+    ...conf.BABEL,
+  }
 
   return conf
 }
