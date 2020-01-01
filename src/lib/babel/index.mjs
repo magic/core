@@ -1,7 +1,15 @@
 import magic from './dead_code.mjs'
 
 export const getBabelConf = (app, config) => {
-  const { IS_PROD, IS_DEV, CLIENT_LIB_NAME, BABEL_DEBUG = false } = config
+  const {
+    CLIENT_LIB_NAME,
+    BABEL_DEBUG,
+    DEAD_CODE,
+    REMOVE_CHECK_PROPS,
+    MINIFY,
+    USE_PRESETS,
+    KEEP_COMMENTS,
+  } = config.BABEL
 
   const presets = [
     [
@@ -13,7 +21,7 @@ export const getBabelConf = (app, config) => {
         forceAllTransforms: true,
         ignoreBrowserslistConfig: true,
         // modules: false,
-        debug: DEBUG,
+        debug: BABEL_DEBUG,
       },
     ],
   ]
@@ -26,7 +34,7 @@ export const getBabelConf = (app, config) => {
     '@babel/plugin-proposal-export-namespace-from',
   ]
 
-  if (IS_PROD) {
+  if (REMOVE_CHECK_PROPS) {
     plugins.push([
       'remove-code',
       {
@@ -35,7 +43,7 @@ export const getBabelConf = (app, config) => {
     ])
   }
 
-  if (IS_PROD) {
+  if (MINIFY) {
     const { argv } = process
     const minify = !argv.includes('--no-minify')
     if (minify) {
@@ -54,11 +62,11 @@ export const getBabelConf = (app, config) => {
 
   return {
     filename: `${CLIENT_LIB_NAME}.js`,
-    minified: IS_PROD,
-    comments: IS_DEV,
+    minified: MINIFY,
+    comments: KEEP_COMMENTS,
     configFile: false,
     sourceMaps: false,
-    presets: IS_PROD ? presets : [],
+    presets: USE_PRESETS ? presets : [],
     plugins,
   }
 }
