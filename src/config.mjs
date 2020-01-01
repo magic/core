@@ -176,5 +176,7 @@ export const runConfig = async () => {
 
   conf.HOIST = conf.HOIST || []
 
+  conf.BABEL_DEBUG = false
+
   return conf
 }
