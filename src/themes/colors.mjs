@@ -1,4 +1,4 @@
-export default {
+export const colors = {
   red: {
     '50': '#FFEBEE',
     '100': '#FFCDD2',
@@ -294,3 +294,8 @@ export default {
   black: '#000000',
   white: '#FFFFFF',
 }
+
+colors.grey = colors.gray
+colors.bluegrey = colors.bluegrey
+
+export default colors
