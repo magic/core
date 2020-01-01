@@ -70,6 +70,7 @@ fix 404 page regression
 
 ##### 0.0.14 - unreleased
 * update @magic/css which updates postcss
+* color theme vars now export grey and bluegrey. copies gray and bluegray.
 
 ##### 0.0.15 - unreleased
 ...
