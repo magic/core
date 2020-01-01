@@ -43,7 +43,7 @@
     "@babel/preset-env": "7.7.7",
     "@magic-libraries/prevent-default": "0.0.2",
     "@magic/cli": "0.0.10",
-    "@magic/css": "0.7.6",
+    "@magic/css": "0.7.7",
     "@magic/deep": "0.1.0",
     "@magic/fs": "0.0.1",
     "@magic/hyperapp": "2.0.3",
