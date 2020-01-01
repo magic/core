@@ -169,13 +169,16 @@ export const runConfig = async () => {
     }
   }
 
+  // the directory used to save temporary build files
   conf.TMP_DIR = conf.TMP_DIR || '.tmp'
   if (!conf.TMP_DIR.startsWith(process.cwd())) {
     conf.TMP_DIR = path.join(process.cwd(), '.tmp')
   }
 
+  // an array of @magic-modules that get appended to the body
   conf.HOIST = conf.HOIST || []
 
+  // set to true to get babel build info
   conf.BABEL_DEBUG = false
 
   return conf
