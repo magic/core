@@ -72,6 +72,7 @@ fix 404 page regression
 * update @magic/css which updates postcss
 * color theme vars now export grey and bluegrey. copies gray and bluegray.
 * config.BABEL is now being used for babel build
+* config.THEME_VARS can be a function. gets passed { colors } if it is a function.
 
 ##### 0.0.15 - unreleased
 ...
