@@ -1,7 +1,7 @@
 import magic from './dead_code.mjs'
 
 export const getBabelConf = (app, config) => {
-  const { IS_PROD, IS_DEV, CLIENT_LIB_NAME } = config
+  const { IS_PROD, IS_DEV, CLIENT_LIB_NAME, BABEL_DEBUG = false } = config
 
   const presets = [
     [
@@ -13,7 +13,7 @@ export const getBabelConf = (app, config) => {
         forceAllTransforms: true,
         ignoreBrowserslistConfig: true,
         // modules: false,
-        debug: IS_DEV,
+        debug: DEBUG,
       },
     ],
   ]
@@ -36,9 +36,9 @@ export const getBabelConf = (app, config) => {
   }
 
   if (IS_PROD) {
-    const minify = !process.argv.includes('--no-minify')
+    const { argv } = process
+    const minify = !argv.includes('--no-minify')
     if (minify) {
-      const argv = process.argv
       presets.push([
         'minify',
         {
