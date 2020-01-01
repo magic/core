@@ -69,6 +69,7 @@ fix 404 page regression
 * svg tags are actually usable now. except color-profile and switch.
 
 ##### 0.0.14 - unreleased
+* update @magic/css which updates postcss
 ...
 
 
