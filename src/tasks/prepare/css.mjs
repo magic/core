@@ -10,6 +10,10 @@ export const prepareCss = async ({ app, modules }) => {
   const styles = []
 
   let { THEME = '', THEME_VARS = {} } = config
+  if (is.fn(THEME_VARS)) {
+    THEME_VARS = THEME_VARS({ colors })
+  }
+
   THEME_VARS.colors = colors
   if (is.string(THEME)) {
     THEME = [THEME]
