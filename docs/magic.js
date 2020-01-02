@@ -1868,7 +1868,7 @@ var pages = {
       to: 'https://gitlab.com'
     }, 'gitlab'), ' and any other git-pages enabled hosting service.']), h3('serverless / faas'), p(['automagically generates ', ' serverless lambdas, derived from the ', Link({
       to: 'https://github.com/magic-modules/'
-    }, '@magic-modules'), ' you use in your pages.', ' this makes visitor statistics, user authentication and authorization,', ' chat, and all other server side services possible.'])]), LightSwitch(state)];
+    }, '@magic-modules'), ' you use in your pages.', ' this makes visitor statistics, user authentication and authorization,', ' chat, and all other server side services possible.'])])];
   },
   '/core/404/': function core404() {
     return div('404 - not found');
@@ -1894,7 +1894,7 @@ var pages = {
       id: 'globals'
     }, 'global'), p('every module can set a global object, containing state and action properties.'), p('every state and/or action name in the global object with a value that equals true gets merged into the main app state/actions.')]), div([h2({
       id: 'lambdas'
-    }, 'server lambdas'), p('this is the serverside magic.'), p('you can define functions that get transpiled into serverside lambdas.'), p('server side lambdas will be available for GET and/or POST requests.'), p(['the server side function signature is (req, res) => {},', ' as in any nodejs http server, with the addition of req.body being async => awaited before execution of the lambda.'])]), LightSwitch(state)];
+    }, 'server lambdas'), p('this is the serverside magic.'), p('you can define functions that get transpiled into serverside lambdas.'), p('server side lambdas will be available for GET and/or POST requests.'), p(['the server side function signature is (req, res) => {},', ' as in any nodejs http server, with the addition of req.body being async => awaited before execution of the lambda.'])])];
   },
   '/core/files/': function coreFiles(state) {
     var examples = {
@@ -1934,7 +1934,7 @@ var pages = {
       id: 'config-example'
     }, 'example /config.mjs'), Pre(examples.config), Link({
       to: 'https://github.com/magic/core/blob/master/src/modules/Menu.mjs'
-    }, 'Menu.mjs on github'), LightSwitch(state)];
+    }, 'Menu.mjs on github')];
   },
   '/core/libraries/': function coreLibraries(state) {
     return [div([h1(state.title), p(state.description), h2({
@@ -1953,14 +1953,14 @@ var pages = {
       id: 'npm'
     }, '@magic-libraries from npm'), p('all @magic-libraries/* and all npm packages starting with magic-library-* will be loaded automatically. '), h4({
       id: 'example'
-    }, 'Example'), p('first, install a @magic-library'), Pre("\nnpm install --save --save-exact @magic-libraries/is\n"), p('then, in javascript'), Pre("\nexport const View = props => div([\n  'value is ',\n  lib.is(props.value, 'string') ? '' : 'not',\n  ' a string'\n])\n      "), LibraryList(), LightSwitch(state)])];
+    }, 'Example'), p('first, install a @magic-library'), Pre("\nnpm install --save --save-exact @magic-libraries/is\n"), p('then, in javascript'), Pre("\nexport const View = props => div([\n  'value is ',\n  lib.is(props.value, 'string') ? '' : 'not',\n  ' a string'\n])\n      "), LibraryList()])];
   },
   '/core/modules/': function coreModules(state) {
     return [h1(state.title), p('magic modules are predefined modules for webapps.'), h2({
       id: 'definition'
     }, 'module definition:'), p('the minimal module is a function that returns some html.'), Pre("\n// /assets/ModuleName.mjs\n\n// simplest module\nexport const View = () => div('hello, world')\n\n// complete signature\nexport const View = (props = {}, children = []) => div('hello, world')\n"), h2({
       id: 'usage'
-    }, 'usage'), p(['if the npm package name starts with @magic-modules/ or magic-module-, it will get imported automagically.', ' the name of the Module will be set to a PascalCased version of the remainder of the module name.', ' @magic-modules/git-badges, for example, turns into GitBadges.', ' the same is true for all uppercased files in your /assets/ directory and subdirectories.', ' in the rare case where you want to install a npm module that can not be found, you can import it in /assets/index.mjs']), Pre("\n// /assets/index.mjs\nexport default {\n  // ...otherModules\n\n  // load module from node_modules\n  NpmModule: require('not-standard-named-magic-module-from-npm'),\n}"), p('after this, the module will be a global in your app and can be used like any other component.'), Pre("\n// any page or module\nexport default state => div([\n  // module without props\n  Mod(),\n  'modules that need props: ',\n  Mod({ state, customProp: true }),\n"), ModuleList(), LightSwitch(state)];
+    }, 'usage'), p(['if the npm package name starts with @magic-modules/ or magic-module-, it will get imported automagically.', ' the name of the Module will be set to a PascalCased version of the remainder of the module name.', ' @magic-modules/git-badges, for example, turns into GitBadges.', ' the same is true for all uppercased files in your /assets/ directory and subdirectories.', ' in the rare case where you want to install a npm module that can not be found, you can import it in /assets/index.mjs']), Pre("\n// /assets/index.mjs\nexport default {\n  // ...otherModules\n\n  // load module from node_modules\n  NpmModule: require('not-standard-named-magic-module-from-npm'),\n}"), p('after this, the module will be a global in your app and can be used like any other component.'), Pre("\n// any page or module\nexport default state => div([\n  // module without props\n  Mod(),\n  'modules that need props: ',\n  Mod({ state, customProp: true }),\n"), ModuleList()];
   },
   '/core/modules/example/': function coreModulesExample(state) {
     return [h1('example module'), h2({
@@ -2013,16 +2013,14 @@ var pages = {
       id: 'img'
     }, 'img'), p('the img module adds some sane default values to your images.'), Pre("\n// in any page or module View\nexport default () => [\n  Img('/image.png'),\n  // output: <img src=\"/image.png\" alt=\"\" role=\"presentation\"/>\n  Img({ src: '/image.png }),\n  // output: <img src=\"/image.png\" alt=\"\" role=\"presentation\"/>\n  Img({ src: '/image.png', alt: 'image description' }),\n  // output: <img src=\"/image.png alt=\"image description\" />\n  Img({ src: '/image.png', title: 'image title', }),\n  // output: <img src=\"/image.png\" title=\"image title\" alt=\"image title\"/>\n  Img({ src: '/image.png', title: 'image title', alt: 'image alt' }),\n  // output: <img src=\"/image.png\" title=\"image title\" alt=\"image alt\"/>\n]"), h2({
       id: 'footer'
-    }, 'footer'), p('the footer module contains a small info text and a link to the magic github repository.'), p('to overwrite this behaviour, just place a Footer.mjs file in your assets and require it in /assets/index.mjs.'), Pre("\n// /assets/Footer.mjs:\nconst Footer = () =>\nfooter({ class: 'main' }, [\n  div({ class: 'wrapper' }, [\n    'made with a few bits of ',\n    Link({ href: 'https://github.com/magic/core', target: '_blank', rel: 'noopener' }, 'magic'),\n  ]),\n])\n\nFooter.style: {\n  'footer.main': {\n    position: 'relative',\n    textAlign: 'center',\n    padding: '5em 0 .5em',\n  },\n}\n\nexport default Footer\n"), h2({
-      id: 'gdpr'
-    }, 'Gdpr privacy notice'), p(['This shows a modal that either informs users that they are not being tracked,', ' or that asks users to confirm cookie usage.']), LightSwitch(state)];
+    }, 'footer'), p('the footer module contains a small info text and a link to the magic github repository.'), p('to overwrite this behaviour, just place a Footer.mjs file in your assets and require it in /assets/index.mjs.'), Pre("\n// /assets/Footer.mjs:\nconst Footer = () =>\nfooter({ class: 'main' }, [\n  div({ class: 'wrapper' }, [\n    'made with a few bits of ',\n    Link({ href: 'https://github.com/magic/core', target: '_blank', rel: 'noopener' }, 'magic'),\n  ]),\n])\n\nFooter.style: {\n  'footer.main': {\n    position: 'relative',\n    textAlign: 'center',\n    padding: '5em 0 .5em',\n  },\n}\n\nexport default Footer\n  ")];
   },
   '/core/modules/propTypes/': function coreModulesPropTypes(state) {
     return [h1(state.title), h2({
       id: 'check-props'
     }, 'CHECK_PROPS'), p('@magic-modules can export a .propTypes object with an array of prop types.'), h4({
       to: '#example'
-    }, 'example'), Pre("\nexport const View = (prop1, prop2, prop3) => [\n  p(prop1),\n  p(prop2),\n  p(prop3),\n]\n\nexport const propTypes = [\n  { name: 'prop1', type: 'string' },\n  { name: 'prop2', type: 'number' },\n  { name: 'prop3', type: 'array', items: 'string' },\n  {\n    name: 'prop4',\n    type: 'object',\n    items: [\n      { name: 'prop4prop1', type: 'string' },\n      { name: 'prop4prop2', type: 'number' },\n  ] },\n]\n"), LightSwitch(state)];
+    }, 'example'), Pre("\nexport const View = (prop1, prop2, prop3) => [\n  p(prop1),\n  p(prop2),\n  p(prop3),\n]\n\nexport const propTypes = [\n  { name: 'prop1', type: 'string' },\n  { name: 'prop2', type: 'number' },\n  { name: 'prop3', type: 'array', items: 'string' },\n  {\n    name: 'prop4',\n    type: 'object',\n    items: [\n      { name: 'prop4prop1', type: 'string' },\n      { name: 'prop4prop2', type: 'number' },\n  ] },\n]\n")];
   },
   '/core/news/': function coreNews(state) {
     return BlogArchive(state);
@@ -2037,7 +2035,7 @@ var pages = {
     return BlogPost(state, [p('so i guess i should start using it...'), p(["it's pretty rough,\nthe index pages for yearly and monthly archives are not polished,\nbut can be overwritten by adding them to the config.BLOG_DIR dir of your @magic app."]), p(["to use the blog,\ncreate an archive dir, for example"]), pre(code('src/blog/2019/12/22/')), p('then just add the blogposts in that directory structure.'), p(["@magic will automagically build a blog directory for you,\nincluding the archives for yearly, monthly and overall blog posts."]), p('more information following soon.')]);
   },
   '/core/themes/': function coreThemes(state) {
-    return [h1(state.title), p('magic themes are themes for magic apps. you decide which theme to load by specifying the theme name in config.THEME'), Pre("\n// /config.mjs\nexport default {\n  // ...rest of config,\n  THEME: 'blue',\n}\n"), h2('theme load order'), p('themes get loaded from multiple places. last in the list overwrites earlier entries.'), Pre("\n// ...default module styles get inserted here\n/node_modules/@magic/core/src/themes/THEME/index.mjs\n/node_modules/@magic-themes/THEME\n/assets/themes/THEME/index.mjs\n"), ThemeList(), LightSwitch(state)];
+    return [h1(state.title), p('magic themes are themes for magic apps. you decide which theme to load by specifying the theme name in config.THEME'), Pre("\n// /config.mjs\nexport default {\n  // ...rest of config,\n  THEME: 'blue',\n}\n"), h2('theme load order'), p('themes get loaded from multiple places. last in the list overwrites earlier entries.'), Pre("\n// ...default module styles get inserted here\n/node_modules/@magic/core/src/themes/THEME/index.mjs\n/node_modules/@magic-themes/THEME\n/assets/themes/THEME/index.mjs\n"), ThemeList()];
   }
 };
 app({
@@ -2065,7 +2063,7 @@ app({
     return Page({
       page: page,
       state: state
-    }, Gdpr(state));
+    }, [Gdpr(state), LightSwitch(state)]);
   },
   node: document.getElementById('Magic')
 });
