@@ -73,7 +73,5 @@ export const View = props => div([
       `),
 
     LibraryList(),
-
-    LightSwitch(state),
   ]),
 ]

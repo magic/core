@@ -168,7 +168,5 @@ Footer.style: {
 }
 
 export default Footer
-`),
-
-  LightSwitch(state),
+  `),
 ]

@@ -92,6 +92,4 @@ export const View = state => [
       ' as in any nodejs http server, with the addition of req.body being async => awaited before execution of the lambda.',
     ]),
   ]),
-
-  LightSwitch(state),
 ]

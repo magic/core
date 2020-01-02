@@ -85,6 +85,4 @@ export const View = state => [
       ' chat, and all other server side services possible.',
     ]),
   ]),
-
-  LightSwitch(state),
 ]

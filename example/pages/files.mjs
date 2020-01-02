@@ -142,7 +142,5 @@ export default {
       { to: 'https://github.com/magic/core/blob/master/src/modules/Menu.mjs' },
       'Menu.mjs on github',
     ),
-
-    LightSwitch(state),
   ]
 }

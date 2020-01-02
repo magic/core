@@ -18,5 +18,5 @@ export default {
 
   KEEP_CLIENT: false,
 
-  HOIST: 'Gdpr',
+  HOIST: ['Gdpr', 'LightSwitch'],
 }

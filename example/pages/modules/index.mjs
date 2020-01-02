@@ -49,6 +49,4 @@ export default state => div([
 `),
 
   ModuleList(),
-
-  LightSwitch(state),
 ]

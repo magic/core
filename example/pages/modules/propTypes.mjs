@@ -30,6 +30,4 @@ export const propTypes = [
   ] },
 ]
 `),
-
-  LightSwitch(state),
 ]
