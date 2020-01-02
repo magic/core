@@ -68,7 +68,7 @@ fix 404 page regression
 ##### 0.0.13
 * svg tags are actually usable now. except color-profile and switch.
 
-##### 0.0.14 - unreleased
+##### 0.0.14
 * update @magic/css which updates postcss
 * color theme vars now export grey and bluegrey. copies gray and bluegray.
 * config.BABEL is now being used for babel build
