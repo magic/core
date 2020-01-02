@@ -95,7 +95,6 @@ export const runConfig = async () => {
     }
   }
 
-
   // the following files are zippable
   const ZIPPABLE = [
     'css',
