@@ -170,11 +170,5 @@ Footer.style: {
 export default Footer
 `),
 
-  h2({ id: 'gdpr' }, 'Gdpr privacy notice'),
-  p([
-    'This shows a modal that either informs users that they are not being tracked,',
-    ' or that asks users to confirm cookie usage.',
-  ]),
-
   LightSwitch(state),
 ]
