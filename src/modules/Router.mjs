@@ -73,14 +73,18 @@ export const actions = {
     const [url, hash = ''] = to.split('#')
 
     // do nothing if url would not change
-    if (url === state.url && hash === state.hash) {
-      return state
+    if (url === state.url) {
+      if (hash && hash === state.hash) {
+        return state
+      } else {
+        window.scroll({ top: 0, behaviour: 'smooth' })
+      }
     }
 
     window.history.pushState({ url, hash }, '', to)
 
     if (!hash) {
-      window.scroll(0, 0)
+      window.scroll({ top: 0, behaviour: 'smooth' })
     } else {
       window.location.hash = hash
     }
