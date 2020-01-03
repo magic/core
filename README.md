@@ -80,6 +80,7 @@ regression: babel should minify files on build.
 ##### 0.0.16 - unreleased
 * modules/MenuItem: only add submenu ul if submenu has items.length > 0
 * link menu parent .to only gets prepended to link.to if link.to starts with - or #, not if it starts with /.
+* add modules/MenuLink. use it in modules/MenuItem
 
 ##### 0.0.17 - unreleased
 ...
