@@ -44,7 +44,7 @@ export const View = props => {
   let children = []
   const active = url.startsWith(item.to) || !collapse
 
-  if (active) {
+  if (active && items.length) {
     children = ul(items.map(i => MenuItem({ parentTo: item.to, url, root, collapse, ...i })))
   }
 
