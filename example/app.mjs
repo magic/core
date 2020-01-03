@@ -43,7 +43,7 @@ export const state = config => ({
           text: '/assets',
           items: [{ to: '-example', text: 'example' }],
         },
-        { to: '/files/#static', text: '/assets/static' },
+        { to: '#static', text: '/assets/static' },
         {
           to: '#themes',
           text: '/assets/themes',
@@ -68,7 +68,7 @@ export const state = config => ({
         { to: '#definition', text: 'definition' },
         { to: '#usage', text: 'usage' },
         { to: '#gl-magic-modules', text: '@magic-modules' },
-        { to: '/example/', text: 'custom modules' },
+        { to: '/modules/example/', text: 'custom modules' },
         {
           to: '/preinstalled/',
           text: 'preinstalled',
@@ -88,11 +88,11 @@ export const state = config => ({
           ],
         },
         {
-          to: '/markdown/',
+          to: '/modules/markdown/',
           text: 'markdown',
         },
         {
-          to: '/html/',
+          to: '/modules/html/',
           text: 'html',
         },
       ],
