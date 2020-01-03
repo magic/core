@@ -74,7 +74,10 @@ fix 404 page regression
 * config.BABEL is now being used for babel build
 * config.THEME_VARS can be a function. gets passed { colors } if it is a function.
 
-##### 0.0.15 - unreleased
+##### 0.0.15
+regression: babel should minify files on build.
+
+##### 0.0.16 - unreleased
 ...
 
 
