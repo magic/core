@@ -78,6 +78,9 @@ fix 404 page regression
 regression: babel should minify files on build.
 
 ##### 0.0.16 - unreleased
+* modules/MenuItem: only add submenu ul if submenu has items.length > 0
+
+##### 0.0.17 - unreleased
 ...
 
 
