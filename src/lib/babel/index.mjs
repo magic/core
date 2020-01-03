@@ -4,7 +4,6 @@ export const getBabelConf = (app, config) => {
   const {
     CLIENT_LIB_NAME,
     BABEL_DEBUG,
-    DEAD_CODE,
     REMOVE_CHECK_PROPS,
     MINIFY,
     USE_PRESETS,

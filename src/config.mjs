@@ -216,11 +216,10 @@ export const runConfig = async () => {
 
   conf.BABEL = {
     DEBUG: false,
-    REMOVE_DEAD_CODE: true,
-    REMOVE_CHECK_PROPS: true,
-    MINIFY: false,
+    REMOVE_CHECK_PROPS: conf.IS_PROD,
+    MINIFY: conf.IS_PROD,
     USE_PRESETS: true,
-    KEEP_COMMENTS: false,
+    KEEP_COMMENTS: conf.IS_DEV,
     ...conf.BABEL,
   }
 
