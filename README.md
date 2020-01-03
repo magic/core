@@ -84,6 +84,7 @@ regression: babel should minify files on build.
 
 ##### 0.0.17 - unreleased
 * modules/Router.mjs: Link module now accepts action as prop
+* modules/Router.mjs: scroll page back to top if the clicked link points to current page root
 
 ##### 0.0.18 - unreleased
 ...
