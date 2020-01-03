@@ -37,7 +37,7 @@ export const View = props => {
     children = ul(items.map(i => MenuItem({ parentTo: item.to, url, root, collapse, ...i })))
   }
 
-  return li(p, [item.to ? Link(item, text) : span(item, text), children])
+  return li(p, [item.to ? MenuLink(item, text) : span(item, text), children])
 }
 
 export const propTypes = {

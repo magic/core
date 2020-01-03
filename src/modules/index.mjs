@@ -1,6 +1,7 @@
 import * as Router from './Router.mjs'
 import * as Menu from './Menu.mjs'
 import * as MenuItem from './MenuItem.mjs'
+import * as MenuLink from './MenuLink.mjs'
 import * as Footer from './Footer.mjs'
 import * as Header from './Header.mjs'
 import * as Img from './Img.mjs'
@@ -22,19 +23,20 @@ export { tags } from './tags.mjs'
 const { Link, ...Page } = Router
 
 export const builtins = {
-  MenuItem,
-  Menu,
+  BlogArchive,
+  BlogMonth,
+  BlogPost,
+  BlogTeaser,
+  BlogYear,
   Footer,
   Header,
   Img,
-  Page,
   Link,
+  Menu,
+  MenuItem,
+  MenuLink,
+  Page,
   Route,
   Seo,
-  BlogYear,
-  BlogMonth,
-  BlogTeaser,
-  BlogArchive,
-  BlogPost,
   SkipLink,
 }
