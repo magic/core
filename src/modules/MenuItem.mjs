@@ -15,19 +15,8 @@ export const View = props => {
   const first = item.to[0]
   const isLocal = first === '/' || first === '-' || first === '#'
 
-  if (parentTo && isLocal) {
-    if (first === '-' || first === '#') {
-      to = parentTo + to
-    } else {
-      const start = to.split('/')[1]
-      if (start) {
-        const startsLikeParentEnds = parentTo.endsWith(`/${start}/`)
-
-        if (!startsLikeParentEnds && isLocal) {
-          to = parentTo + to
-        }
-      }
-    }
+  if (parentTo && isLocal && (first === '-' || first === '#')) {
+    to = parentTo + to
   }
 
   const isRooted = to.startsWith(root)
