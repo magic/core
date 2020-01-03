@@ -83,6 +83,9 @@ regression: babel should minify files on build.
 * add modules/MenuLink. use it in modules/MenuItem
 
 ##### 0.0.17 - unreleased
+* modules/Router.mjs: Link module now accepts action as prop
+
+##### 0.0.18 - unreleased
 ...
 
 
