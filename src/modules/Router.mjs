@@ -15,7 +15,7 @@ export const View = ({ page, state }, children) => {
   return main(magicProps, div(wrapperProps, [Route({ state, page }), children]))
 }
 
-export const Link = ({ to, ...p }, children) => {
+export const Link = ({ to, action = actions.go, ...p }, children) => {
   const { href, text, nofollow, noreferrer, ...props } = p
   to = to || href || ''
   props.href = to
@@ -23,7 +23,7 @@ export const Link = ({ to, ...p }, children) => {
   const isLocal = to[0] === '/' || to[0] === '#'
 
   if (isLocal) {
-    props.onclick = [actions.go, lib.preventDefault]
+    props.onclick = [action, lib.preventDefault]
   } else {
     props.target = '_blank'
     props.rel = 'noopener'
