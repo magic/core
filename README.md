@@ -89,9 +89,10 @@ regression: babel should minify files on build.
 * link menu parent .to only gets prepended to link.to if link.to starts with - or #, not if it starts with /.
 * add modules/MenuLink. use it in modules/MenuItem
 
-##### 0.0.17 - unreleased
+##### 0.0.17
 * modules/Router.mjs: Link module now accepts action as prop
 * modules/Router.mjs: scroll page back to top if the clicked link points to current page root
+* commonjs support is gone. minimum node version bumped to 13.5.0
 
 ##### 0.0.18 - unreleased
 ...
