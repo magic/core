@@ -95,7 +95,10 @@ regression: babel should minify files on build.
 * modules/Router.mjs: Link module now accepts action as prop
 * modules/Router.mjs: scroll page back to top if the clicked link points to current page root
 
-##### 0.0.18 - unreleased
+##### 0.0.18
+do not error if docs/sri-hashes.json does not exist
+
+##### 0.0.19 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
