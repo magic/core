@@ -79,10 +79,9 @@ export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
     const pageDir = PAGES.replace(process.cwd(), '')
     // remove slashes
     const pageName = page.name.replace(/\//g, '')
-    const page = `${pageDir}/${pageName}.mjs`
 
     throw new Error(`
-${page}
+${pageDir}/${pageName}.mjs
 needs to either
 export default () => []
 or
