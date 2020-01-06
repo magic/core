@@ -90,9 +90,10 @@ regression: babel should minify files on build.
 * add modules/MenuLink. use it in modules/MenuItem
 
 ##### 0.0.17
+* **commonjs support is gone.**
+* **minimum node version bumped to 13.5.0**
 * modules/Router.mjs: Link module now accepts action as prop
 * modules/Router.mjs: scroll page back to top if the clicked link points to current page root
-* commonjs support is gone. minimum node version bumped to 13.5.0
 
 ##### 0.0.18 - unreleased
 ...
