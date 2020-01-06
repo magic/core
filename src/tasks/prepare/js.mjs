@@ -231,7 +231,7 @@ app({
       })
     }
 
-    return Page({ page, state }${hoisted ? `, ${hoisted}` : ''} )
+    return Page({ page, state }${hoisted ? `, ${hoisted}` : ''})
   },
   node: document.getElementById('Magic'),
 })
