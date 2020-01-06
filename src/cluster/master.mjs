@@ -1,7 +1,7 @@
 import log from '@magic/log'
 import { runCmd } from './runCmd.mjs'
 
-export const master = async (cluster, cmds, argv, config) => {
+export const master = async ({ cluster, commands, config }) => {
   if (config.URL_WARNING) {
     log.warn('Autodetected URL:', `https://${config.URL}`)
     log.info(`
@@ -13,26 +13,26 @@ export const master = async (cluster, cmds, argv, config) => {
   `)
   }
 
-  if (cmds.clean) {
+  if (commands.clean) {
     await runCmd('clean', config)
   }
 
-  if (cmds.connect) {
+  if (commands.connect) {
     await runCmd('connect', config)
   }
 
-  if (cmds.publish) {
+  if (commands.publish) {
     await runCmd('publish', config)
   }
 
-  const bail = !cmds.build && !cmds.serve
+  const bail = !commands.build && !commands.serve
 
   if (bail) {
     return
   }
 
   let watchWorker
-  if (cmds.serve) {
+  if (commands.serve) {
     watchWorker = cluster.fork()
   }
   let buildWorker = cluster.fork()

@@ -5,7 +5,9 @@ import { build } from './build.mjs'
 import { watch } from './watch.mjs'
 import { runConfig } from '../config.mjs'
 
-export const runCluster = async ({ cmds, argv }) => {
+export const runCluster = async options => {
+  const { args, commands } = options
+
   // get the config
   const config = await runConfig()
 
@@ -15,16 +17,16 @@ export const runCluster = async ({ cmds, argv }) => {
   }
 
   if (cluster.isMaster) {
-    await master(cluster, cmds, argv, config)
+    await master({ cluster, commands, config })
   } else if (cluster.isWorker) {
-    if (cmds.serve && cluster.worker.id === 1) {
+    if (commands.serve && cluster.worker.id === 1) {
       // watcher,
       // watches the directory and tells master to restart the build process when files change
-      watch(argv, config)
+      watch({ args, config })
     } else {
       // builder
       // builds the files and pages needed
-      build(cmds, config)
+      build({ commands, config })
     }
 
     process

@@ -5,7 +5,7 @@ import runCmd from './runCmd.mjs'
 
 import { serve } from '../tasks/index.mjs'
 
-export const build = async (cmds, config) => {
+export const build = async ({ commands, config }) => {
   const App = await runApp(config)
   const app = await runCmd('prepare', App, config)
 
@@ -16,14 +16,14 @@ export const build = async (cmds, config) => {
     app.client = bundle.code
     // app.sw = serviceWorker.code
 
-    if (cmds.build) {
+    if (commands.build) {
       await runCmd('write', app, config)
     }
   } catch (e) {
     log.error('error during build', e)
   }
 
-  if (cmds.serve) {
+  if (commands.serve) {
     serve(app)
   } else {
     process.send({ evt: 'quit' })

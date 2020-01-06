@@ -3,13 +3,17 @@ import path from 'path'
 
 import * as tasks from '../tasks/index.mjs'
 
-export const watch = (argv, config) => {
-  const watchDirs = argv['--watch']
+const cwd = process.cwd()
+
+export const watch = ({ args, config }) => {
+  const watchDirs = args.watch
   let dirs = [config.ROOT]
-  if (is.array(watchDirs) && !is.empty(watchDirs)) {
+
+  if (is.array(watchDirs)) {
     dirs = [...dirs, ...watchDirs]
   }
-  const cwd = process.cwd()
+
   dirs = dirs.map(dir => (dir.startsWith(cwd) ? dir : path.join(cwd, dir)))
+
   tasks.watch(dirs)
 }
