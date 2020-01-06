@@ -99,6 +99,9 @@ regression: babel should minify files on build.
 do not error if docs/sri-hashes.json does not exist
 
 ##### 0.0.19 - unreleased
+**minimum node version of dependencies bumped to 13.5.0**
+
+##### 0.0.20 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
