@@ -1,6 +1,8 @@
-import { cli } from '@magic/cli/src/index.mjs'
+#!/usr/bin/env node
 
-import { runCluster } from '../cluster/index.mjs'
+import cli from '@magic/cli'
+
+import { runCluster } from './cluster/index.mjs'
 
 const args = {
   options: [['--help', '-help', 'help', '--h', '-h'], ['--no-minify'], ['--watch', '-w']],

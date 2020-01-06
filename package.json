@@ -7,22 +7,22 @@
   "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
   "module": "src/index.mjs",
   "engines": {
-    "node": ">=12.13.0"
+    "node": ">=13.5.0"
   },
   "scripts": {
     "start": "t -p",
-    "build": "NODE_ENV=production node src/bin/bin.js build",
-    "devbuild": "node src/bin/bin.js build",
-    "serve": "node src/bin/bin.js serve --watch src",
-    "prod": "NODE_ENV=production node src/bin/bin.js build serve --watch src",
-    "clean": "node src/bin/bin.js clean",
-    "dev": "node src/bin/bin.js dev --watch src",
+    "build": "NODE_ENV=production src/bin.mjs build",
+    "devbuild": "src/bin.mjs build",
+    "serve": "src/bin.mjs serve --watch src",
+    "prod": "NODE_ENV=production src/bin.mjs build serve --watch src",
+    "clean": "src/bin.mjs clean",
+    "dev": "src/bin.mjs dev --watch src",
     "format": "f -w --exclude docs",
     "test": "t",
     "calls": "calls"
   },
   "bin": {
-    "magic": "src/bin/bin.js"
+    "magic": "src/bin.mjs"
   },
   "files": [
     "src"
@@ -42,7 +42,7 @@
     "@babel/plugin-transform-react-jsx": "7.7.7",
     "@babel/preset-env": "7.7.7",
     "@magic-libraries/prevent-default": "0.0.2",
-    "@magic/cli": "0.0.10",
+    "@magic/cli": "0.0.11",
     "@magic/css": "0.7.8",
     "@magic/deep": "0.1.1",
     "@magic/fs": "0.0.1",
@@ -64,7 +64,8 @@
     "@magic-modules/pre": "0.0.2",
     "@magic-modules/theme-list": "0.0.4",
     "@magic-themes/docs": "0.0.3",
-    "@magic/test": "0.1.25"
+    "@magic/format": "0.0.1",
+    "@magic/test": "0.1.26"
   },
   "keywords": [
     "magic",
