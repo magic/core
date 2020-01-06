@@ -1,7 +1,9 @@
-import cp from 'child_process'
+import child_process from 'child_process'
 import path from 'path'
 import deep from '@magic/deep'
 import log from '@magic/log'
+import fs from '@magic/fs'
+
 import colors from './themes/colors.mjs'
 
 export const runConfig = async () => {
@@ -82,8 +84,8 @@ export const runConfig = async () => {
 
   try {
     const hashPath = path.join(PUBLIC, conf.HASH_FILE_NAME)
-    const { default: HASHES } = await import(hashPath)
-    conf.HASHES = HASHES
+    const content = await fs.readFile(hashPath, 'utf8')
+    conf.HASHES = JSON.parse(content)
   } catch (e) {
     if (e.code === 'ERR_MODULE_NOT_FOUND') {
       conf.HASHES = {
@@ -156,7 +158,7 @@ export const runConfig = async () => {
   // show warning if this has to be done, needs a few hundred ms
   if (!conf.WEB_ROOT || !conf.URL) {
     const startTime = new Date().getTime()
-    const stdout = cp.execSync('git remote -v').toString()
+    const stdout = child_process.execSync('git remote -v').toString()
 
     let remote = stdout.split('\n')[1].split(/(\t| )/gim)[2]
 
