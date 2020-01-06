@@ -9,6 +9,7 @@ import colors from './themes/colors.mjs'
 export const runConfig = async () => {
   let conf = {}
   const confPath = path.join(process.cwd(), 'config.mjs')
+
   try {
     const { default: imported } = await import(confPath)
     conf = imported
