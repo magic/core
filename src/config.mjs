@@ -54,7 +54,7 @@ export const runConfig = async () => {
   const PAGES = path.join(conf.ROOT, 'pages')
 
   // the output dir that files get written to
-  const PUBLIC = path.join(process.cwd(), conf.PUBLIC || conf.DIR.PUBLIC || 'public')
+  const PUBLIC = path.join(process.cwd(), conf.PUBLIC || conf.DIR.PUBLIC || 'docs')
 
   // assets dir, can include themes, modules, libraries
   const ASSETS = path.join(conf.ROOT, 'assets')
