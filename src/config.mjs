@@ -88,7 +88,7 @@ export const runConfig = async () => {
     const content = await fs.readFile(hashPath, 'utf8')
     conf.HASHES = JSON.parse(content)
   } catch (e) {
-    if (e.code === 'ERR_MODULE_NOT_FOUND') {
+    if (e.code === 'ENOENT') {
       conf.HASHES = {
         pages: {},
         static: {},
