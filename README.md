@@ -98,7 +98,7 @@ regression: babel should minify files on build.
 ##### 0.0.18
 do not error if docs/sri-hashes.json does not exist
 
-##### 0.0.19 - unreleased
+##### 0.0.19
 **minimum node version of dependencies bumped to 13.5.0**
 
 ##### 0.0.20 - unreleased
