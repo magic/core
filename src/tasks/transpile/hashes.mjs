@@ -31,7 +31,7 @@ export const transpile = async app => {
       hashes.static[name] = createFileHash(val)
     })
 
-  app.static[`/${config.HASH_FILE_NAME}`] = JSON.stringify(hashes, null, 2)
+  app.static[`/${config.HASH_FILE_NAME}`] = `${JSON.stringify(hashes, null, 2)}\n`
 
   return {
     hashes,
