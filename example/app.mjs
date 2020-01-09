@@ -70,7 +70,7 @@ export const state = config => ({
         { to: '#gl-magic-modules', text: '@magic-modules' },
         { to: '/modules/example/', text: 'custom modules' },
         {
-          to: '/preinstalled/',
+          to: '/modules/preinstalled/',
           text: 'preinstalled',
           items: [
             {
