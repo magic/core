@@ -1,28 +1,28 @@
 {
-  "css": "sha384-1rycWRbUjEXH1aXexDZVm+mpdLchDEOErTla8fEuPsvvmYmkRvdM2IGaNr680ND5",
-  "js": "sha384-E/qSA+ySf/CLGgnhuA70MlWzRur/UtYFYe1vQKr/FOhcqGf4gMah4zJpLg2qlWCv",
+  "css": "sha384-Gq1UxjWxe0Nz0CF9V9BTqKjwtzPXrAxF0njd6A1w5R+6KbCeUEjdWiJVnjN2zj6Y",
+  "js": "sha384-gD+80UP8FNQQGwzJrxe7LzOfky9F1sdPC9/au9PhH0qoESg1nVJV5Lnbo3QGrA12",
   "pages": {
-    "/core/": "sha384-ueim196ORg13BOVB6Wv93JWItSETsJML8VcjJgl0XMLoC+kBRE40+ZWmWC7wSPsD",
-    "/core/404/": "sha384-N80th1EoVa4fo1TwiVzC1ajOlAt+wcc+LxIzNTiBtoIJ5TCyItOO2aWsU2YnUc0P",
-    "/core/concepts/": "sha384-C+HX3V5maV0nI5ZRpXjVAPi2fJUSLg0DS3wPegE22/1sn+LYtXn4lCwPlk8z0LF6",
-    "/core/files/": "sha384-cV4rCnymQU3vqjEtrcKYs4PGX4YOZB0rH9V+aCA69oGFHrtggOVMEdra8eZbHAc2",
-    "/core/libraries/": "sha384-HWt+1H6T0yWP8Eisr9mrV+5ceLhVzkh4AEnjeyDsx+TkYzACVYdLXZKZNAGoLedF",
-    "/core/modules/": "sha384-4XQGTgzqaXK7EzqHul9qvluTiqS2nWR9QAc0wMx/FWU2L5/heVqtDyib40FrR+qw",
-    "/core/modules/example/": "sha384-I+LJxrGmp9HdQ/jpXFREITddClR2VoL95vVMjf1RdWg58ByqtLrYLNjJ62++alha",
-    "/core/modules/html/": "sha384-+ZhKC/MuwNX5ibLVuXFhXXo8zzMvZVGpt+dp+SRYCvxJeSJRMeuyViiii479/CMF",
-    "/core/modules/markdown/": "sha384-zgop30SPzhAsqAd9pHMJ0nfFengFBkO3AouK9qKofcrEv/LhoAHIxh/jUe5BWl58",
-    "/core/modules/preinstalled/": "sha384-ixKoM90yjaXobejBSgDsM62x31uaOc3dyN69PC/xmpXUS316YLM7wgRwSrhHhM8a",
-    "/core/modules/propTypes/": "sha384-IvJJ4Q+RxttFKTuoEUvmP4TuZh9vz1a8qUxAimU0r+NmpRK927uXZjSh9zhVMZK1",
-    "/core/news/": "sha384-LjcW5yPfxeIpOfiODHtjfABhf8nNWcwbVexqN+7LFnFpfRH7lKJYPrqHC7uDoKRg",
-    "/core/news/2019/": "sha384-oV3BEooF3xHDgvNm4cMvZIY/Ta/e90qWHQvPsuaYkBAiktJmHsm4axEQT4idsvr8",
-    "/core/news/2019/12/": "sha384-Dppr1csyPnibFHqy42wHv+ZT9/uIxQZzyc6JXnQiANGUCnIWYOO5TpVBWxvjwETW",
-    "/core/news/2019/12/22/blogging/": "sha384-lZJsP9TZZbjW5RI8EYotPLMyXzcSapdlGuOIDPqAnNKZumB7g6lr7aoC1MU31O5S",
-    "/core/themes/": "sha384-Kws9NFfld2CX07/z3VIvJRuSwoN/fwvcB43/kK5uHq+rl1jzdGELwHqiab96F65i"
+    "/core/": "sha384-XbCLYcQDAN7X8nMswO/wCLDOpEFI2uiNuMCFdl+IYzNascX6rsciSzC29/bhF5qe",
+    "/core/404/": "sha384-dlU3uxwEYN6AhDolQ4C2tYgG9gPmvOOdNcEJJQfT+brRArMnCg6lJEpkczTwXPYy",
+    "/core/concepts/": "sha384-EGtSn1ILWt27HrrRA5YnxOiVXWW0SBnxiFfGjK89apZgCd9lW3ih1qOO6523YJWK",
+    "/core/files/": "sha384-71Wei3SnkKR/wyPHte7oMlZzvWFJSdddx2L0cTVnIxEJ1cQSL27LMXJgSFoiozFy",
+    "/core/libraries/": "sha384-3kJw41N5VHA/X5M/09r/p0fDu+vOimZUzJveNB4TKEeoi+UDZadDDcYXOnZ6784I",
+    "/core/modules/": "sha384-8OFrXGWP0eM9IDv11ZkpqNZgkoaa4IbyGsL219QWgf/oDWbaYO6a2YMf9s8GyvBV",
+    "/core/modules/example/": "sha384-ApsyxXnmCAuqMMlrWaCmqT4taNAwzfTaXZysY0ebn69WNTC5mEVN67Tsbfd3YaPX",
+    "/core/modules/html/": "sha384-LDGZMfdTp3iKBsZVtBxbgVsEF/o4K6lBDbci7LuSaVbpMAahUEyAYL3UMiK3FaMd",
+    "/core/modules/markdown/": "sha384-Hg8/h0K5mlI7fI0eeru+leLzv4aVQPJP9DiOZG26epkc7C/Z7grKRym9Hbqvphz9",
+    "/core/modules/preinstalled/": "sha384-ui4Vpd/j75PNM+1B3ltLLauXJFNJbJYOJEIjtvw85MZaWQxP8v6rTJ3egsuIdsnz",
+    "/core/modules/propTypes/": "sha384-l7t7DL/43JaBHRJXTVHBavxQpacyxBmPUDwHYeiA9++8LNw5UQEaAYiLbWvQ4bOH",
+    "/core/news/": "sha384-Cr6VnKlvT+9ExwvPbnNcODlaIo6ZrWcEu4wt4auQZUjV3rP/c1Y2LNpdwM7YUVLF",
+    "/core/news/2019/": "sha384-uTTNmlOLaOZTjLObZ1FNg2gHiZd0bBqeRl+JO6IiVTsNSVT2mhBc66WZ3rvUKdNx",
+    "/core/news/2019/12/": "sha384-RF40oq7/IwSqtaKoUhyQKWfOZ492+iTlaqPkJn6cYakcSOf7yqrmjMcEf6eqQ6W9",
+    "/core/news/2019/12/22/blogging/": "sha384-mjFzBs68mjMXe7SKr2u36T8S5g0LF6Y4shHtZJwf5oK3MzmrcSjn6M5Tz+LLaQvV",
+    "/core/themes/": "sha384-GsDFXrMWoNytXBUUaMdY2RcriNLZFoWjr7pP4mpXUPZdeXcqGT3qtw7jL+CzPogT"
   },
   "static": {
     "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+",
     "/logo.png": "sha384-yRxX8nlWNCvk7+PidWDtP1jLxTmtbHm7tCW6TszNfZ7R5DTDMmXyxhKC/JmX3r1u",
     "/robots.txt": "sha384-UJ99rKaWQNOb1b2yL4/2XX6B6Gjr6ZeSk6CJfZ5lw/AUGmwgmUfFx1v0bnK+q/0O",
-    "/sitemap.xml": "sha384-QthNdk6bgmqhI1xKlxmcy6l0cpwj8vmhlmLsiaydVxlQj6ZVpbInqKZWu0+RdzxA"
+    "/sitemap.xml": "sha384-QF1YiZEykc5DXBDPSgJn1EX60HiQmeOX1AiPw1fLotpUgld2SX2I/L57hL/twT1u"
   }
 }
