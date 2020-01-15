@@ -102,6 +102,9 @@ do not error if docs/sri-hashes.json does not exist
 **minimum node version of dependencies bumped to 13.5.0**
 
 ##### 0.0.20 - unreleased
+update dependencies
+
+##### 0.0.21 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
