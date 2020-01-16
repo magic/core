@@ -54,10 +54,16 @@ export const reset = (vars = {}) => ({
     maxWidth: '100vw',
     overflowX: 'hidden',
   },
-  'ol, ul': {
+  ul: {
     listStyle: 'none',
     display: 'inline-block',
   },
+
+  ol: {
+    display: 'inline-block',
+    listStyle: 'inside decimal',
+  },
+
   'blockquote, q': {
     quotes: 'none',
   },
