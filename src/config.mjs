@@ -1,9 +1,10 @@
 import child_process from 'child_process'
 import path from 'path'
+
 import deep from '@magic/deep'
-import log from '@magic/log'
-import fs from '@magic/fs'
 import error from '@magic/error'
+import fs from '@magic/fs'
+import log from '@magic/log'
 
 import colors from './themes/colors.mjs'
 

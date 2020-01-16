@@ -1,4 +1,5 @@
 import is from '@magic/types'
+
 import { isUpperCase } from '../isUpperCase.mjs'
 
 const isModuleTag = (name, moduleNames) => moduleNames.includes(name)

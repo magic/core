@@ -1,6 +1,6 @@
-import { component } from './component.mjs'
-
 import { bodyTags, headTags, svgTags } from '@magic/tags'
+
+import { component } from './component.mjs'
 
 const exp = {}
 

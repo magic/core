@@ -1,5 +1,6 @@
-import is from '@magic/types'
 import path from 'path'
+
+import is from '@magic/types'
 
 import * as tasks from '../tasks/index.mjs'
 

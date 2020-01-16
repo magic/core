@@ -1,8 +1,8 @@
 import path from 'path'
 
-import log from '@magic/log'
 import error from '@magic/error'
 import fs from '@magic/fs'
+import log from '@magic/log'
 
 export const getBlog = async () => {
   let files

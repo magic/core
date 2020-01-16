@@ -1,6 +1,8 @@
 import path from 'path'
-import { prepareBlogPost } from './blogPost.mjs'
+
 import fs from '@magic/fs'
+
+import { prepareBlogPost } from './blogPost.mjs'
 
 export const prepareBlog = async app => {
   const relativeBlogDir = config.BLOG_DIR.replace(`${config.ROOT}/`, '')

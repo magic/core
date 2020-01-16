@@ -1,5 +1,3 @@
-import path from 'path'
-import { fs } from '../../lib/index.mjs'
 import { preparePage } from './page.mjs'
 
 export const preparePages = async app => {

@@ -1,5 +1,5 @@
-import is from '@magic/types'
 import deep from '@magic/deep'
+import is from '@magic/types'
 
 import handleStyleFunctions from './handleStyleFunctions.mjs'
 

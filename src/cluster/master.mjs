@@ -1,4 +1,5 @@
 import log from '@magic/log'
+
 import { runCmd } from './runCmd.mjs'
 
 export const master = async ({ cluster, commands, config }) => {

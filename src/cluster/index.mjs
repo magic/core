@@ -1,8 +1,9 @@
 import cluster from 'cluster'
 
-import { master } from './master.mjs'
 import { build } from './build.mjs'
+import { master } from './master.mjs'
 import { watch } from './watch.mjs'
+
 import { runConfig } from '../config.mjs'
 
 export const runCluster = async options => {

@@ -1,7 +1,9 @@
-import { fs, xc } from '../lib/index.mjs'
 import path from 'path'
-import log from '@magic/log'
+
 import error from '@magic/error'
+import log from '@magic/log'
+
+import { fs, xc } from '../lib/index.mjs'
 
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)

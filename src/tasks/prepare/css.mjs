@@ -1,6 +1,8 @@
-import is from '@magic/types'
-import error from '@magic/error'
 import path from 'path'
+
+import error from '@magic/error'
+import is from '@magic/types'
+
 import { findModuleStyles } from '../../lib/index.mjs'
 import colors from '../../themes/colors.mjs'
 

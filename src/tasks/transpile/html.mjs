@@ -1,7 +1,7 @@
 import { default as render } from 'hyperapp-render'
 
-import log from '@magic/log'
 import deep from '@magic/deep'
+import log from '@magic/log'
 
 const maybePrependWebRoot = s => {
   // non local links or already webrooted links

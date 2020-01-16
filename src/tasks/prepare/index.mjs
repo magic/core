@@ -1,15 +1,15 @@
 import error from '@magic/error'
 import is from '@magic/types'
 
-import { getBlog, getPages, fs } from '../../lib/index.mjs'
+import { fs, getBlog, getPages } from '../../lib/index.mjs'
 
-import { prepareGlobals } from './globals.mjs'
-import { prepareJs } from './js.mjs'
-import { preparePages } from './pages.mjs'
 import { prepareBlog } from './blog.mjs'
 import { prepareCss } from './css.mjs'
-import { prepareModules } from './modules.mjs'
+import { prepareGlobals } from './globals.mjs'
+import { prepareJs } from './js.mjs'
 import { prepareMetaFiles } from './meta.mjs'
+import { prepareModules } from './modules.mjs'
+import { preparePages } from './pages.mjs'
 import { prepareServiceWorker } from './service-worker.mjs'
 
 export const prepare = async (app, config) => {

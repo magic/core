@@ -1,4 +1,5 @@
 export const snakeRegex = /[-_]/gi
+
 export const toPascal = s =>
   s
     .split(snakeRegex)

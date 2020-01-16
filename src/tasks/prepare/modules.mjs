@@ -1,5 +1,6 @@
-import is from '@magic/types'
 import deep from '@magic/deep'
+import is from '@magic/types'
+
 import { isUpperCase } from '../../lib/index.mjs'
 
 export const prepareModule = app => ([name, component]) => {
@@ -19,6 +20,7 @@ export const prepareModule = app => ([name, component]) => {
   }
 
   const actionTypes = ['actions', 'effects']
+
   actionTypes
     // if component has no actions or effects, do nothing
     .filter(type => !is.empty(component[type]))

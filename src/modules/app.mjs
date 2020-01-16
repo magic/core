@@ -1,8 +1,8 @@
 import path from 'path'
 
-import is from '@magic/types'
 import deep from '@magic/deep'
 import { h } from '@magic/hyperapp'
+import is from '@magic/types'
 
 const App = async config => {
   const { WEB_ROOT = '/', LANG = 'en' } = config
