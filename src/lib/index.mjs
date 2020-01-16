@@ -1,5 +1,3 @@
-export { fs } from '@magic/fs'
-
 export { addTrailingSlash } from './addTrailingSlash.mjs'
 export { applyWebRoot } from './applyWebRoot.mjs'
 export { CHECK_PROPS } from './CHECK_PROPS.mjs'

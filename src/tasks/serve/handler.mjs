@@ -1,9 +1,10 @@
 import path from 'path'
 import URL from 'url'
 
+import fs from '@magic/fs'
 import is from '@magic/types'
 
-import { addTrailingSlash, fs } from '../../lib/index.mjs'
+import { addTrailingSlash } from '../../lib/index.mjs'
 
 export const handler = app => (req, res) => {
   const { IS_PROD } = config

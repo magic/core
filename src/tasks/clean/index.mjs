@@ -1,10 +1,11 @@
 import path from 'path'
 
 import error from '@magic/error'
+import fs from '@magic/fs'
 import is from '@magic/types'
 import log from '@magic/log'
 
-import { fs, isLocalPath } from '../../lib/index.mjs'
+import { isLocalPath } from '../../lib/index.mjs'
 
 export const clean = async config => {
   const dir = config.DIR.PUBLIC

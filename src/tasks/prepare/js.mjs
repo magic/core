@@ -1,8 +1,9 @@
 import path from 'path'
 
+import fs from '@magic/fs'
 import is from '@magic/types'
 
-import { fs, isUpperCase, stringifyObject, toCamel } from '../../lib/index.mjs'
+import { isUpperCase, stringifyObject, toCamel } from '../../lib/index.mjs'
 
 export const prepareJs = async magic => {
   const hyperappPath = path.join(

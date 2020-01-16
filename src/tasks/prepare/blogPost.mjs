@@ -1,11 +1,10 @@
 import path from 'path'
 
 import error from '@magic/error'
+import fs from '@magic/fs'
 import is from '@magic/types'
 import log from '@magic/log'
 import transmute from '@magic/transmute'
-
-import { fs } from '../../lib/index.mjs'
 
 export const prepareBlogPost = ({ WEB_ROOT, PAGES }) => async file => {
   const ext = path.extname(file)

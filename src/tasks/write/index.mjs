@@ -1,8 +1,9 @@
 import path from 'path'
 
+import fs from '@magic/fs'
+
 import {
   // compress,
-  fs,
   // getFileType,
   // minifyImages,
   writeFile,

@@ -1,7 +1,8 @@
 import error from '@magic/error'
+import fs from '@magic/fs'
 import is from '@magic/types'
 
-import { fs, getBlog, getPages } from '../../lib/index.mjs'
+import { getBlog, getPages } from '../../lib/index.mjs'
 
 import { prepareBlog } from './blog.mjs'
 import { prepareCss } from './css.mjs'

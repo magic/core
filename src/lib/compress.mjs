@@ -1,6 +1,6 @@
+import fs from '@magic/fs'
 import log from '@magic/log'
 
-import { fs } from './fs.mjs'
 import { getFiles } from './getFiles.mjs'
 import { getFileType } from './getFileType.mjs'
 
