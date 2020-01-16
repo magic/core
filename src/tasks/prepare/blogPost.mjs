@@ -3,6 +3,7 @@ import path from 'path'
 import log from '@magic/log'
 import transmute from '@magic/transmute'
 import { fs } from '../../lib/index.mjs'
+import error from '@magic/error'
 
 export const prepareBlogPost = ({ WEB_ROOT, PAGES }) => async file => {
   const ext = path.extname(file)
@@ -95,13 +96,16 @@ export const prepareBlogPost = ({ WEB_ROOT, PAGES }) => async file => {
     const pageName = page.name.replace(/\//g, '')
     const page = `${pageDir}/${pageName}.mjs`
 
-    throw new Error(`
+    throw error(
+      `
 ${page}
 needs to either
 export default () => []
 or
 export const View = () => []
-`)
+`,
+      'E_INVALID_BLOGPOST',
+    )
   }
 
   return page

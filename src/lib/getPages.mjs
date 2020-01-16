@@ -1,19 +1,24 @@
 import path from 'path'
 
 import log from '@magic/log'
+import error from '@magic/error'
 import fs from '@magic/fs'
 
 export const getPages = async () => {
   try {
     const files = await fs.getFiles(config.DIR.PAGES)
     if (files.length === 0) {
+      // this actually throws the error below
       throw new Error('no files')
     }
 
     return files
   } catch (e) {
     if (config.DIR.PAGES.startsWith(config.ROOT)) {
-      throw new Error(`NOEXIST - ${config.DIR.PAGES} does not exist or does not contain pages`)
+      throw error(
+        `${config.DIR.PAGES} does not exist or does not contain pages`,
+        'E_PAGE_DIR_NOEXIST',
+      )
 
       // TODO: install an example and give the user a choice which one
       // const indexPage = "() => div('hello world')"
@@ -23,6 +28,6 @@ export const getPages = async () => {
       //~ return await getPages()
     }
 
-    throw e
+    throw error(e)
   }
 }

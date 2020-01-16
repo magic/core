@@ -1,5 +1,6 @@
 import http from 'http'
 
+import error from '@magic/error'
 import log from '@magic/log'
 
 import handler from './handler.mjs'
@@ -21,7 +22,7 @@ export const startServer = async (server, options) => {
     if (e.code === 'EADDRINUSE') {
       options.port += 1
     } else {
-      throw e
+      throw error(e)
     }
 
     return startServer(server, options)
@@ -47,6 +48,7 @@ export const serve = async app => {
     if (port !== config.PORT) {
       log.warn('Address in use', `incrementing port to ${port}...`)
     }
+
     log(`listening to http://${host}:${port}${config.WEB_ROOT}`)
   } catch (e) {
     log.error(e)

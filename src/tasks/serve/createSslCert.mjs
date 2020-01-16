@@ -1,6 +1,7 @@
 import { fs, xc } from '../lib/index.mjs'
 import path from 'path'
 import log from '@magic/log'
+import error from '@magic/error'
 
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
@@ -15,7 +16,7 @@ const ssl = async () => {
     keyExists = true
   } catch (e) {
     if (e.code !== 'ENOENT') {
-      throw e
+      throw error(e)
     }
   }
 
@@ -25,7 +26,7 @@ const ssl = async () => {
     const certExists = true
   } catch (e) {
     if (e.code !== 'ENOENT') {
-      throw e
+      throw error(e)
     }
   }
   if (certExists && keyExists) {

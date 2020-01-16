@@ -1,4 +1,5 @@
 import is from '@magic/types'
+import error from '@magic/error'
 import path from 'path'
 import { findModuleStyles } from '../../lib/index.mjs'
 import colors from '../../themes/colors.mjs'
@@ -43,7 +44,7 @@ export const prepareCss = async ({ app, modules }) => {
     await Promise.all(themePromises)
   } catch (e) {
     if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-      throw e
+      throw error(e)
     }
   }
 
@@ -65,7 +66,7 @@ export const prepareCss = async ({ app, modules }) => {
         styles.push(theme)
       } catch (e) {
         if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-          throw e
+          throw error(e)
         }
       }
 
@@ -79,7 +80,7 @@ export const prepareCss = async ({ app, modules }) => {
         styles.push(theme)
       } catch (e) {
         if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-          throw e
+          throw error(e)
         }
         // theme does not exist in node_modules, continue happily.
       }
@@ -94,7 +95,7 @@ export const prepareCss = async ({ app, modules }) => {
         styles.push(theme)
       } catch (e) {
         if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-          throw e
+          throw error(e)
         }
       }
     })
@@ -124,7 +125,7 @@ export const prepareCss = async ({ app, modules }) => {
       }
     } catch (e) {
       if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-        throw e
+        throw error(e)
       }
     }
   }

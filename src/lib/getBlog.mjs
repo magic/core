@@ -1,6 +1,7 @@
 import path from 'path'
 
 import log from '@magic/log'
+import error from '@magic/error'
 import fs from '@magic/fs'
 
 export const getBlog = async () => {
@@ -13,7 +14,7 @@ export const getBlog = async () => {
       log.warn('NOEXIST', `${config.BLOG_DIR} does not exist or does not contain blog posts`)
     }
 
-    throw e
+    throw error(e)
   }
 
   return files

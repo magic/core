@@ -3,6 +3,7 @@ import path from 'path'
 import deep from '@magic/deep'
 import log from '@magic/log'
 import fs from '@magic/fs'
+import error from '@magic/error'
 
 import colors from './themes/colors.mjs'
 
@@ -94,7 +95,7 @@ export const runConfig = async () => {
         static: {},
       }
     } else {
-      throw e
+      throw error(e)
     }
   }
 

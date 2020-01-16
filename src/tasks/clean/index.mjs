@@ -2,6 +2,7 @@ import is from '@magic/types'
 import log from '@magic/log'
 import path from 'path'
 import { fs, isLocalPath } from '../../lib/index.mjs'
+import error from '@magic/error'
 
 export const clean = async config => {
   const dir = config.DIR.PUBLIC
@@ -12,7 +13,7 @@ export const clean = async config => {
       const msg = `TRIED DELETING OUTSIDE OF CWD!
       directory: ${dir} is not within ${process.cwd()}
       This is not good, please file an issue on https://github.com/magic/core or send me a mail: bug@jaeh.at`
-      throw new Error(msg)
+      throw error(msg, 'E_DEL_OUTSIDE_CWD')
     }
 
     log.warn('remove', dir)

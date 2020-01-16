@@ -1,4 +1,7 @@
 import path from 'path'
+
+import error from '@magic/error'
+
 import imagemin from 'imagemin'
 import imageminPngquant from 'imagemin-pngquant'
 import imageminSvgo from 'imagemin-svgo'
@@ -30,7 +33,7 @@ export const minifyImages = async images => {
   } catch (e) {
     // do not throw if error is ENOENT
     if (e.code !== 'ENOENT') {
-      throw e
+      throw error(e)
     }
   }
 }

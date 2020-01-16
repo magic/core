@@ -2,6 +2,7 @@ import is from '@magic/types'
 import path from 'path'
 import log from '@magic/log'
 import transmute from '@magic/transmute'
+import error from '@magic/transmute'
 import { fs } from '../../lib/index.mjs'
 
 export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
@@ -80,13 +81,16 @@ export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
     // remove slashes
     const pageName = page.name.replace(/\//g, '')
 
-    throw new Error(`
+    throw error(
+      `
 ${pageDir}/${pageName}.mjs
 needs to either
 export default () => []
 or
 export const View = () => []
-`)
+`,
+      'E_INVALID_PAGE',
+    )
   }
 
   return page

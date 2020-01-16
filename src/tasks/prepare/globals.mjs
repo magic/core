@@ -1,11 +1,11 @@
 import path from 'path'
 
 import deep from '@magic/deep'
+import error from '@magic/error'
 import is from '@magic/types'
 import log from '@magic/log'
 
 import { fs, isUpperCase, toPascal } from '../../lib/index.mjs'
-
 import { builtins, component, tags } from '../../modules/index.mjs'
 
 const localLibIndexPath = path.join('src', 'lib', 'index.mjs')
@@ -41,7 +41,7 @@ export const findNodeModules = async () => {
         modules[name].lib = path.join(loadPath, localLibIndexPath)
       } catch (e) {
         if (e.code !== 'ENOENT') {
-          throw e
+          throw error(e)
         }
       }
 
@@ -51,7 +51,7 @@ export const findNodeModules = async () => {
         modules[name].lib = path.join(loadPath, localLibMjsPath)
       } catch (e) {
         if (e.code !== 'ENOENT') {
-          throw e
+          throw error(e)
         }
       }
     })
@@ -82,7 +82,7 @@ export const findNodeModules = async () => {
           modules[name].lib = path.join(loadPath, localLibIndexPath)
         } catch (e) {
           if (e.code !== 'ENOENT') {
-            throw e
+            throw error(e)
           }
         }
 
@@ -92,7 +92,7 @@ export const findNodeModules = async () => {
           modules[name].lib = path.join(loadPath, localLibMjsPath)
         } catch (e) {
           if (e.code !== 'ENOENT') {
-            throw e
+            throw error(e)
           }
         }
       }

@@ -1,3 +1,4 @@
+import error from '@magic/error'
 import is from '@magic/types'
 
 import { getBlog, getPages, fs } from '../../lib/index.mjs'
@@ -93,7 +94,7 @@ export const prepare = async (app, config) => {
     // it's fine if the static dir does not exist,
     // but all other errors will throw.
     if (e.code !== 'ENOENT') {
-      throw e
+      throw error(e)
     }
   }
 
