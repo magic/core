@@ -102,8 +102,11 @@ do not error if docs/sri-hashes.json does not exist
 **minimum node version of dependencies bumped to 13.5.0**
 
 ##### 0.0.20
-update dependencies
-update theme to show list-style for ordered lists (ol)
+* update dependencies
+* update theme to show list-style for ordered lists (ol)
+* better error handling
+* remove lib/fs, use @magic/fs everywhere
+* is @magic/types for isUpperCase and isLowerCase
 
 ##### 0.0.21 - unreleased
 ...
