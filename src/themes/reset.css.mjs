@@ -34,13 +34,13 @@ export const reset = (vars = {}) => ({
   },
 
   [all]: {
+    border: 0,
+    boxSizing: 'border-box',
+    font: 'inherit',
+    fontSize: '100%',
     margin: 0,
     padding: 0,
-    border: 0,
-    fontSize: '100%',
-    font: 'inherit',
     verticalAlign: 'baseline',
-    boxSizing: 'border-box',
   },
   /* HTML5 display-role reset for older browsers */
   [html5Reset]: {
@@ -50,13 +50,13 @@ export const reset = (vars = {}) => ({
   body: {
     lineHeight: 1.5,
     margin: 0,
-    padding: 0,
     maxWidth: '100vw',
     overflowX: 'hidden',
+    padding: 0,
   },
   ul: {
-    listStyle: 'none',
     display: 'inline-block',
+    listStyle: 'none',
   },
 
   ol: {
@@ -68,7 +68,6 @@ export const reset = (vars = {}) => ({
     quotes: 'none',
   },
   'blockquote:before, blockquote:after, q:before, q:after': {
-    content: '',
     content: 'none',
   },
   table: {
@@ -78,15 +77,15 @@ export const reset = (vars = {}) => ({
 
   // remove outlines from links
   a: {
-    outline: 'none',
     cursor: 'pointer',
+    outline: 'none',
     whiteSpace: 'nowrap',
   },
 
   [buttons]: {
-    cursor: 'pointer',
     backgroundColor: vars.buttonBackgroundColor || vars.colors.gray[500],
     color: vars.buttonColor || vars.colors.gray[900],
+    cursor: 'pointer',
     padding: '0.5em',
 
     '&:hover': {
@@ -95,8 +94,8 @@ export const reset = (vars = {}) => ({
     },
 
     '&::-moz-focus-inner': {
-      padding: '0',
       border: '0 none',
+      padding: '0',
     },
   },
 
@@ -107,9 +106,9 @@ export const reset = (vars = {}) => ({
   },
 
   '.Wrapper': {
-    width: '90%',
     margin: '0 auto',
     maxWidth: '1300px',
+    width: '90%',
   },
 
   // header and menu in header
