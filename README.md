@@ -101,8 +101,9 @@ do not error if docs/sri-hashes.json does not exist
 ##### 0.0.19
 **minimum node version of dependencies bumped to 13.5.0**
 
-##### 0.0.20 - unreleased
+##### 0.0.20
 update dependencies
+update theme to show list-style for ordered lists (ol)
 
 ##### 0.0.21 - unreleased
 ...
