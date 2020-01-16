@@ -1,12 +1,12 @@
 import path from 'path'
 
+import cases from '@magic/cases'
 import deep from '@magic/deep'
 import error from '@magic/error'
 import fs from '@magic/fs'
 import is from '@magic/types'
 import log from '@magic/log'
 
-import { toPascal } from '../../lib/index.mjs'
 import { builtins, component, tags } from '../../modules/index.mjs'
 
 const localLibIndexPath = path.join('src', 'lib', 'index.mjs')
@@ -21,7 +21,7 @@ export const findNodeModules = async () => {
   const dirPromises = dirs
     .filter(dir => dir.includes('magic-module-') || dir.includes('magic-modules-'))
     .map(async nodeModule => {
-      const name = toPascal(nodeModule.split(/magic-module(s)?/)[1])
+      const name = cases.pascal(nodeModule.split(/magic-module(s)?/)[1])
       const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
 
       // find module itself
@@ -64,7 +64,7 @@ export const findNodeModules = async () => {
     .filter(n => nodeModuleDir !== n)
     .map(async nodeModule => {
       if (magicModuleDir !== nodeModule) {
-        const name = toPascal(path.basename(nodeModule))
+        const name = cases.pascal(path.basename(nodeModule))
         const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
 
         try {
