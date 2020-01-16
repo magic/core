@@ -3,7 +3,7 @@ import path from 'path'
 import fs from '@magic/fs'
 import is from '@magic/types'
 
-import { isUpperCase, stringifyObject, toCamel } from '../../lib/index.mjs'
+import { stringifyObject, toCamel } from '../../lib/index.mjs'
 
 export const prepareJs = async magic => {
   const hyperappPath = path.join(
@@ -51,7 +51,7 @@ return { ${imports} }
       .map(([_, mod]) => {
         const subPropTypes = Object.entries(mod)
           .sort(([a], [b]) => (a > b ? 1 : -1))
-          .filter(([k, { propTypes }]) => isUpperCase(k) && k !== 'View' && propTypes)
+          .filter(([k, { propTypes }]) => is.case.upper(k[0]) && k !== 'View' && propTypes)
           .map(([_, sm]) =>
             Object.entries(sm.propTypes)
               .sort(([a], [b]) => (a > b ? 1 : -1))
@@ -85,7 +85,7 @@ return { ${imports} }
     .filter(([k]) => k !== 'Magic' && k !== 'component')
     .sort(([a], [b]) => (a > b ? 1 : -1))
     .forEach(([k, v]) => {
-      if (!isUpperCase(k)) {
+      if (!is.case.upper(k[0])) {
         htmlTagString += `const ${k} = C('${k}')\n`
       } else {
         let str
@@ -96,7 +96,7 @@ return { ${imports} }
         }
 
         const subStr = Object.entries(v)
-          .filter(([sk]) => isUpperCase(sk) && sk !== 'View')
+          .filter(([sk]) => is.case.upper(sk[0]) && sk !== 'View')
           .sort(([a], [b]) => (a > b ? 1 : -1))
           .map(([sk, sv]) => `\n${k}.${sk} = ${is.fn(sv) ? sv.toString() : sv.View.toString()}`)
           .join('\n')

@@ -1,8 +1,6 @@
 import deep from '@magic/deep'
 import is from '@magic/types'
 
-import { isUpperCase } from '../../lib/index.mjs'
-
 export const prepareModule = app => ([name, component]) => {
   const lowerName = name.toLowerCase()
 
@@ -62,6 +60,6 @@ export const prepareModules = (app, modules) => {
   // merge component states into app.state[componentName].
   // this makes all identical components share their state.
   Object.entries(modules)
-    .filter(([name]) => isUpperCase(name))
+    .filter(([name]) => is.case.upper(name[0]))
     .forEach(prepareModule(app))
 }

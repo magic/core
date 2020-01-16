@@ -1,8 +1,6 @@
 import deep from '@magic/deep'
 import is from '@magic/types'
 
-import { isUpperCase } from './isUpperCase.mjs'
-
 export const findModuleStyles = (modules, vars, parent) => {
   let styles = {}
   Object.entries(modules)
@@ -76,7 +74,7 @@ export const findModuleStyles = (modules, vars, parent) => {
       }
 
       Object.entries(mod)
-        .filter(([k]) => isUpperCase(k))
+        .filter(([k]) => is.case.upper(k[0]))
         .filter(([_, m]) => !is.empty(m.style))
         .forEach(([subName, subMod]) => {
           const subStyles = findModuleStyles({ [subName]: subMod }, vars, name)

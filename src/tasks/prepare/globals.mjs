@@ -6,7 +6,7 @@ import fs from '@magic/fs'
 import is from '@magic/types'
 import log from '@magic/log'
 
-import { isUpperCase, toPascal } from '../../lib/index.mjs'
+import { toPascal } from '../../lib/index.mjs'
 import { builtins, component, tags } from '../../modules/index.mjs'
 
 const localLibIndexPath = path.join('src', 'lib', 'index.mjs')
@@ -109,7 +109,7 @@ export const findLocalModules = async () => {
 
   const assetModules = await fs.getFiles(config.DIR.ASSETS)
   const assetPromises = assetModules
-    .filter(m => isUpperCase(path.basename(m)))
+    .filter(m => is.case.upper(path.basename(m)[0]))
     .filter(m => ['.mjs'].some(ext => m.endsWith(ext)))
     .map(async m => {
       try {
@@ -272,7 +272,7 @@ export const prepareGlobals = async (app, config) => {
       global[name] = mod[name]
     }
 
-    const views = Object.entries(mod).filter(([k]) => k !== name && isUpperCase(k) && k !== 'View')
+    const views = Object.entries(mod).filter(([k]) => k !== name && is.case.upper(k[0]) && k !== 'View')
     views.forEach(([k, v]) => {
       if (is.function(v)) {
         global[name][k] = v

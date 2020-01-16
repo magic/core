@@ -1,15 +1,14 @@
 import is from '@magic/types'
 
-import { isUpperCase } from './isUpperCase.mjs'
 import { stringifyObject } from './stringifyObject.mjs'
 
 export const handleDependencies = (name, component) => {
-  if (is.fn(component) && !isUpperCase(name)) {
+  if (is.fn(component) && !is.case.upper(name[0])) {
     return `const ${name} = C('${name}')\n`
   }
 
   const views = Object.entries(component)
-    .filter(([name]) => isUpperCase(name))
+    .filter(([name]) => is.case.upper(name[0]))
     .map(([name, view]) => ({
       name,
       view: view.toString(),

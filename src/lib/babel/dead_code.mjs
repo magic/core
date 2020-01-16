@@ -1,7 +1,5 @@
 import is from '@magic/types'
 
-import { isUpperCase } from '../isUpperCase.mjs'
-
 const isModuleTag = (name, moduleNames) => moduleNames.includes(name)
 
 const used = {
@@ -158,7 +156,7 @@ const removeUnused = (t, app) => path => {
     if (name && isModuleTag(name, moduleNames)) {
       if (!usedTagNames.includes(name)) {
         if (isModuleTag(name, moduleNames)) {
-          if (!isUpperCase(name)) {
+          if (!is.case.upper(name[0])) {
             const init = path.node.init
             if (!init) {
               return
