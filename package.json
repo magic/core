@@ -47,7 +47,7 @@
     "@magic/cli": "0.0.17",
     "@magic/css": "0.7.9",
     "@magic/deep": "0.1.2",
-    "@magic/error": "0.0.2",
+    "@magic/error": "0.0.3",
     "@magic/fs": "0.0.3",
     "@magic/hyperapp": "2.0.3",
     "@magic/log": "0.1.3",
