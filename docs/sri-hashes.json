@@ -1,28 +1,28 @@
 {
-  "css": "sha384-m4rPAhvYi1frpBjPnriFCxiQd3tCxnWzh6IK6yQYapQCEe5l5oD5vNag8dxUIxBJ",
-  "js": "sha384-gD+80UP8FNQQGwzJrxe7LzOfky9F1sdPC9/au9PhH0qoESg1nVJV5Lnbo3QGrA12",
+  "css": "sha384-qJmLEunig2gIFkJia3YQO8rfs86FkHW0/yxDA8JQ6m3G/dgUM2MSrtE8WgM6hSSC",
+  "js": "sha384-N4mgBMMLQKUEa5sBLtlxwtTy0IErHPYCzs2zyWdynh2x2H6JAV4VYMjWSAYixKJ7",
   "pages": {
-    "/core/": "sha384-kFi4GyxZyD754w19AmoLhOulgikoqa7QHIMCxZpFVhAM9vG7y06Y93THKdu8Xbwy",
-    "/core/404/": "sha384-Bn66VqgISXEdppDXwLM51C55gKxvrnwktChcva3l84LDAqbKzeAup+KEpbem7JGe",
-    "/core/concepts/": "sha384-g6AcXRA0DJpZsVrcGTG1DtU/ukztJM0ulO3Mugh9FGtvMNU/o4vAYUQOstF4j91S",
-    "/core/files/": "sha384-bqnVj48sj8MnR1/lmZVDpH1pYOrlC7YU0s/wVRLiGQwd1eIlOVjjaqTbucCB1YJt",
-    "/core/libraries/": "sha384-AMgW8T7RuIK+8uaGFPFdDPUEISCkBbgXSShlWJ+/SR8Sswghm20cUjt2RO1ELJ7J",
-    "/core/modules/": "sha384-Jlnh0DdUOrm3xqrKdCVIXMXe5+g9/VSKUNt9TmVwOk5nWwwpGfMF1hwKgOneLBgh",
-    "/core/modules/example/": "sha384-7YX39B/RFzLc3N7dzidLpL0sECa/sHroWlfAHvtZI8MfTFltCBDtY2qIJXPVgkiy",
-    "/core/modules/html/": "sha384-d/ZJHIIe4gi0vnU6hvq8ClsWAH0eTiZ1O7yPahJapHQ/q5AEv68Y/ugPWh+vjmsy",
-    "/core/modules/markdown/": "sha384-q9JpvVwUGXWT+kJvbic9jglKBZXSjlokwTFLfA36DjUqKbucnWY6FLS35wN7CHSp",
-    "/core/modules/preinstalled/": "sha384-opFYP5opCiQ3TkjSvUPfNYZJTw7YUkS7GQ/Y/YOdB0frPkzXM/sIPoAk0MpP8xJu",
-    "/core/modules/propTypes/": "sha384-9HIgEdyClBz/AXt/wmQDxtviRt2iSNhhTrGlepspHtqDx2mEp0cuwyRxvoDr46SF",
-    "/core/news/": "sha384-arxEWMsNeRD9Xy56jhV+a7ALYbNRIn5KvXsNyoaD9RYU9SZXzgxws/kMN/iBtLYb",
-    "/core/news/2019/": "sha384-HUwQndgDNZxGWKUmkcmA0OIxGo24LYHSNDnVwJKaf0xBu2SdvZGnXxU6E9WxwgpE",
-    "/core/news/2019/12/": "sha384-AeMXJXVw35M0ii02qV7TPnepqUF9aJk5x6cGY/dKtnyl9y2BFuqUYc8zoUV7HM2q",
-    "/core/news/2019/12/22/blogging/": "sha384-l+Ol4GDF047iy4vw3aIzTTKGq3bYfruhpQBMtgjdQqYMhAoaQzXBwRHtrmRENCjA",
-    "/core/themes/": "sha384-UhbSDg/J9UnwpwXOULnSldXZCs4tZxtMuG4lz4CWrE1Zu92bpmNj3g/JHPmHHrQ4"
+    "/core/": "sha384-x8xn+7hQzGD5+7z08qvfKrXyRPzSrWK9d9ccC8XVAw5+wFYKmN7HPkjOKxrBp2gR",
+    "/core/404/": "sha384-wdCSjhlLU194d0vbGDRIMC+iC7EgaLDwU3WEynbjWlhnWbef8gUh4BICdpnL0XJM",
+    "/core/concepts/": "sha384-iGnpbwxzyT8nQ5rr+KASx9FuZVKXC/8Ix8+CPoAtUAeq2ZNbGDBczjwGaCQRadx4",
+    "/core/files/": "sha384-IS/Zi9OVqZ+K6nyNFUn2EFNr7xr1Vx/eHc2zUqRgXI154kLmvU1+3Mei1LjVrN6V",
+    "/core/libraries/": "sha384-x5KeUp6hwwRb/AOWVdPSkOVdmimCmimUrxIm75kjY4Bevpr8WlRqsZNx1KPPjHH9",
+    "/core/modules/": "sha384-jSyPDrr1YP6oxY7od/xVJJ9Vxl/uVU2TCelPLNCQf8npFzWMcvct5HUpUVOGhLRX",
+    "/core/modules/example/": "sha384-qKV2twVzkyo/SLVM4cgj02zhSEYpU1VxpRIS1mfEWMvRi2hxEx3XHfUNsEtgcvWi",
+    "/core/modules/html/": "sha384-zsVvzP3cL9pS9p5vddrG5pFODKMqeTNNbVGhESAzSq+KDoxjQajVmMatOn2Ecw7d",
+    "/core/modules/markdown/": "sha384-+1awA2gGv/dDU57PBSXwfMu3inFkEoKVQjSUNK4MnzgrtmjG9N8C4E9fuvA5eWgf",
+    "/core/modules/preinstalled/": "sha384-hR2sj9B/+OBOyTlV93jRhAJGiYE8Tz1XG1CiRudW6A11X5prXEBGCMhw6HMqvbfI",
+    "/core/modules/propTypes/": "sha384-/OG6nfrUNAjIp/5iv24qjMfDK4QLTUyAMbNI41zn9FQ75u35Cz3cTU5hwAj/9smI",
+    "/core/news/": "sha384-S+wHFsjKgebqJI1UJUbsTmPJGW1walCr9tTaquntRzKoysR24qY7B4DtxGh87rAy",
+    "/core/news/2019/": "sha384-gr7uzaO66sRdpdpBV8IfU/fNKP7zJkGSe9in1NPc0jCufvtrirXVBKjsd8XWGscM",
+    "/core/news/2019/12/": "sha384-BzspC9cX8cROtMU4AymvgQ8lS5FbOAfZkt5HrMzzuB+tYmKTkz9woxNSuR63YScq",
+    "/core/news/2019/12/22/blogging/": "sha384-4iYicWdMDyY7UwuV5ui/HWDoaTdXYJPCiSx5DCnJcMQuvrB919vB6LnZKsejlai0",
+    "/core/themes/": "sha384-As0f4sxShBf8OZ/UkYdZWe7dEQzK5DVGfg3EmdovsP0+6OUETKrzGaZAz0o5e465"
   },
   "static": {
     "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+",
     "/logo.png": "sha384-yRxX8nlWNCvk7+PidWDtP1jLxTmtbHm7tCW6TszNfZ7R5DTDMmXyxhKC/JmX3r1u",
     "/robots.txt": "sha384-UJ99rKaWQNOb1b2yL4/2XX6B6Gjr6ZeSk6CJfZ5lw/AUGmwgmUfFx1v0bnK+q/0O",
-    "/sitemap.xml": "sha384-/EpEO2PLB3ggJFO37/NreDsK5t4NIDrMzFKVj5jvgO6pZ099RWeQEQ2IYgZG520I"
+    "/sitemap.xml": "sha384-jjC5WCeVhr+ay6JCu0xwA4dROoDqkP/9obGW40BzzBlBUEXQc1vRLtaz8nKUTruZ"
   }
 }
