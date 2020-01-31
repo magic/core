@@ -108,7 +108,10 @@ do not error if docs/sri-hashes.json does not exist
 * remove lib/fs, use @magic/fs everywhere
 * is @magic/types for isUpperCase and isLowerCase
 
-##### 0.0.21 - unreleased
+##### 0.0.21 
+add viewport and ie=edge html meta tags.
+
+##### 0.0.22 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
