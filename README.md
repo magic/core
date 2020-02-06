@@ -114,8 +114,12 @@ add viewport and ie=edge html meta tags.
 ##### 0.0.22
 tasks/prepare/css: also load themes directly from node_modules/${theme_name}.
 
-##### 0.0.23 - unreleased
+##### 0.0.23
 * all hail eris!
+* css styles now inherit THEME_VARS from all possible source before transpiling styles.
+
+
+##### 0.0.24 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
