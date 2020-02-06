@@ -72,7 +72,21 @@ export const prepareCss = async ({ app, modules }) => {
         }
       }
 
-      // look if it exists in node_modules
+      // look if it exists in node_modules/${theme_name}
+      try {
+        let { default: theme } = await import(theme_name)
+        if (is.function(theme)) {
+          theme = theme(THEME_VARS)
+        }
+        styles.push(theme)
+      } catch (e) {
+        if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+          throw error(e)
+        }
+        // theme does not exist in node_modules, continue happily.
+      }
+
+      // look if it exists in node_modules/@magic-themes/${theme_name}
       try {
         const themePath = `@magic-themes/${theme_name}`
         let { default: theme } = await import(themePath)
