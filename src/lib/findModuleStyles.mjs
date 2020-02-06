@@ -3,11 +3,13 @@ import is from '@magic/types'
 
 export const findModuleStyles = (modules, vars, parent) => {
   let styles = {}
+
   Object.entries(modules)
     .sort(([a], [b]) => (a > b ? 1 : -1))
     .forEach(([name, mod]) => {
       if (!is.empty(mod.style)) {
         let style = mod.style
+
         if (is.function(mod.style)) {
           style = mod.style(vars)
         }
