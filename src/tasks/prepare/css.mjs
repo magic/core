@@ -45,67 +45,41 @@ export const prepareCss = async ({ app, modules }) => {
     }
   }
 
-  // load user's chosen theme, if it is set and exists, and merge it over the styles
+  // load user's chosen theme, if it is set and exists, and merge it into the styles
   if (THEME) {
     const themePromises = THEME.map(async theme_name => {
-      // first look if we have this theme preinstalled, if so, merge it into the styles
-      const libThemeFile = path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs')
+      // order is meaningful.
+      const themeLocations = [
+        // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
+        path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs'),
+        // see if the theme is a full name of a js module in node_modules,
+        // eg: @org/theme-name or theme-name
+        theme_name,
+        // see if this is a @magic-themes theme
+        `@magic-themes/${theme_name}`,
+        // see if it is installed locally.
+        path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
+      ]
 
-      try {
-        let { default: theme, vars } = await import(libThemeFile)
-        if (!is.empty(vars)) {
-          THEME_VARS = { ...THEME_VARS, ...vars }
-        }
-        themeStyles.push(theme)
-      } catch (e) {
-        if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-          throw error(e)
-        }
-      }
+      await Promise.all(
+        themeLocations.map(async location => {
+          try {
+            console.log('looking for theme', location)
+            let { default: theme, vars } = await import(location)
 
-      // look if it exists in node_modules/${theme_name}
-      try {
-        let { default: theme, vars } = await import(theme_name)
+            if (!is.empty(vars)) {
+              console.log('non-empty vars', vars)
+              THEME_VARS = { ...THEME_VARS, ...vars }
+            }
 
-        if (!is.empty(vars)) {
-          THEME_VARS = { ...THEME_VARS, ...vars }
-        }
-        themeStyles.push(theme)
-      } catch (e) {
-        if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-          throw error(e)
-        }
-        // theme does not exist in node_modules, continue happily.
-      }
-
-      // look if it exists in node_modules/@magic-themes/${theme_name}
-      try {
-        const themePath = `@magic-themes/${theme_name}`
-        let { default: theme, vars } = await import(themePath)
-        if (!is.empty(vars)) {
-          THEME_VARS = { ...THEME_VARS, ...vars }
-        }
-        themeStyles.push(theme)
-      } catch (e) {
-        if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-          throw error(e)
-        }
-        // theme does not exist in node_modules, continue happily.
-      }
-
-      // load user's custom theme, overwriting both preinstalled and node_modules themes
-      try {
-        const maybeThemeFile = path.join(config.DIR.THEMES, theme_name, 'index.mjs')
-        let { default: theme, vars } = await import(maybeThemeFile)
-        if (!is.empty(vars)) {
-          THEME_VARS = { ...THEME_VARS, ...vars }
-        }
-        themeStyles.push(theme)
-      } catch (e) {
-        if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-          throw error(e)
-        }
-      }
+            themeStyles.push(theme)
+          } catch (e) {
+            if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+              throw error(e)
+            }
+          }
+        }),
+      )
     })
 
     await Promise.all(themePromises)
@@ -139,15 +113,10 @@ export const prepareCss = async ({ app, modules }) => {
   }
 
   // load all styles from all modules
+  console.log({ THEME_VARS })
   const moduleStyles = findModuleStyles(modules, THEME_VARS)
 
-  const styles = [
-    ...resetStyles,
-    moduleStyles,
-    ...themeStyles,
-    ...pageStyles,
-    ...appStyles,
-  ]
+  const styles = [...resetStyles, moduleStyles, ...themeStyles, ...pageStyles, ...appStyles]
 
-  return styles.map(style => is.fn(style) ? style(THEME_VARS) : style)
+  return styles.map(style => (is.fn(style) ? style(THEME_VARS) : style))
 }
