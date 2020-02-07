@@ -296,6 +296,6 @@ export const colors = {
 }
 
 colors.grey = colors.gray
-colors.bluegrey = colors.bluegrey
+colors.bluegrey = colors.bluegray
 
 export default colors
