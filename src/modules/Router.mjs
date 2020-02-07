@@ -47,15 +47,18 @@ export const actions = {
     let { pathname: url, hash } = window.location
     hash = hash.substring(1)
 
+    let top = 0
+
     if (e.state) {
       url = e.state.url
       hash = e.state.hash
+      top = e.state.scrollY || 0
     }
 
     if (hash) {
       window.location.hash = hash
     } else {
-      window.scroll(0, 0)
+      window.scroll({ top, behavior: 'smooth' })
     }
 
     return {
@@ -73,18 +76,31 @@ export const actions = {
     const [url, hash = ''] = to.split('#')
 
     // do nothing if url would not change
-    if (url === state.url) {
-      if (hash && hash === state.hash) {
-        return state
-      } else {
-        window.scroll({ top: 0, behaviour: 'smooth' })
-      }
+    if (url === state.url && hash === state.hash) {
+      window.location.hash = hash
+      return state
     }
 
-    window.history.pushState({ url, hash }, '', to)
+    const { scrollY } = window
+    window.history.pushState({ url, hash, scrollY }, state.title, to)
 
-    if (!hash) {
-      window.scroll({ top: 0, behaviour: 'smooth' })
+    if (url !== state.url) {
+      if (!hash) {
+        const [html] = document.getElementsByTagName('html')
+        // firefox can not access this value via javascript (07.02.2020)
+        // which means that it will be an empty string.
+        // the hack below works by miracle, not logic.
+        const scrollBehavior = html.style.scrollBehavior
+
+        // this allows firefox to scroll to top in some edge-case scenarios
+        // example: page with was scrolled manually.
+        html.style.scrollBehavior = 'auto'
+
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+
+        // set scrollBehavior back to default.
+        html.style.scrollBehavior = scrollBehavior
+      }
     } else {
       window.location.hash = hash
     }
