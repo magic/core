@@ -117,7 +117,9 @@ tasks/prepare/css: also load themes directly from node_modules/${theme_name}.
 ##### 0.0.23
 * all hail eris!
 * css styles now inherit THEME_VARS from all possible source before transpiling styles.
-
+* colors.bluegrey now is alias for colors.bluegray instead of undefined.
+* client side routing scrolls to top in all cases, but is not animated.
+  scroll-behavior + window.scroll() = bug
 
 ##### 0.0.24 - unreleased
 ...
