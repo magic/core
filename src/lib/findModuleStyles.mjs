@@ -9,7 +9,6 @@ export const findModuleStyles = (modules, vars, parent) => {
     .forEach(([name, mod]) => {
       if (!is.empty(mod.style)) {
         let style = mod.style
-
         if (is.function(mod.style)) {
           style = mod.style(vars)
         }
