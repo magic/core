@@ -4,8 +4,8 @@ export const View = state =>
     p([
       'this is Mod. it gets loaded from ',
       Link(
-        { to: 'https://github.com/magic/core/blob/master/example/assets/module.mjs' },
-        '/assets/module.mjs',
+        { to: 'https://github.com/magic/core/blob/master/example/assets/modules/Mod.mjs' },
+        '/assets/modules/Mod.mjs',
       ),
     ]),
     p(['the state of this module: ', JSON.stringify(state.module)]),
@@ -17,7 +17,7 @@ export const state = {
   },
 }
 
-export const style = {
+export const style = vars => ({
   margin: '0 0 1em',
   padding: '0.5em',
   border: '1px solid',
@@ -25,8 +25,9 @@ export const style = {
 
   h3: {
     margin: 0,
+    color: vars.textColor,
   },
-}
+})
 
 export const global = {
   state: {
