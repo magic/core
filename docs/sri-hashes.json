@@ -1,28 +1,28 @@
 {
-  "css": "sha384-qJmLEunig2gIFkJia3YQO8rfs86FkHW0/yxDA8JQ6m3G/dgUM2MSrtE8WgM6hSSC",
-  "js": "sha384-N4mgBMMLQKUEa5sBLtlxwtTy0IErHPYCzs2zyWdynh2x2H6JAV4VYMjWSAYixKJ7",
+  "css": "sha384-600wBMPhFinSsofZpyuyizb/BFYh5qxHC/v6unba70NISSu2Gus8hw9NdVLk4HvA",
+  "js": "sha384-PGXxVWF4zwqx6EB2ch3ODX5QJ37hMINckEuiYzWmjoutx5GUKy/DdojccDABpV1L",
   "pages": {
-    "/core/": "sha384-x8xn+7hQzGD5+7z08qvfKrXyRPzSrWK9d9ccC8XVAw5+wFYKmN7HPkjOKxrBp2gR",
-    "/core/404/": "sha384-wdCSjhlLU194d0vbGDRIMC+iC7EgaLDwU3WEynbjWlhnWbef8gUh4BICdpnL0XJM",
-    "/core/concepts/": "sha384-iGnpbwxzyT8nQ5rr+KASx9FuZVKXC/8Ix8+CPoAtUAeq2ZNbGDBczjwGaCQRadx4",
-    "/core/files/": "sha384-IS/Zi9OVqZ+K6nyNFUn2EFNr7xr1Vx/eHc2zUqRgXI154kLmvU1+3Mei1LjVrN6V",
-    "/core/libraries/": "sha384-x5KeUp6hwwRb/AOWVdPSkOVdmimCmimUrxIm75kjY4Bevpr8WlRqsZNx1KPPjHH9",
-    "/core/modules/": "sha384-jSyPDrr1YP6oxY7od/xVJJ9Vxl/uVU2TCelPLNCQf8npFzWMcvct5HUpUVOGhLRX",
-    "/core/modules/example/": "sha384-qKV2twVzkyo/SLVM4cgj02zhSEYpU1VxpRIS1mfEWMvRi2hxEx3XHfUNsEtgcvWi",
-    "/core/modules/html/": "sha384-zsVvzP3cL9pS9p5vddrG5pFODKMqeTNNbVGhESAzSq+KDoxjQajVmMatOn2Ecw7d",
-    "/core/modules/markdown/": "sha384-+1awA2gGv/dDU57PBSXwfMu3inFkEoKVQjSUNK4MnzgrtmjG9N8C4E9fuvA5eWgf",
-    "/core/modules/preinstalled/": "sha384-hR2sj9B/+OBOyTlV93jRhAJGiYE8Tz1XG1CiRudW6A11X5prXEBGCMhw6HMqvbfI",
-    "/core/modules/propTypes/": "sha384-/OG6nfrUNAjIp/5iv24qjMfDK4QLTUyAMbNI41zn9FQ75u35Cz3cTU5hwAj/9smI",
-    "/core/news/": "sha384-S+wHFsjKgebqJI1UJUbsTmPJGW1walCr9tTaquntRzKoysR24qY7B4DtxGh87rAy",
-    "/core/news/2019/": "sha384-gr7uzaO66sRdpdpBV8IfU/fNKP7zJkGSe9in1NPc0jCufvtrirXVBKjsd8XWGscM",
-    "/core/news/2019/12/": "sha384-BzspC9cX8cROtMU4AymvgQ8lS5FbOAfZkt5HrMzzuB+tYmKTkz9woxNSuR63YScq",
-    "/core/news/2019/12/22/blogging/": "sha384-4iYicWdMDyY7UwuV5ui/HWDoaTdXYJPCiSx5DCnJcMQuvrB919vB6LnZKsejlai0",
-    "/core/themes/": "sha384-As0f4sxShBf8OZ/UkYdZWe7dEQzK5DVGfg3EmdovsP0+6OUETKrzGaZAz0o5e465"
+    "/core/": "sha384-0yUFxBdOrYXnXCckpJOsZlUBB/JHAYCxkH78BVSCQeR7Ihmv3Ph2xOY0ALgP8u+J",
+    "/core/404/": "sha384-4bP813U0Jj2l7ww5DwhliBGt71YKYSYtwI8w7IDlpisnTLLplj51IbHiWmb3Yr9I",
+    "/core/concepts/": "sha384-olpeOoGAf3xdkCdkoGwu1V/FFb9I7AnwXLXeyRL2D67/Z4zq691Fu/4F2L9dKR+2",
+    "/core/files/": "sha384-noRaHyDlQeHiHFB7f4gu2K/A78L6Y2IjL0HVsnphBXNBtkg/ErD4INuollBBc5jF",
+    "/core/libraries/": "sha384-ISHDWQizxtI/WNxW6Pwd/L9AZijyCtfqWdJFHQnOc+HLAaFK+907N1w/BCB8DCpW",
+    "/core/modules/": "sha384-IFmjIN6XpUoT8nSxGkLCVGWkXqKOzGInL2gwDr6MjHHby1NbmCUQb1lonN3Xaa4N",
+    "/core/modules/example/": "sha384-E6c3cX2eV4uCOWUgBKrqSZrPqmRM5hyEgUQNAE8lvKKZxb9TdAgbZVfMNQv7orP1",
+    "/core/modules/html/": "sha384-LSX85TmDqkwobxEVKatzyDn6/hD1IqmNQ81oey7mXLub6SYrS7S5193YilQZbDNl",
+    "/core/modules/markdown/": "sha384-2WKDYc75CS8Zvf7uxJUGAc43/i6tosT10Fe3lQND3Gcmy1/EQsegFBkNRXVB5god",
+    "/core/modules/preinstalled/": "sha384-mKiLlWxOv2WPWMbrHDoWEfl1ZAWUkbewUYmDPhov8YVkBLVKesSil/hk5DnWz72T",
+    "/core/modules/propTypes/": "sha384-w+weWgIHGubonV3C6HkM4Aa6BRlpek7rObN7NHpPOi4kEfJ3prLCWh/srhLdiWmn",
+    "/core/news/": "sha384-oBxSjoE/eHqTSxv49Zix2UdtUGRDPY7D4ktZuV+Cow7PcKH7aJFTLh2T7PEMNW53",
+    "/core/news/2019/": "sha384-tvfylWUYPR7iJ2O+pHxNiIZzWRdiW8cKKnHW8LqvqWGRCaQIBElYQBbA4CBzSc1y",
+    "/core/news/2019/12/": "sha384-2uIbPHBIBZ3vOYetxIwMFeAO0L0F8hnmiOhr0r7AQIwNKScM6e4CjbBG09I9Tw16",
+    "/core/news/2019/12/22/blogging/": "sha384-Ch2+zI00OkXxeJLAyjC7HoG598TKAS0deE9ALi3QQLbQc+4+V1IRl5YPJ7rg1bri",
+    "/core/themes/": "sha384-uOtwIV6XZT3ifut7im0/WdFE/aVkxwfPQ90P6AA6kxJRyzUm7apSUj5edy9l0ZoW"
   },
   "static": {
     "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+",
     "/logo.png": "sha384-yRxX8nlWNCvk7+PidWDtP1jLxTmtbHm7tCW6TszNfZ7R5DTDMmXyxhKC/JmX3r1u",
     "/robots.txt": "sha384-UJ99rKaWQNOb1b2yL4/2XX6B6Gjr6ZeSk6CJfZ5lw/AUGmwgmUfFx1v0bnK+q/0O",
-    "/sitemap.xml": "sha384-jjC5WCeVhr+ay6JCu0xwA4dROoDqkP/9obGW40BzzBlBUEXQc1vRLtaz8nKUTruZ"
+    "/sitemap.xml": "sha384-VKnzs9niTxtoTVYCQ/cT+0Tt5x0d4NJoY5wswxG/TORfvkscYjqWMFwLRqoeNmXl"
   }
 }
