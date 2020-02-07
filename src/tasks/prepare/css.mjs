@@ -64,11 +64,9 @@ export const prepareCss = async ({ app, modules }) => {
       await Promise.all(
         themeLocations.map(async location => {
           try {
-            console.log('looking for theme', location)
             let { default: theme, vars } = await import(location)
 
             if (!is.empty(vars)) {
-              console.log('non-empty vars', vars)
               THEME_VARS = { ...THEME_VARS, ...vars }
             }
 
@@ -113,7 +111,6 @@ export const prepareCss = async ({ app, modules }) => {
   }
 
   // load all styles from all modules
-  console.log({ THEME_VARS })
   const moduleStyles = findModuleStyles(modules, THEME_VARS)
 
   const styles = [...resetStyles, moduleStyles, ...themeStyles, ...pageStyles, ...appStyles]
