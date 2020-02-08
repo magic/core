@@ -3,7 +3,7 @@ export const state = config => ({
     name: '@magic/core documentation',
     url: `https://${config.URL}`,
     about: '@magic framework core.',
-    image: `${config.WEB_ROOT}logo.png`,
+    image: `https://${config.URL}${config.WEB_ROOT}logo.png`,
     author: {
       '@type': 'person',
       name: 'Jascha Ehrenreich',
