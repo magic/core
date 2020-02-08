@@ -9,6 +9,7 @@ export const state = config => ({
       name: 'Jascha Ehrenreich',
       jobTitle: 'Technomancer',
       image: 'https:/jaeh.at/img/jascha.ehrenreich.jpg',
+      url: 'https://jaeh.at',
     },
   },
 
