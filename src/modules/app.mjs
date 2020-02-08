@@ -7,9 +7,40 @@ import is from '@magic/types'
 const App = async config => {
   const { WEB_ROOT = '/', LANG = 'en' } = config
 
+  let localApp = {}
+  let seo = {}
+
+  try {
+    const maybeAppFile = path.join(config.ROOT, 'app.mjs')
+    const { default: def, ...maybeApp } = await import(maybeAppFile)
+
+    if (def) {
+      let state = def.state
+      if (is.fn(def.state)) {
+        state = def.state(config)
+      }
+
+      const { seo: _, ...s } = state
+      seo = state.seo
+      localApp = { ...def, state: s }
+    } else {
+      let state = maybeApp.state
+      if (is.fn(maybeApp.state)) {
+        state = maybeApp.state(config)
+      }
+
+      const { seo: _, ...s } = state
+      seo = state.seo
+      localApp = { ...maybeApp, state: s }
+    }
+  } catch (e) {
+    // happy without maybeApp
+  }
+
   // default app state. gets merged with /assets/app.js if it exists.
   // /assets/app.js overwrites the values defined here.
-  let app = {
+  let app = deep.merge(localApp, {
+
     state: {
       url: WEB_ROOT,
       root: WEB_ROOT,
@@ -17,6 +48,11 @@ const App = async config => {
 
     // this View gets server rendered.
     View: (page, hashes) => state => {
+      state = {
+        ...localApp.state,
+        ...state,
+      }
+
       state.url = page.name
 
       const shortJsHash = hashes.js.split('-')[1].substr(0, 10)
@@ -48,7 +84,7 @@ const App = async config => {
             meta({ charset: 'utf-8' }),
             meta({ 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' }),
             meta({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }),
-            Seo(state),
+            Seo({ ...state, seo }),
             link(magicCss),
             page.Head && page.Head(state),
           ]),
@@ -61,32 +97,7 @@ const App = async config => {
         ]),
       ]
     },
-  }
-
-  try {
-    const maybeAppFile = path.join(config.ROOT, 'app.mjs')
-    const { default: def, ...maybeApp } = await import(maybeAppFile)
-
-    if (def) {
-      let state = def.state
-      if (is.fn(def.state)) {
-        state = def.state(config)
-      }
-
-      const { seo, ...s } = state
-      app = deep.merge(app, { ...def, state: s })
-    } else {
-      let state = maybeApp.state
-      if (is.fn(maybeApp.state)) {
-        state = maybeApp.state(config)
-      }
-
-      const { seo, ...s } = state
-      app = deep.merge(app, { ...maybeApp, state: s })
-    }
-  } catch (e) {
-    // happy without maybeApp
-  }
+  })
 
   // admin
   // if (config.ENV === 'development') {
