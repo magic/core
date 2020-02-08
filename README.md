@@ -124,9 +124,11 @@ tasks/prepare/css: also load themes directly from node_modules/${theme_name}.
 ##### 0.0.24
 * Router: set document.title on pushstate if possible
 * Seo: add image for social previews
+
+##### 0.0.25
 * fix: do not error if none of the pages has state.title set.
 
-##### 0.0.25 - unreleased
+##### 0.0.26 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
