@@ -15,6 +15,13 @@ export const View = state => {
     head.push(title(pageTitle))
   }
 
+  const pageImage = state.image || seo.image
+
+  if (pageImage) {
+    head.push(meta({ name: 'twitter:image', property: 'og:image', content: pageImage }))
+    head.push(meta({ name: 'twitter:card', content: 'summary_large_image' }))
+  }
+
   if (description) {
     head.push(
       meta({
