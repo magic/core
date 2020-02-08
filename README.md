@@ -121,7 +121,11 @@ tasks/prepare/css: also load themes directly from node_modules/${theme_name}.
 * client side routing scrolls to top in all cases, but is not animated.
   scroll-behavior + window.scroll() = bug
 
-##### 0.0.24 - unreleased
+##### 0.0.24
+* Router: set document.title on pushstate if possible
+* Seo: add image for social previews
+
+##### 0.0.25 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
