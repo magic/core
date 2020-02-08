@@ -165,14 +165,23 @@ return { ${imports} }
 
   // create pages object, each Page is a html View
   let pageString = 'const pages = {\n'
+  let pageTitles = {}
 
   magic.pages
     .sort(({ name: a }, { name: b }) => (a > b ? 1 : -1))
     .forEach(page => {
       pageString += `\n  '${page.name}': ${page.View.toString()},`
+
+      if (page.state && page.state.title) {
+        pageTitles[page.name] = page.state.title
+      }
     })
 
   pageString += '\n}\n'
+
+  const pageTitleString = Object.entries(pageTitles)
+    .map(([name, title]) => `"${name}": "${title}",`)
+    .join('\n      ')
 
   // unused for now
   const serviceWorkerString = `
@@ -231,6 +240,10 @@ app({
       Object.keys(s).forEach(key => {
         state[key] = s[key]
       })
+    }
+
+    state.titles = {
+      ${pageTitleString}
     }
 
     return Page({ page, state }${hoisted ? `, ${hoisted}` : ''})
