@@ -82,6 +82,12 @@ export const actions = {
     }
 
     const { scrollY } = window
+
+    const page = state.pages[url]
+    if (page) {
+      document.title = state.title = page.title
+    }
+
     window.history.pushState({ url, hash, scrollY }, state.title, to)
 
     if (url !== state.url) {
