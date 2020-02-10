@@ -157,6 +157,8 @@ export const runConfig = async () => {
   conf.IS_PROD = conf.ENV === 'production'
   conf.IS_DEV = conf.ENV === 'development'
 
+  conf.IGNORED_STATIC = conf.IGNORED_STATIC || []
+
   // find WEB_ROOT manually from git.
   // show warning if this has to be done, needs a few hundred ms
   if (!conf.WEB_ROOT || !conf.URL) {

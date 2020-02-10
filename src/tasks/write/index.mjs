@@ -25,6 +25,13 @@ export const write = async app => {
       // .filter(([name]) => !images.includes(getFileType(name)))
       .map(async file => {
         const [name] = file
+
+        const extname = path.extname(name)
+        // do not write file if extension or filepath is in ignore list.
+        if (config.IGNORED_STATIC.includes(extname) || config.IGNORED_STATIC.includes(name)) {
+          return
+        }
+
         const dir = path.join(config.DIR.PUBLIC, path.dirname(name))
         await fs.mkdirp(dir)
         await writeFile(file)
