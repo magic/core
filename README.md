@@ -131,7 +131,10 @@ tasks/prepare/css: also load themes directly from node_modules/${theme_name}.
 ##### 0.0.26
 config.IGNORED_STATIC is an array. can include path ('/file.ext') or extension ('.ext') strings.
 
-##### 0.0.27 - unreleased
+##### 0.0.27
+do not create sri-hashes for config.IGNORED_STATIC files
+
+##### 0.0.28  - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
