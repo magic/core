@@ -1,3 +1,5 @@
+import path from 'path'
+
 import html from './html.mjs'
 import js from './js.mjs'
 import style from './css.mjs'
@@ -25,8 +27,10 @@ export const transpile = async (app, config) => {
       hashes.pages[page.name] = page.hash
     })
 
-  hashes.static = {}
+  const ignored = config.IGNORED_STATIC
+
   Object.entries(app.static)
+    .filter(([name, val]) => !ignored.includes(path.extname(name)) && !ignored.includes(name))
     .sort(([a], [b]) => (a > b ? 1 : -1))
     .forEach(([name, val]) => {
       hashes.static[name] = createFileHash(val)
