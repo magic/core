@@ -9,7 +9,7 @@ import colors from '../../themes/colors.mjs'
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
-export const prepareCss = async ({ app, modules }) => {
+export const prepareThemes = async ({ app, modules }) => {
   const resetStyles = []
   const themeStyles = []
   const pageStyles = []
@@ -64,7 +64,34 @@ export const prepareCss = async ({ app, modules }) => {
       await Promise.all(
         themeLocations.map(async location => {
           try {
-            let { default: theme, vars } = await import(location)
+            let { default: theme, vars, ...maybeModules } = await import(location)
+
+            const libs = {}
+            Object.entries(maybeModules).map(([name, fn]) => {
+              if (is.fn(fn)) {
+                if (!modules[name]) {
+                  modules[name] = fn
+                } else if (modules[name].View) {
+                  modules[name] = {
+                    ...modules[name],
+                    View: fn,
+                  }
+                } else {
+                  modules[name] = fn
+                }
+              } else {
+                if (!modules[name]) {
+                  modules[name] = fn
+                } else if (is.fn(modules[name])) {
+                  modules[name] = fn
+                } else {
+                  modules[name] = {
+                    ...modules[name],
+                    ...fn,
+                  }
+                }
+              }
+            })
 
             if (!is.empty(vars)) {
               THEME_VARS = { ...THEME_VARS, ...vars }
@@ -115,5 +142,8 @@ export const prepareCss = async ({ app, modules }) => {
 
   const styles = [...resetStyles, moduleStyles, ...themeStyles, ...pageStyles, ...appStyles]
 
-  return styles.map(style => (is.fn(style) ? style(THEME_VARS) : style))
+  return {
+    css: styles.map(style => (is.fn(style) ? style(THEME_VARS) : style)),
+    mods: modules,
+  }
 }

@@ -5,7 +5,7 @@ import is from '@magic/types'
 import { getBlog, getPages } from '../../lib/index.mjs'
 
 import { prepareBlog } from './blog.mjs'
-import { prepareCss } from './css.mjs'
+import { prepareThemes } from './themes.mjs'
 import { prepareGlobals } from './globals.mjs'
 import { prepareJs } from './js.mjs'
 import { prepareMetaFiles } from './meta.mjs'
@@ -27,7 +27,7 @@ export const prepare = async (app, config) => {
 
   app = { ...defaultApp, ...app }
 
-  const { modules, libs } = await prepareGlobals(app, config)
+  let { modules, libs } = await prepareGlobals(app, config)
 
   app.files = await getPages()
 
@@ -116,7 +116,9 @@ export const prepare = async (app, config) => {
     app.lib[lib.key] = lib.path
   })
 
-  app.style = await prepareCss({ app, modules })
+  const { css, mods } = await prepareThemes({ app, modules })
+  modules = mods
+  app.style = css
 
   prepareModules(app, modules)
 
