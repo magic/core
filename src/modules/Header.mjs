@@ -7,8 +7,7 @@ export const View = (props = {}, children = []) => {
   }
 
   return header({ class: 'Header' }, [
-    (logo || logotext) &&
-      Link({ to: state.root, class: 'Logo' }, [logo && Img(logo), logotext && span(logotext)]),
+    (logo || logotext) && Logo({ img: logo, text: logotext }),
     menu && Menu({ state, items: menu }),
     children,
   ])

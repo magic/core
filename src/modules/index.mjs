@@ -1,6 +1,7 @@
 import * as Footer from './Footer.mjs'
 import * as Header from './Header.mjs'
 import * as Img from './Img.mjs'
+import * as Logo from './Logo.mjs'
 import * as Menu from './Menu.mjs'
 import * as MenuItem from './MenuItem.mjs'
 import * as MenuLink from './MenuLink.mjs'
@@ -30,6 +31,7 @@ export const builtins = {
   Header,
   Img,
   Link,
+  Logo,
   Menu,
   MenuItem,
   MenuLink,
