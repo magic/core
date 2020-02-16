@@ -1,28 +1,28 @@
 {
-  "css": "sha384-600wBMPhFinSsofZpyuyizb/BFYh5qxHC/v6unba70NISSu2Gus8hw9NdVLk4HvA",
-  "js": "sha384-ufaaSVxpB6EHNjkam//mUWmFn4rmy+3yBNZbPmQi4UaWzyVsa48B5RmEeJI7R2R3",
+  "css": "sha384-1DvvqyXE3UZTQ1Ap9jh4I4lALD8nmISVax+z6v/jYQ/mCyk3oo+7+42VNzYcLvok",
+  "js": "sha384-6imbdmYwszEsn8AM41Z6UUGZjGTC/yHpzfmhCfHGbBSPNWCVC/xZWnJC/d7MLP9E",
   "pages": {
-    "/core/": "sha384-wJnOURI9l9aMvyh+jiz/URxKvD/oIe4T4934z1VYNC0qfjabMpx3QPCDhAD9XPE0",
-    "/core/404/": "sha384-560KrGMGfw9JYeXBlqZI/EWaY1+WmlRwVTEZZ9H2TOKYnEqTOxnJXWOcyGiqrYSr",
-    "/core/concepts/": "sha384-qfdPSxCWJJxaZc695ACW+1N21U7BSI0h98T7kiBY7ALwodW1cAV319pyntqYhfXg",
-    "/core/files/": "sha384-5tpstpcPDHLy8GStkpLe/3Ogo47LlXGpkCgpmfTmyJcwOiSdTW/zXj2m0FSAgPvN",
-    "/core/libraries/": "sha384-HfoPKSAfFj1ypfwwQ2iLx2vhKdOGv3STk5kw9XZCAIF1ryV6s2r16DJHGmNHp/Ao",
-    "/core/modules/": "sha384-YFr4CjiBs62A0og6Sp+rIU8ntOyk0xQ8zQWewxXzdWC6S7KGzOsdYxOitfInHcTI",
-    "/core/modules/example/": "sha384-bnCIwpurly/kvjxevmGlSOcYKRMKaR7xXX0wTULKI5xLzTbaQMfFkmy5JOMHsFto",
-    "/core/modules/html/": "sha384-f6rZBoYmd6Z48UYbz115FVAoO/w13/OtR/swI8rRml1LhsMyjFVpKMU75by9HE//",
-    "/core/modules/markdown/": "sha384-ktmRbhMW6y6eqrmHPdIzvtAynUV2FN36yl3WGF6ZVvwd32suals/cLfu5NewN5xW",
-    "/core/modules/preinstalled/": "sha384-B0HhRgAvV+KnPO7jY08IOvSDLWr7P6pU5cunBsVQH8pRGKIXo7GuehGEisxq1MqP",
-    "/core/modules/propTypes/": "sha384-XvOOOn+MRIUaq3yQrLo/AT4+mpKdd/DNBH9W0msJH1FizeWF0qaTbTmioWcfCu5S",
-    "/core/news/": "sha384-BmP9AXE9N/Nsi1/hmwbZJq2bRN+WRFqMDh/5nrI3mycJgoG1hlMdu9RD6HiRim1R",
-    "/core/news/2019/": "sha384-ZrofrwcYz+cvlLgYv80XJBsgyQhFGoFdk15nQLJBAcrZnUSOUe5jf77giYYmlG5z",
-    "/core/news/2019/12/": "sha384-S2KIJSI+jCxrW6NAJLEghzgPCIWgKkajqz+KLkV83GUtLuNrF6Zgz5NS63ZM7scp",
-    "/core/news/2019/12/22/blogging/": "sha384-rf4xm3Zi1XLNsFXu9gWffBGbLml7oXJiC18pP3XAItIoOjkqFNiuc0NHaD/f3WXx",
-    "/core/themes/": "sha384-GuEcX1jPOB29kJnng8yvJB6xl4dDjEZ1RRHehHcuSRhdnL5clKf187mLS9nPx67y"
+    "/core/": "sha384-UGCz7Vd5wGXmrP6fQAPDmpM5xKT8nio9GWmwT7oc8qy4BxBQJBd5CxT4hgd4qgA4",
+    "/core/404/": "sha384-vfPSUL4Xw1WiIdZVE+iAyo8icnzGmm0XE9HdZm4b7wIeZ1ycMZB0YPMYQ/7Z+2Oa",
+    "/core/concepts/": "sha384-c4KE1+T3p1tu1/KFIDkpYMCufvxSgzYRR3GdoUQfk2Ww/woP2Qi9F1adPB9FlfPM",
+    "/core/files/": "sha384-wuR3rf3VATKIyYYfxRFG74NVLAPkOU+dIKHpMxzujfsNY3yvFnZ877Crl99b3hn6",
+    "/core/libraries/": "sha384-MkydczZxwEBBqJwL8ytjbCdjqFkNlqbuJ4Pexm/b4Eiq+Gn0DDk4dOX7qgYd1J7R",
+    "/core/modules/": "sha384-ykXlDBht93l54f30mga/W6p4MJXx18z45Fx7D6NDPiFDPQ9XtUIFpa4O02MEryT0",
+    "/core/modules/example/": "sha384-c6ZJKhpIPqabY7FR2JMLFZ2S9jN3JQT3lgvvY2Cp+7u5IjGTs8jybz6oNmuxnOqi",
+    "/core/modules/html/": "sha384-OU5mk96tddtIcU9ct+KEHzU8PU8jx5VMmPzjh96yv9eXYEX9obcIIiLVrRNSrsRL",
+    "/core/modules/markdown/": "sha384-BE+VkEnBszWQ+hAwwyiKDqkEhE52RCQBjPCl1tEC0MDUjQmZeOVn5/DU1HpWOriH",
+    "/core/modules/preinstalled/": "sha384-ypcmAxk+K25aMhvTGeDji94rKuN/GFTSOKo6QipUnryKl13in7dtfpwSre6WLTHj",
+    "/core/modules/propTypes/": "sha384-wgFQ5fwiKhQqIdYz51dgqdUsl2Obp4EwZVjLAiapzUqE1VWTFMwWJ6kH/ESbzJi/",
+    "/core/news/": "sha384-4fKBE/SRt8NfX9hRU3VvDHwjM9xFQX0mL5E3+dAPDbKpNLt/xOSFFVL6dhvhSNBv",
+    "/core/news/2019/": "sha384-PjGX68+vuFWBMznWl7pxQV74uTKmW8QYD6IwOOeC9y6qe52AHYXIzyO6Re6tlLqT",
+    "/core/news/2019/12/": "sha384-eB/sfV0yaAqL818R3H5uXs+nBo4kDv5D2wp2NS/RPoe8UaDHp/rAuZwD7YFMebUz",
+    "/core/news/2019/12/22/blogging/": "sha384-ftH41L0TGV6Yiv1ewmlVo0z5LVBNsyqYt9/55VA5hVE9TpnclU98T0t74On3GeEy",
+    "/core/themes/": "sha384-T8cXB0Kxmcjx5HjiwXq97xDsy47EKebmMkyynZOCjpl5vH1ybIeduN12afjH43Jp"
   },
   "static": {
     "/favicon.ico": "sha384-pf51ay6pZCj3+XlVCPmCKLDFpLj7QP+2heR+/n08WgS7Bve7JMkgubHOkwLzaTr+",
     "/logo.png": "sha384-yRxX8nlWNCvk7+PidWDtP1jLxTmtbHm7tCW6TszNfZ7R5DTDMmXyxhKC/JmX3r1u",
     "/robots.txt": "sha384-UJ99rKaWQNOb1b2yL4/2XX6B6Gjr6ZeSk6CJfZ5lw/AUGmwgmUfFx1v0bnK+q/0O",
-    "/sitemap.xml": "sha384-VKnzs9niTxtoTVYCQ/cT+0Tt5x0d4NJoY5wswxG/TORfvkscYjqWMFwLRqoeNmXl"
+    "/sitemap.xml": "sha384-kyaGoEpyngg3noonBP50Eh6BxQF69Cou+urkoeYIEcOrxYKGIJoXKmNf99B20VGE"
   }
 }
