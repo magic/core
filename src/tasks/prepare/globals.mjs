@@ -242,7 +242,7 @@ export const findDefinedLibraries = async (app, modules) => {
   return libs
 }
 
-const findThemeModules = async (modules) => {
+const findThemeModules = async modules => {
   let { THEME } = config
 
   if (THEME) {
@@ -306,6 +306,8 @@ const findThemeModules = async (modules) => {
 
     await Promise.all(themePromises)
   }
+
+  return modules
 }
 
 export const prepareGlobals = async (app, config) => {
@@ -315,26 +317,31 @@ export const prepareGlobals = async (app, config) => {
 
   let modules = {}
 
+  // load core builtin modules
   const builtinFiles = await findBuiltins(modules)
   if (builtinFiles) {
     modules = deep.merge(modules, builtinFiles)
   }
-  const assetFiles = await findAssetFile(modules)
-  if (assetFiles) {
-    modules = deep.merge(modules, assetFiles)
-  }
-  const localModuleFiles = await findLocalModules(modules)
-  if (localModuleFiles) {
-    modules = deep.merge(modules, { ...localModuleFiles })
-  }
+
+  // load modules from themes
+  modules = await findThemeModules(modules)
+
+  // load plugins from node_modules
   const nodeModuleFiles = await findNodeModules(modules)
   if (nodeModuleFiles) {
     modules = deep.merge(modules, nodeModuleFiles)
   }
 
-  const themeModuleFiles = await findThemeModules(modules)
-  if (themeModuleFiles) {
-    modules = deep.merge(modules, themeModulesFiles)
+  // look for /assets/index.mjs
+  const assetFile = await findAssetFile(modules)
+  if (assetFile) {
+    modules = deep.merge(modules, assetFile)
+  }
+
+  // look for /assets/Uppercased.mjs and /assets/modules/Uppercased.mjs
+  const localModuleFiles = await findLocalModules(modules)
+  if (localModuleFiles) {
+    modules = deep.merge(modules, { ...localModuleFiles })
   }
 
   Object.entries(modules).forEach(([name, mod]) => {
