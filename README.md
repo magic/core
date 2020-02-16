@@ -134,7 +134,10 @@ config.IGNORED_STATIC is an array. can include path ('/file.ext') or extension (
 ##### 0.0.27
 do not create sri-hashes for config.IGNORED_STATIC files
 
-##### 0.0.28  - unreleased
+##### 0.0.28
+themes can export Modules now, which can overwrite builtins.
+
+##### 0.0.29 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
