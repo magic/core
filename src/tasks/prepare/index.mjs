@@ -116,9 +116,7 @@ export const prepare = async (app, config) => {
     app.lib[lib.key] = lib.path
   })
 
-  const { css, mods } = await prepareThemes({ app, modules })
-  modules = mods
-  app.style = css
+  app.style = await prepareThemes({ app, modules })
 
   prepareModules(app, modules)
 

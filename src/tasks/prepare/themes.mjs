@@ -64,34 +64,7 @@ export const prepareThemes = async ({ app, modules }) => {
       await Promise.all(
         themeLocations.map(async location => {
           try {
-            let { default: theme, vars, ...maybeModules } = await import(location)
-
-            const libs = {}
-            Object.entries(maybeModules).map(([name, fn]) => {
-              if (is.fn(fn)) {
-                if (!modules[name]) {
-                  modules[name] = fn
-                } else if (modules[name].View) {
-                  modules[name] = {
-                    ...modules[name],
-                    View: fn,
-                  }
-                } else {
-                  modules[name] = fn
-                }
-              } else {
-                if (!modules[name]) {
-                  modules[name] = fn
-                } else if (is.fn(modules[name])) {
-                  modules[name] = fn
-                } else {
-                  modules[name] = {
-                    ...modules[name],
-                    ...fn,
-                  }
-                }
-              }
-            })
+            const { default: theme, vars } = await import(location)
 
             if (!is.empty(vars)) {
               THEME_VARS = { ...THEME_VARS, ...vars }
@@ -142,8 +115,5 @@ export const prepareThemes = async ({ app, modules }) => {
 
   const styles = [...resetStyles, moduleStyles, ...themeStyles, ...pageStyles, ...appStyles]
 
-  return {
-    css: styles.map(style => (is.fn(style) ? style(THEME_VARS) : style)),
-    mods: modules,
-  }
+  return styles.map(style => (is.fn(style) ? style(THEME_VARS) : style))
 }

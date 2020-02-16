@@ -9,6 +9,9 @@ import log from '@magic/log'
 
 import { builtins, component, tags } from '../../modules/index.mjs'
 
+const url = new URL(import.meta.url)
+const dirName = path.dirname(url.pathname)
+
 const localLibIndexPath = path.join('src', 'lib', 'index.mjs')
 const localLibMjsPath = path.join('src', 'lib.mjs')
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
@@ -239,6 +242,72 @@ export const findDefinedLibraries = async (app, modules) => {
   return libs
 }
 
+const findThemeModules = async (modules) => {
+  let { THEME } = config
+
+  if (THEME) {
+    if (is.string(THEME)) {
+      THEME = [THEME]
+    }
+
+    const themePromises = THEME.map(async theme_name => {
+      // order is meaningful.
+      const themeLocations = [
+        // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
+        path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs'),
+        // see if the theme is a full name of a js module in node_modules,
+        // eg: @org/theme-name or theme-name
+        theme_name,
+        // see if this is a @magic-themes theme
+        `@magic-themes/${theme_name}`,
+        // see if it is installed locally.
+        path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
+      ]
+
+      await Promise.all(
+        themeLocations.map(async location => {
+          try {
+            const { default: theme, vars, ...maybeModules } = await import(location)
+
+            const libs = {}
+            Object.entries(maybeModules).map(([name, fn]) => {
+              if (is.fn(fn)) {
+                if (!modules[name]) {
+                  modules[name] = fn
+                } else if (modules[name].View) {
+                  modules[name] = {
+                    ...modules[name],
+                    View: fn,
+                  }
+                } else {
+                  modules[name] = fn
+                }
+              } else if (is.object(fn)) {
+                if (!modules[name]) {
+                  modules[name] = { ...fn }
+                } else if (is.fn(modules[name])) {
+                  modules[name] = { View: modules[name], ...fn }
+                } else {
+                  modules[name] = {
+                    ...modules[name],
+                    ...fn,
+                  }
+                }
+              }
+            })
+          } catch (e) {
+            if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+              throw error(e)
+            }
+          }
+        }),
+      )
+    })
+
+    await Promise.all(themePromises)
+  }
+}
+
 export const prepareGlobals = async (app, config) => {
   global.keys = global.keys || new Set()
   global.config = config
@@ -261,6 +330,11 @@ export const prepareGlobals = async (app, config) => {
   const nodeModuleFiles = await findNodeModules(modules)
   if (nodeModuleFiles) {
     modules = deep.merge(modules, nodeModuleFiles)
+  }
+
+  const themeModuleFiles = await findThemeModules(modules)
+  if (themeModuleFiles) {
+    modules = deep.merge(modules, themeModulesFiles)
   }
 
   Object.entries(modules).forEach(([name, mod]) => {
