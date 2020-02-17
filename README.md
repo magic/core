@@ -140,7 +140,10 @@ themes can export Modules now, which can overwrite builtins.
 ##### 0.0.29
 fix some edgecases with exported theme modules
 
-##### 0.0.30 - unreleased
+##### 0.0.30
+local config.THEME_VARS get deep merged over theme provided THEME_VARS now.
+
+##### 0.0.31 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
