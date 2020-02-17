@@ -2,6 +2,7 @@ import path from 'path'
 
 import error from '@magic/error'
 import is from '@magic/types'
+import deep from '@magic/deep'
 
 import { findModuleStyles } from '../../lib/index.mjs'
 import colors from '../../themes/colors.mjs'
@@ -67,7 +68,7 @@ export const prepareThemes = async ({ app, modules }) => {
             const { default: theme, vars } = await import(location)
 
             if (!is.empty(vars)) {
-              THEME_VARS = { ...THEME_VARS, ...vars }
+              THEME_VARS = deep.merge(vars, THEME_VARS)
             }
 
             themeStyles.push(theme)
@@ -86,9 +87,6 @@ export const prepareThemes = async ({ app, modules }) => {
   app.pages
     .filter(p => p.style)
     .forEach(page => {
-      if (!is.empty(page.styleVars)) {
-        THEME_VARS = { ...THEME_VARS, ...page.styleVars }
-      }
       pageStyles.push(page.style)
     })
 
@@ -98,9 +96,6 @@ export const prepareThemes = async ({ app, modules }) => {
     try {
       const { style, styleVars } = await import(maybeAppFile)
       if (style) {
-        if (!is.empty(styleVars)) {
-          THEME_VARS = { ...THEME_VARS, ...styleVars }
-        }
         appStyles.push(style)
       }
     } catch (e) {
