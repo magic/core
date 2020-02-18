@@ -143,7 +143,11 @@ fix some edgecases with exported theme modules
 ##### 0.0.30
 local config.THEME_VARS get deep merged over theme provided THEME_VARS now.
 
-##### 0.0.31 - unreleased
+##### 0.0.31
+if multiple themes are installed,
+the last imported theme will overwrite earlier imported themes and their vars.
+
+##### 0.0.32 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
