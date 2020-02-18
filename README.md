@@ -147,7 +147,11 @@ local config.THEME_VARS get deep merged over theme provided THEME_VARS now.
 if multiple themes are installed,
 the last imported theme will overwrite earlier imported themes and their vars.
 
-##### 0.0.32 - unreleased
+##### 0.0.32
+fix race condition in case of multiple themes.
+modules did not always get overwritten in the correct order.
+
+##### 0.0.33 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
