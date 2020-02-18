@@ -3,6 +3,7 @@
 this is the @magic core library.
 
 [![NPM version][npm-image]][npm-url]
+[![Node version][node-image]][node-url]
 [![Linux Build Status][travis-image]][travis-url]
 [![Windows Build Status][appveyor-image]][appveyor-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
@@ -156,6 +157,8 @@ modules did not always get overwritten in the correct order.
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
 [npm-url]: https://www.npmjs.com/package/@magic/core
+[node-image]: https://img.shields.io/node/v/@magic/core/latest
+[node-url]: https://www.npmjs.com/package/@magic/core
 [travis-image]: https://img.shields.io/travis/com/magic/core/master
 [travis-url]: https://travis-ci.com/magic/core
 [appveyor-image]: https://img.shields.io/appveyor/ci/magic/core/master.svg
