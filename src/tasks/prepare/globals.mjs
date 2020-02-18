@@ -242,7 +242,7 @@ export const findDefinedLibraries = async (app, modules) => {
   return libs
 }
 
-const findThemeModules = async modules => {
+const findThemeModules = async (modules = {}) => {
   let { THEME } = config
 
   if (THEME) {
@@ -250,7 +250,7 @@ const findThemeModules = async modules => {
       THEME = [THEME]
     }
 
-    const themePromises = THEME.map(async theme_name => {
+    const results = await Promise.all(THEME.map(async theme_name => {
       // order is meaningful.
       const themeLocations = [
         // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
@@ -263,6 +263,8 @@ const findThemeModules = async modules => {
         // see if it is installed locally.
         path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
       ]
+
+      const modules = {}
 
       await Promise.all(
         themeLocations.map(async location => {
@@ -300,11 +302,20 @@ const findThemeModules = async modules => {
               throw error(e)
             }
           }
+
         }),
       )
-    })
 
-    await Promise.all(themePromises)
+      return modules
+    }))
+
+    // by writing the results after awaiting them above,
+    // we force correct order of merges.
+    // Promise.all does not wait internally for sequential execution,
+    // but await Promise.all returns ordered results.
+    results.map(result => {
+      modules = deep.merge(modules, result)
+    });
   }
 
   return modules
