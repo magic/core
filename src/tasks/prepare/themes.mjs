@@ -48,7 +48,9 @@ export const prepareThemes = async ({ app, modules }) => {
 
   // load user's chosen theme, if it is set and exists, and merge it into the styles
   if (THEME) {
-    const themePromises = THEME.map(async theme_name => {
+    let themeVars = {}
+
+    await Promise.all(THEME.map(async theme_name => {
       // order is meaningful.
       const themeLocations = [
         // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
@@ -68,7 +70,7 @@ export const prepareThemes = async ({ app, modules }) => {
             const { default: theme, vars } = await import(location)
 
             if (!is.empty(vars)) {
-              THEME_VARS = deep.merge(vars, THEME_VARS)
+              themeVars = deep.merge(themeVars, vars)
             }
 
             themeStyles.push(theme)
@@ -79,9 +81,9 @@ export const prepareThemes = async ({ app, modules }) => {
           }
         }),
       )
-    })
+    }))
 
-    await Promise.all(themePromises)
+    THEME_VARS = deep.merge(themeVars, THEME_VARS)
   }
 
   app.pages
