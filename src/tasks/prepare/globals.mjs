@@ -17,14 +17,6 @@ const localLibMjsPath = path.join('src', 'lib.mjs')
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 const recursiveSearch = false
 
-const pathReplaceRegExp = () => {
-  if (path.sep === '\\') {
-    return new RegExp('\\', 'gi')
-  } else {
-    return new RegExp(path.sep, 'gi')
-  }
-}
-
 export const findNodeModules = async () => {
   let modules = {}
 
@@ -34,11 +26,8 @@ export const findNodeModules = async () => {
     .filter(dir => dir.includes('magic-module-') || dir.includes('magic-modules-'))
     .map(async nodeModule => {
       const name = cases.pascal(nodeModule.split(/magic-module(s)?/)[1])
-      let loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
-
-      if (path.sep !== '/') {
-        loadPath = loadPath.replace(pathReplaceRegExp, '/')
-      }
+      const importDir = nodeModule.replace(nodeModuleDir + path.sep, '')
+      const loadPath = replacePathSepForImport(importDir, path.sep)
 
       // find module itself
       try {
@@ -81,10 +70,9 @@ export const findNodeModules = async () => {
     .map(async nodeModule => {
       if (magicModuleDir !== nodeModule) {
         const name = cases.pascal(path.basename(nodeModule))
-        let loadPath = nodeModule.replace(nodeModuleDir + path.sep, '')
-        if (path.sep !== '/') {
-          loadPath = loadPath.replace(pathReplaceRegExp(), '/')
-        }
+
+        const importPath = nodeModule.replace(nodeModuleDir + path.sep, '')
+        const loadPath = replacePathSepForImport(importPath, path.sep)
 
         try {
           const mod = await import(loadPath)
