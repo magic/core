@@ -50,38 +50,40 @@ export const prepareThemes = async ({ app, modules }) => {
   if (THEME) {
     let themeVars = {}
 
-    await Promise.all(THEME.map(async theme_name => {
-      // order is meaningful.
-      const themeLocations = [
-        // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
-        path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs'),
-        // see if the theme is a full name of a js module in node_modules,
-        // eg: @org/theme-name or theme-name
-        theme_name,
-        // see if this is a @magic-themes theme
-        `@magic-themes/${theme_name}`,
-        // see if it is installed locally.
-        path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
-      ]
+    await Promise.all(
+      THEME.map(async theme_name => {
+        // order is meaningful.
+        const themeLocations = [
+          // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
+          path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs'),
+          // see if the theme is a full name of a js module in node_modules,
+          // eg: @org/theme-name or theme-name
+          theme_name,
+          // see if this is a @magic-themes theme
+          `@magic-themes/${theme_name}`,
+          // see if it is installed locally.
+          path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
+        ]
 
-      await Promise.all(
-        themeLocations.map(async location => {
-          try {
-            const { default: theme, vars } = await import(location)
+        await Promise.all(
+          themeLocations.map(async location => {
+            try {
+              const { default: theme, vars } = await import(location)
 
-            if (!is.empty(vars)) {
-              themeVars = deep.merge(themeVars, vars)
+              if (!is.empty(vars)) {
+                themeVars = deep.merge(themeVars, vars)
+              }
+
+              themeStyles.push(theme)
+            } catch (e) {
+              if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+                throw error(e)
+              }
             }
-
-            themeStyles.push(theme)
-          } catch (e) {
-            if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-              throw error(e)
-            }
-          }
-        }),
-      )
-    }))
+          }),
+        )
+      }),
+    )
 
     THEME_VARS = deep.merge(themeVars, THEME_VARS)
   }

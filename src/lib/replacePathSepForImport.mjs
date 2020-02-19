@@ -6,6 +6,5 @@ export const replacePathSepForImport = (p, sep) => {
       return p.replace(new RegExp(sep, 'gi'), '/')
     }
   }
-
   return p
 }

@@ -258,64 +258,65 @@ const findThemeModules = async (modules = {}) => {
       THEME = [THEME]
     }
 
-    const results = await Promise.all(THEME.map(async theme_name => {
-      // order is meaningful.
-      const themeLocations = [
-        // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
-        path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs'),
-        // see if the theme is a full name of a js module in node_modules,
-        // eg: @org/theme-name or theme-name
-        theme_name,
-        // see if this is a @magic-themes theme
-        `@magic-themes/${theme_name}`,
-        // see if it is installed locally.
-        path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
-      ]
+    const results = await Promise.all(
+      THEME.map(async theme_name => {
+        // order is meaningful.
+        const themeLocations = [
+          // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
+          path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs'),
+          // see if the theme is a full name of a js module in node_modules,
+          // eg: @org/theme-name or theme-name
+          theme_name,
+          // see if this is a @magic-themes theme
+          `@magic-themes/${theme_name}`,
+          // see if it is installed locally.
+          path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
+        ]
 
-      const modules = {}
+        const modules = {}
 
-      await Promise.all(
-        themeLocations.map(async location => {
-          try {
-            const { default: theme, vars, ...maybeModules } = await import(location)
+        await Promise.all(
+          themeLocations.map(async location => {
+            try {
+              const { default: theme, vars, ...maybeModules } = await import(location)
 
-            const libs = {}
-            Object.entries(maybeModules).map(([name, fn]) => {
-              if (is.fn(fn)) {
-                if (!modules[name]) {
-                  modules[name] = fn
-                } else if (modules[name].View) {
-                  modules[name] = {
-                    ...modules[name],
-                    View: fn,
+              const libs = {}
+              Object.entries(maybeModules).map(([name, fn]) => {
+                if (is.fn(fn)) {
+                  if (!modules[name]) {
+                    modules[name] = fn
+                  } else if (modules[name].View) {
+                    modules[name] = {
+                      ...modules[name],
+                      View: fn,
+                    }
+                  } else {
+                    modules[name] = fn
                   }
-                } else {
-                  modules[name] = fn
-                }
-              } else if (is.object(fn)) {
-                if (!modules[name]) {
-                  modules[name] = { ...fn }
-                } else if (is.fn(modules[name])) {
-                  modules[name] = { View: modules[name], ...fn }
-                } else {
-                  modules[name] = {
-                    ...modules[name],
-                    ...fn,
+                } else if (is.object(fn)) {
+                  if (!modules[name]) {
+                    modules[name] = { ...fn }
+                  } else if (is.fn(modules[name])) {
+                    modules[name] = { View: modules[name], ...fn }
+                  } else {
+                    modules[name] = {
+                      ...modules[name],
+                      ...fn,
+                    }
                   }
                 }
+              })
+            } catch (e) {
+              if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+                throw error(e)
               }
-            })
-          } catch (e) {
-            if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-              throw error(e)
             }
-          }
+          }),
+        )
 
-        }),
-      )
-
-      return modules
-    }))
+        return modules
+      }),
+    )
 
     // by writing the results after awaiting them above,
     // we force correct order of merges.
@@ -323,7 +324,7 @@ const findThemeModules = async (modules = {}) => {
     // but await Promise.all returns ordered results.
     results.map(result => {
       modules = deep.merge(modules, result)
-    });
+    })
   }
 
   return modules
