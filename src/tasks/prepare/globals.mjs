@@ -89,8 +89,8 @@ export const findNodeModules = async () => {
         try {
           const libPath = path.join(nodeModule, localLibIndexPath)
           await fs.stat(libPath)
-          const resolvedLibPath = path.join(loadPath, localLibIndexPath)
-            .replace(pathReplaceRegExp(), '/')
+          const importPath = path.join(loadPath, localLibIndexPath)
+          const resolvedLibPath = replacePathSepForImport(importPath, path.sep)
           modules[name].lib = resolvedLibPath
         } catch (e) {
           if (e.code !== 'ENOENT') {
