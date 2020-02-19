@@ -17,7 +17,13 @@ const localLibMjsPath = path.join('src', 'lib.mjs')
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 const recursiveSearch = false
 
-const pathReplaceRegExp = new RegExp(path.sep, 'gi')
+const pathReplaceRegExp = () => {
+  if (path.sep === '\\') {
+    return new RegExp('\\', 'gi')
+  } else {
+    return new RegExp(path.sep, 'gi')
+  }
+}
 
 export const findNodeModules = async () => {
   let modules = {}
@@ -77,7 +83,7 @@ export const findNodeModules = async () => {
         const name = cases.pascal(path.basename(nodeModule))
         let loadPath = nodeModule.replace(nodeModuleDir + path.sep, '')
         if (path.sep !== '/') {
-          loadPath = loadPath.replace(pathReplaceRegExp, '/')
+          loadPath = loadPath.replace(pathReplaceRegExp(), '/')
         }
 
         try {
@@ -95,7 +101,7 @@ export const findNodeModules = async () => {
           const libPath = path.join(nodeModule, localLibIndexPath)
           await fs.stat(libPath)
           const resolvedLibPath = path.join(loadPath, localLibIndexPath)
-            .replace(pathReplaceRegExp, '/')
+            .replace(pathReplaceRegExp(), '/')
           modules[name].lib = resolvedLibPath
         } catch (e) {
           if (e.code !== 'ENOENT') {

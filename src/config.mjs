@@ -8,13 +8,19 @@ import log from '@magic/log'
 
 import colors from './themes/colors.mjs'
 
-const pathReplaceRegExp = new RegExp(path.sep, 'gi')
+const pathReplaceRegExp = () => {
+  if (path.sep === '\\') {
+    return new RegExp('\\', 'gi')
+  } else {
+    return new RegExp(path.sep, 'gi')
+  }
+}
 
 export const runConfig = async () => {
   let conf = {}
   let confPath = path.join(process.cwd(), 'config.mjs')
   if (path.sep !== '/') {
-    confPath = loadPath.replace(pathReplaceRegExp, '/')
+    confPath = loadPath.replace(pathReplaceRegExp(), '/')
   }
 
   try {
