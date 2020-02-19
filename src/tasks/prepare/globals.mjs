@@ -199,7 +199,7 @@ export const findDefinedLibraries = async (app, modules) => {
   const libPromises = libDirs.map(async libDir => {
     let libName = ''
     if (libDir.includes('@magic-libraries')) {
-      libName = libDir.split('@magic-libraries/')[1]
+      libName = libDir.split('@magic-libraries' + path.sep)[1]
       libDir = `@magic-libraries/${libName}`
     } else if (libDir.includes('magic-libraries-')) {
       libName = libDir.split('magic-libraries-')[1]
