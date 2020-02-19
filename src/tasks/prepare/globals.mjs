@@ -17,6 +17,8 @@ const localLibMjsPath = path.join('src', 'lib.mjs')
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 const recursiveSearch = false
 
+const pathReplaceRegExp = new RegExp(path.sep, 'gi')
+
 export const findNodeModules = async () => {
   let modules = {}
 
@@ -26,7 +28,11 @@ export const findNodeModules = async () => {
     .filter(dir => dir.includes('magic-module-') || dir.includes('magic-modules-'))
     .map(async nodeModule => {
       const name = cases.pascal(nodeModule.split(/magic-module(s)?/)[1])
-      const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
+      let loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
+
+      if (path.sep !== '/') {
+        loadPath = loadPath.replace(pathReplaceRegExp, '/')
+      }
 
       // find module itself
       try {
@@ -69,7 +75,10 @@ export const findNodeModules = async () => {
     .map(async nodeModule => {
       if (magicModuleDir !== nodeModule) {
         const name = cases.pascal(path.basename(nodeModule))
-        const loadPath = nodeModule.replace(nodeModuleDir + path.sep, '')
+        let loadPath = nodeModule.replace(nodeModuleDir + path.sep, '')
+        if (path.sep !== '/') {
+          loadPath = loadPath.replace(pathReplaceRegExp, '/')
+        }
 
         try {
           const mod = await import(loadPath)
@@ -86,6 +95,7 @@ export const findNodeModules = async () => {
           const libPath = path.join(nodeModule, localLibIndexPath)
           await fs.stat(libPath)
           const resolvedLibPath = path.join(loadPath, localLibIndexPath)
+            .replace(pathReplaceRegExp, '/')
           modules[name].lib = resolvedLibPath
         } catch (e) {
           if (e.code !== 'ENOENT') {
