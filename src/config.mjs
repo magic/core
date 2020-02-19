@@ -20,7 +20,7 @@ export const runConfig = async () => {
   let conf = {}
   let confPath = path.join(process.cwd(), 'config.mjs')
   if (path.sep !== '/') {
-    confPath = loadPath.replace(pathReplaceRegExp(), '/')
+    confPath = confPath.replace(pathReplaceRegExp(), '/')
   }
 
   try {
