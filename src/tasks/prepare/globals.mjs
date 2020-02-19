@@ -8,6 +8,7 @@ import is from '@magic/types'
 import log from '@magic/log'
 
 import { builtins, component, tags } from '../../modules/index.mjs'
+import { replacePathSepForImport } from '../../lib/index.mjs'
 
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
