@@ -21,6 +21,7 @@ export const findNodeModules = async () => {
   let modules = {}
 
   const dirs = await fs.getDirectories(nodeModuleDir, recursiveSearch)
+
   const dirPromises = dirs
     .filter(dir => dir.includes('magic-module-') || dir.includes('magic-modules-'))
     .map(async nodeModule => {
@@ -68,7 +69,7 @@ export const findNodeModules = async () => {
     .map(async nodeModule => {
       if (magicModuleDir !== nodeModule) {
         const name = cases.pascal(path.basename(nodeModule))
-        const loadPath = nodeModule.replace(`${nodeModuleDir}/`, '')
+        const loadPath = nodeModule.replace(nodeModuleDir + path.sep, '')
 
         try {
           const mod = await import(loadPath)
@@ -77,13 +78,15 @@ export const findNodeModules = async () => {
             ...mod,
           }
         } catch (e) {
-          log.error('Error', `requiring node_module: ${nodeModule}, error: ${e.message}`)
+          log.error('E_REQUIRE', `requiring node_module: ${nodeModule}, error: ${e.message}`)
+          process.exit(1)
         }
 
         try {
           const libPath = path.join(nodeModule, localLibIndexPath)
           await fs.stat(libPath)
-          modules[name].lib = path.join(loadPath, localLibIndexPath)
+          const resolvedLibPath = path.join(loadPath, localLibIndexPath)
+          modules[name].lib = resolvedLibPath
         } catch (e) {
           if (e.code !== 'ENOENT') {
             throw error(e)
