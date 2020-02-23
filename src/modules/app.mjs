@@ -4,6 +4,9 @@ import deep from '@magic/deep'
 import { h } from '@magic/hyperapp'
 import is from '@magic/types'
 
+const url = new URL(import.meta.url)
+const dirName = path.dirname(url.pathname)
+
 const App = async config => {
   const { WEB_ROOT = '/', LANG = 'en' } = config
 
@@ -35,7 +38,61 @@ const App = async config => {
     }
   } catch (e) {
     // happy without maybeApp
+    if (e.code !== 'ERR_MODULE_NOT_FOUND') {
+      throw e
+    }
   }
+
+
+  let { THEME } = config
+
+  if (!is.array(THEME)) {
+    THEME = [THEME]
+  }
+
+  const results = await Promise.all(
+    THEME.map(async theme_name => {
+      // order is meaningful.
+      const themeLocations = [
+        // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
+        path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs'),
+        // see if the theme is a full name of a js module in node_modules,
+        // eg: @org/theme-name or theme-name
+        theme_name,
+        // see if this is a @magic-themes theme
+        `@magic-themes/${theme_name}`,
+        // see if it is installed locally.
+        path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
+      ]
+
+      const modules = {}
+
+      await Promise.all(
+        themeLocations.map(async location => {
+          try {
+            const { state, actions, effects, subscriptions } = await import(location)
+
+            if (state) {
+              localApp.state = deep.merge(localApp.state, state)
+            }
+            if (actions) {
+              localApp.actions = deep.merge(localApp.actions, actions)
+            }
+            if (effects) {
+              localApp.effects = deep.merge(localApp.effects, effects)
+            }
+            if (subscriptions) {
+              localApp.subscriptions = deep.merge(localApp.subscriptions, subscriptions)
+            }
+          } catch (e) {
+            if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+              throw error(e)
+            }
+          }
+        }),
+      )
+    }),
+  )
 
   // default app state. gets merged with /assets/app.js if it exists.
   // /assets/app.js overwrites the values defined here.
