@@ -77,7 +77,7 @@ export const actions = {
 
     // do nothing if url would not change
     if (url === state.url && hash === state.hash) {
-      window.location.hash = hash
+      // window.location.hash = hash
       return state
     }
 
@@ -87,8 +87,6 @@ export const actions = {
     if (title) {
       document.title = state.title = title
     }
-
-    window.history.pushState({ url, hash, scrollY }, state.title, to)
 
     if (url !== state.url) {
       if (!hash) {
@@ -110,6 +108,8 @@ export const actions = {
     } else {
       window.location.hash = hash
     }
+
+    window.history.pushState({ url, hash, scrollY }, state.title, to)
 
     return {
       ...state,
