@@ -1,6 +1,6 @@
 export const View = props => {
   CHECK_PROPS(props, propTypes, 'MenuItem', true)
-  const { text, items = [], url, root = '/', parentTo = undefined, collapse, ...item } = props
+  const { text, items = [], url, root, parentTo = undefined, collapse, ...item } = props
 
   const p = {
     class: {},
@@ -8,8 +8,8 @@ export const View = props => {
 
   let to = item.to
 
-  if (to.startsWith(root)) {
-    to = to.replace(root, '')
+  if (root && to.startsWith('/')) {
+    to = to.substr(1)
   }
 
   const first = item.to[0]
