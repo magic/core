@@ -162,7 +162,10 @@ MenuItem: fix link handling for rooted links. initial / will not be removed from
 ##### 0.0.35
 fix: hash routing in webkit works (chromium, brave tested)
 
-##### 0.0.36 - unreleased
+##### 0.0.36
+modules/app: correctly merge maybeApp and theme state, actions, effects and subscriptions.
+
+##### 0.0.37 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
