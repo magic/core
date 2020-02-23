@@ -41,7 +41,10 @@ export const master = async ({ cluster, commands, config }) => {
   let lastCall = new Date().getTime()
   cluster.on('message', (worker, msg) => {
     if (watchWorker && worker.id === watchWorker.id) {
-      if (msg.evt === 'change' || msg.evt === 'rename') {
+      const { evt } = msg
+      const isChangeEvent = ['change', 'rename', 'delete'].includes(evt)
+
+      if (isChangeEvent) {
         const now = new Date().getTime()
         const delay = now - lastCall
         lastCall = now
@@ -55,6 +58,7 @@ export const master = async ({ cluster, commands, config }) => {
       }
     } else if (worker.id === buildWorker.id) {
       if (msg.evt === 'quit') {
+        log('quit event received')
         process.exit()
       } else {
         log.warn('Unexpected message from build worker', msg)
@@ -69,6 +73,7 @@ export const master = async ({ cluster, commands, config }) => {
   cluster.on('exit', (worker, code, signal) => {
     if (code !== null && code !== 0) {
       log('exit', code)
+      process.exit(code)
     }
   })
 }
