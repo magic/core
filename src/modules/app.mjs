@@ -43,7 +43,6 @@ const App = async config => {
     }
   }
 
-
   let { THEME } = config
 
   if (!is.array(THEME)) {
@@ -71,16 +70,16 @@ const App = async config => {
             const { state, actions, effects, subscriptions } = await import(location)
 
             if (state) {
-              localApp.state = deep.merge(localApp.state, state)
+              localApp.state = { ...localApp.state, ...state }
             }
             if (actions) {
-              localApp.actions = deep.merge(localApp.actions, actions)
+              localApp.actions = { ...localApp.actions, ...actions }
             }
             if (effects) {
-              localApp.effects = deep.merge(localApp.effects, effects)
+              localApp.effects = { ...localApp.effects, ...effects }
             }
             if (subscriptions) {
-              localApp.subscriptions = deep.merge(localApp.subscriptions, subscriptions)
+              localApp.subscriptions = { ...localApp.subscriptions, ...subscriptions }
             }
           } catch (e) {
             if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
