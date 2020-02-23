@@ -156,6 +156,10 @@ modules did not always get overwritten in the correct order.
 MenuItem: fix link handling for rooted links. initial / will not be removed from links.
 
 ##### 0.0.34 - unreleased
+* themes: merge state, actions, effects, and subscriptions into app.
+* maybeApp import: only suppress error if it is E_MODULE_NOT_FOUND.
+
+##### 0.0.35 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
