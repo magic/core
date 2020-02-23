@@ -8,10 +8,6 @@ export const View = props => {
 
   let to = item.to
 
-  if (to.startsWith('/#')) {
-    to = to.substr(1)
-  }
-
   const first = item.to[0]
   const isLocal = first === '/' || first === '-' || first === '#'
 
