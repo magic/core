@@ -278,7 +278,7 @@ const findThemeModules = async (modules = {}) => {
         await Promise.all(
           themeLocations.map(async location => {
             try {
-              const { default: theme, vars, ...maybeModules } = await import(location)
+              const { default: theme, ...maybeModules } = await import(location)
 
               const libs = {}
               Object.entries(maybeModules).map(([name, fn]) => {
