@@ -85,7 +85,6 @@ export const state = config => ({
             { to: '#link', text: 'link' },
             { to: '#img', text: 'img' },
             { to: '#footer', text: 'footer' },
-            { to: '#gdpr', text: 'gdpr' },
           ],
         },
         {
