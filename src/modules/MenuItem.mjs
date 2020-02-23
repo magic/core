@@ -1,6 +1,6 @@
 export const View = props => {
   CHECK_PROPS(props, propTypes, 'MenuItem', true)
-  const { text, items = [], url, root, parentTo = undefined, collapse, ...item } = props
+  const { text, items = [], url, root = '/', parentTo = undefined, collapse, ...item } = props
 
   const p = {
     class: {},
@@ -8,10 +8,14 @@ export const View = props => {
 
   let to = item.to
 
+  if (to.startsWith(root)) {
+    to = to.replace(root, '')
+  }
+
   const first = item.to[0]
   const isLocal = first === '/' || first === '-' || first === '#'
 
-  if (parentTo && isLocal && (first === '-' || first === '#')) {
+  if (parentTo && (first === '-' || first === '#')) {
     to = parentTo + to
   }
 
