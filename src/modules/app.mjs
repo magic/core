@@ -10,38 +10,14 @@ const dirName = path.dirname(url.pathname)
 const App = async config => {
   const { WEB_ROOT = '/', LANG = 'en' } = config
 
-  let localApp = {}
+  let localApp = {
+    state: {},
+    actions: {},
+    effects: {},
+    subscriptions: [],
+  }
   let seo = {}
 
-  try {
-    const maybeAppFile = path.join(config.ROOT, 'app.mjs')
-    const { default: def, ...maybeApp } = await import(maybeAppFile)
-
-    if (def) {
-      let state = def.state
-      if (is.fn(def.state)) {
-        state = def.state(config)
-      }
-
-      const { seo: _, ...s } = state
-      seo = state.seo
-      localApp = { ...def, state: s }
-    } else {
-      let state = maybeApp.state
-      if (is.fn(maybeApp.state)) {
-        state = maybeApp.state(config)
-      }
-
-      const { seo: _, ...s } = state
-      seo = state.seo
-      localApp = { ...maybeApp, state: s }
-    }
-  } catch (e) {
-    // happy without maybeApp
-    if (e.code !== 'ERR_MODULE_NOT_FOUND') {
-      throw e
-    }
-  }
 
   let { THEME } = config
 
@@ -49,7 +25,7 @@ const App = async config => {
     THEME = [THEME]
   }
 
-  const results = await Promise.all(
+  await Promise.all(
     THEME.map(async theme_name => {
       // order is meaningful.
       const themeLocations = [
@@ -90,6 +66,39 @@ const App = async config => {
       )
     }),
   )
+
+  try {
+    const maybeAppFile = path.join(config.ROOT, 'app.mjs')
+    const { default: def, ...maybeApp } = await import(maybeAppFile)
+
+    if (def) {
+      let state = def.state
+      if (is.fn(def.state)) {
+        state = def.state(config)
+      }
+
+      const { seo: _, ...s } = state
+      seo = state.seo
+
+      localApp = deep.merge(localApp, def)
+      localApp.state = { ...localApp.state, ...s }
+    } else {
+      let state = maybeApp.state
+      if (is.fn(maybeApp.state)) {
+        state = maybeApp.state(config)
+      }
+
+      const { seo: _, ...s } = state
+      seo = state.seo
+      localApp = deep.merge(localApp, maybeApp)
+      localApp.state = { ...localApp.state, ...s }
+    }
+  } catch (e) {
+    // happy without maybeApp
+    if (e.code !== 'ERR_MODULE_NOT_FOUND') {
+      throw e
+    }
+  }
 
   // default app state. gets merged with /assets/app.js if it exists.
   // /assets/app.js overwrites the values defined here.
