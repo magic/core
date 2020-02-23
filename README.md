@@ -152,7 +152,10 @@ the last imported theme will overwrite earlier imported themes and their vars.
 fix race condition in case of multiple themes.
 modules did not always get overwritten in the correct order.
 
-##### 0.0.33 - unreleased
+##### 0.0.33
+MenuItem: fix link handling for rooted links. initial / will not be removed from links.
+
+##### 0.0.34 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
