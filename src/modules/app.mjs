@@ -55,17 +55,15 @@ const App = async config => {
       // order is meaningful.
       const themeLocations = [
         // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
-        path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs'),
+        path.join(dirName, '..', 'themes', theme_name, 'index.mjs'),
         // see if the theme is a full name of a js module in node_modules,
-        // eg: @org/theme-name or theme-name
+        // eg: theme-name
         theme_name,
         // see if this is a @magic-themes theme
         `@magic-themes/${theme_name}`,
         // see if it is installed locally.
         path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
       ]
-
-      const modules = {}
 
       await Promise.all(
         themeLocations.map(async location => {
