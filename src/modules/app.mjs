@@ -18,7 +18,6 @@ const App = async config => {
   }
   let seo = {}
 
-
   let { THEME } = config
 
   if (!is.array(THEME)) {
