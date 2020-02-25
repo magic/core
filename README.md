@@ -165,9 +165,11 @@ fix: hash routing in webkit works (chromium, brave tested)
 ##### 0.0.36
 modules/app: correctly merge maybeApp and theme state, actions, effects and subscriptions.
 
-##### 0.0.37 - unreleased
+##### 0.0.37
 * config: IGNORED_STATIC can be a string.
 * config: items in IGNORED_STATIC do not have to start with a dot. will be added if it is missing.
+
+##### 0.0.38 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
