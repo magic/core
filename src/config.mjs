@@ -5,6 +5,7 @@ import deep from '@magic/deep'
 import error from '@magic/error'
 import fs from '@magic/fs'
 import log from '@magic/log'
+import is from '@magic/types'
 
 import colors from './themes/colors.mjs'
 
@@ -160,6 +161,17 @@ export const runConfig = async () => {
   conf.IS_DEV = conf.ENV === 'development'
 
   conf.IGNORED_STATIC = conf.IGNORED_STATIC || []
+
+  if (is.string(conf.IGNORED_STATIC)) {
+    conf.IGNORED_STATIC = [conf.IGNORED_STATIC]
+  }
+
+  conf.IGNORED_STATIC = conf.IGNORED_STATIC.map(st => {
+    if (!st.startsWith('.')) {
+      st = '.' + st
+    }
+    return st
+  })
 
   // find WEB_ROOT manually from git.
   // show warning if this has to be done, needs a few hundred ms
