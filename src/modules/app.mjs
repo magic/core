@@ -1,8 +1,10 @@
 import path from 'path'
 
 import deep from '@magic/deep'
+import error from '@magic/error'
 import { h } from '@magic/hyperapp'
 import is from '@magic/types'
+import log from '@magic/log'
 
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
@@ -58,7 +60,11 @@ const App = async config => {
             }
           } catch (e) {
             if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-              throw error(e)
+              if (e.name === 'SyntaxError') {
+                log.error('SYNTAX_ERROR', '@magic/core: SyntaxError in your source files. Please run `npm run format` to get more information.')
+                process.exit(1)
+              }
+              throw e
             }
           }
         }),
