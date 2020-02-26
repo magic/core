@@ -168,6 +168,8 @@ modules/app: correctly merge maybeApp and theme state, actions, effects and subs
 ##### 0.0.37
 * config: IGNORED_STATIC can be a string.
 * config: items in IGNORED_STATIC do not have to start with a dot. will be added if it is missing.
+* babel errors tell us to run `npm run format` to find the source of the error. Sourcemaps tbd
+* build worker process should always exit with process.exit(1), not panic.
 
 ##### 0.0.38 - unreleased
 ...
