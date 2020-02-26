@@ -6,10 +6,11 @@ import runCmd from './runCmd.mjs'
 import { serve } from '../tasks/index.mjs'
 
 export const build = async ({ commands, config }) => {
-  const App = await runApp(config)
-  const app = await runCmd('prepare', App, config)
 
   try {
+    const App = await runApp(config)
+    const app = await runCmd('prepare', App, config)
+
     const { bundle, css, pages /*, serviceWorker */ } = await runCmd('transpile', app, config)
     app.pages = pages
     app.css = css
@@ -19,13 +20,14 @@ export const build = async ({ commands, config }) => {
     if (commands.build) {
       await runCmd('write', app, config)
     }
+
+    if (commands.serve) {
+      serve(app)
+    } else {
+      process.send({ evt: 'quit' })
+    }
   } catch (e) {
     log.error('error during build', e)
-  }
-
-  if (commands.serve) {
-    serve(app)
-  } else {
-    process.send({ evt: 'quit' })
+    process.exit(1)
   }
 }
