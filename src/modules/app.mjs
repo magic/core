@@ -61,7 +61,10 @@ const App = async config => {
           } catch (e) {
             if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
               if (e.name === 'SyntaxError') {
-                log.error('SYNTAX_ERROR', '@magic/core: SyntaxError in your source files. Please run `npm run format` to get more information.')
+                log.error(
+                  'SYNTAX_ERROR',
+                  '@magic/core: SyntaxError in your source files. Please run `npm run format` to get more information.',
+                )
                 process.exit(1)
               }
               throw e

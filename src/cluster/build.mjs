@@ -6,7 +6,6 @@ import runCmd from './runCmd.mjs'
 import { serve } from '../tasks/index.mjs'
 
 export const build = async ({ commands, config }) => {
-
   try {
     const App = await runApp(config)
     const app = await runCmd('prepare', App, config)
