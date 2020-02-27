@@ -4,7 +4,7 @@ import fs from '@magic/fs'
 
 import { prepareBlogPost } from './blogPost.mjs'
 
-export const prepareBlog = async app => {
+export const prepareBlog = async (app, modules = []) => {
   const relativeBlogDir = config.BLOG_DIR.replace(`${config.ROOT}/`, '')
 
   const extensions = ['.markdown', '.js', '.htm', '.mjs', '.html', '.md']
@@ -20,7 +20,8 @@ export const prepareBlog = async app => {
 
   const posts = await Promise.all(
     app.blog.map(async file => {
-      const post = await prepareBlogPost({ WEB_ROOT, PAGES: config.BLOG_DIR })(file)
+      const preparePost = prepareBlogPost({ WEB_ROOT, PAGES: config.BLOG_DIR }, modules)
+      const post = await preparePost(file)
       const rootedBlogPath = file.replace(config.BLOG_DIR, '')
       let [year, month, day, ...postPath] = rootedBlogPath.split('/').filter(a => a)
 

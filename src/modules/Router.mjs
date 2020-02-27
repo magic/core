@@ -1,4 +1,5 @@
 export const View = ({ page, state }) => {
+  page = page ? page(state) : '404 - Page not found.'
   const magicProps = {
     id: 'Magic',
     class: state.pageClass,

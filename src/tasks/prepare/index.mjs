@@ -35,11 +35,13 @@ export const prepare = async (app, config) => {
     app.blog = await getBlog(app.files)
   }
 
+  const moduleNames = Object.keys(modules)
+
   // collect the pages, create their states
-  app.pages = await preparePages(app)
+  app.pages = await preparePages(app, moduleNames)
 
   if (config.BLOG_DIR) {
-    const { posts, index } = await prepareBlog(app)
+    const { posts, index } = await prepareBlog(app, moduleNames)
 
     app.state.blog = index
 

@@ -6,7 +6,7 @@ import fs from '@magic/fs'
 import log from '@magic/log'
 import transmute from '@magic/transmute'
 
-export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
+export const preparePage = ({ WEB_ROOT, PAGES }, modules = []) => async file => {
   const ext = path.extname(file)
 
   const markdownExtensions = ['.md', '.markdown']
@@ -16,17 +16,17 @@ export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
 
   if (markdownExtensions.includes(ext)) {
     const content = await fs.readFile(file, 'utf8')
-    transmuted = transmute.markdown(content)
+    transmuted = transmute.markdown(content, {}, modules)
     file = file.replace('.md', '.mjs').replace('.markdown', '.mjs')
   } else if (htmlExtensions.includes(ext)) {
     const content = await fs.readFile(file, 'utf8')
-    transmuted = transmute.html(content)
+    transmuted = transmute.html(content, {}, modules)
     file = file.replace('.html', '.mjs').replace('.htm', '.mjs')
   }
 
   let pageTmp
   if (!is.empty(transmuted)) {
-    const viewString = `export const View = () => [${transmuted.rendered}]`
+    const viewString = `export const View = state => [${transmuted.rendered}]`
 
     const fileTmpPath = path.join(config.TMP_DIR, path.basename(file))
     await fs.mkdirp(config.TMP_DIR)
@@ -52,6 +52,9 @@ export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
   page.file = file
 
   if (!is.empty(transmuted.state)) {
+    if (is.fn(transmuted.state)) {
+      transmuted.state = transmuted.state(config)
+    }
     page.state = transmuted.state
   }
 
@@ -86,9 +89,9 @@ export const preparePage = ({ WEB_ROOT, PAGES }) => async file => {
       `
 ${pageDir}/${pageName}.mjs
 needs to either
-export default () => []
+export default state => []
 or
-export const View = () => []
+export const View = state => []
 `,
       'E_INVALID_PAGE',
     )

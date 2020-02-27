@@ -6,7 +6,7 @@ import is from '@magic/types'
 import log from '@magic/log'
 import transmute from '@magic/transmute'
 
-export const prepareBlogPost = ({ WEB_ROOT, PAGES }) => async file => {
+export const prepareBlogPost = ({ WEB_ROOT, PAGES }, modules) => async file => {
   const ext = path.extname(file)
 
   const markdownExtensions = ['.md', '.markdown']
@@ -16,11 +16,11 @@ export const prepareBlogPost = ({ WEB_ROOT, PAGES }) => async file => {
 
   if (markdownExtensions.includes(ext)) {
     const content = await fs.readFile(file, 'utf8')
-    transmuted = transmute.markdown(content)
+    transmuted = transmute.markdown(content, {}, modules)
     file = file.replace('.md', '.mjs').replace('.markdown', '.mjs')
   } else if (htmlExtensions.includes(ext)) {
     const content = await fs.readFile(file, 'utf8')
-    transmuted = transmute.html(content)
+    transmuted = transmute.html(content, {}, modules)
     file = file.replace('.html', '.mjs').replace('.htm', '.mjs')
   }
 
