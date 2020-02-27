@@ -101,9 +101,9 @@ export const prepareBlogPost = ({ WEB_ROOT, PAGES }) => async file => {
       `
 ${page}
 needs to either
-export default () => []
+export default state => []
 or
-export const View = () => []
+export const View = state => []
 `,
       'E_INVALID_BLOGPOST',
     )
