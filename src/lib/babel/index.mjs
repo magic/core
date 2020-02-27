@@ -49,8 +49,9 @@ export const getBabelConf = (app, config) => {
       presets.push([
         'minify',
         {
+          // this seems to sometimes break builds. "too much recursion".
           mangle: {
-            topLevel: true,
+            // topLevel: true,
           },
           removeConsole: !argv.includes('--keep-console'),
           removeDebugger: !argv.includes('--keep-debugger'),
