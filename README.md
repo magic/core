@@ -171,7 +171,10 @@ modules/app: correctly merge maybeApp and theme state, actions, effects and subs
 * babel errors tell us to run `npm run format` to find the source of the error. Sourcemaps tbd
 * build worker process should always exit with process.exit(1), not panic.
 
-##### 0.0.38 - unreleased
+##### 0.0.38
+* babel: do not mangle toplevel names. broke builds, adds 1kb+ to js. investigate, exterminate.
+
+##### 0.0.39  - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
