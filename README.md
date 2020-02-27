@@ -174,7 +174,10 @@ modules/app: correctly merge maybeApp and theme state, actions, effects and subs
 ##### 0.0.38
 * babel: do not mangle toplevel names. broke builds, adds 1kb+ to js. investigate, exterminate.
 
-##### 0.0.39  - unreleased
+##### 0.0.39
+only load Modules from theme if their names are CamelCased.
+
+##### 0.0.40  - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
