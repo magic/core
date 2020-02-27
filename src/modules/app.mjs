@@ -47,6 +47,9 @@ const App = async config => {
             const { state, actions, effects, subscriptions } = await import(location)
 
             if (state) {
+              if (is.fn(localApp.state)) {
+                localApp.state = localApp.state(config)
+              }
               localApp.state = { ...localApp.state, ...state }
             }
             if (actions) {
@@ -89,6 +92,9 @@ const App = async config => {
       seo = state.seo
 
       localApp = deep.merge(localApp, def)
+      if (is.fn(localApp.state)) {
+        localApp.state = localApp.state(config)
+      }
       localApp.state = { ...localApp.state, ...s }
     } else {
       let state = maybeApp.state
@@ -98,7 +104,16 @@ const App = async config => {
 
       const { seo: _, ...s } = state
       seo = state.seo
+
+      if (is.fn(maybeApp.state)) {
+        maybeApp.state = maybeApp.state(config)
+      }
+      if (is.fn(localApp.state)) {
+        localApp.state = localApp.state(config)
+      }
+
       localApp = deep.merge(localApp, maybeApp)
+
       localApp.state = { ...localApp.state, ...s }
     }
   } catch (e) {
@@ -118,6 +133,12 @@ const App = async config => {
 
     // this View gets server rendered.
     View: (page, hashes) => state => {
+      if (is.fn(localApp.state)) {
+        localApp.state = localApp.state(config)
+      }
+      if (is.fn(state)) {
+        state = state(config)
+      }
       state = {
         ...localApp.state,
         ...state,
