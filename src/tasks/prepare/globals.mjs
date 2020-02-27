@@ -294,14 +294,16 @@ const findThemeModules = async (modules = {}) => {
                     modules[name] = fn
                   }
                 } else if (is.object(fn)) {
-                  if (!modules[name]) {
-                    modules[name] = { ...fn }
-                  } else if (is.fn(modules[name])) {
-                    modules[name] = { View: modules[name], ...fn }
-                  } else {
-                    modules[name] = {
-                      ...modules[name],
-                      ...fn,
+                  if (name[0].toUpperCase === name[0].toUpperCase()) {
+                    if (!modules[name]) {
+                      modules[name] = { ...fn }
+                    } else if (is.fn(modules[name])) {
+                      modules[name] = { View: modules[name], ...fn }
+                    } else {
+                      modules[name] = {
+                        ...modules[name],
+                        ...fn,
+                      }
                     }
                   }
                 }
