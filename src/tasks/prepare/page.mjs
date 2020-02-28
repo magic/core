@@ -28,8 +28,11 @@ export const preparePage = ({ WEB_ROOT, PAGES }, modules = []) => async file => 
   if (!is.empty(transmuted)) {
     const viewString = `export const View = state => [${transmuted.rendered}]`
 
-    const fileTmpPath = path.join(config.TMP_DIR, path.basename(file))
-    await fs.mkdirp(config.TMP_DIR)
+    const fileTmpPath = path.join(config.TMP_DIR, file.replace(config.DIR.PAGES, ''))
+
+    const subDir = path.dirname(fileTmpPath)
+    await fs.mkdirp(subDir)
+
     await fs.writeFile(fileTmpPath, viewString)
     pageTmp = await import(fileTmpPath)
   } else {
