@@ -180,7 +180,6 @@ only load Modules from theme if their names are CamelCased.
 ##### 0.0.40
 * handle state as a function in all imports, call it with config param
 * @magic/transform handles @magic-modules now, which makes pure markdown pages possible.
-*
 
 ##### 0.0.41  - unreleased
 ...
