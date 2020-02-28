@@ -191,7 +191,10 @@ fix: theme modules are now getting imported again.
 ##### 0.0.43
 update @magic/transmute: @magic-modules in markdown are no longer wrapped in p tags
 
-##### 0.0.44 - unreleased
+##### 0.0.44
+add Credit module
+
+##### 0.0.45 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
