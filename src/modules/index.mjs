@@ -9,6 +9,7 @@ import * as Route from './Route.mjs'
 import * as Router from './Router.mjs'
 import * as Seo from './Seo.mjs'
 import * as SkipLink from './SkipLink.mjs'
+import * as Credits from './Credits.mjs'
 
 import * as BlogArchive from './BlogArchive.mjs'
 import * as BlogMonth from './BlogMonth.mjs'
@@ -27,6 +28,7 @@ export const builtins = {
   BlogPost,
   BlogTeaser,
   BlogYear,
+  Credits,
   Footer,
   Header,
   Img,
