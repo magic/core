@@ -198,7 +198,8 @@ add Credit module
 add b, strong, i, and em styles (bold and italic)
 
 ##### 0.0.46
-no more race conditions when importing multiple themes \o/
+* no more race conditions when importing multiple themes.
+* Logo link works again.
 
 ##### 0.0.47 - unreleased
 ...
