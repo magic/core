@@ -179,7 +179,10 @@ modules/app: correctly merge maybeApp and theme state, actions, effects and subs
 * handle state as a function in all imports, call it with config param
 * @magic/transform handles @magic-modules now, which makes pure markdown pages possible.
 
-##### 0.0.40 - unreleased
+##### 0.0.40
+fix: HOISTing broke in 0.0.39
+
+##### 0.0.41 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
