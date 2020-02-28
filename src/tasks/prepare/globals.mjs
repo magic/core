@@ -139,6 +139,7 @@ export const findLocalModules = async () => {
     })
 
   await Promise.all(assetPromises)
+
   return modules
 }
 
@@ -294,7 +295,7 @@ const findThemeModules = async (modules = {}) => {
                     modules[name] = fn
                   }
                 } else if (is.object(fn)) {
-                  if (name[0].toUpperCase === name[0].toUpperCase()) {
+                  if (name[0].toUpperCase() === name[0].toUpperCase()) {
                     if (!modules[name]) {
                       modules[name] = { ...fn }
                     } else if (is.fn(modules[name])) {
@@ -325,9 +326,12 @@ const findThemeModules = async (modules = {}) => {
     // Promise.all does not wait internally for sequential execution,
     // but await Promise.all returns ordered results.
     results.map(result => {
-      modules = deep.merge(modules, result)
+      if (!is.empty(result)) {
+        modules = deep.merge(modules, result)
+      }
     })
   }
+
 
   return modules
 }
