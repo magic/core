@@ -12,6 +12,7 @@
 # @magic/core docs
 
 ## welcome to the magic docs.
+
 the goal of this document is to give you a rough @magical overview.
 
 <GitBadges>magic/core</GitBadges>
