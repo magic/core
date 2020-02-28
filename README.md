@@ -194,7 +194,10 @@ update @magic/transmute: @magic-modules in markdown are no longer wrapped in p t
 ##### 0.0.44
 add Credit module
 
-##### 0.0.45 - unreleased
+##### 0.0.45
+add b, strong, i, and em styles (bold and italic)
+
+##### 0.0.46 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
