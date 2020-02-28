@@ -82,6 +82,14 @@ export const reset = (vars = {}) => ({
     whiteSpace: 'nowrap',
   },
 
+  'b, strong': {
+    fontWeight: 700,
+  },
+
+  'i, em': {
+    fontStyle: 'italic',
+  },
+
   [buttons]: {
     backgroundColor: vars.buttonBackgroundColor || vars.colors.gray[500],
     color: vars.buttonColor || vars.colors.gray[900],
