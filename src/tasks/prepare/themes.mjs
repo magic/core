@@ -48,9 +48,7 @@ export const prepareThemes = async ({ app, modules }) => {
 
   // load user's chosen theme, if it is set and exists, and merge it into the styles
   if (THEME) {
-    let themeVars = {}
-
-    await Promise.all(
+    const result = await Promise.all(
       THEME.map(async theme_name => {
         // order is meaningful.
         const themeLocations = [
@@ -65,16 +63,15 @@ export const prepareThemes = async ({ app, modules }) => {
           path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
         ]
 
-        await Promise.all(
+        return await Promise.all(
           themeLocations.map(async location => {
             try {
               const { default: theme, vars } = await import(location)
 
-              if (!is.empty(vars)) {
-                themeVars = deep.merge(themeVars, vars)
+              return {
+                theme,
+                vars,
               }
-
-              themeStyles.push(theme)
             } catch (e) {
               if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
                 throw error(e)
@@ -84,6 +81,23 @@ export const prepareThemes = async ({ app, modules }) => {
         )
       }),
     )
+
+    let themeVars = {}
+
+    result
+      .filter(a => a)
+      .forEach(list => {
+        list
+          .filter(a => a)
+          .forEach(({ theme, vars }) => {
+            if (!is.empty(vars)) {
+              themeVars = deep.merge(themeVars, vars)
+            }
+            if (!is.empty(theme)) {
+              themeStyles.push(theme)
+            }
+          })
+      })
 
     THEME_VARS = deep.merge(themeVars, THEME_VARS)
   }

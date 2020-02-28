@@ -26,7 +26,7 @@ const App = async config => {
     THEME = [THEME]
   }
 
-  await Promise.all(
+  const themeData = await Promise.all(
     THEME.map(async theme_name => {
       // order is meaningful.
       const themeLocations = [
@@ -41,25 +41,16 @@ const App = async config => {
         path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
       ]
 
-      await Promise.all(
+      return await Promise.all(
         themeLocations.map(async location => {
           try {
             const { state, actions, effects, subscriptions } = await import(location)
 
-            if (state) {
-              if (is.fn(localApp.state)) {
-                localApp.state = localApp.state(config)
-              }
-              localApp.state = { ...localApp.state, ...state }
-            }
-            if (actions) {
-              localApp.actions = { ...localApp.actions, ...actions }
-            }
-            if (effects) {
-              localApp.effects = { ...localApp.effects, ...effects }
-            }
-            if (subscriptions) {
-              localApp.subscriptions = { ...localApp.subscriptions, ...subscriptions }
+            return {
+              state,
+              actions,
+              effects,
+              subscriptions,
             }
           } catch (e) {
             if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
@@ -77,6 +68,32 @@ const App = async config => {
       )
     }),
   )
+
+  themeData
+    .filter(a => a)
+    .forEach(theme => {
+      theme
+        .filter(a => a)
+        .forEach((props = {}) => {
+          const { state, actions, effects, subscriptions } = props
+
+          if (state) {
+            if (is.fn(localApp.state)) {
+              localApp.state = localApp.state(config)
+            }
+            localApp.state = { ...localApp.state, ...state }
+          }
+          if (actions) {
+            localApp.actions = { ...localApp.actions, ...actions }
+          }
+          if (effects) {
+            localApp.effects = { ...localApp.effects, ...effects }
+          }
+          if (subscriptions) {
+            localApp.subscriptions = { ...localApp.subscriptions, ...subscriptions }
+          }
+        })
+    })
 
   try {
     const maybeAppFile = path.join(config.ROOT, 'app.mjs')
