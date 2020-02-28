@@ -182,10 +182,13 @@ modules/app: correctly merge maybeApp and theme state, actions, effects and subs
 ##### 0.0.40
 fix: HOISTing broke in 0.0.39
 
-##### 0.0.41 
+##### 0.0.41
 hoisting happens in the footer.
 
-##### 0.0.42 - unreleased
+##### 0.0.42
+fix: theme modules are now getting imported again.
+
+##### 0.0.43 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
