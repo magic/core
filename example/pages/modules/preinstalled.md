@@ -1,26 +1,27 @@
-export const state = {
-  title: '@magic-modules',
-  description: '@magic-modules documentation.',
+---
+@state {
+  "title": "@magic-modules",
+  "description": "@magic-modules documentation."
 }
+---
 
-export const View = state => [
-  h1('@magic modules'),
+# ${state.title}
 
-  h2({ id: 'preinstalled' }, 'preinstalled'),
-  p('magic has some preinstalled modules that will be used in most pages.'),
+<h2 id='preinstalled'>preinstalled</h2>
 
-  h2({ id: 'app' }, 'app'),
-  p([
-    'this is the main app module.',
-    ' it has magically inherited properties and all of it is customizable.',
-  ]),
-  p([
-    'to add actions/state/style to the app you can just create an /assets/app.mjs file.',
-    'the contents of this file get ',
-    Link({ to: 'https://github.com/magic/deep', text: 'deep .merged' }),
-    ' into the app',
-  ]),
-  Pre(`
+magic has some preinstalled modules that will be used in most pages.
+
+<h2 id='app'>app</h2>
+
+this is the main app module.
+it has magically inherited properties and all of it is customizable.
+
+to add actions/state/style to the app you can just create an /assets/app.mjs file.
+the contents of this file get
+[deep .merged](https://github.com/magic/deep)
+into the app
+
+<Pre>
 // /assets/app.mjs
 export const state = {
   merge: 'gets merged into state',
@@ -28,12 +29,13 @@ export const state = {
 export const actions = {
   mergedActions: state => ({ ...state, merge: 'merged action executed' }),
 }
-`),
+</Pre>
 
-  h2({ id: 'menu' }, 'menu'),
-  p('the Menu module provides... menus.'),
+<h2 id='menu'>menu</h2>
 
-  Pre(`
+the Menu module provides... menus.
+
+<Pre>
 export const View = state => {
   const items = [
     { to: '/example-page', text: 'example page' },
@@ -43,6 +45,7 @@ export const View = state => {
 
   return Menu({ items, collapse: false })
 }
+
 // output:
 <nav class="Menu">
   <ul>
@@ -57,41 +60,45 @@ export const View = state => {
     </li>
   </ul>
 </nav>
-}`),
+}
+</Pre>
 
-  h3({ id: 'menu-props' }, 'Menu props'),
-  p('the Menu module allows multiple props to be passed when instantiating the Menu'),
+<h3 id='menu-props'>Menu props</h3>
 
-  h3({ id: 'menu-props-collapse' }, 'props.collapse'),
-  p([
-    'by default, the menu will only show submenu items if their parent link is active.',
-    ' to force submenu items to show at all times, just pass a collapse: false prop',
-  ]),
+the Menu module allows multiple props to be passed when instantiating the Menu
 
-  Pre(`
+<h3 id='menu-props-collapse'>props.collapse</h3>
+
+by default, the menu will only show submenu items if their parent link is active.
+to force submenu items to show at all times, just pass a collapse: false prop
+
+<Pre>
 Menu({
   // if false, menu will always show all submenu items
   collapse: false, // (default: true)
-})`),
+})
+</Pre>
 
-  h3({ id: 'menu-item-props' }, 'Menu.Item props'),
-  p([
-    'every MenuItem accepts props the same props as a link does.',
-    ' additionally a MenuItem accepts a items prop with sub menu items.',
-  ]),
+<h3 id='menu-item-props'>Menu.Item props</h3>
 
-  Pre(`
+every MenuItem accepts props the same props as a link does.
+additionally a MenuItem accepts a items prop with sub menu items.
+
+<Pre>
 const menuItem = ({
   to: '/url',
   text: 'link text',
   items: [MenuItems],
   noreferrer: true, // set rel='noreferrer'
   nofollow: true, // set rel='nofollow'
-})`),
+})
+</Pre>
 
-  h3({ id: 'menu-sub-menus' }, 'sub menus'),
-  p('to define a submenu, simply define a .items array on the menu item'),
-  Pre(`
+<h3 id='menu-sub-menus'>sub menus</h3>
+
+to define a submenu, simply define a .items array on the menu item
+
+<Pre>
 // assets/app.mjs
 export default {
   state: {
@@ -106,11 +113,14 @@ export default {
     ],
   },
   // ... rest of app.mjs
-}`),
+}
+</Pre>
 
-  h2({ id: 'link' }, 'link'),
-  p('the link module allows you to link to things.'),
-  Pre(`
+<h2 id='link'>link</h2>
+
+the link module allows you to link to things.
+
+<Pre>
 // in any page or module View
 export default () => [
   Link({ to: '/page', text: 'page' }),
@@ -125,11 +135,14 @@ export default () => [
 
   // Link also supports # hash links
   Link({ to: '/#hash' }, 'home with hash'),
-]`),
+]
+</Pre>
 
-  h2({ id: 'img' }, 'img'),
-  p('the img module adds some sane default values to your images.'),
-  Pre(`
+<h2 id='img'>img</h2>
+
+the img module adds some sane default values to your images.
+
+<Pre>
 // in any page or module View
 export default () => [
   Img('/image.png'),
@@ -137,19 +150,21 @@ export default () => [
   Img({ src: '/image.png }),
   // output: <img src="/image.png" alt="" role="presentation"/>
   Img({ src: '/image.png', alt: 'image description' }),
-  // output: <img src="/image.png alt="image description" />
+  // output: <img src="/image.png" alt="image description" />
   Img({ src: '/image.png', title: 'image title', }),
   // output: <img src="/image.png" title="image title" alt="image title"/>
   Img({ src: '/image.png', title: 'image title', alt: 'image alt' }),
   // output: <img src="/image.png" title="image title" alt="image alt"/>
-]`),
+]
+</Pre>
 
-  h2({ id: 'footer' }, 'footer'),
-  p('the footer module contains a small info text and a link to the magic github repository.'),
-  p(
-    'to overwrite this behaviour, just place a Footer.mjs file in your assets and require it in /assets/index.mjs.',
-  ),
-  Pre(`
+<h2 id='footer'>footer</h2>
+
+the footer module contains a small info text and a link to the magic github repository.
+
+to overwrite this behaviour, just place a Footer.mjs file in your assets and require it in /assets/index.mjs.
+
+<Pre>
 // /assets/Footer.mjs:
 const Footer = () =>
 footer({ class: 'main' }, [
@@ -168,5 +183,4 @@ Footer.style: {
 }
 
 export default Footer
-  `),
-]
+</Pre>

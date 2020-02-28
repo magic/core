@@ -1,21 +1,22 @@
-export const state = {
-  title: '@magic-modules/example',
-  description: '@magic-modules example module.',
+---
+@state {
+  "title": "@magic-modules/example",
+  "description": "@magic-modules example module."
 }
+---
 
-export const View = state => [
-  h1('example module'),
+# ${state.title}
 
-  h2({ id: 'custom-module' }, 'Mod and Mod.Component:'),
+<h2 id='custom-module'>Mod and Component:</h2>
 
-  Mod(state),
+<Mod state></Mod>
 
-  Mod.Component({ title: 'Mod Component Title, passed via props' }),
+<Component title='Mod Component Title, passed via props'></Component>
 
-  h3('Mod sourcecode:'),
+### Mod sourcecode:
 
-  Pre(`
-  export const View = state =>
+<Pre>
+export const View = state =>
   div({ class: 'Mod' }, [
     h3('Mod.Mod'),
     p([
@@ -48,27 +49,33 @@ export const global = {
     module: true,
   },
 }
+</Pre>
 
-export const Component = props => {
+### Component sourcecode:
+
+<Pre>
+export const View = props => {
   props = typeof props === 'string' ? { header: props } : props
-  CHECK_PROPS(props, propTypes, 'ModComponent')
+  CHECK_PROPS(props, propTypes, 'Component')
   const header = props.header || props.title
 
-  return div({ class: 'ModComponent' }, [
+  return div({ class: 'Component' }, \\[
     header && h5(header),
     p([
-      'Mod.Component, a second component in ',
-      Link({ to: 'https://github.com/magic/core/example/assets/module.mjs' }, '/assets/module.mjs'),
+      'Component, a second component in ',
+      Link(
+        { to: 'https://github.com/magic/core/blob/master/example/assets/modules/Component.mjs' },
+        '/assets/modules/Component.mjs',
+      ),
     ]),
   ])
 }
 
-Component.style = {
+export const style = {
   border: '1px solid orange',
 }
 
 export const propTypes = {
-  ModComponent: [{ key: 'header', type: ['string', 'array'], required: ['title'] }],
+  Component: [{ key: 'header', type: ['string', 'array'], required: ['title'] }],
 }
-`),
-]
+</Pre>

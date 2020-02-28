@@ -1,16 +1,20 @@
-export const state = {
-  title: '@magic-modules/propTypes',
-  description: '@magic-modules/propTypes documentation.',
+---
+@state {
+  "title": "@magic-modules/prop-types",
+  "description": "@magic-modules/prop-types documentation."
 }
+---
 
-export const View = state => [
-  h1(state.title),
 
-  h2({ id: 'check-props' }, 'CHECK_PROPS'),
-  p('@magic-modules can export a .propTypes object with an array of prop types.'),
+# @magic-modules/prop-types
 
-  h4({ to: '#example' }, 'example'),
-  Pre(`
+<h2 id='check-props'>CHECK_PROPS</h2>
+
+@magic-modules can export a .propTypes object with an array of prop types.
+
+<h4 id='#example'>example</h4>
+
+<Pre>
 export const View = (prop1, prop2, prop3) => [
   p(prop1),
   p(prop2),
@@ -29,5 +33,4 @@ export const propTypes = [
       { name: 'prop4prop2', type: 'number' },
   ] },
 ]
-`),
-]
+</Pre>
