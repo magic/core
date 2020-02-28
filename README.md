@@ -197,7 +197,10 @@ add Credit module
 ##### 0.0.45
 add b, strong, i, and em styles (bold and italic)
 
-##### 0.0.46 - unreleased
+##### 0.0.46
+no more race conditions when importing multiple themes \o/
+
+##### 0.0.47 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
