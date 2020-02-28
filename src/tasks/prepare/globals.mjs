@@ -332,7 +332,6 @@ const findThemeModules = async (modules = {}) => {
     })
   }
 
-
   return modules
 }
 
