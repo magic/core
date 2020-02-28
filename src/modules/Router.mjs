@@ -1,4 +1,4 @@
-export const View = ({ page, state }) => {
+export const View = ({ page, state }, children) => {
   page = page ? page(state) : '404 - Page not found.'
   const magicProps = {
     id: 'Magic',
@@ -11,7 +11,7 @@ export const View = ({ page, state }) => {
     },
   }
 
-  return main(magicProps, div(wrapperProps, Route({ state, page })))
+  return main(magicProps, div(wrapperProps, Route({ state, page }, children)))
 }
 
 export const Link = ({ to, action = actions.go, ...p }, children = []) => {
