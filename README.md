@@ -205,9 +205,15 @@ add b, strong, i, and em styles (bold and italic)
 modules/app: page.state gets inherited properly, markdown pages can see global state now.
 
 ##### 0.0.48
+import originalState from transmuted bundle.
+
+##### 0.0.49
 FIX: process would hang if a markdown or html page had no state.
 
-##### 0.0.49 - unreleased
+##### 0.0.50
+document.title does not error in client if only one page exists.
+
+##### 0.0.51 - unreleased
 ...
 
 
