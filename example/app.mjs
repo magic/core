@@ -13,6 +13,8 @@ export const state = config => ({
     },
   },
 
+  title: '@magic/core documentation',
+
   menu: [
     {
       to: '/concepts/',
