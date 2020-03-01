@@ -204,7 +204,10 @@ add b, strong, i, and em styles (bold and italic)
 ##### 0.0.47
 modules/app: page.state gets inherited properly, markdown pages can see global state now.
 
-##### 0.0.48 - unreleased
+##### 0.0.48
+FIX: process would hang if a markdown or html page had no state.
+
+##### 0.0.49 - unreleased
 ...
 
 
