@@ -201,8 +201,12 @@ add b, strong, i, and em styles (bold and italic)
 * no more race conditions when importing multiple themes.
 * Logo link works again.
 
-##### 0.0.47 - unreleased
+##### 0.0.47
+modules/app: page.state gets inherited properly, markdown pages can see global state now.
+
+##### 0.0.48 - unreleased
 ...
+
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
 [npm-url]: https://www.npmjs.com/package/@magic/core
