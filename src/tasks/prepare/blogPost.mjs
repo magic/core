@@ -65,8 +65,13 @@ export const prepareBlogPost = ({ WEB_ROOT, PAGES, state = {}, modules = [] }) =
 
   page.file = file
 
-  if (!is.empty(transmuted.state)) {
-    page.state = transmuted.state
+
+  if (!is.empty(transmuted.originalState)) {
+    if (is.fn(transmuted.originalState)) {
+      transmuted.originalState = transmuted.originalState(config)
+    }
+
+    page.state = transmuted.originalState
   }
 
   const pageName = file
