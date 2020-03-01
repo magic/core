@@ -242,9 +242,7 @@ app({
       })
     }
 
-    state.titles = {
-      ${pageTitleString}
-    }
+    state.url = url
 
     return Page({ page, state }${hoisted ? `, ${hoisted}` : ''})
   },
