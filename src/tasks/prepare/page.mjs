@@ -54,17 +54,14 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {}, modules = [] }) => as
 
   page.file = file
 
-  page.state = { ...state }
+  page.state = {}
 
   if (!is.empty(transmuted.state)) {
     if (is.fn(transmuted.state)) {
       transmuted.state = transmuted.state(config)
     }
 
-    page.state = {
-      ...page.state,
-      ...transmuted.state,
-    }
+    page.state = transmuted.state
   }
 
   const pageName = file
