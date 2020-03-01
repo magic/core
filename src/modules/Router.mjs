@@ -89,7 +89,7 @@ export const actions = {
 
     const { scrollY } = window
 
-    const title = state.pages[url] && state.pages[url].title
+    const title = state.pages && state.pages[url] && state.pages[url].title
     if (title) {
       document.title = state.title = title
     }
