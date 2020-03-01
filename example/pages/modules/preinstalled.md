@@ -50,7 +50,7 @@ export const View = state => {
 <nav class="Menu">
   <ul>
     <li>
-      <a onclick="actions.go" href="{{ WEB_ROOT }}example-page">example page</a>
+      <a onclick="actions.go" href="{{ root }}example-page">example page</a>
     </li>
     <li>
       <a href="https://example.com" target="_blank" rel="noopener">example.com</a>
