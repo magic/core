@@ -7,7 +7,7 @@ export const preparePages = async (app, modules = []) => {
   }
 
   const pages = await Promise.all(
-    app.files.map(preparePage({ WEB_ROOT, PAGES: config.DIR.PAGES }, modules)),
+    app.files.map(preparePage({ WEB_ROOT, PAGES: config.DIR.PAGES, state: app.state, modules })),
   )
 
   const has404 = pages.some(p => p.name === `${config.WEB_ROOT}404/`)

@@ -20,7 +20,13 @@ export const prepareBlog = async (app, modules = []) => {
 
   const posts = await Promise.all(
     app.blog.map(async file => {
-      const preparePost = prepareBlogPost({ WEB_ROOT, PAGES: config.BLOG_DIR }, modules)
+      const preparePost = prepareBlogPost({
+        WEB_ROOT,
+        PAGES: config.BLOG_DIR,
+        state: app.state,
+        modules,
+      })
+
       const post = await preparePost(file)
       const rootedBlogPath = file.replace(config.BLOG_DIR, '')
       let [year, month, day, ...postPath] = rootedBlogPath.split('/').filter(a => a)
