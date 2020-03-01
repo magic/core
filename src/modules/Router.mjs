@@ -10,11 +10,15 @@ export const View = ({ page, state }, children) => {
     },
   }
 
-  return main(magicProps, div(wrapperProps, [
-    Header(state),
-    div({ class: 'Page', id: 'page' }, page(state)),
-    Footer(state, children),
-  ]))
+  return main(
+    magicProps,
+    div(wrapperProps, [
+      Header(state),
+      div({ class: 'Page', id: 'page' }, page(state)),
+      Footer(state),
+      children,
+    ]),
+  )
 }
 
 export const Link = ({ to, action = actions.go, ...p }, children = []) => {
