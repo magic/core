@@ -1,13 +1,3 @@
----
-@state {
-  "description": [
-    "@magic/core documentation.",
-    "tells you why, how and when to use @magic.",
-    "also provides an overview of all @magic functionality this ecosystem provides."
-  ]
-}
----
-
 # ${ state.title }
 
 ## welcome to the magic docs.
