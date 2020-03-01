@@ -8,11 +8,11 @@
 }
 ---
 
-# ${state.title}
+# ${ state.title }
 
 ## welcome to the magic docs.
 
-${state.description}
+{{ state.description }}
 
 the goal of this document is to give you a rough @magical overview.
 
