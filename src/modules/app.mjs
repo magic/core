@@ -156,12 +156,13 @@ const App = async config => {
       if (is.fn(state)) {
         state = state(config)
       }
+
       state = {
         ...localApp.state,
         ...state,
+        ...page.state,
+        url: page.name,
       }
-
-      state.url = page.name
 
       const shortJsHash = hashes.js.split('-')[1].substr(0, 10)
       const magicJs = {
