@@ -5,7 +5,6 @@ import * as Logo from './Logo.mjs'
 import * as Menu from './Menu.mjs'
 import * as MenuItem from './MenuItem.mjs'
 import * as MenuLink from './MenuLink.mjs'
-import * as Route from './Route.mjs'
 import * as Router from './Router.mjs'
 import * as Seo from './Seo.mjs'
 import * as SkipLink from './SkipLink.mjs'
@@ -38,7 +37,6 @@ export const builtins = {
   MenuItem,
   MenuLink,
   Page,
-  Route,
   Seo,
   SkipLink,
 }
