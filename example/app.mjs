@@ -15,6 +15,12 @@ export const state = config => ({
 
   title: '@magic/core documentation',
 
+  description: [
+    "@magic/core documentation.",
+    "tells you why, how and when to use @magic.",
+    "also provides an overview of all @magic functionality this ecosystem provides.",
+  ],
+
   menu: [
     {
       to: '/concepts/',
