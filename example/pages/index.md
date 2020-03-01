@@ -1,6 +1,5 @@
 ---
 @state {
-  "title": "@magic/core docs",
   "description": [
     "@magic/core documentation.",
     "tells you why, how and when to use @magic.",
@@ -9,9 +8,11 @@
 }
 ---
 
-# @magic/core docs
+# ${state.title}
 
 ## welcome to the magic docs.
+
+${state.description}
 
 the goal of this document is to give you a rough @magical overview.
 
