@@ -65,6 +65,8 @@ export const prepareBlogPost = ({ WEB_ROOT, PAGES, state = {}, modules = [] }) =
 
   page.file = file
 
+  // has to be initialized!
+  page.state = {}
 
   if (!is.empty(transmuted.originalState)) {
     if (is.fn(transmuted.originalState)) {

@@ -54,6 +54,9 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {}, modules = [] }) => as
 
   page.file = file
 
+  // has to be initialized!
+  page.state = {}
+
   if (!is.empty(transmuted.originalState)) {
     if (is.fn(transmuted.originalState)) {
       transmuted.originalState = transmuted.originalState(config)
