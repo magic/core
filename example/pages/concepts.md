@@ -24,20 +24,20 @@ this can lead to inception.
 
 ## module building blocks
 
-<h3 id='state'>state</h2>
+### state
 
 state is a javascript object.
 state can be mutated by actions or effects.
 every rendering step, the state determines the output of the views
 
 
-<h2 id='actions'>actions</h2>
+## actions
 
 actions are an object containing functions
 
 those functions get the state and their props and may return a new full, but changed, state.
 
-<h2 id='effects'>effects</h2>
+## effects
 
 effects are an object containing functions, just like actions.
 
@@ -47,13 +47,13 @@ the big difference?
 
 effects may be impure and trigger sideeffects outside of hyperapp.
 
-<h2 id='views'>views</h2>
+## views
 
 views render the state to html
 whenever an action triggers a change in the state, this then triggers a view change.
 
 
-<h2 id='styles'>styles</h2>
+## styles
 
 every module can have a style object attached to it.
 magic will automagically merge all styles into one global css file.
@@ -62,7 +62,7 @@ in the future, it will also remove unused styles for you.
 style merge order from lowest to highest, last overwrites first:
 module.style < page.style < app.style < theme.style
 
-<h3 id='styles-magic-css'>@magic/css</h3>
+### #styles- @magic/css
 
 internally, magic uses it's own css-in-js library.
 
@@ -70,13 +70,13 @@ to find out more, click the following link:
 [@magic/css](https://magic.github.io/css/)
 
 
-<h2 id='globals'>global</h2>
+## globals
 
 every module can set a global object, containing state and action properties.
 
 every state and/or action name in the global object with a value that equals true gets merged into the main app state/actions.
 
-<h2 id='lambdas'>server lambdas</h2>
+## #lambdas server lambdas
 
 this is the serverside magic.
 you can define functions that get transpiled into serverside lambdas.

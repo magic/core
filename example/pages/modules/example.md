@@ -7,7 +7,7 @@
 
 # ${state.title}
 
-<h2 id='custom-module'>Mod and Component:</h2>
+## custom module
 
 <Mod state></Mod>
 

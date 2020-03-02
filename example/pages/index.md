@@ -2,20 +2,18 @@
 
 ## welcome to the magic docs.
 
-{{ state.description }}
-
 the goal of this document is to give you a rough @magical overview.
 
 <GitBadges>magic/core</GitBadges>
 
-<h2 id='philosophy'>philosophy</h2>
+## philosophy
 
 @magic aims to make it easy to stitch together any kind of webapp.
 by providing simple, well documented and self contained modules,
 @magic makes it possible to create stunningly fast
 webpages with minimal cognitive overhead.
 
-<h2 id='privacy'>privacy</h2>
+## privacy
 
 @magic does not spy.
 
@@ -25,7 +23,7 @@ which means prioritizing your rights over our needs,
 but also means we prioritize the rights of your users over your needs.
 we believe that this is the best compromise.
 
-<h2 id='buzzwords'>why should i use magic?</h2>
+## #buzzwords why should i use magic?
 
 ### features
 * static html pages with opengraph seo.

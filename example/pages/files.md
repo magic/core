@@ -18,14 +18,15 @@ There are multiple magic files and directories.
 * /config.mjs - custom config for your app
 * /assets/Menu.mjs - custom Menu for your app
 
-<h2 id='pages'>/pages</h2>
+## /pages
 
 the pages dir contains the pages of your webapp.
 
 each page has it's own state and actions,
 but also inherits the global state and actions from the app and it's dependencies
 
-<h3 id='pages-dir-structure'>pages directory to url map</h3>
+### #pages-dir-structure pages directory to url map
+
 for the domain mag.ic:
 
 <Pre>
@@ -37,7 +38,7 @@ for the domain mag.ic:
 /pages/dir/name.mjs === http://mag.ic/dir/name/
 </Pre>
 
-<h3 id='pages-example'>example page:</h3>
+# #pages-example example page
 
 <Pre>
 export default {
@@ -59,13 +60,14 @@ export default {
 }
 </Pre>
 
-<h2 id='assets'>/assets</h2>
+## assets
 
 the assets dir contains custom components of your app.
 
 you can import additional @magic-modules here
 
-<h3 id='assets-example'>example /assets/index.mjs</h3>
+### #assets-example example /assets/index.mjs
+
 <Pre>
 export default {
   Custom: () => div('custom component'),
@@ -73,18 +75,17 @@ export default {
 }
 </Pre>
 
-<h2 id='static'>/assets/static</h2>
+## #static /assets/static
 
 the static dir contains all of your static assets.
 every file in this directory gets copied to the public dir.
 image and svg files get minified using imagemin.
 
-
 text and binary files get compressed using the optional
 [node-zopfli-es](https://github.com/jaeh/node-zopfli-es)
 (if it is installed)
 
-<h2 id='themes'>/assets/themes</h2>
+## #themes /assets/themes
 
 the themes directory contains... themes.
 
@@ -92,7 +93,7 @@ a magic theme is an object of css rules, see
 [@magic/css](https://github.com/magic/css/)
 for more examples and documentation.
 
-<h3 id='themes-example'>example theme</h3>
+### #themes-example example theme
 
 <Pre>
 export default {
@@ -102,11 +103,11 @@ export default {
 }
 </Pre>
 
-<h2 id='app'>/assets/app.mjs</h2>
+## #app /assets/app.mjs
 
 the /app.mjs file allows you to set global state, actions, and styles
 
-<h3 id='app-example'>example /app.mjs</h3>
+### #app-example example /app.mjs
 
 <Pre>
 export default {
@@ -124,11 +125,11 @@ export default {
 }
 </Pre>
 
-<h2 id='config'>/config.mjs</h2>
+## #config /config.mjs
 
 the /config.mjs file allows you to set various aspects of your app
 
-<h3 id='config-example'>example /config.mjs</h3>
+### #config-example example /config.mjs
 
 <Pre>
 export default {
