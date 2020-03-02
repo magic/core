@@ -224,7 +224,10 @@ document.title does not error in client if only one page exists.
 * state variables in template strings can be arrays (eg state.description).
   will be join(' ')ed
 
-##### 0.0.52 - unreleased
+##### 0.0.52
+fix: remove admin for now
+
+##### 0.0.53 - unreleased
 ...
 
 
