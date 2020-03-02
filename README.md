@@ -213,7 +213,18 @@ FIX: process would hang if a markdown or html page had no state.
 ##### 0.0.50
 document.title does not error in client if only one page exists.
 
-##### 0.0.51 - unreleased
+##### 0.0.51
+
+##### FULL @magic-module api available from markdown.
+
+* nested state variables in template strings eg {{state.test.deep.var}} now work.
+* replace parse5 with posthtml.
+* custom markdown and custom html renderers added.
+* @magic-modules in markdown and html can have keys that are arrays or objects now.
+* state variables in template strings can be arrays (eg state.description).
+  will be join(' ')ed
+
+##### 0.0.52 - unreleased
 ...
 
 
