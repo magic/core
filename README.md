@@ -227,7 +227,10 @@ document.title does not error in client if only one page exists.
 ##### 0.0.52
 fix: remove admin for now
 
-##### 0.0.53 - unreleased
+##### 0.0.53
+* transmute now returns empty strings instead of empty arrays and objects.
+
+##### 0.0.54 - unreleased
 ...
 
 
