@@ -2,6 +2,8 @@
 
 ## welcome to the magic docs.
 
+${state.description}
+
 the goal of this document is to give you a rough @magical overview.
 
 <GitBadges>magic/core</GitBadges>
