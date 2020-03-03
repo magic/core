@@ -230,7 +230,10 @@ fix: remove admin for now
 ##### 0.0.53
 * transmute now returns empty strings instead of empty arrays and objects.
 
-##### 0.0.54 - unreleased
+##### 0.0.54
+* transmute/render/markdown.codespan: do not show line numbers for code spans.
+
+##### 0.0.55 - unreleased
 ...
 
 
