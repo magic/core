@@ -232,6 +232,7 @@ fix: remove admin for now
 
 ##### 0.0.54
 * transmute/render/markdown.codespan: do not show line numbers for code spans.
+* do not pass modules to transmute.
 
 ##### 0.0.55 - unreleased
 ...
