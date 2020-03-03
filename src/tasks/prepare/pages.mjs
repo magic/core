@@ -1,13 +1,13 @@
 import { preparePage } from './page.mjs'
 
-export const preparePages = async (app, modules = []) => {
+export const preparePages = async app => {
   let WEB_ROOT = config.WEB_ROOT
   if (WEB_ROOT && WEB_ROOT.endsWith('/')) {
     WEB_ROOT = WEB_ROOT.slice(0, -1)
   }
 
   const pages = await Promise.all(
-    app.files.map(preparePage({ WEB_ROOT, PAGES: config.DIR.PAGES, state: app.state, modules })),
+    app.files.map(preparePage({ WEB_ROOT, PAGES: config.DIR.PAGES, state: app.state })),
   )
 
   const has404 = pages.some(p => p.name === `${config.WEB_ROOT}404/`)

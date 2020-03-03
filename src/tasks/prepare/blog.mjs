@@ -24,7 +24,6 @@ export const prepareBlog = async (app, modules = []) => {
         WEB_ROOT,
         PAGES: config.BLOG_DIR,
         state: app.state,
-        modules,
       })
 
       const post = await preparePost(file)

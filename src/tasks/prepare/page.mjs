@@ -6,7 +6,7 @@ import fs from '@magic/fs'
 import log from '@magic/log'
 import transmute from '@magic/transmute'
 
-export const preparePage = ({ WEB_ROOT, PAGES, state = {}, modules = [] }) => async file => {
+export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
   const ext = path.extname(file)
 
   const markdownExtensions = ['.md', '.markdown']
@@ -16,11 +16,11 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {}, modules = [] }) => as
 
   if (markdownExtensions.includes(ext)) {
     const content = await fs.readFile(file, 'utf8')
-    transmuted = transmute.markdown(content, state, modules)
+    transmuted = transmute.markdown(content, state)
     file = file.replace('.md', '.mjs').replace('.markdown', '.mjs')
   } else if (htmlExtensions.includes(ext)) {
     const content = await fs.readFile(file, 'utf8')
-    transmuted = transmute.html(content, state, modules)
+    transmuted = transmute.html(content, state)
     file = file.replace('.html', '.mjs').replace('.htm', '.mjs')
   }
 
