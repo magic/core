@@ -234,7 +234,10 @@ fix: remove admin for now
 * transmute/render/markdown.codespan: do not show line numbers for code spans.
 * do not pass modules to transmute.
 
-##### 0.0.55 - unreleased
+##### 0.0.55
+@magic/transmute now correctly unescapes quot entities.
+
+##### 0.0.56 - unreleased
 ...
 
 
