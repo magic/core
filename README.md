@@ -237,7 +237,10 @@ fix: remove admin for now
 ##### 0.0.55
 @magic/transmute now correctly unescapes quot entities.
 
-##### 0.0.56 - unreleased
+##### 0.0.56
+* Credits module does not error if style variables are not set.
+
+##### 0.0.57 - unreleased
 ...
 
 
