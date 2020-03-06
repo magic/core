@@ -6,15 +6,22 @@ export const prepareModule = app => ([name, component]) => {
 
   const glob = component.global || {}
 
+  let tempState = {}
+
   if (!is.empty(component.state)) {
     Object.entries(component.state).forEach(([key, val]) => {
       if (glob.state && glob.state[key] === true) {
-        app.state[key] = val
+        tempState[key] = val
       } else {
-        app.state[lowerName] = app.state[lowerName] || {}
-        app.state[lowerName][key] = val
+        tempState[lowerName] = app.state[lowerName] || {}
+        tempState[lowerName][key] = val
       }
     })
+  }
+
+  app.state = {
+    ...tempState,
+    ...app.state,
   }
 
   const actionTypes = ['actions', 'effects']
