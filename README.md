@@ -240,7 +240,10 @@ fix: remove admin for now
 ##### 0.0.56
 * Credits module does not error if style variables are not set.
 
-##### 0.0.57 - unreleased
+##### 0.0.57
+tasks/prepare: module.state extends, but does not overwrite app.state when importing modules
+
+##### 0.0.58 - unreleased
 ...
 
 
