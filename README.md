@@ -243,7 +243,11 @@ fix: remove admin for now
 ##### 0.0.57
 tasks/prepare: module.state extends, but does not overwrite app.state when importing modules
 
-##### 0.0.58 - unreleased
+##### 0.0.58
+update @magic/transmute, which now actually replaces all occurrences of html entities in a string,
+not just the first one.
+
+##### 0.0.59 - unreleased
 ...
 
 
