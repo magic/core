@@ -151,6 +151,7 @@ export const reset = (vars = {}) => ({
   // html header tags
   'h1, h2, h3, h4, h5': {
     padding: '1em 0 .2em',
+    clear: 'both',
   },
 
   h1: {
