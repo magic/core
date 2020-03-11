@@ -21,11 +21,17 @@ export const handler = app => (req, res) => {
 
   if (rawUrl.startsWith('/api')) {
     const action = rawUrl.replace('/api/', '').replace('/', '')
-    if (is.function(lambdas[action])) {
-      req.body = ''
-      req.on('data', chunk => (req.body += chunk))
 
-      req.on('end', (...args) => lambdas[action](req, res, ...args))
+    if (is.function(lambdas[action])) {
+      const body = []
+
+      req.on('data', chunk => { body.push(chunk) })
+
+      req.on('end', (...args) => {
+        req.body = Buffer.concat(body).toString()
+
+        return lambdas[action](req, res, ...args)
+      })
       return
     }
   }
