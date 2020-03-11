@@ -248,6 +248,12 @@ update @magic/transmute, which now actually replaces all occurrences of html ent
 not just the first one.
 
 ##### 0.0.59 - unreleased
+* tasks/serve/handler: use array to collect req.body data.
+  strings break unicode characters if the chunks split a character on transit
+...
+
+
+##### 0.0.59 - unreleased
 ...
 
 
