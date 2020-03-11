@@ -250,12 +250,10 @@ not just the first one.
 ##### 0.0.59 - unreleased
 * tasks/serve/handler: use array to collect req.body data.
   strings break unicode characters if the chunks split a character on transit
+* only create sri-hashes for static files in conf.INCLUDED_HASH_EXTENSIONS
+
+##### 0.0.60 - unreleased
 ...
-
-
-##### 0.0.59 - unreleased
-...
-
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
 [npm-url]: https://www.npmjs.com/package/@magic/core
