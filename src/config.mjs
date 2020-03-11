@@ -103,6 +103,8 @@ export const runConfig = async () => {
     }
   }
 
+  conf.INCLUDED_HASH_EXTENSIONS = conf.INCLUDED_HASH_EXTENSIONS || ['.txt', '.xml']
+
   // the following files are zippable
   const ZIPPABLE = [
     'css',

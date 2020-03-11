@@ -14,7 +14,6 @@ export const transpile = async (app, config) => {
     css: createFileHash(config.ENV === 'production' ? css.minified : css.css),
     js: createFileHash(bundle.code),
     pages: {},
-    static: {},
     // serviceWorker: createFileHash(serviceWorker.code),
   }
 
@@ -29,12 +28,18 @@ export const transpile = async (app, config) => {
 
   const ignored = config.IGNORED_STATIC
 
-  Object.entries(app.static)
-    .filter(([name, val]) => !ignored.includes(path.extname(name)) && !ignored.includes(name))
-    .sort(([a], [b]) => (a > b ? 1 : -1))
-    .forEach(([name, val]) => {
-      hashes.static[name] = createFileHash(val)
-    })
+  const included = config.INCLUDED_HASH_EXTENSIONS
+
+  if (included.length) {
+    hashes.static = {}
+
+    Object.entries(app.static)
+      .filter(([name, val]) => included.includes(path.extname(name)) || included.includes(name))
+      .sort(([a], [b]) => (a > b ? 1 : -1))
+      .forEach(([name, val]) => {
+        hashes.static[name] = createFileHash(val)
+      })
+  }
 
   app.static[`/${config.HASH_FILE_NAME}`] = JSON.stringify(hashes, null, 2)
 
