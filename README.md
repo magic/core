@@ -247,10 +247,11 @@ tasks/prepare: module.state extends, but does not overwrite app.state when impor
 update @magic/transmute, which now actually replaces all occurrences of html entities in a string,
 not just the first one.
 
-##### 0.0.59 - unreleased
+##### 0.0.59
 * tasks/serve/handler: use array to collect req.body data.
   strings break unicode characters if the chunks split a character on transit
 * only create sri-hashes for static files in conf.INCLUDED_HASH_EXTENSIONS
+* update dependencies => minimist vuln
 
 ##### 0.0.60 - unreleased
 ...
