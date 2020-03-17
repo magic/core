@@ -83,7 +83,9 @@ export const actions = {
 
     // do nothing if url would not change
     if (url === state.url && hash === state.hash) {
-      // window.location.hash = hash
+      if (hash) {
+        window.location.hash = hash
+      }
       return state
     }
 
