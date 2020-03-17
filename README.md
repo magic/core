@@ -253,7 +253,11 @@ not just the first one.
 * only create sri-hashes for static files in conf.INCLUDED_HASH_EXTENSIONS
 * update dependencies => minimist vuln
 
-##### 0.0.60 - unreleased
+##### 0.0.60
+* modules/Router/Link.onclick: now also resets window.location.hash if the hash did not change.
+* tasks/serve/handler: response data chunks are now always buffers.
+
+##### 0.0.61 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
