@@ -105,7 +105,7 @@ export const actions = {
         const scrollBehavior = html.style.scrollBehavior
 
         // this allows firefox to scroll to top in some edge-case scenarios
-        // example: page with was scrolled manually.
+        // example: page was scrolled manually.
         html.style.scrollBehavior = 'auto'
 
         window.scrollTo({ top: 0, behavior: 'smooth' })
