@@ -26,6 +26,10 @@ export const handler = app => (req, res) => {
       const body = []
 
       req.on('data', chunk => {
+        if (typeof chunk === 'string') {
+          chunk = Buffer.from(chunk)
+        }
+
         body.push(chunk)
       })
 
