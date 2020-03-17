@@ -10,7 +10,7 @@ export const style = vars => ({
   margin: '2em 0 1em',
 
   a: {
-    color: vars.text && vars.text.dark || '#dedede',
+    color: (vars.text && vars.text.dark) || '#dedede',
     textDecoration: 'underline',
 
     '&:hover': {

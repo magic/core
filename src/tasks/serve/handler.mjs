@@ -25,7 +25,9 @@ export const handler = app => (req, res) => {
     if (is.function(lambdas[action])) {
       const body = []
 
-      req.on('data', chunk => { body.push(chunk) })
+      req.on('data', chunk => {
+        body.push(chunk)
+      })
 
       req.on('end', (...args) => {
         req.body = Buffer.concat(body).toString()
