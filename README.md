@@ -257,7 +257,10 @@ not just the first one.
 * modules/Router/Link.onclick: now also resets window.location.hash if the hash did not change.
 * tasks/serve/handler: response data chunks are now always buffers.
 
-##### 0.0.61 - unreleased
+##### 0.0.61
+update babel and @magic/transmute
+
+##### 0.0.62 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
