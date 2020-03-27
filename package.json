@@ -40,7 +40,7 @@
     "@babel/plugin-proposal-export-namespace-from": "7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "7.9.0",
     "@babel/plugin-transform-arrow-functions": "7.8.3",
-    "@babel/plugin-transform-react-jsx": "7.9.1",
+    "@babel/plugin-transform-react-jsx": "7.9.4",
     "@babel/preset-env": "7.9.0",
     "@magic-libraries/prevent-default": "0.0.3",
     "@magic/cases": "0.0.2",
