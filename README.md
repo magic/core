@@ -260,7 +260,10 @@ not just the first one.
 ##### 0.0.61
 update babel and @magic/transmute
 
-##### 0.0.62 - unreleased
+##### 0.0.62
+update babel jsx and @magic/transmute
+
+##### 0.0.63 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
