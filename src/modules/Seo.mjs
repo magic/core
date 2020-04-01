@@ -1,6 +1,12 @@
 export const View = state => {
   const { seo = {} } = state
-  const { author, type = 'website', context = 'http://schema.org', name = state.title } = seo
+  const {
+    author,
+    type = 'website',
+    context = 'http://schema.org',
+    name = state.title,
+    custom = [],
+  } = seo
   const description = Array.isArray(state.description)
     ? state.description.join(' ')
     : state.description
@@ -70,6 +76,10 @@ export const View = state => {
   }
 
   head.push(script(props))
+
+  custom.map(cus => {
+    head.push(script(cus))
+  })
 
   return head
 }
