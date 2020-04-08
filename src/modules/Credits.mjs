@@ -1,7 +1,7 @@
 export const View = () =>
   div({ class: 'Credits' }, [
     'made with a few bits of ',
-    Link({ to: 'https://github.com/magic/core', target: '_blank', rel: 'noopener' }, 'magic'),
+    Link({ to: 'https://magic.github.io/', target: '_blank', rel: 'noopener' }, 'magic'),
   ])
 
 export const style = vars => ({
