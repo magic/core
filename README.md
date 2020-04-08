@@ -263,19 +263,22 @@ update babel and @magic/transmute
 ##### 0.0.62
 update babel jsx and @magic/transmute
 
-##### 0.0.63 
+##### 0.0.63
 modules/Seo now allows arbitrary header fields.
 
-##### 0.0.64 
+##### 0.0.64
 modules/Header passes state.theme to Logo
 
-##### 0.0.65 
+##### 0.0.65
 magic can now serve a log of mime-types. see @magic/mime-types for full list
 
-##### 0.0.66 
+##### 0.0.66
 update dependencies
 
-##### 0.0.67 - unreleased
+##### 0.0.67
+update @magic/transmute
+
+##### 0.0.68 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
