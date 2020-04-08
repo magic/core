@@ -38,14 +38,14 @@
   "dependencies": {
     "@babel/core": "7.9.0",
     "@babel/plugin-proposal-export-namespace-from": "7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "7.9.0",
+    "@babel/plugin-proposal-object-rest-spread": "7.9.5",
     "@babel/plugin-transform-arrow-functions": "7.8.3",
     "@babel/plugin-transform-react-jsx": "7.9.4",
-    "@babel/preset-env": "7.9.0",
+    "@babel/preset-env": "7.9.5",
     "@magic-libraries/prevent-default": "0.0.3",
     "@magic/cases": "0.0.2",
-    "@magic/cli": "0.0.23",
-    "@magic/css": "0.7.10",
+    "@magic/cli": "0.0.24",
+    "@magic/css": "0.7.11",
     "@magic/deep": "0.1.2",
     "@magic/error": "0.0.5",
     "@magic/fs": "0.0.5",
@@ -67,8 +67,8 @@
     "@magic-modules/pre": "0.0.7",
     "@magic-modules/theme-list": "0.0.8",
     "@magic-themes/docs": "0.0.6",
-    "@magic/format": "0.0.7",
-    "@magic/test": "0.1.39"
+    "@magic/format": "0.0.8",
+    "@magic/test": "0.1.41"
   },
   "keywords": [
     "magic",
