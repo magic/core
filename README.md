@@ -281,7 +281,10 @@ update @magic/transmute
 ##### 0.0.68 
 @magic/transmute does not add p tags around Link and Img elements.
 
-##### 0.0.69 - unreleased
+##### 0.0.69
+update dependencies
+
+##### 0.0.70 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
