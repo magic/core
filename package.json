@@ -49,7 +49,7 @@
     "@magic/deep": "0.1.2",
     "@magic/error": "0.0.5",
     "@magic/fs": "0.0.5",
-    "@magic/hyperapp": "2.0.4-alpha.0",
+    "@magic/hyperapp": "2.0.4-alpha.0.0",
     "@magic/log": "0.1.4",
     "@magic/tags": "0.0.3",
     "@magic/transmute": "0.0.24",
