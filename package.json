@@ -36,15 +36,15 @@
     "url": "https://github.com/magic/core/issues"
   },
   "dependencies": {
-    "@babel/core": "7.9.0",
+    "@babel/core": "7.9.6",
     "@babel/plugin-proposal-export-namespace-from": "7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "7.9.5",
+    "@babel/plugin-proposal-object-rest-spread": "7.9.6",
     "@babel/plugin-transform-arrow-functions": "7.8.3",
     "@babel/plugin-transform-react-jsx": "7.9.4",
-    "@babel/preset-env": "7.9.5",
+    "@babel/preset-env": "7.9.6",
     "@magic-libraries/prevent-default": "0.0.3",
     "@magic/cases": "0.0.2",
-    "@magic/cli": "0.0.24",
+    "@magic/cli": "0.0.27",
     "@magic/css": "0.7.11",
     "@magic/deep": "0.1.2",
     "@magic/error": "0.0.5",
@@ -52,7 +52,7 @@
     "@magic/hyperapp": "2.0.4-alpha.0.0",
     "@magic/log": "0.1.4",
     "@magic/tags": "0.0.3",
-    "@magic/transmute": "0.0.24",
+    "@magic/transmute": "0.0.25",
     "@magic/types": "0.1.11",
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.1",
@@ -67,8 +67,8 @@
     "@magic-modules/pre": "0.0.7",
     "@magic-modules/theme-list": "0.0.8",
     "@magic-themes/docs": "0.0.6",
-    "@magic/format": "0.0.9",
-    "@magic/test": "0.1.43"
+    "@magic/format": "0.0.10",
+    "@magic/test": "0.1.44"
   },
   "keywords": [
     "magic",
