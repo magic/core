@@ -284,7 +284,10 @@ update @magic/transmute
 ##### 0.0.69
 update dependencies
 
-##### 0.0.70 - unreleased
+##### 0.0.70 
+update dependencies
+
+##### 0.0.71 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
