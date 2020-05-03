@@ -278,18 +278,18 @@ update dependencies
 ##### 0.0.67
 update @magic/transmute
 
-##### 0.0.68 
+##### 0.0.68
 @magic/transmute does not add p tags around Link and Img elements.
 
 ##### 0.0.69
 update dependencies
 
-##### 0.0.70 
+##### 0.0.70
 update dependencies
 
 ##### 0.0.71
 * update dependencies
-
+* sri-hashes.json is a flat object: key = path, value = hash
 
 ##### 0.0.72 - unreleased
 ...
