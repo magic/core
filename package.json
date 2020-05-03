@@ -45,7 +45,7 @@
     "@magic-libraries/prevent-default": "0.0.3",
     "@magic/cases": "0.0.2",
     "@magic/cli": "0.0.27",
-    "@magic/css": "0.7.11",
+    "@magic/css": "0.7.12",
     "@magic/deep": "0.1.2",
     "@magic/error": "0.0.5",
     "@magic/fs": "0.0.5",
@@ -61,11 +61,11 @@
   "devDependencies": {
     "@magic-modules/gdpr": "0.0.15",
     "@magic-modules/git-badges": "0.0.9",
-    "@magic-modules/library-list": "0.0.13",
+    "@magic-modules/library-list": "0.0.14",
     "@magic-modules/light-switch": "0.0.5",
-    "@magic-modules/module-list": "0.0.13",
+    "@magic-modules/module-list": "0.0.14",
     "@magic-modules/pre": "0.0.7",
-    "@magic-modules/theme-list": "0.0.8",
+    "@magic-modules/theme-list": "0.0.9",
     "@magic-themes/docs": "0.0.6",
     "@magic/format": "0.0.10",
     "@magic/test": "0.1.45"
