@@ -39,7 +39,7 @@ export const write = async app => {
   )
 
   pages.forEach(async page => {
-    const oldHash = config.HASHES.pages[page.name]
+    const oldHash = config.HASHES[page.name]
     if (oldHash && oldHash === page.hash) {
       return
     }

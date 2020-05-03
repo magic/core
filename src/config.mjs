@@ -94,10 +94,7 @@ export const runConfig = async () => {
     conf.HASHES = JSON.parse(content)
   } catch (e) {
     if (e.code === 'ENOENT') {
-      conf.HASHES = {
-        pages: {},
-        static: {},
-      }
+      conf.HASHES = {}
     } else {
       throw error(e)
     }

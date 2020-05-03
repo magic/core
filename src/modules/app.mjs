@@ -164,14 +164,14 @@ const App = async config => {
         url: page.name,
       }
 
-      const shortJsHash = hashes.js.split('-')[1].substr(0, 10)
+      const shortJsHash = hashes['/magic.js'].split('-')[1].substr(0, 10)
       const magicJs = {
         src: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.js?${shortJsHash}`,
         integrity: hashes.js,
         crossorigin: 'anonymous',
       }
 
-      const shortCssHash = hashes.css.split('-')[1].substr(0, 10)
+      const shortCssHash = hashes['/magic.css'].split('-')[1].substr(0, 10)
       const magicCss = {
         rel: 'stylesheet',
         href: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.css?${shortCssHash}`,

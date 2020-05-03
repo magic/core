@@ -11,10 +11,9 @@ export const transpile = async (app, config) => {
   const css = await style(app.style)
 
   const hashes = {
-    css: createFileHash(config.ENV === 'production' ? css.minified : css.css),
-    js: createFileHash(bundle.code),
-    pages: {},
-    // serviceWorker: createFileHash(serviceWorker.code),
+    '/magic.css': createFileHash(config.ENV === 'production' ? css.minified : css.css),
+    '/magic.js': createFileHash(bundle.code),
+    // 'worker.js': createFileHash(serviceWorker.code),
   }
 
   const pages = html(app, hashes)
@@ -23,7 +22,7 @@ export const transpile = async (app, config) => {
     .sort((a, b) => (a.name < b.name ? -1 : 1))
     .forEach(page => {
       page.hash = createFileHash(page.rendered)
-      hashes.pages[page.name] = page.hash
+      hashes[page.name] = page.hash
     })
 
   const ignored = config.IGNORED_STATIC
@@ -31,13 +30,11 @@ export const transpile = async (app, config) => {
   const included = config.INCLUDED_HASH_EXTENSIONS
 
   if (included.length) {
-    hashes.static = {}
-
     Object.entries(app.static)
       .filter(([name, val]) => included.includes(path.extname(name)) || included.includes(name))
       .sort(([a], [b]) => (a > b ? 1 : -1))
       .forEach(([name, val]) => {
-        hashes.static[name] = createFileHash(val)
+        hashes[name] = createFileHash(val)
       })
   }
 
