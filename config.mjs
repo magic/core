@@ -16,7 +16,5 @@ export default {
   // see http://www.gnuterrypratchett.com/
   FOR_DEATH_CAN_NOT_HAVE_HIM: true,
 
-  KEEP_CLIENT: false,
-
   HOIST: ['Gdpr', 'LightSwitch'],
 }
