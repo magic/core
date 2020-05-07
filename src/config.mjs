@@ -1,6 +1,7 @@
 import child_process from 'child_process'
 import path from 'path'
 
+import cases from '@magic/cases'
 import deep from '@magic/deep'
 import error from '@magic/error'
 import fs from '@magic/fs'
@@ -11,7 +12,7 @@ import colors from './themes/colors.mjs'
 
 import { replacePathSepForImport } from './lib/index.mjs'
 
-export const runConfig = async () => {
+export const runConfig = async args => {
   let conf = {}
   const confPath = replacePathSepForImport(path.join(process.cwd(), 'config.mjs'), path.sep)
 
@@ -242,6 +243,11 @@ export const runConfig = async () => {
     KEEP_COMMENTS: conf.IS_DEV,
     ...conf.BABEL,
   }
+
+  Object.entries(args).map(([k,v]) => {
+    const snaked = cases.snakeCaps(k)
+    conf[snaked] = v
+  })
 
   return conf
 }

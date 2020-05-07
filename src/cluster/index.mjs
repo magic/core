@@ -10,7 +10,7 @@ export const runCluster = async options => {
   const { args, commands } = options
 
   // get the config
-  const config = await runConfig()
+  const config = await runConfig(args)
 
   if (!global.CHECK_PROPS) {
     const { CHECK_PROPS } = await import('../lib/CHECK_PROPS.mjs')
