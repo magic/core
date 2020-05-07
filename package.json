@@ -7,7 +7,7 @@
   "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
   "module": "src/index.mjs",
   "engines": {
-    "node": ">=13.5.0"
+    "node": ">=14.2.0"
   },
   "engineString": true,
   "scripts": {
