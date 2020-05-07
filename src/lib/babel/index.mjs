@@ -43,8 +43,7 @@ export const getBabelConf = (app, config) => {
   }
 
   if (MINIFY) {
-    const { argv } = process
-    const minify = !argv.includes('--no-minify')
+    const minify = !config.NO_MINIFY
     if (minify) {
       presets.push([
         'minify',
@@ -53,8 +52,8 @@ export const getBabelConf = (app, config) => {
           mangle: {
             // topLevel: true,
           },
-          removeConsole: !argv.includes('--keep-console'),
-          removeDebugger: !argv.includes('--keep-debugger'),
+          removeConsole: !config.KEEP_CONSOLE,
+          removeDebugger: !config.KEEP_DEBUGGER,
         },
       ])
     }
