@@ -1,4 +1,5 @@
 import is from '@magic/types'
+import cases from '@magic/cases'
 
 const isModuleTag = (name, moduleNames) => moduleNames.includes(name)
 
@@ -14,7 +15,6 @@ const handleLink = (path, config) => {
   const { node } = path
   const href = node.value.value
 
-  // console.log('href', href)
   if (!href.startsWith(config.WEB_ROOT)) {
     const isLocal = href.startsWith('/') && !href.startsWith('//')
     const isHash = href.startsWith('#') || href.startsWith('/#')
@@ -48,13 +48,20 @@ const findUsedSpells = (t, app, config) => path => {
       let name
       if (t.isMemberExpression(callee)) {
         name = object.name
+
+        if (object.name === 'lib') {
+          name = callee.property.name
+        }
       } else if (key) {
         name = key.name
       }
 
-      if (Object.keys(app.lib).includes(name)) {
-        if (is.string(app.lib[name])) {
-          used.lib[name] = {}
+      if (name) {
+        const kebabName = cases.kebab(name)
+        if (Object.keys(app.lib).includes(kebabName)) {
+          if (is.string(app.lib[kebabName])) {
+            used.lib[name] = {}
+          }
         }
       }
     } else {
@@ -180,6 +187,7 @@ const removeUnused = (t, app) => path => {
         // remove unused lib imports
         // console.log(name, path.node, path.node.init.properties)
       }
+
       if (name === 'actions') {
         // remove unused actions
         path.node.init.properties.forEach(prop => {
