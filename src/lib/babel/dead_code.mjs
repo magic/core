@@ -192,7 +192,13 @@ const removeUnused = (t, app) => path => {
     } else {
       if (name === 'lib') {
         // remove unused lib imports
-        // console.log(name, path.node, path.node.init.properties)
+        // if (path.node.init && path.node.init.properties) {
+        //   const { properties } = path.node.init
+        //   properties.forEach(prop => {
+        //     console.log(prop.key.name, Object.keys(used.lib).includes(prop.key.name))
+        //   })
+        //   console.log(used.lib);
+        // }
       }
 
       if (name === 'actions') {
