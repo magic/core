@@ -291,7 +291,13 @@ update dependencies
 * update dependencies
 * sri-hashes.json is a flat object: key = path, value = hash
 
-##### 0.0.72 - unreleased
+##### 0.0.72
+* bump required node version
+* update dependencies
+* cli help expanded
+* cli flags get passed to config
+
+##### 0.0.73 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
