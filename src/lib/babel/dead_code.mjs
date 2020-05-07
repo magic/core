@@ -107,6 +107,7 @@ const findUsedSpells = (t, app, config) => path => {
           } else if (t.isIdentifier(action.object)) {
             const { name: objName } = action.object
             const { name: propName } = action.property
+
             if (objName !== type) {
               used[type][objName] = used[type][objName] || {}
               used[type][objName][propName] = {}
@@ -129,8 +130,14 @@ const findUsedSpells = (t, app, config) => path => {
           } else if (t.isIdentifier(helper.object)) {
             const { name: objName } = helper.object
             const { name: propName } = helper.property
-            used[type][objName] = used[type][objName] || {}
-            used[type][objName][propName] = {}
+
+            if (objName !== type) {
+              used[type][objName] = used[type][objName] || {}
+              used[type][objName][propName] = {}
+            } else {
+              used[type] = used[type] || {}
+              used[type][propName] = {}
+            }
           }
         }
       }
