@@ -9,6 +9,8 @@ export const stringifyObject = (obj, indent = '') => {
     obj = `[${obj.map(o => stringifyObject(o, indent)).join(',')}]`
   } else if (is.fn(obj)) {
     obj = obj.toString()
+  } else if (is.regex(obj)) {
+    obj = obj.toString()
   } else if (is.obj(obj)) {
     let str = Object.entries(obj)
       .sort(([a], [b]) => (a > b ? 1 : -1))
