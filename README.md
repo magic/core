@@ -296,6 +296,7 @@ update dependencies
 * update dependencies
 * cli help expanded
 * cli flags get passed to config
+* better lib handling
 
 ##### 0.0.73 - unreleased
 ...
