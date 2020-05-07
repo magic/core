@@ -138,7 +138,7 @@ export const prepare = async (app, config) => {
   // app.serviceWorker = await prepareServiceWorker(app, config)
 
   const tmpExists = await fs.exists(config.TMP_DIR)
-  if (tmpExists) {
+  if (tmpExists && !config.KEEP_CLIENT) {
     await fs.rmrf(config.TMP_DIR)
   }
 
