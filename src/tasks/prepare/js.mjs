@@ -137,13 +137,13 @@ return { ${imports} }
 
   let libString = ''
   if (!is.empty(magic.lib)) {
-    libString = 'const lib = {'
     const libPromises = Object.entries(magic.lib)
       .sort(([a], [b]) => (a > b ? 1 : -1))
       .map(async ([name, lib]) => {
         if (lib.startsWith('@')) {
           lib = path.join(process.cwd(), 'node_modules', lib)
         }
+
         if (!lib.endsWith('index.mjs')) {
           lib = path.join(lib, 'src', 'index.mjs')
         }
@@ -153,13 +153,23 @@ return { ${imports} }
           name = cases.camel(name)
         }
 
-        return `  ${name}: (() => {${contents
-          .replace(/export default/g, `return`)
-          .replace(/export /g, '')}})(),`
+        const { default: imported } = await import(lib)
+
+        if (is.function(imported)) {
+          return ` ${name}: ${imported.toString()},`
+        } else if (is.array(imported)) {
+          return ` ${name}: ${JSON.stringify(imported)},`
+        } else if (is.objectNative(imported)) {
+          return ` ${name}: ${stringifyObject(imported)},`
+        } else {
+          log.error('UNKNOWN_LIB_TYPE', `app.lib[${name}] has to be a function, array or object`)
+        }
       })
 
     const libArray = await Promise.all(libPromises)
-    libString += libArray.join('\n')
+
+    libString = 'const lib = {\n'
+    libString += libArray.filter(a => a).join('\n')
     libString += '\n}'
   }
 
