@@ -298,7 +298,10 @@ update dependencies
 * cli flags get passed to config
 * better lib handling
 
-##### 0.0.73 - unreleased
+##### 0.0.73 
+update dependencies.
+
+##### 0.0.74 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
