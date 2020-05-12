@@ -244,7 +244,7 @@ export const runConfig = async (args = {}) => {
     ...conf.BABEL,
   }
 
-  Object.entries(args).map(([k,v]) => {
+  Object.entries(args).map(([k, v]) => {
     const snaked = cases.snakeCaps(k)
     conf[snaked] = v
   })
