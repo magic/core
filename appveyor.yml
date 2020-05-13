@@ -11,7 +11,7 @@ matrix:
 
 install:
   # Build
-  - ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild 13.5.0) $env:platform
+  - ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild 14.2.0) $env:platform
   - npm install
 
 test_script:

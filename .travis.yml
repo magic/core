@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "13.5.0"
+  - "14.2.0"
 
 cache: npm
 
@@ -11,7 +11,7 @@ os:
 
 env:
   matrix:
-    - NODE_VERSION="13"
+    - NODE_VERSION="14.2.0"
 
 matrix:
   fast_finish: true
