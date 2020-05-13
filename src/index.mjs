@@ -4,6 +4,9 @@ import { build, master, watch } from './cluster/index.mjs'
 
 import { runConfig } from './config.mjs'
 
+export colors from './themes/colors.mjs'
+export { reset } from './themes/reset.css.mjs'
+
 export const runCluster = async options => {
   const { args, commands } = options
 
