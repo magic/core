@@ -298,10 +298,14 @@ update dependencies
 * cli flags get passed to config
 * better lib handling
 
-##### 0.0.73 
+##### 0.0.73
 update dependencies.
 
-##### 0.0.74 - unreleased
+##### 0.0.74
+* src/index: export runCluster
+* pkg: add type: module, add main field
+
+##### 0.0.75 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
