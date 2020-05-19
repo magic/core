@@ -1,4 +1,4 @@
-import { default as render } from 'hyperapp-render'
+import render from 'hyperapp-render'
 
 import deep from '@magic/deep'
 import log from '@magic/log'
@@ -13,7 +13,7 @@ const maybePrependWebRoot = s => {
   return config.WEB_ROOT.slice(0, -1) + s
 }
 
-export default (app, hashes) => {
+export default app => {
   app.state.root = config.WEB_ROOT
 
   return app.pages.map(page => {
@@ -21,7 +21,7 @@ export default (app, hashes) => {
       app.state.url = page.name
       const state = deep.merge(app.state, page.state)
 
-      const view = app.View(page, hashes)
+      const view = app.View(page, app.hashes)
 
       let rendered = render.renderToString(view(state))
 
