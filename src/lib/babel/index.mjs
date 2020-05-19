@@ -43,20 +43,17 @@ export const getBabelConf = (app, config) => {
   }
 
   if (MINIFY) {
-    const minify = !config.NO_MINIFY
-    if (minify) {
-      presets.push([
-        'minify',
-        {
-          // this seems to sometimes break builds. "too much recursion".
-          mangle: {
-            // topLevel: true,
-          },
-          removeConsole: !config.KEEP_CONSOLE,
-          removeDebugger: !config.KEEP_DEBUGGER,
+    presets.push([
+      'minify',
+      {
+        // this seems to sometimes break builds. "too much recursion".
+        mangle: {
+          // topLevel: true,
         },
-      ])
-    }
+        removeConsole: !config.KEEP_CONSOLE,
+        removeDebugger: !config.KEEP_DEBUGGER,
+      },
+    ])
   }
 
   return {

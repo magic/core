@@ -240,7 +240,7 @@ export const runConfig = async (args = {}) => {
   conf.BABEL = {
     DEBUG: false,
     REMOVE_CHECK_PROPS: conf.IS_PROD,
-    MINIFY: conf.IS_PROD,
+    MINIFY: conf.IS_PROD && !is.defined(args.noMinify),
     USE_PRESETS: true,
     KEEP_COMMENTS: conf.IS_DEV,
     ...conf.BABEL,
