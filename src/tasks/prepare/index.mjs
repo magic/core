@@ -128,12 +128,11 @@ export const prepare = async (app, config) => {
   app.client = await prepareJs(app)
 
   // extract lambdas and prepare them
-  app.lambdas = {}
-  Object.entries(modules)
+  const lambdaEntries = Object.entries(modules)
     .filter(([_, dep]) => dep.server)
-    .forEach(([name, dep]) => {
-      app.lambdas[name.toLowerCase()] = dep.server
-    })
+    .map(([name, dep]) => [name.toLowerCase(), dep.server])
+
+  app.lambdas = Object.fromEntries(lambdaEntries)
 
   // app.serviceWorker = await prepareServiceWorker(app, config)
 
