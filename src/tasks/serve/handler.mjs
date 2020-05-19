@@ -42,10 +42,7 @@ export const handler = app => (req, res) => {
     }
   }
 
-  const pages = {}
-  app.pages.forEach(page => {
-    pages[page.name] = page.rendered
-  })
+  const pages = Object.fromEntries(app.pages.map(page => [page.name, page.rendered]))
 
   const style = IS_PROD ? css.minified : css.css
 
