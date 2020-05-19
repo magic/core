@@ -5,19 +5,18 @@ import log from '@magic/log'
 
 import handler from './handler.mjs'
 
-// return a thenable async/await struct
-export const listen = async server =>
-  await {
-    then(r, f) {
-      server.on('listening', r)
-      server.on('error', f)
-    },
-  }
-
 export const startServer = async (server, options) => {
   try {
     server.listen(options)
-    await listen(server)
+
+    // await a thenable async/await struct
+    // this "promise" waits for the server either erroring or starting to listen
+    await {
+      then(r, f) {
+        server.on('listening', r)
+        server.on('error', f)
+      },
+    }
   } catch (e) {
     if (e.code === 'EADDRINUSE') {
       options.port += 1
