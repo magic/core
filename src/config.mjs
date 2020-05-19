@@ -124,6 +124,8 @@ export const runConfig = async (args = {}) => {
     'ico',
   ]
 
+  conf.THEME = conf.THEME || []
+
   // those are image formats.
   const IMAGES = ['jpg', 'jpeg', 'png', 'svg', 'gif']
 
