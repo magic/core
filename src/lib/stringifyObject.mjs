@@ -1,7 +1,11 @@
 import is from '@magic/types'
 
 export const stringifyObject = (obj, indent = '') => {
-  indent = indent + '  '
+  if (indent === false) {
+    indent = ''
+  } else {
+    indent += '  '
+  }
 
   if (is.string(obj)) {
     obj = `'${obj}'`
@@ -12,7 +16,7 @@ export const stringifyObject = (obj, indent = '') => {
   } else if (is.regex(obj)) {
     obj = obj.toString()
   } else if (is.obj(obj)) {
-    let str = Object.entries(obj)
+    const str = Object.entries(obj)
       .sort(([a], [b]) => (a > b ? 1 : -1))
       .map(([k, o]) => `${indent}'${k}': ${stringifyObject(o, indent)}`)
       .join(',\n')
