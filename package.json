@@ -19,7 +19,7 @@
     "prod": "NODE_ENV=production src/bin.mjs build serve --watch src",
     "clean": "src/bin.mjs clean",
     "dev": "src/bin.mjs dev --watch src",
-    "format": "f -w --exclude docs",
+    "format": "f -w --exclude docs api",
     "test": "t",
     "calls": "calls"
   },
