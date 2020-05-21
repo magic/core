@@ -38,6 +38,7 @@ export const handler = app => (req, res) => {
 
         return lambdas[action](req, res, ...args)
       })
+
       return
     }
   }
