@@ -263,15 +263,18 @@ const findThemeModules = async (modules = {}) => {
       THEME.map(async theme_name => {
         // order is meaningful.
         const themeLocations = [
-          // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
+          // first look if we have this theme preinstalled in @magic,
+          // if so, merge it into the styles
           path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs'),
           // see if the theme is a full name of a js module in node_modules,
           // eg: @org/theme-name or theme-name
           theme_name,
           // see if this is a @magic-themes theme
           `@magic-themes/${theme_name}`,
-          // see if it is installed locally.
+          // see if it is installed locally,
+          // either in a subdirectory or as a single mjs file
           path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
+          path.join(config.DIR.THEMES, theme_name + '.mjs'),
         ]
 
         const modules = {}
