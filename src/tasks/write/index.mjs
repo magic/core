@@ -7,8 +7,9 @@ import {
   // getFileType,
   // minifyImages,
   writeFile,
-  writeServer,
 } from '../../lib/index.mjs'
+
+import { writeServer } from './writeServer.mjs'
 
 export const write = async app => {
   const { IS_PROD } = config
