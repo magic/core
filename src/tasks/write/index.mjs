@@ -39,7 +39,7 @@ export const write = async app => {
       }),
   )
 
-  pages.forEach(async page => {
+  const pagePromises = pages.map(async page => {
     const oldHash = config.HASHES[page.name]
     if (oldHash && oldHash === page.hash) {
       return
@@ -52,6 +52,8 @@ export const write = async app => {
 
     await fs.writeFile(pagePath, page.rendered)
   })
+
+  await Promise.all(pagePromises)
 
   const jsFile = path.join(config.DIR.PUBLIC, `${config.CLIENT_LIB_NAME}.js`)
   await fs.writeFile(jsFile, client)
