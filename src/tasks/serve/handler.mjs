@@ -20,23 +20,33 @@ export const handler = app => (req, res) => {
   const rawUrl = url.pathname.replace(config.WEB_ROOT, '/')
 
   if (rawUrl.startsWith('/api')) {
-    const action = rawUrl.replace('/api/', '').replace('/', '')
+    const [module, action] = rawUrl
+      .replace('/api/', '')
+      .split('/')
+      .filter(a => a)
 
-    if (is.function(lambdas[action])) {
-      const body = []
+    let lambda = lambdas[module]
+    if (is.objectNative(lambda) && action) {
+      lambda = lambda[action]
+    }
+
+    if (is.function(lambda)) {
+      req.body = []
 
       req.on('data', chunk => {
         if (typeof chunk === 'string') {
           chunk = Buffer.from(chunk)
         }
 
-        body.push(chunk)
+        req.body.push(chunk)
       })
 
       req.on('end', (...args) => {
-        req.body = Buffer.concat(body).toString()
+        req.body = Buffer.concat(req.body).toString()
 
-        return lambdas[action](req, res, ...args)
+        const { code, body, type = 'text/plain' } = lambda(req, res, ...args)
+        res.writeHead(code, { 'Content-Type': type })
+        res.end(body)
       })
 
       return
