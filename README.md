@@ -305,7 +305,12 @@ update dependencies.
 * src/index: export runCluster
 * pkg: add type: module, add main field
 
-##### 0.0.75 - unreleased
+##### 0.0.75
+* magic build --no-minify flag now works
+* themes/theme_name.mjs is now a valid theme path
+* apis can be served by @grundstein/gas and created on page, app and module level
+
+##### 0.0.76 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
