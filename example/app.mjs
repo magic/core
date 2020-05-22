@@ -126,3 +126,14 @@ export const state = config => ({
   logo: '/logo.png',
   logotext: '@magic',
 })
+
+// export const server = {
+//   lambda1: () => ({
+//     code: 200,
+//     body: 'Ok, lambda1',
+//   }),
+//   lambda2: () => ({
+//     code: 200,
+//     body: 'Ok, lambda2',
+//   }),
+// }
