@@ -23,6 +23,7 @@ export const prepare = async (app, config) => {
     subscriptions: [],
     lib: {},
     init: [],
+    server: {},
   }
 
   app = { ...defaultApp, ...app }
@@ -128,11 +129,19 @@ export const prepare = async (app, config) => {
   app.client = await prepareJs(app)
 
   // extract lambdas and prepare them
-  const lambdaEntries = Object.entries(modules)
+  const moduleLambdas = Object.entries(modules)
     .filter(([_, dep]) => dep.server)
     .map(([name, dep]) => [name.toLowerCase(), dep.server])
 
-  app.lambdas = Object.fromEntries(lambdaEntries)
+  const pageLambdas = app.pages
+    .filter(page => page.server)
+    .map(page => [page.name.toLowerCase(), page.server])
+
+  app.lambdas = Object.fromEntries([
+    ...moduleLambdas,
+    ...pageLambdas,
+    ...Object.entries(app.server),
+  ])
 
   // app.serviceWorker = await prepareServiceWorker(app, config)
 
