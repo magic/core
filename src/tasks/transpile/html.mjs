@@ -1,4 +1,4 @@
-import render from 'hyperapp-render'
+import * as render from 'hyperapp-render'
 
 import deep from '@magic/deep'
 import log from '@magic/log'
