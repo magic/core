@@ -315,7 +315,8 @@ update dependencies.
 * hyperapp-render is a proper module now
 
 ##### 0.0.77 
-add config.API_DIR. load all files in that dir and use their default exports as lambdas.
+* add config.API_DIR. load all files in that dir and use their default exports as lambdas.
+* update babel build task
 
 ##### 0.0.78 - unreleased
 ...
