@@ -310,7 +310,11 @@ update dependencies.
 * themes/theme_name.mjs is now a valid theme path
 * apis can be served by @grundstein/gas and created on page, app and module level
 
-##### 0.0.76 - unreleased
+##### 0.0.76
+* update dependencies 
+* hyperapp-render is a proper module now
+
+##### 0.0.77 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
