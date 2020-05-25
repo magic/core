@@ -314,7 +314,10 @@ update dependencies.
 * update dependencies 
 * hyperapp-render is a proper module now
 
-##### 0.0.77 - unreleased
+##### 0.0.77 
+add config.API_DIR. load all files in that dir and use their default exports as lambdas.
+
+##### 0.0.78 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
