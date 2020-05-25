@@ -15,23 +15,19 @@ export const getBabelConf = (app, config) => {
       '@babel/preset-env',
       {
         targets: {
-          browsers: 'last 2 versions',
+          firefox: 75,
+          chrome: 60,
+          edge: 80,
+          safari: 12,
         },
         forceAllTransforms: true,
         ignoreBrowserslistConfig: true,
-        // modules: false,
         debug: BABEL_DEBUG,
       },
     ],
   ]
 
-  const plugins = [
-    ['@babel/plugin-transform-react-jsx', { pragma: 'h' }],
-    magic(app, config),
-    '@babel/plugin-transform-arrow-functions',
-    '@babel/plugin-proposal-object-rest-spread',
-    '@babel/plugin-proposal-export-namespace-from',
-  ]
+  const plugins = [['@babel/plugin-transform-react-jsx', { pragma: 'h' }], magic(app, config)]
 
   if (REMOVE_CHECK_PROPS) {
     plugins.push([
@@ -46,9 +42,10 @@ export const getBabelConf = (app, config) => {
     presets.push([
       'minify',
       {
-        // this seems to sometimes break builds. "too much recursion".
+        // this might sometimes break pages in production.
+        // "too much recursion".
         mangle: {
-          // topLevel: true,
+          topLevel: true,
         },
         removeConsole: !config.KEEP_CONSOLE,
         removeDebugger: !config.KEEP_DEBUGGER,
