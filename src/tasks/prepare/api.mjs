@@ -17,13 +17,15 @@ export const prepareApi = async app => {
     const apiDir = path.join(config.ROOT, config.API_DIR)
     const apiLambdaFiles = await fs.getFiles(apiDir)
 
-    apiLambdas = await Promise.all(apiLambdaFiles.map(async file => {
-      if (file.endsWith('.mjs')) {
-        const { default: lambda } = await import(file)
-        const name = path.basename(file, '.mjs')
-        return [name, lambda]
-      }
-    }))
+    apiLambdas = await Promise.all(
+      apiLambdaFiles.map(async file => {
+        if (file.endsWith('.mjs')) {
+          const { default: lambda } = await import(file)
+          const name = path.basename(file, '.mjs')
+          return [name, lambda]
+        }
+      }),
+    )
   }
 
   const api = Object.fromEntries([
