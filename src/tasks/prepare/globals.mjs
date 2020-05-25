@@ -384,6 +384,7 @@ export const prepareGlobals = async (app, config) => {
     const views = Object.entries(mod).filter(
       ([k]) => k !== name && is.case.upper(k[0]) && k !== 'View',
     )
+
     views.forEach(([k, v]) => {
       if (is.function(v)) {
         global[name][k] = v
