@@ -318,7 +318,10 @@ update dependencies.
 * add config.API_DIR. load all files in that dir and use their default exports as lambdas.
 * update babel build task
 
-##### 0.0.78 - unreleased
+##### 0.0.78
+update babel
+
+##### 0.0.79 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
