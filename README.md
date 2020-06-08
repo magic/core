@@ -311,17 +311,20 @@ update dependencies.
 * apis can be served by @grundstein/gas and created on page, app and module level
 
 ##### 0.0.76
-* update dependencies 
+* update dependencies
 * hyperapp-render is a proper module now
 
-##### 0.0.77 
+##### 0.0.77
 * add config.API_DIR. load all files in that dir and use their default exports as lambdas.
 * update babel build task
 
 ##### 0.0.78
 update babel
 
-##### 0.0.79 - unreleased
+##### 0.0.79
+FIX: sri-hashes for magic.js and magic.css get added to html again.
+
+##### 0.0.80 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
