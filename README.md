@@ -322,7 +322,8 @@ update dependencies.
 update babel
 
 ##### 0.0.79
-FIX: sri-hashes for magic.js and magic.css get added to html again.
+* FIX: sri-hashes for magic.js and magic.css get added to html again.
+* update dependencies
 
 ##### 0.0.80 - unreleased
 ...
