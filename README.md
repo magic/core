@@ -325,7 +325,10 @@ update babel
 * FIX: sri-hashes for magic.js and magic.css get added to html again.
 * update dependencies
 
-##### 0.0.80 - unreleased
+##### 0.0.80
+update @magic/css
+
+##### 0.0.81 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
