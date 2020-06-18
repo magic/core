@@ -1,0 +1,7 @@
+{
+    "plugins": [
+        ["../../../../index.js", {
+            "export": ["stripA", "stripB", "stripC", "stripD", "stripE", "stripF"]
+        }]
+    ]
+}

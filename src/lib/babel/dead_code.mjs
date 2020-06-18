@@ -3,14 +3,6 @@ import cases from '@magic/cases'
 
 const isModuleTag = (name, moduleNames) => moduleNames.includes(name)
 
-const used = {
-  actions: {},
-  effects: {},
-  helpers: {},
-  lib: {},
-  tags: new Set(),
-}
-
 const handleLink = (path, config) => {
   const { node } = path
   const href = node.value.value
@@ -19,10 +11,6 @@ const handleLink = (path, config) => {
     const isLocal = href.startsWith('/') && !href.startsWith('//')
     const isHash = href.startsWith('#') || href.startsWith('/#')
     const isExtension = href.startsWith('-')
-
-    // if (isExtension) {
-    //   console.log('is extension', href, path)
-    // }
 
     if (isLocal || isHash) {
       node.value.value = `${config.WEB_ROOT}${href}`.replace(/\/\//g, '/')
@@ -36,20 +24,22 @@ const findUsedSpells = (t, app, config) => path => {
   const moduleNames = Object.keys(app.modules)
 
   if (t.isCallExpression(path.node)) {
+    // is a module
     if (t.isIdentifier(path.node.callee)) {
       const { name } = path.node.callee
       const isModule = isModuleTag(name, moduleNames)
       if (isModule) {
-        used.tags.add(name)
+        app.used.tags.add(name)
       }
+      // is a lib function
     } else if (t.isMemberExpression(path.node.callee)) {
       const { callee } = path.node
       const { key, object } = callee
-      let name
+      let name = false
       if (t.isMemberExpression(callee)) {
         name = object.name
 
-        if (object.name === 'lib') {
+        if (name === 'lib') {
           name = callee.property.name
         }
       } else if (key) {
@@ -60,7 +50,7 @@ const findUsedSpells = (t, app, config) => path => {
         const kebabName = cases.kebab(name)
         if (Object.keys(app.lib).includes(kebabName)) {
           if (is.string(app.lib[kebabName])) {
-            used.lib[name] = {}
+            app.used.lib[name] = {}
           }
         }
       }
@@ -69,6 +59,9 @@ const findUsedSpells = (t, app, config) => path => {
     }
   }
 
+  // let's look for src and logo fields
+  // to make sure images and scripts are linked to correctly,
+  // according to config.WEB_ROOT
   if (t.isObjectProperty(path.node)) {
     if (path.node.key) {
       const validKeys = ['src', 'logo'] //, 'href', 'to']
@@ -89,31 +82,33 @@ const findUsedSpells = (t, app, config) => path => {
   } else if (t.isArrayExpression(path.node)) {
     const [action, helper] = path.node.elements
 
+    // find actions, effects and subscriptions..
     if (action) {
       if (t.isMemberExpression(action)) {
         const { name: type } = action.object
-        if (used[type]) {
+        // console.log({ type, action })
+        if (app.used[type]) {
           if (t.isMemberExpression(action.object)) {
             const { name: objName } = action.object.object
             const { name: propName } = action.object.property
-            console.log({ objName, propName })
+
             if (type !== objName) {
-              used[type][objName] = used[type][objName] || {}
-              used[type][objName][propName] = {}
+              app.used[type][objName] = app.used[type][objName] || {}
+              app.used[type][objName][propName] = {}
             } else {
-              used[type] = used[type] || {}
-              used[type][propName] = {}
+              app.used[type] = app.used[type] || {}
+              app.used[type][propName] = {}
             }
           } else if (t.isIdentifier(action.object)) {
             const { name: objName } = action.object
             const { name: propName } = action.property
 
             if (objName !== type) {
-              used[type][objName] = used[type][objName] || {}
-              used[type][objName][propName] = {}
+              app.used[type][objName] = app.used[type][objName] || {}
+              app.used[type][objName][propName] = {}
             } else {
-              used[type] = used[type] || {}
-              used[type][propName] = {}
+              app.used[type] = app.used[type] || {}
+              app.used[type][propName] = {}
             }
           }
         }
@@ -121,52 +116,37 @@ const findUsedSpells = (t, app, config) => path => {
 
       if (t.isMemberExpression(helper)) {
         const { name: type } = helper.object
-        if (used.hasOwnProperty(type)) {
+        if (app.used.hasOwnProperty(type)) {
           if (t.isMemberExpression(helper.object)) {
             const { name: objName } = helper.object.object
             const { name: propName } = helper.object.property
-            used[type][objName] = used[type][objName] || {}
-            used[type][objName][propName] = {}
+            app.used[type][objName] = app.used[type][objName] || {}
+            app.used[type][objName][propName] = {}
           } else if (t.isIdentifier(helper.object)) {
             const { name: objName } = helper.object
             const { name: propName } = helper.property
 
             if (objName !== type) {
-              used[type][objName] = used[type][objName] || {}
-              used[type][objName][propName] = {}
+              app.used[type][objName] = app.used[type][objName] || {}
+              app.used[type][objName][propName] = {}
             } else {
-              used[type] = used[type] || {}
-              used[type][propName] = {}
+              app.used[type] = app.used[type] || {}
+              app.used[type][propName] = {}
             }
           }
         }
       }
-      // } else if (t.isAssignmentExpression(path.node)) {
-      //   const { left, right } = path.node
-      //   let objName
-      //   let propName
-
-      //   if (t.isMemberExpression(left)) {
-      //     // props.onclick = action
-      //     // console.log('member expression', left)
-      //     objName = left.object.name
-      //     propName = left.property.name
-      //   } else if (t.isIdentifier(left)) {
-      //     // props = { onclick: action }
-      //     objName = left.name
-      //   }
-
-      //   console.log({ objName, propName })
     }
   }
 }
 
 const removeUnused = (t, app) => path => {
   const moduleNames = Object.keys(app.modules)
-  const usedTagNames = Array.from(used.tags)
+  const usedTagNames = Array.from(app.used.tags)
 
   if (t.isVariableDeclarator(path.node)) {
     const { name } = path.node.id
+
     if (name && isModuleTag(name, moduleNames)) {
       if (!usedTagNames.includes(name)) {
         if (isModuleTag(name, moduleNames)) {
@@ -181,70 +161,38 @@ const removeUnused = (t, app) => path => {
               return
             }
 
-            // console.log('removed html tag', name)
+            console.log('removed html tag', name)
             path.remove()
           } else {
-            // console.log('removed @magic-module', name)
+            console.log('removed @magic-module', name)
             path.remove()
           }
         }
-      }
-    } else {
-      if (name === 'lib') {
-        // remove unused lib imports
-        // if (path.node.init && path.node.init.properties) {
-        //   const { properties } = path.node.init
-        //   properties.forEach(prop => {
-        //     console.log(prop.key.name, Object.keys(used.lib).includes(prop.key.name))
-        //   })
-        //   console.log(used.lib);
-        // }
-      }
-
-      if (name === 'actions') {
-        // remove unused actions
-        path.node.init.properties.forEach(prop => {
-          const { value: name } = prop.key
-
-          // console.log({ actions: used.actions })
-
-          if (t.isFunctionExpression(prop.value)) {
-            if (!used.actions || !used.actions.hasOwnProperty(name)) {
-              // console.log('remove fn', name)
-              // prop.remove()
-            } else {
-              // console.log('not remove fn', name)
-            }
-          } else if (t.isObjectExpression(prop.value)) {
-            const { value: propName } = prop.value.properties[0].key
-            if (
-              !used.actions ||
-              !used.actions[name] ||
-              !used.actions[name].hasOwnProperty(propName)
-            ) {
-              //  console.log('remove actions', name, propName)
-              //  prop.remove()
-            } else {
-              //  console.log('not remove action', name, propName)
-            }
-          } else {
-            // console.log('unexpected action type', prop)
-          }
-        })
       }
     }
   }
 }
 
-export default (app, config) => ({ types: t }) => ({
-  visitor: {
-    Program: {
-      enter(path) {
-        path.traverse({ enter: findUsedSpells(t, app, config) })
-      },
-      exit(path) {
-        path.traverse({ enter: removeUnused(t, app, config) })
+export default (app, config) => {
+  app.used = {
+    actions: {},
+    effects: {},
+    subscriptions: {},
+    helpers: {},
+    lib: {},
+    tags: new Set(),
+  }
+
+  return ({ types: t }) => ({
+    visitor: {
+      Program: {
+        enter(path) {
+          path.traverse({ enter: findUsedSpells(t, app, config) })
+        },
+        // exit(path) {
+          // path.traverse({ enter: removeUnused(t, app, config) })
+        // },
       },
     },
-  },
-})
+  })
+}

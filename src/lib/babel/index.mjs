@@ -1,4 +1,5 @@
 import magic from './dead_code.mjs'
+import removeCode from './remove_code.mjs'
 
 export const getBabelConf = (app, config) => {
   const {
@@ -29,16 +30,22 @@ export const getBabelConf = (app, config) => {
 
   const plugins = [['@babel/plugin-transform-react-jsx', { pragma: 'h' }], magic(app, config)]
 
-  if (REMOVE_CHECK_PROPS) {
-    plugins.push([
-      'remove-code',
-      {
-        function: ['CHECK_PROPS'],
-      },
-    ])
+  const tagNames = Object.keys(app.modules)
+  const actionNames = Object.keys(app.actions)
+  const usedActionNames = Object.keys(app.used.actions)
+
+  app.unused = {
+    tags: tagNames.filter(a => !app.used.tags.has(a)),
+    actions: actionNames.filter(a => !usedActionNames.includes(a)),
   }
 
   if (MINIFY) {
+    plugins.push(
+      removeCode({
+        function: ['CHECK_PROPS'],
+      }),
+    )
+
     presets.push([
       'minify',
       {
