@@ -41,7 +41,7 @@ those functions get the state and their props and may return a new full, but cha
 
 effects are an object containing functions, just like actions.
 
-they behave like actions, get a state and props and may return a new full, but changed, state.',
+they behave like actions, get a state and props and may return a new full, but changed, state.
 
 the big difference?
 

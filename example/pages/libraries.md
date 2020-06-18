@@ -17,9 +17,9 @@ slow[ly] (pun intended) grow towards a footprint of 5 megabytes.
 
 we think that all of that bloat is unneeded, unheeded and, frankly, not optimal.
 
-magic has one external client side dependency, ',
-[hyperapp](https://github.com/jorgebucharan/hyperapp)
-, [~500 lines that provide our ui state machine]. thats it. and it won't change.
+magic has one external client side dependency,
+[hyperapp](https://github.com/jorgebucharan/hyperapp),
+ [~500 lines that provide our ui state machine]. thats it. and it won't change.
 
 we also have the tendency to write libraries specialized for our usecase, see
 [@magic/css](https://github.com/magic/css),
@@ -27,9 +27,9 @@ we also have the tendency to write libraries specialized for our usecase, see
  [@magic/cli](https://github.com/magic/cli)
 and others.
 
-once there is a lib key in at least one component,',
-window.lib (browser) and global.lib (nodejs) will be set,',
-aliasing lib as a global variable in both environments',
+once there is a lib key in at least one component,
+window.lib (browser) and global.lib (nodejs) will be set,
+aliasing lib as a global variable in both environments
 
 ### #dir-or-file lib dir or file
 
@@ -72,7 +72,7 @@ then, in javascript
 export const View = props => div([
   'value is ',
   lib.is(props.value, 'string') ? '' : 'not',
-  ' a string'
+  ' a string',
 ])
 </Pre>
 
