@@ -23,8 +23,8 @@ magic has one external client side dependency, ',
 
 we also have the tendency to write libraries specialized for our usecase, see
 [@magic/css](https://github.com/magic/css),
-[@magic/test](https://github.com/magic/test)
-[@magic/cli](https://github.com/magic/cli)
+ [@magic/test](https://github.com/magic/test),
+ [@magic/cli](https://github.com/magic/cli)
 and others.
 
 once there is a lib key in at least one component,',
