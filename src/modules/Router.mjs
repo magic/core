@@ -1,3 +1,4 @@
+// Page Module
 export const View = ({ page, state }, children) => {
   const magicProps = {
     id: 'Magic',
