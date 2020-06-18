@@ -16,7 +16,15 @@ export const preparePages = async app => {
     const page404 = {
       name: `${config.WEB_ROOT}404/`,
       path: `${config.WEB_ROOT}/404.html`,
-      View: () => div('404 - not found'),
+      View: () => div('404 - not found.'),
+      state: {
+        title: '404 - not found',
+        description: '404 - not found.'
+      },
+      originalState: {
+        title: '404 - not found',
+        description: '404 - not found.'
+      },
     }
 
     pages.push(page404)
