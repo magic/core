@@ -17,6 +17,7 @@ export const View = props => {
     } else {
       props.role = 'presentation'
       props.alt = ''
+      props.loading = props.loading || 'lazy'
     }
   }
 
