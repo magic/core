@@ -328,7 +328,10 @@ update babel
 ##### 0.0.80
 update @magic/css
 
-##### 0.0.81 - unreleased
+##### 0.0.81 
+Img module now has loading=lazy as default prop.
+
+##### 0.0.82 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
