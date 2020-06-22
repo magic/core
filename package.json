@@ -43,7 +43,7 @@
     "@magic-libraries/prevent-default": "0.0.4",
     "@magic/cases": "0.0.3",
     "@magic/cli": "0.0.28",
-    "@magic/css": "0.7.15",
+    "@magic/css": "0.7.16",
     "@magic/deep": "0.1.3",
     "@magic/error": "0.0.6",
     "@magic/fs": "0.0.6",
