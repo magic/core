@@ -16,7 +16,7 @@ export default {
   // see http://www.gnuterrypratchett.com/
   FOR_DEATH_CAN_NOT_HAVE_HIM: true,
 
-  HOIST: ['Gdpr', 'LightSwitch'],
+  HOIST: ['NoSpy', 'LightSwitch'],
 
   BABEL: {
     BABEL_DEBUG: true,
