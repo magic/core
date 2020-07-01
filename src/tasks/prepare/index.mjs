@@ -51,7 +51,7 @@ export const prepare = async (app, config) => {
   }
 
   // collect all page states, actions, effects, helpers and subscriptions
-  app.pages.map(page => {
+  app.pages.forEach(page => {
     if (!is.empty(page.state)) {
       app.state.pages = app.state.pages || {}
       app.state.pages[page.name] = page.state
@@ -83,8 +83,6 @@ export const prepare = async (app, config) => {
     if (!is.empty(page.init)) {
       app.init = deep.merge(app.init, page.init)
     }
-
-    return page
   })
 
   // collect all static files,
@@ -121,6 +119,7 @@ export const prepare = async (app, config) => {
   })
 
   app.style = await prepareThemes({ app, modules })
+
 
   prepareModules(app, modules)
 
