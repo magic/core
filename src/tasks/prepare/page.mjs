@@ -39,7 +39,10 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
     pageTmp = await import(file)
   }
 
-  let page
+  let page = {
+    state: {},
+  }
+
   if (is.fn(pageTmp)) {
     page = {
       ...transmuted,
@@ -53,9 +56,6 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
   }
 
   page.file = file
-
-  // has to be initialized!
-  page.state = {}
 
   if (!is.empty(transmuted.originalState)) {
     if (is.fn(transmuted.originalState)) {
@@ -86,6 +86,7 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
       page.path = path.join(page.path, 'index.html')
     }
   }
+
 
   if (!page.View || !is.function(page.View.toString)) {
     const pageDir = PAGES.replace(process.cwd(), '')
