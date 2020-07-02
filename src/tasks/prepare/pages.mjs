@@ -19,11 +19,11 @@ export const preparePages = async app => {
       View: () => div('404 - not found.'),
       state: {
         title: '404 - not found',
-        description: '404 - not found.'
+        description: '404 - not found.',
       },
       originalState: {
         title: '404 - not found',
-        description: '404 - not found.'
+        description: '404 - not found.',
       },
     }
 
