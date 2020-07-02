@@ -25,7 +25,7 @@ export const style = vars => ({
 
   h3: {
     margin: 0,
-    color: vars.textColor,
+    color: vars.text.dark,
   },
 })
 
