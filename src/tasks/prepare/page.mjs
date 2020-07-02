@@ -57,12 +57,25 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
 
   page.file = file
 
+  // has to be initialized!
+  // we also have to make sure to create a copy,
+  // page.state may have been imported from a module
+  // and that would lead to recursion in lib/stringifyObject
+  if (page.state) {
+    page.state = { ...page.state }
+  } else {
+    page.state = {}
+  }
+
   if (!is.empty(transmuted.originalState)) {
     if (is.fn(transmuted.originalState)) {
       transmuted.originalState = transmuted.originalState(config)
     }
 
-    page.state = transmuted.originalState
+    page.state = {
+      ...page.state,
+      ...transmuted.originalState,
+    }
   }
 
   const pageName = file
@@ -86,7 +99,6 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
       page.path = path.join(page.path, 'index.html')
     }
   }
-
 
   if (!page.View || !is.function(page.View.toString)) {
     const pageDir = PAGES.replace(process.cwd(), '')
