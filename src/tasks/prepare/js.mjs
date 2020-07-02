@@ -40,6 +40,7 @@ return { ${imports} }
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
 
+
   let checkProps = ''
   let propTypeString = ''
   if (config.IS_DEV) {
@@ -106,7 +107,9 @@ return { ${imports} }
       }
     })
 
-  let stateString = `const initialState = ${stringifyObject(magic.state)}`
+  const stateForString = stringifyObject(magic.state)
+
+  let stateString = `const initialState = ${stateForString}`
 
   let helperString = ''
   if (!is.empty(magic.helpers)) {
