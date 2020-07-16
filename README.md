@@ -338,7 +338,10 @@ FIX: regression, reenable custom state for pages.
 ##### 0.0.83
 update lodash to mitigate development environment security issue.
 
-##### 0.0.84 - unreleased
+##### 0.0.84
+update deps
+
+##### 0.0.85 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
