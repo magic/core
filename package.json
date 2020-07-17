@@ -10,7 +10,7 @@
   "engines": {
     "node": ">=14.2.0"
   },
-  "engineString": true,
+  "engineStrict": true,
   "scripts": {
     "start": "t -p",
     "build": "NODE_ENV=production src/bin.mjs build",
@@ -64,8 +64,8 @@
     "@magic-modules/module-list": "0.0.15",
     "@magic-modules/pre": "0.0.8",
     "@magic-modules/theme-list": "0.0.10",
-    "@magic-themes/docs": "0.0.7",
-    "@magic/format": "0.0.11",
+    "@magic-themes/docs": "0.0.8",
+    "@magic/format": "0.0.12",
     "@magic/test": "0.1.52"
   },
   "keywords": [
