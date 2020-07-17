@@ -21,6 +21,9 @@ export const state = config => ({
     'also provides an overview of all @magic functionality this ecosystem provides.',
   ],
 
+  logo: '/magic.png',
+  logotext: '@magic',
+
   menu: [
     {
       to: '/concepts/',
@@ -123,8 +126,6 @@ export const state = config => ({
     },
     { to: '/news/', text: 'news' },
   ],
-  logo: '/logo.png',
-  logotext: '@magic',
 })
 
 // export const server = {
