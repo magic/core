@@ -113,8 +113,8 @@ export const reset = (vars = {}) => ({
     width: '100%',
 
     '.icon': {
-      height: '1em',
-      width: 'auto',
+      width: '1.5em',
+      height: 'auto',
     },
   },
 
