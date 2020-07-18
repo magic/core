@@ -115,6 +115,8 @@ export const reset = (vars = {}) => ({
     '.icon': {
       width: '1.5em',
       height: 'auto',
+      animation: 'showHoisted 500ms 0s forwards',
+      opacity: 0,
     },
   },
 
@@ -168,5 +170,14 @@ export const reset = (vars = {}) => ({
 
   h3: {
     fontSize: '1.1em',
+  },
+
+  '@keyframes showHoisted': {
+    '0%': {
+      opacity: 0,
+    },
+    '100%': {
+      opacity: 1,
+    },
   },
 })
