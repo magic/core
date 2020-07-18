@@ -344,7 +344,13 @@ update deps
 ##### 0.0.85 
 icon sizes can be customized
 
-##### 0.0.86 - unreleased
+##### 0.0.86 
+update icon size usage
+
+##### 0.0.87 
+themes/reset.css: add icon animation for hoisted icons
+
+##### 0.0.88 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
