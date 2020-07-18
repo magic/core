@@ -341,7 +341,10 @@ update lodash to mitigate development environment security issue.
 ##### 0.0.84
 update deps
 
-##### 0.0.85 - unreleased
+##### 0.0.85 
+icon sizes can be customized
+
+##### 0.0.86 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
