@@ -111,6 +111,11 @@ export const reset = (vars = {}) => ({
     height: '100%',
     minHeight: '100vh',
     width: '100%',
+
+    '.icon': {
+      height: '1em',
+      width: 'auto',
+    },
   },
 
   '.Wrapper': {
