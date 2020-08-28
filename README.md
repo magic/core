@@ -350,7 +350,10 @@ update icon size usage
 ##### 0.0.87 
 themes/reset.css: add icon animation for hoisted icons
 
-##### 0.0.88 - unreleased
+##### 0.0.88
+update dependencies
+
+##### 0.0.89 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
