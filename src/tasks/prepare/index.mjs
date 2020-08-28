@@ -120,7 +120,6 @@ export const prepare = async (app, config) => {
 
   app.style = await prepareThemes({ app, modules })
 
-
   prepareModules(app, modules)
 
   app.modules = modules

@@ -40,7 +40,6 @@ return { ${imports} }
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
 
-
   let checkProps = ''
   let propTypeString = ''
   if (config.IS_DEV) {
