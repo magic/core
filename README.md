@@ -353,7 +353,10 @@ themes/reset.css: add icon animation for hoisted icons
 ##### 0.0.88
 update dependencies
 
-##### 0.0.89 - unreleased
+##### 0.0.89
+update babel
+
+##### 0.0.90  - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
