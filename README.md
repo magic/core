@@ -357,6 +357,10 @@ update dependencies
 update babel
 
 ##### 0.0.90  - unreleased
+* remove unused imports
+* formatting
+* split tasks/globals into separate files
+
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
