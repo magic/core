@@ -6,7 +6,7 @@ import { getBlog, getPages } from '../../lib/index.mjs'
 
 import { prepareBlog } from './blog.mjs'
 import { prepareThemes } from './themes.mjs'
-import { prepareGlobals } from './globals.mjs'
+import { prepareGlobals } from './globals/index.mjs'
 import { prepareJs } from './js.mjs'
 import { prepareMetaFiles } from './meta.mjs'
 import { prepareModules } from './modules.mjs'
