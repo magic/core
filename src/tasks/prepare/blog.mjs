@@ -1,7 +1,5 @@
 import path from 'path'
 
-import fs from '@magic/fs'
-
 import { prepareBlogPost } from './blogPost.mjs'
 
 export const prepareBlog = async (app, modules = []) => {

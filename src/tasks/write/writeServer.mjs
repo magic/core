@@ -1,7 +1,6 @@
 import path from 'path'
 
 import fs from '@magic/fs'
-import is from '@magic/types'
 
 import { stringifyObject } from '../../lib/stringifyObject.mjs'
 

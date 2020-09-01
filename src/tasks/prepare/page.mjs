@@ -3,7 +3,6 @@ import path from 'path'
 import error from '@magic/error'
 import is from '@magic/types'
 import fs from '@magic/fs'
-import log from '@magic/log'
 import transmute from '@magic/transmute'
 
 export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
