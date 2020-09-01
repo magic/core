@@ -1,4 +1,3 @@
-import path from 'path'
 import URL from 'url'
 
 import fs from '@magic/fs'
