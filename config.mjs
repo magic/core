@@ -13,6 +13,7 @@ export default {
   // this option adds the
   // 'X-Clacks-Overhead', 'GNU Terry Pratchet'
   // http header
+  // when serving pages using grundstein.
   // see http://www.gnuterrypratchett.com/
   FOR_DEATH_CAN_NOT_HAVE_HIM: true,
 
