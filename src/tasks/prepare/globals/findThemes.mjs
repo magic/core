@@ -29,7 +29,7 @@ export const findThemes = async (modules = {}) => {
           // see if this is a @magic-themes theme
           `@magic-themes/${theme_name}`,
           // see if it is installed locally,
-          // either in a subdirectory 
+          // either in a subdirectory
           path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
           // or as a single mjs file
           path.join(config.DIR.THEMES, theme_name + '.mjs'),
