@@ -3,7 +3,7 @@ import http from 'http'
 import error from '@magic/error'
 import log from '@magic/log'
 
-import handler from './handler.mjs'
+import { handler } from './handler.mjs'
 
 export const startServer = async (server, options) => {
   try {
