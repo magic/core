@@ -1,19 +1,17 @@
 import URL from 'url'
 
 import fs from '@magic/fs'
-import is from '@magic/types'
 
 import { addTrailingSlash } from '../../lib/index.mjs'
+import { prepareApi } from './prepareApi.mjs'
+import { apiHandler } from './apiHandler.mjs'
 
 export const handler = async app => {
   const { IS_PROD } = config
   const { css, client, static: stat, lambdas: rawLambdas, sw } = app
   const WEB_ROOT = addTrailingSlash(config.WEB_ROOT)
 
-  const lambdaPromises = await Promise.all(
-    Object.entries(rawLambdas).map(async ([key, lambda]) => [key, await lambda()]),
-  )
-  const lambdas = Object.fromEntries(lambdaPromises)
+  const lambdas = await prepareApi(rawLambdas)
 
   return async (req, res) => {
     const url = URL.parse(req.url)
@@ -26,40 +24,9 @@ export const handler = async app => {
     const rawUrl = url.pathname.replace(config.WEB_ROOT, '/')
 
     if (rawUrl.startsWith('/api')) {
-      const [module, action] = rawUrl
-        .replace('/api/', '')
-        .split('/')
-        .filter(a => a)
-
-      let lambda = lambdas[module]
-
-      if (is.objectNative(lambda) && action) {
-        lambda = lambda[action]
-      }
-
-      console.log({ lambda })
-
-      if (is.function(lambda)) {
-        req.body = []
-
-        req.on('data', chunk => {
-          if (typeof chunk === 'string') {
-            chunk = Buffer.from(chunk)
-          }
-
-          req.body.push(chunk)
-        })
-
-        req.on('end', async (...args) => {
-          req.body = Buffer.concat(req.body).toString()
-
-          const result = await lambda(req, res, ...args)
-          const { code = 500, body = 'Internal Server Error', type = 'text/plain' } = result
-
-          res.writeHead(code, { 'Content-Type': type })
-          res.end(body)
-        })
-
+      console.log('api call')
+      const handled = await apiHandler(req, res, { lambdas, rawUrl })
+      if (handled) {
         return
       }
     }

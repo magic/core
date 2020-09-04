@@ -18,6 +18,8 @@ export const startServer = async (server, options) => {
       },
     }
   } catch (e) {
+    // if the requested port is in use,
+    // increment portnumber by 1, then retry starting the server
     if (e.code === 'EADDRINUSE') {
       options.port += 1
     } else {
@@ -38,8 +40,6 @@ export const serve = async app => {
   const options = {
     port: config.PORT,
     host: config.HOST,
-    // do not make other workers listen to the same port
-    // exclusive: true,
   }
 
   try {
