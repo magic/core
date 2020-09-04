@@ -8,7 +8,9 @@ export const prepareApi = async app => {
     .map(([name, dep]) => [name.toLowerCase(), dep.server])
 
   const pageLambdas = app.pages
+    // filter out pages that do not have a server property.
     .filter(page => page.server)
+    // pages can only have one lambda attached.
     .map(page => [page.name.toLowerCase(), page.server])
 
   let apiLambdas = []
