@@ -360,7 +360,7 @@ update babel
 * remove unused imports
 * formatting
 * split tasks/globals into separate files
-
+* update api to allow self-contained lambdas which load their dependencies using await import
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
