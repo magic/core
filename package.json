@@ -64,7 +64,7 @@
     "@magic-modules/module-list": "0.0.17",
     "@magic-modules/pre": "0.0.9",
     "@magic-modules/theme-list": "0.0.12",
-    "@magic-themes/docs": "0.0.10",
+    "@magic-themes/docs": "0.0.11",
     "@magic/format": "0.0.15",
     "@magic/test": "0.1.54"
   },
