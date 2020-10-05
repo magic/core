@@ -356,11 +356,14 @@ update dependencies
 ##### 0.0.89
 update babel
 
-##### 0.0.90  - unreleased
+##### 0.0.90 
 * remove unused imports
 * formatting
 * split tasks/globals into separate files
 * update api to allow self-contained lambdas which load their dependencies using await import
+* update dependencies
+
+##### 0.0.91 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
