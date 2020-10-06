@@ -363,7 +363,10 @@ update babel
 * update api to allow self-contained lambdas which load their dependencies using await import
 * update dependencies
 
-##### 0.0.91 - unreleased
+##### 0.0.91
+update dependencies
+
+##### 0.0.92 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
