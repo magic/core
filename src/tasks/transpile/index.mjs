@@ -16,6 +16,15 @@ export const transpile = async (app, config) => {
     // 'worker.js': createFileHash(serviceWorker.code),
   }
 
+  const { ADD_SCRIPTS } = config
+  if (ADD_SCRIPTS) {
+    await Promise.all(ADD_SCRIPTS.map(async src => {
+      const fileContent = app.static[src]
+      const fileHash = createFileHash(fileContent)
+      app.hashes[src] = fileHash
+    }))
+  }
+
   const pages = html(app)
 
   pages
@@ -25,13 +34,13 @@ export const transpile = async (app, config) => {
       app.hashes[page.name] = page.hash
     })
 
-  const ignored = config.IGNORED_STATIC
+  // const ignored = config.IGNORED_STATIC
 
   const included = config.INCLUDED_HASH_EXTENSIONS
 
   if (included.length) {
     Object.entries(app.static)
-      .filter(([name, val]) => included.includes(path.extname(name)) || included.includes(name))
+      .filter(([name]) => included.includes(path.extname(name)) || included.includes(name))
       .sort(([a], [b]) => (a > b ? 1 : -1))
       .forEach(([name, val]) => {
         app.hashes[name] = createFileHash(val)

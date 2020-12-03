@@ -9,7 +9,7 @@ const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
 const App = async config => {
-  const { WEB_ROOT = '/', LANG = 'en' } = config
+  const { WEB_ROOT = '/', LANG = 'en', ADD_SCRIPTS } = config
 
   let localApp = {
     state: {},
@@ -17,6 +17,7 @@ const App = async config => {
     effects: {},
     subscriptions: [],
   }
+
   let seo = {}
 
   let { THEME = [] } = config
@@ -178,6 +179,12 @@ const App = async config => {
         crossorigin: 'anonymous',
       }
 
+      const ADD_SCRIPTS = config.ADD_SCRIPTS.map(src => ({
+        src: src,
+        integrity: hashes[src],
+        crossorigin: 'anonymous',
+      }))
+
       // const shortSwHash = hashes.serviceWorker.split('-')[1].substr(0, 10)
       // const serviceWorker = {
       //   src: `${config.WEB_ROOT}${config.CLIENT_SERVICE_WORKER_NAME}.js?${shortSwHash}`,
@@ -200,6 +207,7 @@ const App = async config => {
             SkipLink(),
             Page({ page: page.View, state }),
             script(magicJs),
+            ADD_SCRIPTS && ADD_SCRIPTS.map(src => script(src))
             // script(serviceWorker),
           ]),
         ]),
