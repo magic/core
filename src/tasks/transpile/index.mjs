@@ -18,11 +18,13 @@ export const transpile = async (app, config) => {
 
   const { ADD_SCRIPTS } = config
   if (ADD_SCRIPTS) {
-    await Promise.all(ADD_SCRIPTS.map(async src => {
-      const fileContent = app.static[src]
-      const fileHash = createFileHash(fileContent)
-      app.hashes[src] = fileHash
-    }))
+    await Promise.all(
+      ADD_SCRIPTS.map(async src => {
+        const fileContent = app.static[src]
+        const fileHash = createFileHash(fileContent)
+        app.hashes[src] = fileHash
+      }),
+    )
   }
 
   const pages = html(app)

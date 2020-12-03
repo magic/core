@@ -207,7 +207,7 @@ const App = async config => {
             SkipLink(),
             Page({ page: page.View, state }),
             script(magicJs),
-            ADD_SCRIPTS && ADD_SCRIPTS.map(src => script(src))
+            ADD_SCRIPTS && ADD_SCRIPTS.map(src => script(src)),
             // script(serviceWorker),
           ]),
         ]),

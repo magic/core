@@ -12,12 +12,12 @@ export const prepareApi = async rawLambdas => {
           console.log('result is not a function', typeof result)
         }
       } catch (e) {
-        // lambda does not return a creator function, 
+        // lambda does not return a creator function,
         // use as is by returning it below
       }
 
       return [key, lambda]
-    })
+    }),
   )
 
   const lambdas = Object.fromEntries(lambdaPromises)
