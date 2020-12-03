@@ -6,10 +6,7 @@ export const prepareApi = async rawLambdas => {
       try {
         const result = await lambda()
 
-        console.log({ key, result, type: typeof result })
-
         if (is.fn(result)) {
-          console.log(' return wrapped fn')
           return [key, result]
         } else {
           console.log('result is not a function', typeof result)
