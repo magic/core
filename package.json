@@ -37,7 +37,7 @@
     "url": "https://github.com/magic/core/issues"
   },
   "dependencies": {
-    "@babel/core": "7.12.7",
+    "@babel/core": "7.12.9",
     "@babel/plugin-transform-react-jsx": "7.12.7",
     "@babel/preset-env": "7.12.7",
     "@magic-libraries/prevent-default": "0.0.4",
