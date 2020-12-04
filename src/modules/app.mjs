@@ -9,7 +9,7 @@ const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
 const App = async config => {
-  const { WEB_ROOT = '/', LANG = 'en', ADD_SCRIPTS } = config
+  const { WEB_ROOT = '/', LANG = 'en' } = config
 
   let localApp = {
     state: {},
@@ -179,7 +179,7 @@ const App = async config => {
         crossorigin: 'anonymous',
       }
 
-      const ADD_SCRIPTS = config.ADD_SCRIPTS.map(src => ({
+      const ADD_SCRIPTS = config.ADD_SCRIPTS && config.ADD_SCRIPTS.map(src => ({
         src: src,
         integrity: hashes[src],
         crossorigin: 'anonymous',
