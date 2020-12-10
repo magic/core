@@ -10,7 +10,7 @@ export const preparePages = async app => {
     app.files.map(preparePage({ WEB_ROOT, PAGES: config.DIR.PAGES, state: app.state })),
   )
 
-  const has404 = pages.some(p => p.name === `${config.WEB_ROOT}404/`)
+  const has404 = pages.some(p => p && p.name === `${config.WEB_ROOT}404/`)
 
   if (!has404) {
     const page404 = {
@@ -30,7 +30,7 @@ export const preparePages = async app => {
     pages.push(page404)
   }
 
-  return pages
+  return pages.filter(a => a)
 }
 
 export default preparePages

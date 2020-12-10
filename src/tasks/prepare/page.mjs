@@ -3,6 +3,7 @@ import path from 'path'
 import error from '@magic/error'
 import is from '@magic/types'
 import fs from '@magic/fs'
+import log from '@magic/log'
 import transmute from '@magic/transmute'
 
 export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
@@ -35,7 +36,14 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
     await fs.writeFile(fileTmpPath, viewString)
     pageTmp = await import(fileTmpPath)
   } else {
-    pageTmp = await import(file)
+    try {
+      pageTmp = await import(file)
+    } catch (e) {
+      if (e.code === 'ERR_UNKNOWN_FILE_EXTENSION') {
+        log.warn('UNKNOWN_FILE_TYPE', `${file} is not an es6 component. Ignored.`)
+        return
+      }
+    }
   }
 
   let page = {
