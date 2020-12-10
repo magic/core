@@ -381,6 +381,9 @@ update dependencies
 * update dependencies
 
 ##### 0.0.96 - unreleased
+* do not error if page is not a javascript module
+
+##### 0.0.97 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
