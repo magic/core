@@ -24,7 +24,6 @@ export const handler = async app => {
     const rawUrl = url.pathname.replace(config.WEB_ROOT, '/')
 
     if (rawUrl.startsWith('/api')) {
-      console.log('api call')
       const handled = await apiHandler(req, res, { lambdas, rawUrl })
       if (handled) {
         return

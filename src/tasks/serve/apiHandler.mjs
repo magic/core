@@ -28,7 +28,6 @@ export const apiHandler = async (req, res, { lambdas, rawUrl }) => {
 
       const result = await lambda(req, res, ...args)
       const { code = 500, body = 'Internal Server Error', type = 'text/plain' } = result
-      console.log('call result', { result })
 
       res.writeHead(code, { 'Content-Type': type })
       res.end(body)
