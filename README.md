@@ -382,6 +382,7 @@ update dependencies
 
 ##### 0.0.96 - unreleased
 * do not error if page is not a javascript module
+* update dependencies
 
 ##### 0.0.97 - unreleased
 ...
