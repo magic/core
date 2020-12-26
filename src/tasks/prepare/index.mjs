@@ -29,6 +29,10 @@ export const prepare = async (app, config) => {
 
   app = { ...defaultApp, ...app }
 
+  if (is.fn(app.build)) {
+    app = await app.build({ app, config })
+  }
+
   let { modules, libs } = await prepareGlobals(app, config)
 
   app.files = await getPages()

@@ -1,3 +1,6 @@
+import fs from '@magic/fs'
+import path from 'path'
+
 export const state = config => ({
   seo: {
     name: '@magic/core documentation',
@@ -138,3 +141,29 @@ export const state = config => ({
 //     body: 'Ok, lambda2',
 //   }),
 // }
+
+export const build = async ({ app, config }) => {
+  const dataPath = path.join(config.DIR.ASSETS, 'data', 'index.json')
+  const buildData = await fs.readFile(dataPath)
+  const json = JSON.parse(buildData)
+
+  // add the json data to the state.
+  app.state.data = json.data
+
+  app.pages = app.pages || []
+
+  // this adds the /build/ page to this app
+  app.pages.push({
+    View: state =>
+      div([
+        h3(state.title),
+        p(state.description),
+        p([h4('state.data'), Pre(JSON.stringify({ data: state.data }, null, 2))]),
+      ]),
+    name: `${config.WEB_ROOT}build/`,
+    path: `${config.WEB_ROOT}build/index.html`,
+    state: json.data,
+  })
+
+  return app
+}

@@ -1,0 +1,6 @@
+{
+  "data": {
+    "title": "external data",
+    "description": "This is some static data, loaded via example/app.mjs#build and from example/assets/data/index.json."
+  }
+}
