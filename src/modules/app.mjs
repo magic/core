@@ -95,8 +95,11 @@ const App = async config => {
         })
     })
 
+  // will be used in the catch clause to make sure it's this file 
+  // that causes a MODULE_NOT_FOUND error
+  const maybeAppFile = path.join(config.ROOT, 'app.mjs')
+
   try {
-    const maybeAppFile = path.join(config.ROOT, 'app.mjs')
     const { default: def, ...maybeApp } = await import(maybeAppFile)
 
     if (def) {
@@ -135,7 +138,7 @@ const App = async config => {
     }
   } catch (e) {
     // happy without maybeApp
-    if (e.code !== 'ERR_MODULE_NOT_FOUND') {
+    if (e.code !== 'ERR_MODULE_NOT_FOUND' && !e.message.includes(maybeAppFile)) {
       throw e
     }
   }
