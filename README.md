@@ -369,22 +369,28 @@ update dependencies
 ##### 0.0.92
 update dependencies
 
-##### 0.0.93 
+##### 0.0.93
 update dependencies
 
 ##### 0.0.94
 update dependencies
 
-##### 0.0.95 
+##### 0.0.95
 * serve/prepareApi: remove console.log
 * allow addition of third party scripts using ADD_SCRIPTS config variable
 * update dependencies
 
-##### 0.0.96 - unreleased
+##### 0.0.96
+git tagged but not published
+
+##### 0.0.97
 * do not error if page is not a javascript module
 * update dependencies
+* add app.build task
+* update dependencies
 
-##### 0.0.97 - unreleased
+
+##### 0.0.98 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
