@@ -391,6 +391,8 @@ git tagged but not published
 
 
 ##### 0.0.98 - unreleased
+* if the app.mjs import fails because one of the app dependencies is missing,
+  throw an error instead of silently not importing the app.
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
