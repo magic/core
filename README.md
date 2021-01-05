@@ -396,6 +396,10 @@ git tagged but not published
 * update dependencies
 
 ##### 0.0.99 - unreleased
+* use @swc/core for dev builds to make them 10 times faster.
+* update dependencies
+
+##### 0.0.100 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
