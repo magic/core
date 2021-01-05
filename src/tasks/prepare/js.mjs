@@ -196,11 +196,11 @@ return { ${imports} }
     .join('\n      ')
 
   // unused for now
-  const serviceWorkerString = `
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('${config.WEB_ROOT}service-worker.js')
-}
-`
+  //   const serviceWorkerString = `
+  // if ('serviceWorker' in navigator) {
+  //   navigator.serviceWorker.register('${config.WEB_ROOT}service-worker.js')
+  // }
+  // `
 
   let initState = `{
   ...initialState,
