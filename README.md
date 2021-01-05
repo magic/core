@@ -395,7 +395,7 @@ git tagged but not published
   throw an error instead of silently not importing the app.
 * update dependencies
 
-##### 0.0.99 - unreleased
+##### 0.0.99
 * use @swc/core for dev builds to make them 10 times faster.
 * update dependencies
 * only duplicate unique page.state into app.state, 20-30% bundle size reduction.
