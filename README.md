@@ -398,6 +398,8 @@ git tagged but not published
 ##### 0.0.99 - unreleased
 * use @swc/core for dev builds to make them 10 times faster.
 * update dependencies
+* only duplicate unique page.state into app.state, 20-30% bundle size reduction.
+* cluster/build task recovers from build errors, no restart needed.
 
 ##### 0.0.100 - unreleased
 ...
