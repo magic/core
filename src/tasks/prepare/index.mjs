@@ -59,8 +59,7 @@ export const prepare = async (app, config) => {
       app.state.pages = app.state.pages || {}
 
       // filter page.state that is equal to already existing global state
-      const tmpPageState = Object.entries(page.state)
-        .filter(([k, v]) => app.state[k] !== v)
+      const tmpPageState = Object.entries(page.state).filter(([k, v]) => app.state[k] !== v)
 
       app.state.pages[page.name] = Object.fromEntries(tmpPageState)
     }
