@@ -7,13 +7,13 @@ import style from './css.mjs'
 import { createFileHash } from '../../lib/index.mjs'
 
 export const transpile = async (app, config) => {
-  const { bundle, serviceWorker } = await js(app)
+  const { code, serviceWorker } = await js(app)
   const css = await style(app.style)
 
   app.hashes = {
     '/magic.css': createFileHash(config.ENV === 'production' ? css.minified : css.css),
-    '/magic.js': createFileHash(bundle.code),
-    // 'worker.js': createFileHash(serviceWorker.code),
+    '/magic.js': createFileHash(code),
+    // 'worker.js': createFileHash(serviceWorker),
   }
 
   const { ADD_SCRIPTS } = config
@@ -54,7 +54,7 @@ export const transpile = async (app, config) => {
   return {
     hashes: app.hashes,
     pages,
-    bundle,
+    code,
     css,
     serviceWorker,
   }

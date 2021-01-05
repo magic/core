@@ -10,11 +10,11 @@ export const build = async ({ commands, config }) => {
     const App = await runApp(config)
     const app = await runCmd('prepare', App, config)
 
-    const { bundle, css, pages /*, serviceWorker */ } = await runCmd('transpile', app, config)
+    const { code, css, pages /*, serviceWorker */ } = await runCmd('transpile', app, config)
     app.pages = pages
     app.css = css
-    app.client = bundle.code
-    // app.sw = serviceWorker.code
+    app.client = code
+    // app.sw = serviceWorker
 
     if (commands.build) {
       await runCmd('write', app, config)
