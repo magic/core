@@ -57,7 +57,12 @@ export const prepare = async (app, config) => {
   app.pages.forEach(page => {
     if (!is.empty(page.state)) {
       app.state.pages = app.state.pages || {}
-      app.state.pages[page.name] = page.state
+
+      // filter page.state that is equal to already existing global state
+      const tmpPageState = Object.entries(page.state)
+        .filter(([k, v]) => app.state[k] !== v)
+
+      app.state.pages[page.name] = Object.fromEntries(tmpPageState)
     }
 
     const actionTypes = ['actions', 'effects']
