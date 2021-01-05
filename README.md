@@ -390,9 +390,12 @@ git tagged but not published
 * update dependencies
 
 
-##### 0.0.98 - unreleased
+##### 0.0.98
 * if the app.mjs import fails because one of the app dependencies is missing,
   throw an error instead of silently not importing the app.
+* update dependencies
+
+##### 0.0.99 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
