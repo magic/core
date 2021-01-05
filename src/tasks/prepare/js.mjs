@@ -191,9 +191,9 @@ return { ${imports} }
 
   pageString += '\n}\n'
 
-  const pageTitleString = Object.entries(pageTitles)
-    .map(([name, title]) => `"${name}": "${title}",`)
-    .join('\n      ')
+  // const pageTitleString = Object.entries(pageTitles)
+  //   .map(([name, title]) => `"${name}": "${title}",`)
+  //   .join('\n      ')
 
   // unused for now
   //   const serviceWorkerString = `
