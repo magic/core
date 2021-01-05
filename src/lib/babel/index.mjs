@@ -53,12 +53,14 @@ export const getBabelConf = (app, config) => {
     ])
   }
 
+  const sourceMaps = config.ENV === 'development' ? 'inline' : false
+
   return {
     filename: `${CLIENT_LIB_NAME}.js`,
     minified: MINIFY,
     comments: KEEP_COMMENTS,
     configFile: false,
-    sourceMaps: false,
+    sourceMaps,
     presets: USE_PRESETS ? presets : [],
     plugins,
   }
