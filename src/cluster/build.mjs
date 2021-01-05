@@ -27,6 +27,6 @@ export const build = async ({ commands, config }) => {
     }
   } catch (e) {
     log.error('error during build', e)
-    process.exit(1)
+    // process.exit(1)
   }
 }
