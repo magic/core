@@ -52,6 +52,7 @@
     "@magic/tags": "0.0.4",
     "@magic/transmute": "0.0.36",
     "@magic/types": "0.1.13",
+    "@swc/core": "1.2.43",
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.1",
     "hyperapp-render": "3.5.0"
