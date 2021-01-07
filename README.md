@@ -402,6 +402,9 @@ git tagged but not published
 * cluster/build task recovers from build errors, no restart needed.
 
 ##### 0.0.100 - unreleased
+* config.API_DIR now actually gets used
+
+##### 0.0.101 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
