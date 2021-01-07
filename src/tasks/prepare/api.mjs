@@ -16,8 +16,7 @@ export const prepareApi = async app => {
   let apiLambdas = []
 
   if (config.API_DIR) {
-    const apiDir = path.join(config.ROOT, config.API_DIR)
-    const apiLambdaFiles = await fs.getFiles(apiDir)
+    const apiLambdaFiles = await fs.getFiles(config.DIR.API)
 
     apiLambdas = await Promise.all(
       apiLambdaFiles.map(async file => {

@@ -73,7 +73,7 @@ export const runConfig = async (args = {}) => {
   // themes dir, files in this dir get used as themes
   const THEMES = path.join(ASSETS, 'themes')
   // API dir for server side lambdas.
-  const API = path.join(process.cwd(), conf.DIR.API || 'api')
+  const API = path.join(process.cwd(), conf.API_DIR || 'api')
 
   // global css variables that get used by @magic/css
   const THEME_VARS = conf.THEME_VARS || {}
