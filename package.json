@@ -43,7 +43,7 @@
     "@magic-libraries/prevent-default": "0.0.4",
     "@magic/cases": "0.0.3",
     "@magic/cli": "0.0.30",
-    "@magic/css": "0.7.26",
+    "@magic/css": "0.7.27",
     "@magic/deep": "0.1.4",
     "@magic/error": "0.0.7",
     "@magic/fs": "0.0.9",
@@ -52,7 +52,7 @@
     "@magic/tags": "0.0.4",
     "@magic/transmute": "0.0.36",
     "@magic/types": "0.1.13",
-    "@swc/core": "1.2.43",
+    "@swc/core": "1.2.45",
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.1",
     "hyperapp-render": "3.5.0"
