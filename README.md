@@ -401,7 +401,7 @@ git tagged but not published
 * only duplicate unique page.state into app.state, 20-30% bundle size reduction.
 * cluster/build task recovers from build errors, no restart needed.
 
-##### 0.0.100 - unreleased
+##### 0.0.100
 * config.API_DIR now actually gets used
 * api routes now 404 if they do not exist (redirected to WEB_ROOT before)
 * update deps
