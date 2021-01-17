@@ -27,6 +27,16 @@ export const handler = async app => {
       const handled = await apiHandler(req, res, { lambdas, rawUrl })
       if (handled) {
         return
+      } else {
+        const headers = {
+          'Cache-Control': 'no-cache, must-revalidate',
+          Pragma: 'no-cache',
+          'Content-Type': 'text/plain',
+        }
+
+        res.writeHead(404, headers)
+        res.end('Api route not found')
+        return
       }
     }
 
