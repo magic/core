@@ -411,7 +411,8 @@ git tagged but not published
 * npm i -g magic now works and loads local node_modules as well as global
 
 ##### 0.0.102
-further fixes regarding npm i -g magic
+* further fixes regarding npm i -g magic
+* bump required node version to 14.15.4
 
 ##### 0.0.103 - unreleased
 ...
