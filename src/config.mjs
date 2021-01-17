@@ -36,6 +36,8 @@ export const runConfig = async (args = {}) => {
   // change to change the name of magic.js and magic.css
   conf.CLIENT_LIB_NAME = conf.CLIENT_LIB_NAME || 'magic'
 
+  conf.NODE_MODULES = conf.NODE_MODULES || `${process.cwd()}${path.sep}node_modules`
+
   // name of service-worker client file
   conf.CLIENT_SERVICE_WORKER_NAME = conf.CLIENT_SERVICE_WORKER_NAME || 'service-worker'
 
