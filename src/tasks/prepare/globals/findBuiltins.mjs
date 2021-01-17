@@ -1,5 +1,3 @@
-import path from 'path'
-
 import { builtins, component, tags } from '../../../modules/index.mjs'
 
 export const findBuiltins = () => {
