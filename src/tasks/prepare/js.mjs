@@ -150,7 +150,6 @@ return { ${imports} }
           lib = path.join(lib, 'src', 'index.mjs')
         }
 
-        const contents = await fs.readFile(lib, 'utf8')
         if (name.includes('-')) {
           name = cases.camel(name)
         }
