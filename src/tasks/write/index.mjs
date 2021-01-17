@@ -2,12 +2,7 @@ import path from 'path'
 
 import fs from '@magic/fs'
 
-import {
-  // compress,
-  // getFileType,
-  // minifyImages,
-  writeFile,
-} from '../../lib/index.mjs'
+import { writeFile } from '../../lib/index.mjs'
 
 import { writeServer } from './writeServer.mjs'
 
@@ -64,12 +59,6 @@ export const write = async app => {
 
   // const serviceWorkerFile = path.join(config.DIR.PUBLIC, `${config.CLIENT_SERVICE_WORKER_NAME}.js`)
   // await fs.writeFile(serviceWorkerFile, app.sw)
-
-  // if (IS_PROD) {
-  //   const comp = await compress()
-  //   await comp(zippable, images)
-  //   await minifyImages(images)
-  // }
 
   await writeServer(app)
 }
