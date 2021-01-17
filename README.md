@@ -410,7 +410,10 @@ git tagged but not published
 * Router: on navigation scroll to top works in newer firefox, tradeoff: probably not in older.
 * npm i -g magic now works and loads local node_modules as well as global
 
-##### 0.0.102 - unreleased
+##### 0.0.102
+further fixes regarding npm i -g magic
+
+##### 0.0.103 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
