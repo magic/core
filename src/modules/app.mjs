@@ -39,6 +39,8 @@ const App = async config => {
         `@magic-themes/${theme_name}`,
         // see if it is installed locally.
         path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
+        // npm i -g magic: load magic-themes from node_modules explicitly.
+        path.join(config.NODE_MODULES, '@magic-themes', theme_name, 'src', 'index.mjs'),
       ]
 
       return await Promise.all(
