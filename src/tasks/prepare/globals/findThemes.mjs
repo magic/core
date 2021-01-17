@@ -44,7 +44,6 @@ export const findThemes = async (modules = {}) => {
             try {
               const { default: theme, ...maybeModules } = await import(location)
 
-              const libs = {}
               Object.entries(maybeModules).map(([name, fn]) => {
                 if (is.fn(fn)) {
                   if (!modules[name]) {
