@@ -61,6 +61,8 @@ export const prepareThemes = async ({ app, modules }) => {
           `@magic-themes/${theme_name}`,
           // see if it is installed locally.
           path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
+          // if called from global magic, load with absolute path
+          path.join(config.NODE_MODULES, '@magic-themes', theme_name, 'src', 'index.mjs'),
         ]
 
         return await Promise.all(
