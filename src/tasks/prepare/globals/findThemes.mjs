@@ -34,7 +34,7 @@ export const findThemes = async (modules = {}) => {
           // or as a single mjs file
           path.join(config.DIR.THEMES, theme_name + '.mjs'),
           // or from a globally installed magic
-          path.join(config.NODE_MODULES, theme_name, 'src', 'index.mjs'),
+          path.join(config.NODE_MODULES, '@magic-themes', theme_name, 'src', 'index.mjs'),
         ]
 
         const modules = {}
