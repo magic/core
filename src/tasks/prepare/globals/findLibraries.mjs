@@ -30,13 +30,13 @@ export const findLibraries = async (app, modules) => {
     let libName = ''
     if (libDir.includes('@magic-libraries')) {
       libName = libDir.split('@magic-libraries' + path.sep)[1]
-      libDir = `@magic-libraries/${libName}`
+      // libDir = `@magic-libraries/${libName}`
     } else if (libDir.includes('magic-libraries-')) {
       libName = libDir.split('magic-libraries-')[1]
-      libDir = `magic-libraries-${libName}`
-    } else if (libDir.includes('magic-library')) {
+      // libDir = `magic-libraries-${libName}`
+    } else if (libDir.includes('magic-library-')) {
       libName = libDir.split('magic-library-')[1]
-      libDir = `magic-library-${libName}`
+      // libDir = `magic-library-${libName}`
     }
 
     libraries[libName] = libDir
@@ -61,6 +61,10 @@ export const findLibraries = async (app, modules) => {
   global.lib = global.lib || {}
 
   const libFnPromises = Object.entries(libraries).map(async ([key, val]) => {
+    if (!val.endsWith('.mjs')) {
+      val = path.join(val, 'src', 'index.mjs')
+    }
+
     let lib = await import(val)
     if (lib.default) {
       lib = lib.default

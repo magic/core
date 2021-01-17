@@ -67,17 +67,17 @@ export const findNodeModules = async () => {
       if (magicModuleDir !== nodeModule) {
         const name = cases.pascal(path.basename(nodeModule))
 
-        const importPath = nodeModule.replace(nodeModuleDir + path.sep, '')
-        const loadPath = replacePathSepForImport(importPath, path.sep)
+        const loadPath = replacePathSepForImport(nodeModule, path.sep)
 
         try {
-          const mod = await import(loadPath)
+          const importPath = path.join(nodeModule, 'src', 'index.mjs')
+          const mod = await import(importPath)
           // copy the imported module into a new object to be able to extend it below
           modules[name] = {
             ...mod,
           }
         } catch (e) {
-          log.error('E_REQUIRE', `requiring node_module: ${nodeModule}, error: ${e.message}`)
+          log.error(e.code, `requiring node_module: ${nodeModule}, error: ${e.message}`)
           process.exit(1)
         }
 
