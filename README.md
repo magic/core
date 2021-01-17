@@ -403,6 +403,7 @@ git tagged but not published
 
 ##### 0.0.100 - unreleased
 * config.API_DIR now actually gets used
+* api routes now 404 if they do not exist (redirected to WEB_ROOT before)
 
 ##### 0.0.101 - unreleased
 ...
