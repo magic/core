@@ -81,8 +81,8 @@ Menu({
 
 <h3 id='menu-item-props'>Menu.Item props</h3>
 
-every MenuItem accepts props the same props as a link does.
-additionally a MenuItem accepts a items prop with sub menu items.
+every MenuItem accepts the same props as a link does.
+additionally a MenuItem accepts an items prop with sub menu items.
 
 <Pre>
 const menuItem = ({
