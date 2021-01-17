@@ -65,7 +65,7 @@ export const actions = {
     if (hash) {
       window.location.hash = hash
     } else {
-      window.scroll({ top, behavior: 'smooth' })
+      window.scroll({ top })
     }
 
     return {
@@ -90,8 +90,6 @@ export const actions = {
       return state
     }
 
-    const { scrollY } = window
-
     const title = state.pages && state.pages[url] && state.pages[url].title
     if (title) {
       document.title = state.title = title
@@ -99,25 +97,13 @@ export const actions = {
 
     if (url !== state.url) {
       if (!hash) {
-        const [html] = document.getElementsByTagName('html')
-        // firefox can not access this value via javascript (07.02.2020)
-        // which means that it will be an empty string.
-        // the hack below works by miracle, not logic.
-        const scrollBehavior = html.style.scrollBehavior
-
-        // this allows firefox to scroll to top in some edge-case scenarios
-        // example: page was scrolled manually.
-        html.style.scrollBehavior = 'auto'
-
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-
-        // set scrollBehavior back to default.
-        html.style.scrollBehavior = scrollBehavior
+        window.scrollTo({ top: 0 })
       }
     } else {
       window.location.hash = hash
     }
 
+    const { scrollY } = window
     window.history.pushState({ url, hash, scrollY }, state.title, to)
 
     return {
