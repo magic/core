@@ -415,7 +415,10 @@ git tagged but not published
 * bump required node version to 14.15.4
 * update dependencies
 
-##### 0.0.103 - unreleased
+##### 0.0.103 
+update dependencies
+
+##### 0.0.104 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
