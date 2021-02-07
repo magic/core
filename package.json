@@ -37,22 +37,22 @@
     "url": "https://github.com/magic/core/issues"
   },
   "dependencies": {
-    "@babel/core": "7.12.10",
-    "@babel/plugin-transform-react-jsx": "7.12.12",
-    "@babel/preset-env": "7.12.11",
+    "@babel/core": "7.12.13",
+    "@babel/plugin-transform-react-jsx": "7.12.13",
+    "@babel/preset-env": "7.12.13",
     "@magic-libraries/prevent-default": "0.0.5",
     "@magic/cases": "0.0.4",
     "@magic/cli": "0.0.31",
-    "@magic/css": "0.7.28",
+    "@magic/css": "0.7.29",
     "@magic/deep": "0.1.5",
     "@magic/error": "0.0.8",
     "@magic/fs": "0.0.10",
     "@magic/hyperapp": "2.0.4-alpha.0.0",
     "@magic/log": "0.1.8",
-    "@magic/tags": "0.0.5",
-    "@magic/transmute": "0.0.37",
+    "@magic/tags": "0.0.6",
+    "@magic/transmute": "0.0.38",
     "@magic/types": "0.1.14",
-    "@swc/core": "1.2.45",
+    "@swc/core": "1.2.47",
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.1",
     "hyperapp-render": "3.5.0"
@@ -60,14 +60,14 @@
   "devDependencies": {
     "@magic-modules/no-spy": "0.0.6",
     "@magic-modules/git-badges": "0.0.11",
-    "@magic-modules/library-list": "0.0.16",
+    "@magic-modules/library-list": "0.0.17",
     "@magic-modules/light-switch": "0.0.10",
-    "@magic-modules/module-list": "0.0.18",
+    "@magic-modules/module-list": "0.0.19",
     "@magic-modules/pre": "0.0.10",
-    "@magic-modules/theme-list": "0.0.13",
+    "@magic-modules/theme-list": "0.0.14",
     "@magic-themes/docs": "0.0.12",
     "@magic/format": "0.0.21",
-    "@magic/test": "0.1.60"
+    "@magic/test": "0.1.61"
   },
   "keywords": [
     "magic",
