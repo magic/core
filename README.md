@@ -418,7 +418,10 @@ git tagged but not published
 ##### 0.0.103 
 update dependencies
 
-##### 0.0.104 - unreleased
+##### 0.0.104 
+update dependencies
+
+##### 0.0.105 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
