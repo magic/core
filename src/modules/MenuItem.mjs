@@ -1,12 +1,13 @@
 export const View = props => {
   CHECK_PROPS(props, propTypes, 'MenuItem', true)
+
   const { text, items = [], url, root, parentTo = undefined, collapse, ...item } = props
 
   const p = {
     class: {},
   }
 
-  let to = item.to
+  let { to } = item
 
   if (root && to.startsWith('/')) {
     to = to.substr(1)
