@@ -9,7 +9,7 @@ export const View = (props = {}, children = []) => {
 
   return header({ class: 'Header' }, [
     (logo || logotext) && Logo({ root, theme, logo, logotext }),
-    menu && Menu({ url, hash, root, items: menu }),
+    menu && Menu({ url, hash, root, menu }),
     children,
   ])
 }

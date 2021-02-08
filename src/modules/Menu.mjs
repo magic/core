@@ -1,15 +1,14 @@
 export const View = (props = {}) => {
   CHECK_PROPS(props, propTypes, 'Menu')
 
-  const { class: className = 'Menu', collapse = true, items, state } = props
-  const { hash, root } = state
-  let { url } = state
+  const { class: className = 'Menu', collapse = true, menu, hash, root } = props
+  let { url } = props
 
   if (hash && !url.endsWith(hash)) {
     url += `#${hash}`
   }
 
-  return nav({ className }, ul(items.map(item => MenuItem({ ...item, url, root, collapse }))))
+  return nav({ className }, ul(menu.map(item => MenuItem({ ...item, url, root, collapse }))))
 }
 
 export const style = {
@@ -41,7 +40,7 @@ export const style = {
 
 export const propTypes = {
   Menu: [
-    { key: 'items', type: 'array', required: true },
+    { key: 'menu', type: 'array', required: true },
     { key: 'hash', type: 'string' },
     { key: 'url', type: 'string' },
     { key: 'collapse', type: 'boolean' },
