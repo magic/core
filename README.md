@@ -421,10 +421,13 @@ update dependencies
 ##### 0.0.104 
 update dependencies
 
-##### 0.0.105 - unreleased
+##### 0.0.105
 * Header, Menu, MenuItem and Logo arguments updated
 
-##### 0.0.106 - unreleased
+##### 0.0.106
+update dependencies (marked)
+
+##### 0.0.107 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
