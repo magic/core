@@ -65,9 +65,9 @@
     "@magic-modules/module-list": "0.0.19",
     "@magic-modules/pre": "0.0.10",
     "@magic-modules/theme-list": "0.0.14",
-    "@magic-themes/docs": "0.0.12",
+    "@magic-themes/docs": "0.0.13",
     "@magic/format": "0.0.21",
-    "@magic/test": "0.1.61"
+    "@magic/test": "0.1.62"
   },
   "keywords": [
     "magic",
