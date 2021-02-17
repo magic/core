@@ -21,4 +21,14 @@ const description = content => {
 
 exp.description = description
 
+const oldA = exp.a
+exp.a = (props, children) => {
+  const { to, text = '', ...p } = props
+  if (to) {
+    p.href = to
+  }
+
+  oldA(p, children.length ? children : text)
+}
+
 export const tags = exp
