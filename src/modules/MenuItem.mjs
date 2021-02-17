@@ -1,7 +1,7 @@
 export const View = props => {
   CHECK_PROPS(props, propTypes, 'MenuItem', true)
 
-  const { text, items = [], url, root, parentTo = undefined, collapse, ...item } = props
+  const { text, items = [], url, parentTo = undefined, collapse, ...item } = props
 
   const p = {
     class: {},
@@ -9,20 +9,10 @@ export const View = props => {
 
   let { to } = item
 
-  if (root && to.startsWith('/')) {
-    to = to.substr(1)
-  }
-
   const first = item.to[0]
-  const isLocal = first === '/' || first === '-' || first === '#'
 
   if (parentTo && (first === '-' || first === '#')) {
     to = parentTo + to
-  }
-
-  const isRooted = to.startsWith(root)
-  if (root && isLocal && !isRooted) {
-    to = root + to
   }
 
   item.to = to.replace(/\/\//g, '/')
@@ -35,7 +25,7 @@ export const View = props => {
   const active = url.startsWith(item.to) || !collapse
 
   if (active && items.length) {
-    children = ul(items.map(i => MenuItem({ parentTo: item.to, url, root, collapse, ...i })))
+    children = ul(items.map(i => MenuItem({ parentTo: item.to, url, collapse, ...i })))
   }
 
   return li(p, [item.to ? MenuLink(item, text) : span(item, text), children])

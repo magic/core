@@ -1,7 +1,7 @@
 export const View = (props = {}) => {
   CHECK_PROPS(props, propTypes, 'Menu')
 
-  const { collapse = true, menu, hash, root } = props
+  const { collapse = true, menu, hash } = props
   let { class: className = '', url } = props
 
   if (!className.includes('Menu')) {
@@ -12,7 +12,7 @@ export const View = (props = {}) => {
     url += `#${hash}`
   }
 
-  return nav({ className }, ul(menu.map(item => MenuItem({ ...item, url, root, collapse }))))
+  return nav({ className }, ul(menu.map(item => MenuItem({ ...item, url, collapse }))))
 }
 
 export const style = {
