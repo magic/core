@@ -17,15 +17,17 @@ const handleLink = (path, config) => {
 
   if (!href.startsWith(config.WEB_ROOT)) {
     const isLocal = href.startsWith('/') && !href.startsWith('//')
-    const isHash = href.startsWith('#') || href.startsWith('/#')
-    const isExtension = href.startsWith('-')
+    // const isHash = href.startsWith('#') || href.startsWith('/#')
+    // const isExtension = href.startsWith('-')
 
-    // if (isExtension) {
-    //   console.log('is extension', href, path)
+    // if (isExtension || isHash) {
+    //   console.log('is extension or hash', href, Object.keys(node.value))
     // }
 
-    if (isLocal || isHash) {
-      node.value.value = `${config.WEB_ROOT}${href}`.replace(/\/\//g, '/')
+    if (isLocal) {
+      const newValue = `${config.WEB_ROOT}${href}`.replace(/\/\//g, '/')
+      // console.log({ href, newValue })
+      path.node.value.value = newValue
     }
   }
 }
@@ -71,7 +73,7 @@ const findUsedSpells = (t, app, config) => path => {
 
   if (t.isObjectProperty(path.node)) {
     if (path.node.key) {
-      const validKeys = ['src', 'logo'] //, 'href', 'to']
+      const validKeys = ['src', 'logo', 'href', 'to']
       if (path.node.key.name) {
         const { name } = path.node.key
         if (path.node.value.value) {
@@ -96,7 +98,7 @@ const findUsedSpells = (t, app, config) => path => {
           if (t.isMemberExpression(action.object)) {
             const { name: objName } = action.object.object
             const { name: propName } = action.object.property
-            console.log({ objName, propName })
+            // console.log({ objName, propName })
             if (type !== objName) {
               used[type][objName] = used[type][objName] || {}
               used[type][objName][propName] = {}
