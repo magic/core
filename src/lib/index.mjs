@@ -1,5 +1,4 @@
 export { addTrailingSlash } from './addTrailingSlash.mjs'
-export { applyWebRoot } from './applyWebRoot.mjs'
 export { CHECK_PROPS } from './CHECK_PROPS.mjs'
 export { createFileHash } from './createFileHash.mjs'
 export { findModuleStyles } from './findModuleStyles.mjs'
