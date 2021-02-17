@@ -44,6 +44,7 @@ export const getBabelConf = (app, config) => {
       {
         // this might sometimes break pages in production.
         // "too much recursion".
+        // 17.02.2021: should be fixed. still left the comment for future reference
         mangle: {
           topLevel: true,
         },
