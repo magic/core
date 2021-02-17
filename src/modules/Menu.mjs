@@ -1,8 +1,12 @@
 export const View = (props = {}) => {
   CHECK_PROPS(props, propTypes, 'Menu')
 
-  const { class: className = 'Menu', collapse = true, menu, hash, root } = props
-  let { url } = props
+  const { collapse = true, menu, hash, root } = props
+  let { class: className = '', url } = props
+
+  if (!className.includes('Menu')) {
+    className = `Menu ${className}`.trim()
+  }
 
   if (hash && !url.endsWith(hash)) {
     url += `#${hash}`
