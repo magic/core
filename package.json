@@ -18,7 +18,7 @@
     "serve": "src/bin.mjs serve --watch src",
     "prod": "NODE_ENV=production src/bin.mjs build serve --watch src",
     "clean": "src/bin.mjs clean",
-    "dev": "src/bin.mjs dev --watch src",
+    "dev": "src/bin.mjs dev --watch src --keep-client",
     "format": "f -w --exclude docs api",
     "test": "t",
     "calls": "calls"
