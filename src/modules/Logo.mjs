@@ -1,5 +1,6 @@
 export const View = ({ logo, logotext, root }) =>
-  CHECK_PROPS(props, propTypes, 'Logo') && Link({ to: root, class: 'Logo' }, [logo && Img(logo), logotext && span(logotext)])
+  CHECK_PROPS(props, propTypes, 'Logo') &&
+  Link({ to: root, class: 'Logo' }, [logo && Img(logo), logotext && span(logotext)])
 
 export const propTypes = {
   Logo: [
