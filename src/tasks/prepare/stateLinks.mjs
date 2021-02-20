@@ -44,7 +44,14 @@ const traverseLinks = (state, parent) => {
 
   const result = Object.entries(state).map(([key, value]) => {
     if (is.array(value)) {
-      value = value.map(val => traverseLinks(val, state))
+      value = value.map(val => {
+        if (is.string(val)) {
+          return val
+        }
+
+        const traversed = traverseLinks(val, state)
+        return traversed
+      })
     } else if (is.objectNative(value)) {
       value = traverseLinks(value)
     }
@@ -60,5 +67,6 @@ const traverseLinks = (state, parent) => {
 export const prepareStateLinks = app => {
   const { state } = app
 
-  return traverseLinks(state)
+  const result = traverseLinks(state)
+  return result
 }
