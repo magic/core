@@ -1,28 +1,16 @@
+import deep from '@magic/deep'
+
 import babel from '@babel/core'
 import swc from '@swc/core'
 
-import { getBabelConf } from '../../lib/index.mjs'
+import { getBabelConf, getSwcConf } from '../../lib/index.mjs'
 
 export default async app => {
+
   if (config.ENV === 'development') {
-    const swcOpts = {
-      // Some options cannot be specified in .swcrc
-      filename: `${config.BABEL.CLIENT_LIB_NAME}.js`,
-
-      sourceMaps: true,
-      // Input files are treated as module.
-      isModule: true,
-
-      // All options below can be configured via .swcrc
-      jsc: {
-        parser: {
-          syntax: 'ecmascript',
-        },
-        transform: {},
-      },
-    }
-
+    const swcOpts = getSwcConf(app, config)
     const { code } = await swc.transform(app.client, swcOpts)
+
     // const sw = await swc.transform(app.serviceWorker, swcOpts)
     return {
       code,
