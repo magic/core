@@ -109,7 +109,7 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
 
   if (!page.View || !is.function(page.View.toString)) {
     const pageDir = PAGES.replace(process.cwd(), '')
-    // remove slashes
+    // remove all slashes
     const pageName = page.name.replace(/\//g, '')
 
     throw error(
