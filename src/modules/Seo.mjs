@@ -1,3 +1,5 @@
+import { replaceSlashSlash } from '../lib/index.mjs'
+
 export const View = state => {
   const { seo = {} } = state
   const {
@@ -10,18 +12,19 @@ export const View = state => {
   const description = Array.isArray(state.description)
     ? state.description.join(' ')
     : state.description
+
   const keywords = Array.isArray(state.keywords) ? state.keywords.join(' ') : state.keywords
 
   const favicon = state.favicon || `${config.WEB_ROOT}favicon.ico`
   const head = [link({ rel: 'icon', href: favicon })]
 
-  const pageTitle = state.title || seo.name
+  const pageTitle = seo.name || state.title
 
   if (pageTitle) {
     head.push(title(pageTitle))
   }
 
-  const pageImage = state.image || seo.image
+  const pageImage = replaceSlashSlash(seo.image || state.image)
 
   if (pageImage) {
     head.push(meta({ name: 'twitter:image', property: 'og:image', content: pageImage }))
@@ -63,12 +66,18 @@ export const View = state => {
     head.push(meta({ name: 'author', content: authorName }))
   }
 
-  const openGraph = JSON.stringify({
+  const seoGraph = {
     '@context': context,
     '@type': type,
     name,
     ...seo,
-  })
+  }
+
+  if (pageImage) {
+    seoGraph.image = pageImage
+  }
+
+  const openGraph = JSON.stringify(seoGraph)
 
   const props = {
     type: 'application/ld+json',
