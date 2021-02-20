@@ -427,7 +427,14 @@ update dependencies
 ##### 0.0.106
 update dependencies (marked)
 
-##### 0.0.107 - unreleased
+##### 0.0.107
+* update dependencies
+* swc now handles links in pages
+* prepare task now handles all urls in the state object,
+  no need to handle it in babel/swc or in modules.
+
+
+###### 0.0.108 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
