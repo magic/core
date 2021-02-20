@@ -22,4 +22,8 @@ export default {
   BABEL: {
     BABEL_DEBUG: true,
   },
+
+  // this is set to be able to test broken link behaviour.
+  // DO NOT ENABLE IN YOUR APP (unless you need to because reasons...)
+  NO_CHECK_LINKS_EXIT: true,
 }
