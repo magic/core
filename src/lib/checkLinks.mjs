@@ -10,7 +10,10 @@ const redirectStatusCodes = [301, 302, 303, 307, 308]
 export const checkLinks = async (app, pages) => {
   const staticUrls = Object.keys(app.static)
 
-  const linkResolvers = app.links.map(async link => {
+  // remove duplicate links
+  const links = Array.from(new Set(app.links))
+
+  const linkResolvers = links.map(async link => {
     if (link.startsWith(config.WEB_ROOT)) {
       if (isPageUrl(pages, link) || isHashedUrl(pages, link) || isStaticUrl(staticUrls, link)) {
         return
