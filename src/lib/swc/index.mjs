@@ -1,5 +1,7 @@
 import log from '@magic/log'
 
+import { replaceSlashSlash } from '../replaceSlashSlash.mjs'
+
 const declarations = {
   assigned: [],
   declared: {},
