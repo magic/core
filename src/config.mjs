@@ -31,6 +31,7 @@ export const runConfig = async (args = {}) => {
   }
 
   conf.NO_CHECK_LINKS = args.noCheckLinks
+  conf.NO_CHECK_LINKS_REMOTE = args.noCheckLinksRemote
 
   // object to collect various directories in.
   conf.DIR = conf.DIR || {}
