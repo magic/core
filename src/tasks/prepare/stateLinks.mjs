@@ -1,37 +1,10 @@
 import is from '@magic/types'
-import log from '@magic/log'
 
-const prepareLink = (url, parent, app) => {
-  if (url.startsWith('/#')) {
-    url = url.substr(1)
-  }
-
-  if (url.startsWith('/')) {
-    if (!url.startsWith(config.WEB_ROOT)) {
-      url = `${config.WEB_ROOT}${url.substr(1)}`
-    }
-  } else if (url.startsWith('#') || url.startsWith('-')) {
-    if (parent.to) {
-      url = `${parent.to}${url}`
-    } else {
-      url = `${config.WEB_ROOT}${url}`
-    }
-  } else {
-    log.error(
-      '@magic did not handle this url. Please file a bug at https://github.com/magic/core/issues',
-      url,
-      parent,
-    )
-  }
-
-  app.links.push(url)
-
-  return url
-}
+import { handleLink } from '../../lib/index.mjs'
 
 const traverseLinks = ({ state, parent, app }) => {
   if (state.to && parent) {
-    state.to = prepareLink(state.to, parent, app)
+    state.to = handleLink({ href: state.to, parent, app })
 
     if (state.items) {
       state.items = state.items.map(item => traverseLinks({ state: item, parent: state, app }))
@@ -61,12 +34,13 @@ const traverseLinks = ({ state, parent, app }) => {
 }
 
 export const prepareStateLinks = app => {
-  if (!is.empty(app.state.logo) && is.string(app.state.logo)) {
-    app.state.logo = prepareLink(app.state.logo, undefined, app)
+  const { logo, seo } = app.state
+  if (!is.empty(logo) && is.string(logo)) {
+    app.state.logo = handleLink({ href: logo, app })
   }
 
-  if (!is.empty(app?.seo?.image)) {
-    app.seo.image = prepareLink(app.seo.image, undefined, app)
+  if (!is.empty(seo?.image) && is.string(seo?.image)) {
+    app.state.seo.image = handleLink({ href: seo.image, app })
   }
 
   return traverseLinks({ state: app.state, app })
