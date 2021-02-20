@@ -2,7 +2,7 @@
   "name": "@magic/core",
   "version": "0.0.108",
   "author": "Wizards & Witches",
-  "homepage": "https://magic.github.io/core",
+  "homepage": "https://magic.github.io/",
   "license": "AGPL-3.0",
   "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
   "main": "src/index.mjs",
