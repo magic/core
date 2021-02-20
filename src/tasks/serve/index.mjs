@@ -48,7 +48,7 @@ export const serve = async app => {
       log.warn('Address in use', `incrementing port to ${port}...`)
     }
 
-    log.success('LISTENING TO', `http://${host}:${port}${config.WEB_ROOT}`)
+    log(log.paint.green('LISTENING TO'), `http://${host}:${port}${config.WEB_ROOT}`)
   } catch (e) {
     log.error(e)
   }
