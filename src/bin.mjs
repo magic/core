@@ -16,9 +16,22 @@ const args = {
     '--keep-debugger',
     '--no-check-links',
     '--no-check-links-remote',
+    '--no-check-links-exit',
   ],
   env: [[['--production', '--prod', '--p', '-p'], 'NODE_ENV', 'production']],
   commands: [['serve', 'dev', 'development', 'start'], 'clean', 'connect', 'publish', 'build'],
+  single: [
+    '--no-minify',
+    '--watch',
+    '--keep-client',
+    '--no-mangle-names',
+    '--keep-console',
+    '--keep-dead-code',
+    '--keep-debugger',
+    '--no-check-links',
+    '--no-check-links-remote',
+    '--no-check-links-exit',
+  ],
   help: {
     name: 'magic',
     header: 'static and serverless page generator',
@@ -41,6 +54,7 @@ const args = {
       '--watch': 'watch additional directories',
       '--no-check-links': 'do not check any links for validity',
       '--no-check-links-remote': 'do not check external links for validity',
+      '--no-check-links-exit': 'do not exit production build on broken links',
     },
     example: `
 production:
