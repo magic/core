@@ -6,7 +6,9 @@ export const state = config => ({
     name: '@magic/core documentation',
     url: `https://${config.URL}`,
     about: '@magic framework core.',
-    image: `https://${config.URL}logo.png`,
+    // this will lead to a double slash before logo.png.
+    // should be removed automagically.
+    image: `https://${config.URL}/logo.png`,
     author: {
       '@type': 'person',
       name: 'Jascha Ehrenreich',
