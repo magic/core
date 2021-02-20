@@ -439,6 +439,7 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 
 ##### 0.0.109
 * fix error in modules/Logo
+* tasks/prepare/stateLinks now handles #hash and -expand links without parents
 
 ##### 0.0.110  - unreleased
 ...
