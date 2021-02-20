@@ -1,4 +1,5 @@
 import is from '@magic/types'
+import log from '@magic/log'
 
 const prepareLink = (url, parent) => {
   if (url.startsWith('/#')) {
@@ -13,10 +14,18 @@ const prepareLink = (url, parent) => {
     if (url.startsWith('#') || url.startsWith('-')) {
       url = `${parent.to}${url}`
     } else {
-      console.log('@magic did not handle this url. Please file a bug at https://github.com/magic/core/issues', url, parent)
+      log.error(
+        '@magic did not handle this url. Please file a bug at https://github.com/magic/core/issues',
+        url,
+        parent,
+      )
     }
   } else {
-    console.log('uncaught url', url, parent)
+    log.error(
+      '@magic did not handle this url. Please file a bug at https://github.com/magic/core/issues',
+      url,
+      parent,
+    )
   }
 
   return url
@@ -53,4 +62,3 @@ export const prepareStateLinks = app => {
 
   return traverseLinks(state)
 }
-
