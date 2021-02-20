@@ -38,7 +38,7 @@ the Menu module provides... menus.
 <Pre>
 export const View = state => {
   const items = [
-    { to: '/example-page', text: 'example page' },
+    { to: '/', text: 'example page' },
     { to: 'https://example.com', text: 'example.com' },
     { to: 'https://example.com', nofollow: true, noreferrer: true, target: 'utopia', text: 'nofollow and noref" },
   ]
@@ -50,7 +50,7 @@ export const View = state => {
 <nav class="Menu">
   <ul>
     <li>
-      <a onclick="actions.go" href="{{ root }}example-page">example page</a>
+      <a onclick="actions.go" href="/">example page</a>
     </li>
     <li>
       <a href="https://example.com" target="_blank" rel="noopener">example.com</a>
@@ -123,11 +123,11 @@ the link module allows you to link to things.
 <Pre>
 // in any page or module View
 export default () => [
-  Link({ to: '/page', text: 'page' }),
-  // output: <a href="/page" onclick="actions.go">page</a>
+  Link({ to: '/', text: 'page' }),
+  // output: <a href="/" onclick="actions.go">page</a>
   Link({ to: 'https://example.com', text: 'page' }),
   // output: <a href="https://example.com" target="_blank" rel="noopener">page</a>
-  Link({ to: '/page', text: 'page', nofollow: true, noreferrer: true }),
+  Link({ to: '/', text: 'page', nofollow: true, noreferrer: true }),
   // output: <a href="https://example.com" target="_blank" rel="nofollow noreferrer noopener">page</a>
 
   // you can also use children syntax instead of the text prop:
@@ -147,7 +147,7 @@ the img module adds some sane default values to your images.
 export default () => [
   Img('/image.png'),
   // output: &lt;img src="/image.png" alt="" role="presentation"/>
-  Img({ src: '/image.png }),
+  Img({ src: '/image.png' }),
   // output: &lt;img src="/image.png" alt="" role="presentation"/>
   Img({ src: '/image.png', alt: 'image description' }),
   // output: &lt;img src="/image.png" alt="image description" />

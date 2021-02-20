@@ -18,7 +18,7 @@ slow[ly] (pun intended) grow towards a footprint of 5 megabytes.
 we think that all of that bloat is unneeded, unheeded and, frankly, not optimal.
 
 magic has one external client side dependency,
-[hyperapp](https://github.com/jorgebucharan/hyperapp),
+[hyperapp](https://github.com/jorgebucaran/hyperapp/),
  [~500 lines that provide our ui state machine]. thats it. and it won't change.
 
 we also have the tendency to write libraries specialized for our usecase, see

@@ -19,10 +19,10 @@ only tags valid in a html5 body, excluding &lt;script&gt; and &lt;style&gt; tags
 
 ### a list:
 
-* [@magic/core](https://magic.github.io)
-* [@magic-libraries](https://magic-libraries.github.io)
-* [@magic-modules](https://magic-modules.github.io)
-* [@magic-themes](https://magic-themes.github.io)
+* [@magic/core](https://magic.github.io/)
+* [@magic-libraries](https://magic-libraries.github.io/)
+* [@magic-modules](https://magic-modules.github.io/)
+* [@magic-themes](https://magic-themes.github.io/)
 
 
 ### state

@@ -56,7 +56,7 @@ but @magic always tries to provide a non-javascript fallback via css.
 this makes free hosting (using github or gitlab pages) possible. and it's easy.
 
 
-@magic publishes to [github](https://github.com), [gitlab](https://gitlab.com),
+@magic publishes to [github](https://github.com), [gitlab](https://about.gitlab.com/),
 and any other git-pages enabled hosting service.
 
 ### serverless / faas
@@ -68,3 +68,9 @@ you use in your pages.
 
 this makes visitor statistics, user authentication and authorization,
 chat, and all other server side services possible.
+
+### Link Tests:
+
+* [/modules/](/modules/)
+* [/modules/#gl-magic-modules](/modules/#gl-magic-modules)
+* [https://magic.github.io](https://magic.github.io/)
