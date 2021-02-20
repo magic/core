@@ -2,7 +2,7 @@ import error from '@magic/error'
 import fs from '@magic/fs'
 import is from '@magic/types'
 
-import { getBlog, getPages } from '../../lib/index.mjs'
+import { getBlog, getPages, handleLink } from '../../lib/index.mjs'
 
 import { prepareBlog } from './blog.mjs'
 import { prepareThemes } from './themes.mjs'
@@ -44,6 +44,15 @@ export const prepare = async (app, config) => {
   const moduleNames = Object.keys(app.modules)
 
   // collect the pages, create their states
+
+  const { logo, seo } = app.state
+  if (!is.empty(logo) && is.string(logo)) {
+    app.state.logo = handleLink({ href: logo, app })
+  }
+
+  if (!is.empty(seo?.image) && is.string(seo?.image)) {
+    app.state.seo.image = handleLink({ href: seo.image, app })
+  }
 
   app.pages = await preparePages(app, moduleNames)
 
@@ -137,7 +146,7 @@ export const prepare = async (app, config) => {
   prepareModules(app)
 
   // make all links WEB_ROOTED
-  // mutates app.links
+  // mutates app.state
   app.state = prepareStateLinks(app)
 
   // create client magic.js file

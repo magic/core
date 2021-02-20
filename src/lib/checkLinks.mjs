@@ -27,11 +27,20 @@ export const checkLinks = async (app, pages) => {
         return
       } else if (redirectStatusCodes.includes(statusCode)) {
         if (headers.location) {
-          log.warn('W_CHECKLINKS_REDIRECT', 'There is a link in your app that is getting redirected.')
-          log.info('to make this warning disappear: change:', link, 'to:', headers.location)
+          log.warn(
+            'W_CHECKLINKS_REDIRECT',
+            'There is a link in your app that is getting redirected.\nto make this warning disappear: change:',
+            link,
+            'to:',
+            headers.location,
+          )
           return
         } else {
-          log.warn('W_CHECKLINKS_REDIRECT', 'Weird http redirect. Please file an issue: https://github.com/magic/core/issues/', { statusCode, headers })
+          log.warn(
+            'W_CHECKLINKS_REDIRECT',
+            'Weird http redirect. Please file an issue: https://github.com/magic/core/issues/',
+            { statusCode, headers },
+          )
           return
         }
       } else if (error) {
