@@ -15,23 +15,12 @@ const used = {
 
 const handleLink = (path, config, app) => {
   const href = path.node.value.value
+  const isLocal = href.startsWith('/') && !href.startsWith('//')
 
-  if (!href.startsWith(config.WEB_ROOT)) {
-    const isLocal = href.startsWith('/') && !href.startsWith('//')
-    // const isHash = href.startsWith('#') || href.startsWith('/#')
-    // const isExtension = href.startsWith('-')
-
-    // if (isExtension || isHash) {
-    //   console.log('is extension or hash', href, Object.keys(path.node.value))
-    // }
-
-    if (isLocal) {
-      const newValue = replaceSlashSlash(`${config.WEB_ROOT}${href}`)
-      path.node.value.value = newValue
-      app.links.push(newValue)
-    } else {
-      app.links.push(href)
-    }
+  if (!href.startsWith(config.WEB_ROOT) && isLocal) {
+    const newValue = replaceSlashSlash(`${config.WEB_ROOT}${href}`)
+    path.node.value.value = newValue
+    app.links.push(newValue)
   } else {
     app.links.push(href)
   }
@@ -79,14 +68,14 @@ const findUsedSpells = (t, app, config) => path => {
   if (t.isObjectProperty(path.node)) {
     if (path.node.key) {
       const validKeys = ['src', 'logo', 'href', 'to']
-      if (path.node.key.name) {
+      if (t.isIdentifier(path.node.key)) {
         const { name } = path.node.key
         if (path.node.value.value) {
           if (validKeys.includes(name)) {
             handleLink(path, config, app)
           }
         }
-      } else if (path.node.key.value) {
+      } else if (t.isStringLiteral(path.node.key)) {
         const { value: name } = path.node.key
         if (validKeys.includes(name)) {
           handleLink(path, config, app)
