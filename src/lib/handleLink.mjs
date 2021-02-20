@@ -49,7 +49,6 @@ export const handleLink = ({ app, href, parent = {} }) => {
   return href
 }
 
-
 // export const handleLink = (val, app) => {
 //   if (!val.startsWith(config.WEB_ROOT)) {
 //     if (val.startsWith('/') || val.startsWith('#') || val.startsWith('/#')) {
