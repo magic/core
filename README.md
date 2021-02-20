@@ -437,7 +437,10 @@ update dependencies (marked)
 ##### 0.0.108
 debump hyperapp-render from 4.0.0 to 3.5.0
 
-##### 0.0.109  - unreleased
+##### 0.0.109
+* fix error in modules/Logo
+
+##### 0.0.110  - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
