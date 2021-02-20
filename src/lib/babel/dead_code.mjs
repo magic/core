@@ -13,9 +13,8 @@ const used = {
   tags: new Set(),
 }
 
-const handleLink = (path, config) => {
-  const { node } = path
-  const href = node.value.value
+const handleLink = (path, config, app) => {
+  const href = path.node.value.value
 
   if (!href.startsWith(config.WEB_ROOT)) {
     const isLocal = href.startsWith('/') && !href.startsWith('//')
@@ -23,14 +22,18 @@ const handleLink = (path, config) => {
     // const isExtension = href.startsWith('-')
 
     // if (isExtension || isHash) {
-    //   console.log('is extension or hash', href, Object.keys(node.value))
+    //   console.log('is extension or hash', href, Object.keys(path.node.value))
     // }
 
     if (isLocal) {
       const newValue = replaceSlashSlash(`${config.WEB_ROOT}${href}`)
-      // console.log({ href, newValue })
       path.node.value.value = newValue
+      app.links.push(newValue)
+    } else {
+      app.links.push(href)
     }
+  } else {
+    app.links.push(href)
   }
 }
 
@@ -80,13 +83,13 @@ const findUsedSpells = (t, app, config) => path => {
         const { name } = path.node.key
         if (path.node.value.value) {
           if (validKeys.includes(name)) {
-            handleLink(path, config)
+            handleLink(path, config, app)
           }
         }
       } else if (path.node.key.value) {
         const { value: name } = path.node.key
         if (validKeys.includes(name)) {
-          handleLink(path, config)
+          handleLink(path, config, app)
         }
       }
     }
