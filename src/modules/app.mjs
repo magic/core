@@ -147,7 +147,7 @@ const App = async config => {
 
   // default app state. gets merged with /assets/app.js if it exists.
   // /assets/app.js overwrites the values defined here.
-  let app = deep.merge(localApp, {
+  const app = deep.merge(localApp, {
     state: {
       url: WEB_ROOT,
       root: WEB_ROOT,
