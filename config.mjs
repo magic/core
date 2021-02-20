@@ -2,7 +2,7 @@ export default {
   ROOT: 'example',
   THEME: 'docs',
   WEB_ROOT: '/core/',
-  URL: 'magic.github.io/core',
+  URL: 'magic.github.io/core/',
 
   PUBLIC: 'docs',
 
