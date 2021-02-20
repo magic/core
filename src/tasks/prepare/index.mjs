@@ -13,6 +13,7 @@ import { prepareModules } from './modules.mjs'
 import { preparePages } from './pages.mjs'
 // import { prepareServiceWorker } from './service-worker.mjs'
 import { prepareApi } from './api.mjs'
+import { prepareStateLinks } from './stateLinks.mjs'
 
 export const prepare = async (app, config) => {
   const defaultApp = {
@@ -131,6 +132,8 @@ export const prepare = async (app, config) => {
   prepareModules(app, modules)
 
   app.modules = modules
+
+  app.state = prepareStateLinks(app)
 
   // create client magic.js file
   app.client = await prepareJs(app)
