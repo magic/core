@@ -1,1 +1,1 @@
-export const replaceSlashSlash = str => str.replace(/\/\//g, '/')
+export const replaceSlashSlash = (str, replaceWith = '/') => str.replace(/\/\//g, replaceWith)
