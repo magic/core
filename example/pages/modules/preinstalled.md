@@ -22,7 +22,7 @@ the contents of this file get
 into the app
 
 <Pre>
-// /assets/app.mjs
+// /src/app.mjs
 export const state = {
   merge: 'gets merged into state',
 }

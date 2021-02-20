@@ -66,7 +66,7 @@ export const state = config => ({
         },
         {
           to: '#app',
-          text: '/assets/app.mjs',
+          text: 'app.mjs',
           items: [{ to: '-example', text: 'example' }],
         },
         {
