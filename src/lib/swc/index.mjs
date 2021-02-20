@@ -1,3 +1,6 @@
+import log from '@magic/log'
+
+import { replaceSlashSlash } from '../index.mjs'
 
 const declarations = {
   assigned: [],
@@ -13,33 +16,10 @@ const ignoredLiterals = [
   'RegExpLiteral',
 ]
 
-const handleLinks = props =>
-  props.map(prop => {
-    if (prop.key.value === 'menu') {
-      prop.value.elements = prop.value.elements.map(ele => {
-        ele.expression.properties = ele.expression.properties.map(p => {
-          if (p.key.value === 'to') {
-            // p.value.value = handleLink(p.value.value)
-          } else if (p.key.value === 'items') {
-            // p.value.elements = handleLinks(p.value.elements)
-          }
-
-          return p
-        })
-
-        return ele
-      })
-      // } else if (prop.key.value === 'items') {
-      //   console.log('items')
-    }
-
-    return prop
-  })
-
 const handleLink = val => {
-  if (val.startsWith('/') || val.startsWith('#')) {
-    if (!val.startsWith(config.WEB_ROOT)) {
-      val = `${config.WEB_ROOT}${val}`.replace(/\/\//g, '/')
+  if (!val.startsWith(config.WEB_ROOT)) {
+    if (val.startsWith('/') || val.startsWith('#') || val.startsWith('/#')) {
+      return replaceSlashSlash(`${config.WEB_ROOT}${val}`)
     }
   }
 
@@ -56,10 +36,6 @@ const visit = (parent, ancestor) => {
 
   if (parent.type === 'VariableDeclaration') {
     parent.declarations = parent.declarations.map(decl => visit(decl, parent))
-    const [initialState] = parent.declarations
-    if (initialState.id.value === 'initialState') {
-      initialState.init.properties = handleLinks(initialState.init.properties)
-    }
   } else if (parent.type === 'ExpressionStatement') {
     parent.expression = visit(parent.expression, parent)
   } else if (parent.type === 'AssignmentExpression') {
@@ -75,7 +51,7 @@ const visit = (parent, ancestor) => {
     } else if (parent.body.stmts) {
       parent.body.stmts = parent.body.stmts.map(stmt => visit(stmt, parent))
     } else {
-      // console.log('unhandled ArrowFunctionExpression', parent)
+      log.warn('unhandled ArrowFunctionExpression', parent)
     }
   } else if (parent.type === 'IfStatement') {
     parent.test = visit(parent.test, parent)
@@ -119,7 +95,7 @@ const visit = (parent, ancestor) => {
       parent.id = visit(parent.id, parent)
       parent.init = visit(parent.init, parent)
     } else {
-      console.log('unhandled VariableDeclarator', parent.id.type)
+      log.warn('unhandled VariableDeclarator', parent.id.type)
     }
   } else if (parent.type === 'ObjectExpression') {
     parent.properties = parent.properties.map(prop => visit(prop, parent))
@@ -180,7 +156,7 @@ const visit = (parent, ancestor) => {
     // do nothing with literals
     // console.log(parent)
   } else {
-    console.log('unhandled parent type', parent.type)
+    log.warn('unhandled parent type', parent.type)
   }
 
   return parent
