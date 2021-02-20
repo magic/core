@@ -6,6 +6,7 @@ export const httpGet = url =>
     const handler = url.startsWith('https') ? https : http
 
     const req = handler.get(url, res => {
+      const { statusCode, headers } = res
       // console.log('statusCode:', res.statusCode);
 
       const data = []
@@ -13,8 +14,10 @@ export const httpGet = url =>
         data.push(d)
       })
 
-      res.on('end', () => resolve({ statusCode: res.statusCode, headers: res.headers, data }))
+      res.on('end', () => resolve({ statusCode, headers, data }))
+
+      res.on('error', error => resolve({ error, statusCode }))
     })
 
-    req.on('error', reject)
+    req.on('error', error => resolve({ error }))
   })

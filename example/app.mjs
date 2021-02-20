@@ -24,7 +24,7 @@ export const state = config => ({
     'also provides an overview of all @magic functionality this ecosystem provides.',
   ],
 
-  logo: '/magic.png',
+  logo: '/logo.png',
   logotext: '@magic',
 
   menu: [
