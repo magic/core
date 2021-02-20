@@ -2,6 +2,8 @@ import log from '@magic/log'
 
 import { replaceSlashSlash } from '../replaceSlashSlash.mjs'
 
+const validKeys = ['src', 'logo', 'href', 'to']
+
 const declarations = {
   assigned: [],
   declared: {},
@@ -24,7 +26,6 @@ const handleLink = (val, app) => {
   }
 
   app.links.push(val)
-
   return val
 }
 
@@ -67,11 +68,11 @@ const visit = (parent, ancestor, app) => {
       if (arg.expression.type === 'ObjectExpression') {
         arg.expression.properties.forEach(prop => {
           if (prop.type === 'KeyValueProperty') {
-            if (prop.key.value === 'to' || prop.key.value === 'href') {
+            if (validKeys.includes(prop.key.value)) {
               if (prop.value.type === 'StringLiteral') {
                 prop.value.value = handleLink(prop.value.value, app)
-              } else {
-                // console.log(prop)
+                // } else {
+                // console.log('uncaught link', prop)
               }
             }
           }
