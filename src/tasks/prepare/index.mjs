@@ -26,6 +26,7 @@ export const prepare = async (app, config) => {
     lib: {},
     init: [],
     server: {},
+    links: [],
   }
 
   app = { ...defaultApp, ...app }
@@ -131,12 +132,13 @@ export const prepare = async (app, config) => {
 
   app.style = await prepareThemes(app)
 
-  // might mutate all of app...
+  // mutates app
+  // init, cookies, actions, effects, state, helpers, subscriptions
   prepareModules(app)
 
-  const { state } = prepareStateLinks(app)
-
-  app.state = state
+  // make all links WEB_ROOTED
+  // mutates app.links
+  app.state = prepareStateLinks(app)
 
   // create client magic.js file
   app.client = await prepareJs(app)

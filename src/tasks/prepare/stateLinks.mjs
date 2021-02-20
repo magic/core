@@ -1,7 +1,7 @@
 import is from '@magic/types'
 import log from '@magic/log'
 
-const prepareLink = (url, parent) => {
+const prepareLink = (url, parent, app) => {
   if (url.startsWith('/#')) {
     url = url.substr(1)
   }
@@ -24,15 +24,17 @@ const prepareLink = (url, parent) => {
     )
   }
 
+  app.links.push(url)
+
   return url
 }
 
-const traverseLinks = (state, parent) => {
+const traverseLinks = ({ state, parent, app }) => {
   if (state.to && parent) {
-    state.to = prepareLink(state.to, parent)
+    state.to = prepareLink(state.to, parent, app)
 
     if (state.items) {
-      state.items = state.items.map(item => traverseLinks(item, state))
+      state.items = state.items.map(item => traverseLinks({ state: item, parent: state, app }))
     }
 
     return state
@@ -45,24 +47,17 @@ const traverseLinks = (state, parent) => {
           return val
         }
 
-        const traversed = traverseLinks(val, state)
+        const traversed = traverseLinks({ state: val, parent: state, app })
         return traversed
       })
     } else if (is.objectNative(value)) {
-      value = traverseLinks(value)
+      value = traverseLinks({ state: value, app })
     }
 
     return [key, value]
   })
 
-  state = Object.fromEntries(result)
-
-  return state
+  return Object.fromEntries(result)
 }
 
-export const prepareStateLinks = app => {
-  const { state } = app
-
-  const result = traverseLinks(state)
-  return result
-}
+export const prepareStateLinks = app => traverseLinks({ state: app.state, app })
