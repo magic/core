@@ -4,7 +4,7 @@ import html from './html.mjs'
 import js from './js.mjs'
 import style from './css.mjs'
 
-import { createFileHash } from '../../lib/index.mjs'
+import { createFileHash, checkLinks } from '../../lib/index.mjs'
 
 export const transpile = async (app, config) => {
   const { code, serviceWorker } = await js(app)
@@ -52,6 +52,10 @@ export const transpile = async (app, config) => {
   }
 
   app.static[`/${config.HASH_FILE_NAME}`] = JSON.stringify(app.hashes, null, 2)
+
+  if (!config.NO_CHECK_LINKS) {
+    checkLinks(app, pages)
+  }
 
   return {
     hashes: app.hashes,

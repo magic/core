@@ -30,6 +30,8 @@ export const runConfig = async (args = {}) => {
     conf.ROOT = path.resolve(process.cwd(), conf.ROOT)
   }
 
+  conf.NO_CHECK_LINKS = args.noCheckLinks
+
   // object to collect various directories in.
   conf.DIR = conf.DIR || {}
 
