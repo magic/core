@@ -434,7 +434,10 @@ update dependencies (marked)
 * prepare task now handles all urls in the state object,
   no need to handle it in babel/swc or in modules.
 
-###### 0.0.108 - unreleased
+##### 0.0.108
+debump hyperapp-render from 4.0.0 to 3.5.0
+
+##### 0.0.109  - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
