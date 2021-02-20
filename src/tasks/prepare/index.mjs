@@ -36,9 +36,11 @@ export const prepare = async (app, config) => {
 
   let { modules, libs } = await prepareGlobals(app, config)
 
+  app.modules = modules
+
   app.files = await getPages()
 
-  const moduleNames = Object.keys(modules)
+  const moduleNames = Object.keys(app.modules)
 
   // collect the pages, create their states
 
@@ -127,13 +129,14 @@ export const prepare = async (app, config) => {
     app.lib[lib.key] = lib.path
   })
 
-  app.style = await prepareThemes({ app, modules })
+  app.style = await prepareThemes(app)
 
-  prepareModules(app, modules)
+  // might mutate all of app...
+  prepareModules(app)
 
-  app.modules = modules
+  const { state } = prepareStateLinks(app)
 
-  app.state = prepareStateLinks(app)
+  app.state = state
 
   // create client magic.js file
   app.client = await prepareJs(app)

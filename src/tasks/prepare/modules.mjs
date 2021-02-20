@@ -63,10 +63,10 @@ export const prepareModule = app => ([name, component]) => {
   }
 }
 
-export const prepareModules = (app, modules) => {
+export const prepareModules = app => {
   // merge component states into app.state[componentName].
   // this makes all identical components share their state.
-  Object.entries(modules)
+  Object.entries(app.modules)
     .filter(([name]) => is.case.upper(name[0]))
     .forEach(prepareModule(app))
 }

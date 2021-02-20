@@ -10,7 +10,7 @@ import colors from '../../themes/colors.mjs'
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
-export const prepareThemes = async ({ app, modules }) => {
+export const prepareThemes = async (app) => {
   const resetStyles = []
   const themeStyles = []
   const pageStyles = []
@@ -126,7 +126,7 @@ export const prepareThemes = async ({ app, modules }) => {
   }
 
   // load all styles from all modules
-  const moduleStyles = findModuleStyles(modules, THEME_VARS)
+  const moduleStyles = findModuleStyles(app.modules, THEME_VARS)
 
   const styles = [...resetStyles, moduleStyles, ...themeStyles, ...pageStyles, ...appStyles]
 
