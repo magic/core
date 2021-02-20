@@ -1,6 +1,6 @@
 import log from '@magic/log'
 
-import { replaceSlashSlash } from '../replaceSlashSlash.mjs'
+import { handleLink } from '../handleLink.mjs'
 
 const validKeys = ['src', 'logo', 'href', 'to']
 
@@ -17,17 +17,6 @@ const ignoredLiterals = [
   'NumericLiteral',
   'RegExpLiteral',
 ]
-
-const handleLink = (val, app) => {
-  if (!val.startsWith(config.WEB_ROOT)) {
-    if (val.startsWith('/') || val.startsWith('#') || val.startsWith('/#')) {
-      val = replaceSlashSlash(`${config.WEB_ROOT}${val}`)
-    }
-  }
-
-  app.links.push(val)
-  return val
-}
 
 const visit = (parent, ancestor, app) => {
   if (!parent) {
@@ -70,7 +59,7 @@ const visit = (parent, ancestor, app) => {
           if (prop.type === 'KeyValueProperty') {
             if (validKeys.includes(prop.key.value)) {
               if (prop.value.type === 'StringLiteral') {
-                prop.value.value = handleLink(prop.value.value, app)
+                prop.value.value = handleLink({ href: prop.value.value, app })
                 // } else {
                 // console.log('uncaught link', prop)
               }

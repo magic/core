@@ -1,7 +1,7 @@
 import is from '@magic/types'
 import cases from '@magic/cases'
 
-import { replaceSlashSlash } from '../replaceSlashSlash.mjs'
+import { handleLink } from '../handleLink.mjs'
 
 const isModuleTag = (name, moduleNames) => moduleNames.includes(name)
 
@@ -11,19 +11,6 @@ const used = {
   helpers: {},
   lib: {},
   tags: new Set(),
-}
-
-const handleLink = (path, config, app) => {
-  const href = path.node.value.value
-  const isLocal = href.startsWith('/') && !href.startsWith('//')
-
-  if (!href.startsWith(config.WEB_ROOT) && isLocal) {
-    const newValue = replaceSlashSlash(`${config.WEB_ROOT}${href}`)
-    path.node.value.value = newValue
-    app.links.push(newValue)
-  } else {
-    app.links.push(href)
-  }
 }
 
 // collect all used modules, htmlTags, actions, effects, helpers
@@ -69,16 +56,15 @@ const findUsedSpells = (t, app, config) => path => {
     if (path.node.key) {
       const validKeys = ['src', 'logo', 'href', 'to']
       if (t.isIdentifier(path.node.key)) {
-        const { name } = path.node.key
         if (path.node.value.value) {
-          if (validKeys.includes(name)) {
-            handleLink(path, config, app)
+          if (validKeys.includes(path.node.key.name)) {
+            path.node.value.value = handleLink({ href: path.node.value.value, app })
           }
         }
       } else if (t.isStringLiteral(path.node.key)) {
         const { value: name } = path.node.key
         if (validKeys.includes(name)) {
-          handleLink(path, config, app)
+          path.node.value.value = handleLink({ href: path.node.value.value, app })
         }
       }
     }
