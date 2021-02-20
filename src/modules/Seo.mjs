@@ -9,6 +9,7 @@ export const View = state => {
     name = state.title,
     custom = [],
   } = seo
+
   const description = Array.isArray(state.description)
     ? state.description.join(' ')
     : state.description
@@ -24,7 +25,7 @@ export const View = state => {
     head.push(title(pageTitle))
   }
 
-  const pageImage = replaceSlashSlash(seo.image || state.image)
+  const pageImage = replaceSlashSlash(seo.image || state.image || state.logo || '')
 
   if (pageImage) {
     head.push(meta({ name: 'twitter:image', property: 'og:image', content: pageImage }))
