@@ -13,7 +13,7 @@ export const httpGet = url =>
         data.push(d)
       })
 
-      res.on('end', () => resolve({ statusCode: res.statusCode, data }))
+      res.on('end', () => resolve({ statusCode: res.statusCode, headers: res.headers, data }))
     })
 
     req.on('error', reject)
