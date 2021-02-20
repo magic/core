@@ -10,6 +10,8 @@ export const transpile = async (app, config) => {
   const { code, serviceWorker } = await js(app)
   const css = await style(app.style)
 
+  app.client = code
+
   app.hashes = {
     '/magic.css': createFileHash(config.ENV === 'production' ? css.minified : css.css),
     '/magic.js': createFileHash(code),
