@@ -14,6 +14,7 @@ const args = {
     '--keep-console',
     '--keep-dead-code',
     '--keep-debugger',
+    '--no-check-links',
   ],
   env: [[['--production', '--prod', '--p', '-p'], 'NODE_ENV', 'production']],
   commands: [['serve', 'dev', 'development', 'start'], 'clean', 'connect', 'publish', 'build'],
@@ -37,6 +38,7 @@ const args = {
       '--no-minify': 'do not minify js',
       '--keep-client': 'keeps the unminifed .__browserify_empty.js',
       '--watch': 'watch additional directories',
+      '--no-check-links': 'do not check links for validity',
     },
     example: `
 production:
