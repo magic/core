@@ -60,4 +60,14 @@ const traverseLinks = ({ state, parent, app }) => {
   return Object.fromEntries(result)
 }
 
-export const prepareStateLinks = app => traverseLinks({ state: app.state, app })
+export const prepareStateLinks = app => {
+  if (!is.empty(app.state.logo) && is.string(app.state.logo)) {
+    app.state.logo = prepareLink(app.state.logo, undefined, app)
+  }
+
+  if (!is.empty(app?.seo?.image)) {
+    app.seo.image = prepareLink(app.seo.image, undefined, app)
+  }
+
+  return traverseLinks({ state: app.state, app })
+}
