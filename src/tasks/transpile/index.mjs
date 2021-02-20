@@ -1,5 +1,7 @@
 import path from 'path'
 
+import log from '@magic/log'
+
 import html from './html.mjs'
 import js from './js.mjs'
 import style from './css.mjs'
@@ -54,7 +56,19 @@ export const transpile = async (app, config) => {
   app.static[`/${config.HASH_FILE_NAME}`] = JSON.stringify(app.hashes, null, 2)
 
   if (!config.NO_CHECK_LINKS) {
-    checkLinks(app, pages)
+    if (config.ENV === 'production') {
+      log('Checking page links')
+      const unresolvedLinks = await checkLinks(app, pages)
+      if (unresolvedLinks.length) {
+        log.error('E_BROKEN_LINKS', 'Broken Links found.')
+
+        if (!config.NO_CHECK_LINKS_EXIT) {
+          process.exit(0)
+        }
+      }
+    } else {
+      checkLinks(app, pages)
+    }
   }
 
   return {
