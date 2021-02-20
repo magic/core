@@ -74,3 +74,20 @@ chat, and all other server side services possible.
 * [/modules/](/modules/)
 * [/modules/#gl-magic-modules](/modules/#gl-magic-modules)
 * [https://magic.github.io](https://magic.github.io/)
+
+### Broken link tests:
+
+the following links are broken, and it's intentional for magic to warns us on every rebuild.
+
+* [redirect link](https://magic.github.io/core)
+* [broken link](https://expect-error)
+* [404 link](https://en.wikipedia.org/hMdYfVaKY4btraQcgD0me6RRBDnugbpJ4FLpgJgeB7)
+* ![Broken Image Link](https://broken-image-link)
+
+### image test
+
+while at it, let's test an image, 2 times:
+
+* ![Magic Logo](/logo.png)
+* ![Magic Logo](/core/logo.png)
+* ![Broken Magic Logo](/logo23-broken.png)
