@@ -6,7 +6,6 @@ import swc from '@swc/core'
 import { getBabelConf, getSwcConf } from '../../lib/index.mjs'
 
 export default async app => {
-
   if (config.ENV === 'development') {
     const swcOpts = getSwcConf(app, config)
     const { code } = await swc.transform(app.client, swcOpts)
