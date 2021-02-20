@@ -341,7 +341,7 @@ update lodash to mitigate development environment security issue.
 ##### 0.0.84
 update deps
 
-##### 0.0.85 
+##### 0.0.85
 icon sizes can be customized
 
 ##### 0.0.86 
@@ -415,10 +415,10 @@ git tagged but not published
 * bump required node version to 14.15.4
 * update dependencies
 
-##### 0.0.103 
+##### 0.0.103
 update dependencies
 
-##### 0.0.104 
+##### 0.0.104
 update dependencies
 
 ##### 0.0.105
