@@ -30,8 +30,9 @@ export const runConfig = async (args = {}) => {
     conf.ROOT = path.resolve(process.cwd(), conf.ROOT)
   }
 
-  conf.NO_CHECK_LINKS = args.noCheckLinks
-  conf.NO_CHECK_LINKS_REMOTE = args.noCheckLinksRemote
+  conf.NO_CHECK_LINKS = args.noCheckLinks || conf.NO_CHECK_LINKS
+  conf.NO_CHECK_LINKS_REMOTE = args.noCheckLinksRemote || conf.NO_CHECK_LINKS_REMOTE
+  conf.NO_CHECK_LINKS_EXIT = args.noCheckLinksExit || conf.NO_CHECK_LINKS_EXIT
 
   // object to collect various directories in.
   conf.DIR = conf.DIR || {}
