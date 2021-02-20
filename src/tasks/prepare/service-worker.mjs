@@ -1,9 +1,9 @@
-import { createFileHash } from '../../lib/index.mjs'
+import { createFileHash, replaceSlashSlash } from '../../lib/index.mjs'
 
 export const prepareServiceWorker = async (app, config) => {
   const staticFiles = Object.keys(app.static)
     .filter(f => !f.endsWith('sitemap.xml') || !f.endsWith('robots.txt'))
-    .map(file => `'${config.WEB_ROOT}${file}',`.replace(/\/\//g, '/'))
+    .map(file => replaceSlashSlash(`'${config.WEB_ROOT}${file}',`))
 
   const cacheFileString = `[
     '${config.WEB_ROOT}',

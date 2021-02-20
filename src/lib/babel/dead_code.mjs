@@ -1,6 +1,8 @@
 import is from '@magic/types'
 import cases from '@magic/cases'
 
+import { replaceSlashSlash } from '../replaceSlashSlash.mjs'
+
 const isModuleTag = (name, moduleNames) => moduleNames.includes(name)
 
 const used = {
@@ -25,7 +27,7 @@ const handleLink = (path, config) => {
     // }
 
     if (isLocal) {
-      const newValue = `${config.WEB_ROOT}${href}`.replace(/\/\//g, '/')
+      const newValue = replaceSlashSlash(`${config.WEB_ROOT}${href}`)
       // console.log({ href, newValue })
       path.node.value.value = newValue
     }
