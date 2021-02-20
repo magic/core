@@ -39,21 +39,15 @@ export const prepare = async (app, config) => {
 
   app.modules = modules
 
+  // make all links WEB_ROOTED
+  // mutates app.state
+  app.state = prepareStateLinks(app, config)
+
   app.files = await getPages()
 
   const moduleNames = Object.keys(app.modules)
 
   // collect the pages, create their states
-
-  const { logo, seo } = app.state
-  if (!is.empty(logo) && is.string(logo)) {
-    app.state.logo = handleLink({ href: logo, app })
-  }
-
-  if (!is.empty(seo?.image) && is.string(seo?.image)) {
-    app.state.seo.image = handleLink({ href: seo.image, app })
-  }
-
   app.pages = await preparePages(app, moduleNames)
 
   if (config.BLOG_DIR) {
@@ -144,10 +138,6 @@ export const prepare = async (app, config) => {
   // mutates app
   // init, cookies, actions, effects, state, helpers, subscriptions
   prepareModules(app)
-
-  // make all links WEB_ROOTED
-  // mutates app.state
-  app.state = prepareStateLinks(app)
 
   // create client magic.js file
   app.client = await prepareJs(app)
