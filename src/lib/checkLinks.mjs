@@ -1,27 +1,48 @@
+import log from '@magic/log'
+
 import { httpGet } from './httpGet.mjs'
 import { isPageUrl } from './isPageUrl.mjs'
 import { isHashedUrl } from './isHashedUrl.mjs'
+import { isStaticUrl } from './isStaticUrl.mjs'
+
+const redirectStatusCodes = [301, 302, 303, 307, 308]
 
 export const checkLinks = async (app, pages) => {
+  const staticUrls = Object.keys(app.static)
+
   const linkResolvers = app.links.map(async link => {
     if (link.startsWith(config.WEB_ROOT)) {
-      if (isPageUrl(pages, link)) {
-        return
-      } else if (isHashedUrl(pages, link)) {
+      if (isPageUrl(pages, link) || isHashedUrl(pages, link) || isStaticUrl(staticUrls, link)) {
         return
       }
     } else {
-      // TODO: http.get those links and check if they resolve
-      try {
-        const { statusCode } = await httpGet(link)
+      if (config.NO_CHECK_LINKS_REMOTE) {
+        return
+      }
 
-        if (statusCode === 200) {
+      // TODO: http.get those links and check if they resolve
+      const { statusCode, headers, error } = await httpGet(link)
+
+      if (statusCode === 200) {
+        return
+      } else if (redirectStatusCodes.includes(statusCode)) {
+        if (headers.location) {
+          log.warn('W_CHECKLINKS_REDIRECT', 'There is a link in your app that is getting redirected.')
+          log.info('to make this warning disappear: change:', link, 'to:', headers.location)
           return
         } else {
-          // console.log('unexpected statusCode', statusCode)
+          log.warn('W_CHECKLINKS_REDIRECT', 'Weird http redirect. Please file an issue: https://github.com/magic/core/issues/', { statusCode, headers })
+          return
         }
-      } catch (e) {
-        // console.error(e)
+      } else if (error) {
+        if (error.code === 'EAI_AGAIN') {
+          log.error('E_CHECKLINKS_HOSTNAME_NOT_FOUND', 'could not resolve hostname:', link)
+
+          return
+        }
+      } else if (statusCode === 404) {
+        log.error('E_CHECKLINKS_404', '404 not found for link:', link)
+        return
       }
     }
 
@@ -32,7 +53,7 @@ export const checkLinks = async (app, pages) => {
   const filteredUnresolvedLinks = unresolvedLinks.filter(a => a)
   if (filteredUnresolvedLinks.length) {
     log.error(
-      'E_UNRESOLVED_LINKS',
+      'E__CHECKLINKS_UNRESOLVED',
       'links could not be resolved:',
       JSON.stringify(filteredUnresolvedLinks, null, 2),
     )
