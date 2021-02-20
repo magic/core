@@ -86,8 +86,11 @@ the following links are broken, and it's intentional for magic to warns us on ev
 
 ### image test
 
-while at it, let's test an image, 2 times:
+while at it, let's test an image, 2 times with a working src:
 
 * ![Magic Logo](/logo.png)
 * ![Magic Logo](/core/logo.png)
+
+and once with a broken src:
+
 * ![Broken Magic Logo](/logo23-broken.png)
