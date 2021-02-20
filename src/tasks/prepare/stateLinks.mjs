@@ -10,15 +10,11 @@ const prepareLink = (url, parent) => {
     if (!url.startsWith(config.WEB_ROOT)) {
       url = `${config.WEB_ROOT}${url.substr(1)}`
     }
-  } else if (parent.to) {
-    if (url.startsWith('#') || url.startsWith('-')) {
+  } else if (url.startsWith('#') || url.startsWith('-')) {
+    if (parent.to) {
       url = `${parent.to}${url}`
     } else {
-      log.error(
-        '@magic did not handle this url. Please file a bug at https://github.com/magic/core/issues',
-        url,
-        parent,
-      )
+      url = `${config.WEB_ROOT}${url}`
     }
   } else {
     log.error(
