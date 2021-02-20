@@ -67,4 +67,6 @@ export const checkLinks = async (app, pages) => {
       JSON.stringify(filteredUnresolvedLinks, null, 2),
     )
   }
+
+  return filteredUnresolvedLinks
 }
