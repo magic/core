@@ -50,7 +50,7 @@
     "@magic/hyperapp": "2.0.4-alpha.0.0",
     "@magic/log": "0.1.8",
     "@magic/tags": "0.0.6",
-    "@magic/transmute": "0.0.40",
+    "@magic/transmute": "0.0.41",
     "@magic/types": "0.1.14",
     "@swc/core": "1.2.47",
     "babel-plugin-remove-code": "0.0.6",
