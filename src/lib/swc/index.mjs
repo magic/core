@@ -54,20 +54,6 @@ const visit = (parent, ancestor, app) => {
   } else if (parent.type === 'CallExpression') {
     parent.arguments = parent.arguments.map(arg => {
       arg.expression = visit(arg.expression, parent, app)
-      if (arg.expression.type === 'ObjectExpression') {
-        arg.expression.properties.forEach(prop => {
-          if (prop.type === 'KeyValueProperty') {
-            if (validKeys.includes(prop.key.value)) {
-              if (prop.value.type === 'StringLiteral') {
-                prop.value.value = handleLink({ href: prop.value.value, app })
-                // } else {
-                // console.log('uncaught link', prop)
-              }
-            }
-          }
-        })
-      }
-
       return arg
     })
 
@@ -92,6 +78,12 @@ const visit = (parent, ancestor, app) => {
   } else if (parent.type === 'ObjectExpression') {
     parent.properties = parent.properties.map(prop => visit(prop, parent, app))
   } else if (parent.type === 'KeyValueProperty') {
+    if (parent.value.type === 'StringLiteral') {
+      if (validKeys.includes(parent.key.value)) {
+        parent.value.value = handleLink({ app, href: parent.value.value })
+      }
+    }
+
     parent.key = visit(parent.key, parent, app)
     parent.value = visit(parent.value, parent, app)
   } else if (parent.type === 'MemberExpression') {
