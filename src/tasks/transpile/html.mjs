@@ -25,15 +25,15 @@ export default app => {
 
       let rendered = render.renderToString(view(state))
 
-      if (config.WEB_ROOT !== '/') {
-        rendered = rendered
-          .split('href="')
-          .map(maybePrependWebRoot)
-          .join('href="')
-          .split('src="')
-          .map(maybePrependWebRoot)
-          .join('src="')
-      }
+      // if (config.WEB_ROOT !== '/') {
+      //   rendered = rendered
+      //     .split('href="')
+      //     .map(maybePrependWebRoot)
+      //     .join('href="')
+      //     .split('src="')
+      //     .map(maybePrependWebRoot)
+      //     .join('src="')
+      // }
 
       return {
         ...page,
