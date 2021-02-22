@@ -15,7 +15,7 @@ export const handleLink = ({ app, href, parent = {} }) => {
 
   let local = false
 
-  if (href.startsWith('/')) {
+  if (href.startsWith('/') && !href.startsWith('//')) {
     local = true
 
     if (!href.startsWith(config.WEB_ROOT)) {
@@ -29,7 +29,6 @@ export const handleLink = ({ app, href, parent = {} }) => {
     } else {
       href = `${config.WEB_ROOT}/${href}`
     }
-
   } else if (href.startsWith('-')) {
     if (parent.to) {
       local = true
@@ -54,6 +53,12 @@ export const handleLink = ({ app, href, parent = {} }) => {
 
   if (local) {
     href = replaceSlashSlash(href)
+  } else {
+    if (href.startsWith('//')) {
+      href = `//${replaceSlashSlash(href.substr(2))}`
+    } else {
+      href = href.split('://').map(a => replaceSlashSlash(a)).join('://')
+    }
   }
 
   app.links.push(href)
