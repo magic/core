@@ -80,7 +80,7 @@ const visit = (parent, ancestor, app) => {
   } else if (parent.type === 'KeyValueProperty') {
     if (parent.value.type === 'StringLiteral') {
       if (validKeys.includes(parent.key.value)) {
-        parent.value.value = handleLink({ app, href: parent.value.value })
+        parent.value.value = handleLink({ app, href: parent.value.value, parent })
       }
     }
 
