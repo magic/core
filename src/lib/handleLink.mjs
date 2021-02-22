@@ -33,7 +33,8 @@ export const handleLink = ({ app, href, parent = {} }) => {
   } else if (href.startsWith('-')) {
     if (parent.to) {
       local = true
-      href = `${parent.to}/${href}`
+      // no slash!
+      href = `${parent.to}${href}`
     } else {
       log.error(
         'E_PREPARE_STATE_LINKS_EXPANDED_LINK',
