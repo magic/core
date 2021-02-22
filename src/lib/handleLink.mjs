@@ -4,6 +4,7 @@ import { replaceSlashSlash } from './replaceSlashSlash.mjs'
 
 export const handleLink = ({ app, href, parent = {} }) => {
   if (href.startsWith(config.WEB_ROOT)) {
+    href = replaceSlashSlash(href)
     app.links.push(href)
     return href
   }
@@ -12,19 +13,27 @@ export const handleLink = ({ app, href, parent = {} }) => {
     href = href.substr(1)
   }
 
+  let local = false
+
   if (href.startsWith('/')) {
+    local = true
+
     if (!href.startsWith(config.WEB_ROOT)) {
       href = `${config.WEB_ROOT}${href.substr(1)}`
     }
   } else if (href.startsWith('#')) {
+    local = true
+
     if (parent.to) {
-      href = `${parent.to}${href}`
+      href = `${parent.to}/${href}`
     } else {
-      href = `${config.WEB_ROOT}${href}`
+      href = `${config.WEB_ROOT}/${href}`
     }
+
   } else if (href.startsWith('-')) {
     if (parent.to) {
-      href = `${parent.to}${href}`
+      local = true
+      href = `${parent.to}/${href}`
     } else {
       log.error(
         'E_PREPARE_STATE_LINKS_EXPANDED_LINK',
@@ -42,7 +51,9 @@ export const handleLink = ({ app, href, parent = {} }) => {
     )
   }
 
-  href = replaceSlashSlash(href)
+  if (local) {
+    href = replaceSlashSlash(href)
+  }
 
   app.links.push(href)
 
