@@ -48,12 +48,12 @@ export const prepare = async (app, config) => {
   const moduleNames = Object.keys(app.modules)
 
   // collect the pages, create their states
-  app.pages = await preparePages(app, moduleNames)
+  app.pages = await preparePages(app, config)
 
   if (config.BLOG_DIR) {
     app.blog = await getBlog(config)
 
-    const { posts, index } = await prepareBlog(app, moduleNames)
+    const { posts, index } = await prepareBlog(app, config)
 
     app.state.blog = index
 
@@ -102,7 +102,7 @@ export const prepare = async (app, config) => {
   // collect all static files,
   // write their buffers into app.static
 
-  app.static = await prepareMetaFiles(app)
+  app.static = await prepareMetaFiles(app, config)
 
   let staticExists = false
   try {
@@ -133,17 +133,17 @@ export const prepare = async (app, config) => {
     app.lib[lib.key] = lib.path
   })
 
-  app.style = await prepareThemes(app)
+  app.style = await prepareThemes(app, config)
 
   // mutates app
   // init, cookies, actions, effects, state, helpers, subscriptions
-  prepareModules(app)
+  prepareModules(app, config)
 
   // create client magic.js file
-  app.client = await prepareJs(app)
+  app.client = await prepareJs(app, config)
 
   // extract lambdas and prepare them
-  app.lambdas = await prepareApi(app)
+  app.lambdas = await prepareApi(app, config)
 
   // app.serviceWorker = await prepareServiceWorker(app, config)
 

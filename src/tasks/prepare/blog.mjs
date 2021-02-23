@@ -2,26 +2,24 @@ import path from 'path'
 
 import { prepareBlogPost } from './blogPost.mjs'
 
-export const prepareBlog = async (app, modules = []) => {
+import { replaceSlashSlash } from '../../lib/index.mjs'
+
+export const prepareBlog = async (app, config) => {
   const relativeBlogDir = config.BLOG_DIR.replace(`${config.ROOT}/`, '')
 
   const extensions = ['.markdown', '.js', '.htm', '.mjs', '.html', '.md']
 
-  let WEB_ROOT = config.WEB_ROOT
-  if (WEB_ROOT && WEB_ROOT.endsWith('/')) {
-    WEB_ROOT = WEB_ROOT.slice(0, -1)
-  }
-
-  WEB_ROOT = `${WEB_ROOT}/${relativeBlogDir}`
+  const root = replaceSlashSlash(`${config.WEB_ROOT}/${relativeBlogDir}`)
 
   const index = {}
 
   const posts = await Promise.all(
     app.blog.map(async file => {
       const preparePost = prepareBlogPost({
-        WEB_ROOT,
-        PAGES: config.BLOG_DIR,
+        root,
+        pageDir: config.BLOG_DIR,
         state: app.state,
+        config,
       })
 
       const post = await preparePost(file)
@@ -72,8 +70,8 @@ export const prepareBlog = async (app, modules = []) => {
   if (!file) {
     const post = {
       View: state => BlogArchive(state),
-      name: `${WEB_ROOT}/`,
-      path: `${WEB_ROOT}/index.html`,
+      name: `${root}/`,
+      path: `${root}/index.html`,
     }
 
     posts.push(post)
@@ -87,8 +85,8 @@ export const prepareBlog = async (app, modules = []) => {
     if (!file) {
       const post = {
         View: state => BlogYear(state),
-        name: `${WEB_ROOT}/${year}/`,
-        path: `${WEB_ROOT}/${year}/index.html`,
+        name: `${root}/${year}/`,
+        path: `${root}/${year}/index.html`,
         state: {
           year,
         },
@@ -104,8 +102,8 @@ export const prepareBlog = async (app, modules = []) => {
       if (!file) {
         const post = {
           View: state => BlogMonth(state),
-          name: `${WEB_ROOT}/${year}/${month}/`,
-          path: `${WEB_ROOT}/${year}/${month}/index.html`,
+          name: `${root}/${year}/${month}/`,
+          path: `${root}/${year}/${month}/index.html`,
           state: {
             year,
             month,

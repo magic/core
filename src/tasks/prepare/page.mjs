@@ -6,7 +6,7 @@ import fs from '@magic/fs'
 import log from '@magic/log'
 import transmute from '@magic/transmute'
 
-export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
+export const preparePage = ({ WEB_ROOT, pageDir, state = {}, config }) => async file => {
   const ext = path.extname(file)
 
   const markdownExtensions = ['.md', '.markdown']
@@ -28,7 +28,7 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
   if (!is.empty(transmuted)) {
     const viewString = `export const View = state => [${transmuted.rendered}]`
 
-    const fileTmpPath = path.join(config.TMP_DIR, file.replace(config.DIR.PAGES, ''))
+    const fileTmpPath = path.join(config.TMP_DIR, file.replace(pageDir, ''))
 
     const subDir = path.dirname(fileTmpPath)
     await fs.mkdirp(subDir)
@@ -86,7 +86,7 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
   }
 
   const pageName = file
-    .replace(PAGES, '')
+    .replace(pageDir, '')
     .replace(/index.[m]?js/gm, '')
     .replace(/.[m]?js/gm, '/')
 
@@ -108,7 +108,7 @@ export const preparePage = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
   }
 
   if (!page.View || !is.function(page.View.toString)) {
-    const pageDir = PAGES.replace(process.cwd(), '')
+    const pageDir = pageDir.replace(process.cwd(), '')
     // remove all slashes
     const pageName = page.name.replace(/\//g, '')
 

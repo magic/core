@@ -6,7 +6,7 @@ import is from '@magic/types'
 
 import { stringifyObject } from '../../lib/index.mjs'
 
-export const prepareJs = async magic => {
+export const prepareJs = async (magic, config) => {
   const hyperappPath = path.join(
     process.cwd(),
     'node_modules',
@@ -34,7 +34,7 @@ return { ${imports} }
 })()`
 
   // add the Component module that wraps all other html tags
-  const componentString = `const C = ${global.component.toString()}\n`
+  const componentString = `const C = ${global.Component.toString()}\n`
     // replace names of variables to enforce minification
     .replace(/attributes/gm, 'a')
     .replace(/name/gm, 'n')

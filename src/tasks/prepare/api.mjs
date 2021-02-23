@@ -2,7 +2,10 @@ import path from 'path'
 
 import fs from '@magic/fs'
 
-export const prepareApi = async app => {
+export const prepareApi = async (app, config) => {
+  const { API_DIR: apiDir, DIR } = config
+  const apiDirResolved = DIR.API
+
   const moduleLambdas = Object.entries(app.modules)
     .filter(([_, dep]) => dep.server)
     .map(([name, dep]) => [name.toLowerCase(), dep.server])
@@ -15,8 +18,8 @@ export const prepareApi = async app => {
 
   let apiLambdas = []
 
-  if (config.API_DIR) {
-    const apiLambdaFiles = await fs.getFiles(config.DIR.API)
+  if (apiDir) {
+    const apiLambdaFiles = await fs.getFiles(apiDirResolved)
 
     apiLambdas = await Promise.all(
       apiLambdaFiles.map(async file => {

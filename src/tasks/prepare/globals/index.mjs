@@ -11,7 +11,7 @@ import { findThemes } from './findThemes.mjs'
 
 export const prepareGlobals = async (app, config) => {
   global.keys = global.keys || new Set()
-  global.config = config
+  // global.config = config
   global.app = app
 
   let modules = {}

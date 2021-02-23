@@ -18,10 +18,10 @@ export const transpile = async (app, config) => {
     NO_CHECK_LINKS_EXIT,
   } = config
 
-  const { code, serviceWorker } = await js(app)
-  const css = await style(app.style)
-
+  const { code, serviceWorker } = await js(app, config)
   app.client = code
+
+  const css = await style(app.style, config.THEME_VARS)
 
   app.hashes = {
     '/magic.css': createFileHash(ENV === 'production' ? css.minified : css.css),
@@ -39,7 +39,7 @@ export const transpile = async (app, config) => {
     )
   }
 
-  const pages = html(app)
+  const pages = html(app, config)
 
   pages
     .sort((a, b) => (a.name < b.name ? -1 : 1))

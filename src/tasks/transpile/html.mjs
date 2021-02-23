@@ -13,8 +13,8 @@ const maybePrependWebRoot = s => {
   return config.WEB_ROOT.slice(0, -1) + s
 }
 
-export default app => {
-  app.state.root = config.WEB_ROOT
+export default ({ app, root }) => {
+  app.state.root = root
 
   return app.pages.map(page => {
     try {
@@ -40,7 +40,7 @@ export default app => {
         rendered,
       }
     } catch (e) {
-      log.error(e, `Page url: ${page.name.replace(config.WEB_ROOT, '/')}`)
+      log.error('E_TRANSPILE_HTML', `Page url: ${page.name.replace(config.root, '/')}`, e)
       process.exit(1)
     }
   })

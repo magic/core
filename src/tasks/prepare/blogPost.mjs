@@ -5,7 +5,11 @@ import fs from '@magic/fs'
 import is from '@magic/types'
 import transmute from '@magic/transmute'
 
-export const prepareBlogPost = ({ WEB_ROOT, PAGES, state = {} }) => async file => {
+import { replaceSlashSlash } from '../../lib/index.mjs'
+
+export const prepareBlogPost = ({ pageDir, state = {}, config }) => async file => {
+  const { TMP_DIR } = config
+
   const ext = path.extname(file)
 
   const markdownExtensions = ['.md', '.markdown']
@@ -27,8 +31,8 @@ export const prepareBlogPost = ({ WEB_ROOT, PAGES, state = {} }) => async file =
   if (!is.empty(transmuted)) {
     const viewString = `export const View = state => BlogPost(state, [${transmuted.rendered}])`
 
-    const fileTmpPath = path.join(config.TMP_DIR, path.basename(file))
-    await fs.mkdirp(config.TMP_DIR)
+    const fileTmpPath = path.join(TMP_DIR, path.basename(file))
+    await fs.mkdirp(TMP_DIR)
     await fs.writeFile(fileTmpPath, viewString)
     pageTmp = await import(fileTmpPath)
   } else {
@@ -43,8 +47,8 @@ export const prepareBlogPost = ({ WEB_ROOT, PAGES, state = {} }) => async file =
 
     viewString = `export const View = state => BlogPost(state, ${children})`
 
-    const fileTmpPath = path.join(config.TMP_DIR, path.basename(file))
-    await fs.mkdirp(config.TMP_DIR)
+    const fileTmpPath = path.join(TMP_DIR, path.basename(file))
+    await fs.mkdirp(TMP_DIR)
     await fs.writeFile(fileTmpPath, viewString)
     pageTmp = await import(fileTmpPath)
   }
@@ -76,15 +80,12 @@ export const prepareBlogPost = ({ WEB_ROOT, PAGES, state = {} }) => async file =
   }
 
   const pageName = file
-    .replace(PAGES, '')
+    .replace(pageDir, '')
     .replace(/index.[m]?js/gm, '')
     .replace(/.[m]?js/gm, '/')
 
-  if (WEB_ROOT !== '/') {
-    page.name = `${WEB_ROOT}${pageName}`
-  } else {
-    page.name = pageName
-  }
+  page.name = replaceSlashSlash(pageName)
+
 
   page.path = page.name
 
@@ -98,7 +99,7 @@ export const prepareBlogPost = ({ WEB_ROOT, PAGES, state = {} }) => async file =
   }
 
   if (!page.View || !is.function(page.View.toString)) {
-    const pageDir = PAGES.replace(process.cwd(), '')
+    const pageDir = pageDir.replace(process.cwd(), '')
     // remove slashes
     const pageName = page.name.replace(/\//g, '')
     const page = `${pageDir}/${pageName}.mjs`
