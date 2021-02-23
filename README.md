@@ -449,6 +449,7 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 ##### 0.0.111
 * restructure most of the app and remove global.config.
   this will allow us to seamlessly use @magic/core in the @magic/test library
+* libs can now be static function instead of imports
 
 ##### 0.0.112 - unreleased
 ...
