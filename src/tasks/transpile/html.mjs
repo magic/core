@@ -20,7 +20,7 @@ export default ({ app, root }) => {
         rendered,
       }
     } catch (e) {
-      log.error('E_TRANSPILE_HTML', `Page url: ${page.name.replace(config.root, '/')}`, e)
+      log.error('E_TRANSPILE_HTML', `Page url: ${page.name.replace(root, '/')}`, e)
       process.exit(1)
     }
   })
