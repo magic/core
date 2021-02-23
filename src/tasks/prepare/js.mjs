@@ -34,7 +34,7 @@ return { ${imports} }
 })()`
 
   // add the Component module that wraps all other html tags
-  const componentString = `const C = ${global.Component.toString()}\n`
+  const componentString = `const C = ${global.component.toString()}\n`
     // replace names of variables to enforce minification
     .replace(/attributes/gm, 'a')
     .replace(/name/gm, 'n')
