@@ -86,7 +86,6 @@ export const prepareBlogPost = ({ pageDir, state = {}, config }) => async file =
 
   page.name = replaceSlashSlash(pageName)
 
-
   page.path = page.name
 
   if (page.path.endsWith('/')) {

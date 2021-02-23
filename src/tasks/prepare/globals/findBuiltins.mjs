@@ -7,10 +7,12 @@ export const findBuiltins = () => {
   Object.entries(builtins).forEach(([name, mod]) => {
     modules[name] = mod
   })
+
   Object.entries(tags).forEach(([name, mod]) => {
     modules[name] = mod
   })
 
   modules.component = component
+
   return modules
 }
