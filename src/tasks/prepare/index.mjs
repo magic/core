@@ -43,7 +43,7 @@ export const prepare = async (app, config) => {
   // mutates app.state
   app.state = prepareStateLinks(app, config)
 
-  app.files = await getPages()
+  app.files = await getPages({ dir: config.DIR.PAGES, root: config.ROOT })
 
   const moduleNames = Object.keys(app.modules)
 
@@ -51,7 +51,7 @@ export const prepare = async (app, config) => {
   app.pages = await preparePages(app, moduleNames)
 
   if (config.BLOG_DIR) {
-    app.blog = await getBlog(app.files)
+    app.blog = await getBlog(config)
 
     const { posts, index } = await prepareBlog(app, moduleNames)
 
