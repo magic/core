@@ -22,15 +22,15 @@ export const View = ({ page, state }, children) => {
   )
 }
 
-export const Link = ({ to, action = actions.go, text, ...p }, children = []) => {
+export const Link = ({ to, action = actions.go, text, ...p }, children) => {
   const { href, nofollow, noreferrer, ...props } = p
   to = to || href || ''
   props.href = to
 
-  if (text && children.length) {
+  if (text && children) {
     text = [text, children]
   } else if (!text) {
-    if (children.length) {
+    if (children) {
       text = children
     } else {
       text = to
