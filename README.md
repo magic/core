@@ -443,7 +443,10 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * check for broken links on build and dev
 * better link handling, should now include all images and links in pages too
 
-##### 0.0.110  - unreleased
+##### 0.0.110
+* update dependencies
+
+##### 0.0.111 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
