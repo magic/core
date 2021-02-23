@@ -152,9 +152,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
               }
 
               console.error(
-                `${name} expects item.${
-                  iKey.key
-                } to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`,
+                `${name} expects item.${iKey.key} to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`,
               )
             }
           })
@@ -163,7 +161,6 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
             `${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}, on page ${currentPage}`,
           )
         }
-        // console.log({val, item: propType.item})
       })
     }
   })
