@@ -22,7 +22,6 @@ const args = {
   commands: [['serve', 'dev', 'development', 'start'], 'clean', 'connect', 'publish', 'build'],
   single: [
     '--no-minify',
-    '--watch',
     '--keep-client',
     '--no-mangle-names',
     '--keep-console',

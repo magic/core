@@ -9,18 +9,26 @@ import style from './css.mjs'
 import { createFileHash, checkLinks } from '../../lib/index.mjs'
 
 export const transpile = async (app, config) => {
+  const {
+    ADD_SCRIPTS,
+    ENV,
+    HASH_FILE_NAME,
+    INCLUDED_HASH_EXTENSIONS,
+    NO_CHECK_LINKS,
+    NO_CHECK_LINKS_EXIT,
+  } = config
+
   const { code, serviceWorker } = await js(app)
   const css = await style(app.style)
 
   app.client = code
 
   app.hashes = {
-    '/magic.css': createFileHash(config.ENV === 'production' ? css.minified : css.css),
+    '/magic.css': createFileHash(ENV === 'production' ? css.minified : css.css),
     '/magic.js': createFileHash(code),
     // 'worker.js': createFileHash(serviceWorker),
   }
 
-  const { ADD_SCRIPTS } = config
   if (ADD_SCRIPTS) {
     await Promise.all(
       ADD_SCRIPTS.map(async src => {
@@ -42,7 +50,7 @@ export const transpile = async (app, config) => {
 
   // const ignored = config.IGNORED_STATIC
 
-  const included = config.INCLUDED_HASH_EXTENSIONS
+  const included = INCLUDED_HASH_EXTENSIONS
 
   if (included.length) {
     Object.entries(app.static)
@@ -52,22 +60,21 @@ export const transpile = async (app, config) => {
         app.hashes[name] = createFileHash(val)
       })
   }
+  app.static[`/${HASH_FILE_NAME}`] = JSON.stringify(app.hashes, null, 2)
 
-  app.static[`/${config.HASH_FILE_NAME}`] = JSON.stringify(app.hashes, null, 2)
-
-  if (!config.NO_CHECK_LINKS) {
-    if (config.ENV === 'production') {
+  if (!NO_CHECK_LINKS) {
+    if (ENV === 'production') {
       log('Checking page links')
       const unresolvedLinks = await checkLinks(app, pages)
       if (unresolvedLinks.length) {
         log.error('E_BROKEN_LINKS', 'Broken Links found.')
 
-        if (!config.NO_CHECK_LINKS_EXIT) {
+        if (!NO_CHECK_LINKS_EXIT) {
           process.exit(0)
         }
       }
     } else {
-      checkLinks(app, pages)
+      checkLinks(app, pages, config)
     }
   }
 
