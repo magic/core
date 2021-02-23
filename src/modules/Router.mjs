@@ -22,10 +22,20 @@ export const View = ({ page, state }, children) => {
   )
 }
 
-export const Link = ({ to, action = actions.go, ...p }, children = []) => {
-  const { href, text, nofollow, noreferrer, ...props } = p
+export const Link = ({ to, action = actions.go, text, ...p }, children = []) => {
+  const { href, nofollow, noreferrer, ...props } = p
   to = to || href || ''
   props.href = to
+
+  if (text && children.length) {
+    text = [text, children]
+  } else if (!text) {
+    if (children.length) {
+      text = children
+    } else {
+      text = to
+    }
+  }
 
   const isLocal = to[0] === '/' || to[0] === '#'
 
@@ -42,7 +52,7 @@ export const Link = ({ to, action = actions.go, ...p }, children = []) => {
     }
   }
 
-  return a(props, [text, children])
+  return a(props, text)
 }
 
 export const state = {
