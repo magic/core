@@ -6,6 +6,8 @@ import fs from '@magic/fs'
 import log from '@magic/log'
 import transmute from '@magic/transmute'
 
+import { replaceSlashSlash } from '../../lib/index.mjs'
+
 export const preparePage = ({ WEB_ROOT, pageDir, state = {}, config }) => async file => {
   const ext = path.extname(file)
 
@@ -90,11 +92,7 @@ export const preparePage = ({ WEB_ROOT, pageDir, state = {}, config }) => async 
     .replace(/index.[m]?js/gm, '')
     .replace(/.[m]?js/gm, '/')
 
-  if (WEB_ROOT !== '/') {
-    page.name = `${WEB_ROOT}${pageName}`
-  } else {
-    page.name = pageName
-  }
+  page.name = replaceSlashSlash(`${WEB_ROOT}${pageName}`)
 
   page.path = page.name
 
