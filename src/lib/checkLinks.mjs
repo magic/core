@@ -7,19 +7,14 @@ import { isStaticUrl } from './isStaticUrl.mjs'
 
 const redirectStatusCodes = [301, 302, 303, 307, 308]
 
-export const checkLinks = async (app, pages, { NO_CHECK_LINKS_REMOTE, WEB_ROOT }) => {
-  const staticUrls = Object.keys(app.static)
-
-  // remove duplicate links
-  const links = Array.from(new Set(app.links))
-
+export const checkLinks = async ({ staticUrls, links, pages, noRemote = false, root }) => {
   const linkResolvers = links.map(async link => {
-    if (link.startsWith(WEB_ROOT)) {
+    if (link.startsWith(root)) {
       if (isPageUrl(pages, link) || isHashedUrl(pages, link) || isStaticUrl(staticUrls, link)) {
         return
       }
     } else {
-      if (NO_CHECK_LINKS_REMOTE) {
+      if (noRemote) {
         return
       }
 

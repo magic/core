@@ -74,7 +74,12 @@ export const transpile = async (app, config) => {
         }
       }
     } else {
-      checkLinks(app, pages, config)
+      const staticUrls = Object.keys(app.static)
+      const links = Array.from(new Set(app.links))
+
+      const { NO_CHECK_LINKS_REMOTE: noRemote, ROOT: root } = config
+
+      checkLinks({ staticUrls, links, pages, noRemote, root })
     }
   }
 
