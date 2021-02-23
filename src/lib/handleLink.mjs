@@ -2,8 +2,10 @@ import log from '@magic/log'
 
 import { replaceSlashSlash } from './replaceSlashSlash.mjs'
 
-export const handleLink = ({ app, href, parent = {} }) => {
-  if (href.startsWith(config.WEB_ROOT)) {
+export const handleLink = ({ app, href, parent = {}, config }) => {
+  const { WEB_ROOT } = config
+
+  if (href.startsWith(WEB_ROOT)) {
     href = replaceSlashSlash(href)
     app.links.push(href)
     return href
@@ -18,8 +20,8 @@ export const handleLink = ({ app, href, parent = {} }) => {
   if (href.startsWith('/') && !href.startsWith('//')) {
     local = true
 
-    if (!href.startsWith(config.WEB_ROOT)) {
-      href = `${config.WEB_ROOT}${href.substr(1)}`
+    if (!href.startsWith(WEB_ROOT)) {
+      href = `${WEB_ROOT}${href.substr(1)}`
     }
   } else if (href.startsWith('#')) {
     local = true
@@ -27,7 +29,7 @@ export const handleLink = ({ app, href, parent = {} }) => {
     if (parent.to) {
       href = `${parent.to}/${href}`
     } else {
-      href = `${config.WEB_ROOT}/${href}`
+      href = `${WEB_ROOT}/${href}`
     }
   } else if (href.startsWith('-')) {
     if (parent.to) {
@@ -70,9 +72,9 @@ export const handleLink = ({ app, href, parent = {} }) => {
 }
 
 // export const handleLink = (val, app) => {
-//   if (!val.startsWith(config.WEB_ROOT)) {
+//   if (!val.startsWith(WEB_ROOT)) {
 //     if (val.startsWith('/') || val.startsWith('#') || val.startsWith('/#')) {
-//       val = replaceSlashSlash(`${config.WEB_ROOT}${val}`)
+//       val = replaceSlashSlash(`${WEB_ROOT}${val}`)
 //     }
 //   }
 

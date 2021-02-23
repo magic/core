@@ -2,12 +2,12 @@ import is from '@magic/types'
 
 import { handleLink } from '../../lib/index.mjs'
 
-const traverseLinks = ({ state, parent, app }) => {
+const traverseLinks = ({ state, parent, ...args }) => {
   if (state.to && parent) {
-    state.to = handleLink({ href: state.to, parent, app })
+    state.to = handleLink({ href: state.to, parent, ...args })
 
     if (state.items) {
-      state.items = state.items.map(item => traverseLinks({ state: item, parent: state, app }))
+      state.items = state.items.map(item => traverseLinks({ state: item, parent: state, ...args }))
     }
 
     return state
@@ -20,11 +20,11 @@ const traverseLinks = ({ state, parent, app }) => {
           return val
         }
 
-        const traversed = traverseLinks({ state: val, parent: state, app })
+        const traversed = traverseLinks({ state: val, parent: state, ...args })
         return traversed
       })
     } else if (is.objectNative(value)) {
-      value = traverseLinks({ state: value, app })
+      value = traverseLinks({ state: value, ...args })
     }
 
     return [key, value]
@@ -33,15 +33,15 @@ const traverseLinks = ({ state, parent, app }) => {
   return Object.fromEntries(result)
 }
 
-export const prepareStateLinks = app => {
+export const prepareStateLinks = (app, config) => {
   const { logo, seo } = app.state
   if (!is.empty(logo) && is.string(logo)) {
-    app.state.logo = handleLink({ href: logo, app })
+    app.state.logo = handleLink({ href: logo, app, config })
   }
 
   if (!is.empty(seo?.image) && is.string(seo?.image)) {
-    app.state.seo.image = handleLink({ href: seo.image, app })
+    app.state.seo.image = handleLink({ href: seo.image, app, config })
   }
 
-  return traverseLinks({ state: app.state, app })
+  return traverseLinks({ state: app.state, app, config })
 }

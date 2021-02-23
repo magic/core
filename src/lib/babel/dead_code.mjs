@@ -58,13 +58,13 @@ const findUsedSpells = (t, app, config) => path => {
       if (t.isIdentifier(path.node.key)) {
         if (path.node.value.value) {
           if (validKeys.includes(path.node.key.name)) {
-            path.node.value.value = handleLink({ href: path.node.value.value, app })
+            path.node.value.value = handleLink({ href: path.node.value.value, app, config })
           }
         }
       } else if (t.isStringLiteral(path.node.key)) {
         const { value: name } = path.node.key
         if (validKeys.includes(name)) {
-          path.node.value.value = handleLink({ href: path.node.value.value, app })
+          path.node.value.value = handleLink({ href: path.node.value.value, app, config })
         }
       }
     }
