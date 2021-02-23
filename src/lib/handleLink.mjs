@@ -57,7 +57,10 @@ export const handleLink = ({ app, href, parent = {} }) => {
     if (href.startsWith('//')) {
       href = `//${replaceSlashSlash(href.substr(2))}`
     } else {
-      href = href.split('://').map(a => replaceSlashSlash(a)).join('://')
+      href = href
+        .split('://')
+        .map(a => replaceSlashSlash(a))
+        .join('://')
     }
   }
 
