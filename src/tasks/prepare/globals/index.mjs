@@ -23,7 +23,10 @@ export const prepareGlobals = async (app, config) => {
   }
 
   // load modules from themes
-  modules = await findThemes(modules)
+  const themeModulefiles = await findThemes(modules, config)
+  if (themeModulefiles) {
+    modules = deep.merge(modules, themeModulefiles)
+  }
 
   // load plugins from node_modules
   const nodeModuleFiles = await findNodeModules(modules)
@@ -40,10 +43,10 @@ export const prepareGlobals = async (app, config) => {
   // look for /assets/Uppercased.mjs and /assets/modules/Uppercased.mjs
   const localModuleFiles = await findLocalModules(config.DIR.ASSETS)
   if (localModuleFiles) {
-    modules = deep.merge(modules, { ...localModuleFiles })
+    modules = deep.merge(modules, localModuleFiles)
   }
-
   Object.entries(modules).forEach(([name, mod]) => {
+    // console.log({ name, mod })
     if (is.fn(mod)) {
       global[name] = mod
     } else if (is.fn(mod.View)) {
