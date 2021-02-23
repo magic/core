@@ -16,7 +16,7 @@ export const View = state => {
 
   const keywords = Array.isArray(state.keywords) ? state.keywords.join(' ') : state.keywords
 
-  const favicon = state.favicon || `${config.WEB_ROOT}favicon.ico`
+  const favicon = state.favicon || `${state.root}favicon.ico`
   const head = [link({ rel: 'icon', href: favicon })]
 
   const pageTitle = seo.name || state.title
