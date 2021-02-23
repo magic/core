@@ -142,26 +142,31 @@ return { ${imports} }
     const libPromises = Object.entries(magic.lib)
       .sort(([a], [b]) => (a > b ? 1 : -1))
       .map(async ([name, lib]) => {
-        if (lib.startsWith('@')) {
-          lib = path.join(process.cwd(), 'node_modules', lib)
-        }
+        let fn = lib
 
-        if (!lib.endsWith('index.mjs')) {
-          lib = path.join(lib, 'src', 'index.mjs')
+        if (is.string(lib)) {
+          if (lib.startsWith('@')) {
+            lib = path.join(process.cwd(), 'node_modules', lib)
+          }
+
+          if (!lib.endsWith('index.mjs')) {
+            lib = path.join(lib, 'src', 'index.mjs')
+          }
+
+          const imported = await import(lib)
+          fn = imported.default
         }
 
         if (name.includes('-')) {
           name = cases.camel(name)
         }
 
-        const { default: imported } = await import(lib)
-
-        if (is.function(imported)) {
-          return ` ${name}: ${imported.toString()},`
-        } else if (is.array(imported)) {
-          return ` ${name}: ${JSON.stringify(imported)},`
-        } else if (is.objectNative(imported)) {
-          return ` ${name}: ${stringifyObject(imported)},`
+        if (is.function(fn)) {
+          return ` ${name}: ${fn.toString()},`
+        } else if (is.array(fn)) {
+          return ` ${name}: ${JSON.stringify(fn)},`
+        } else if (is.objectNative(fn)) {
+          return ` ${name}: ${stringifyObject(fn)},`
         } else {
           log.error('UNKNOWN_LIB_TYPE', `app.lib[${name}] has to be a function, array or object`)
         }
