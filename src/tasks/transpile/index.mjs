@@ -18,7 +18,7 @@ export const transpile = async (app, config) => {
     NO_CHECK_LINKS_EXIT,
   } = config
 
-  const { code, serviceWorker } = await js(app, config)
+  const { code, serviceWorker } = await js({ app, config })
   app.client = code
 
   const css = await style(app.style, config.THEME_VARS)
@@ -39,7 +39,7 @@ export const transpile = async (app, config) => {
     )
   }
 
-  const pages = html(app, config)
+  const pages = html({ app, root: config.WEB_ROOT })
 
   pages
     .sort((a, b) => (a.name < b.name ? -1 : 1))
@@ -77,7 +77,7 @@ export const transpile = async (app, config) => {
       const staticUrls = Object.keys(app.static)
       const links = Array.from(new Set(app.links))
 
-      const { NO_CHECK_LINKS_REMOTE: noRemote, ROOT: root } = config
+      const { NO_CHECK_LINKS_REMOTE: noRemote, WEB_ROOT: root } = config
 
       checkLinks({ staticUrls, links, pages, noRemote, root })
     }
