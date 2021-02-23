@@ -1,4 +1,5 @@
 import is from '@magic/types'
+import log from '@magic/log'
 
 export const prepareApi = async rawLambdas => {
   const lambdaPromises = await Promise.all(
@@ -9,7 +10,7 @@ export const prepareApi = async rawLambdas => {
         if (is.fn(result)) {
           return [key, result]
         } else {
-          console.log('result is not a function', typeof result)
+          log.error('E_NOT_A_FUNCTION', 'result is not a function', result)
         }
       } catch (e) {
         // lambda does not return a creator function,
