@@ -2,7 +2,7 @@
 
 import cli from '@magic/cli'
 
-import { runCluster } from './index.mjs'
+import { runCluster } from './runCluster.mjs'
 
 const args = {
   options: [
