@@ -1,6 +1,5 @@
-export const CHECK_PROPS = config => (props, propTypeDecl, name) => {
-  const currentPage =
-    app && app.state ? app.state.url.replace(config.WEB_ROOT, '/') : 'Unknown on client.'
+export const CHECK_PROPS = (props, propTypeDecl, name) => {
+  const currentPage = app && app.state ? app.state.url : 'Unknown on client.'
 
   if (!name) {
     const err = new Error()
@@ -140,11 +139,17 @@ export const CHECK_PROPS = config => (props, propTypeDecl, name) => {
             const v = val[iKey.key]
             if (!is(v, iKey.type)) {
               const typeInfo = is(iKey.type, 'array') && iKey.type.length > 1 ? 'one of' : 'a'
-              const typeString = Array.isArray(iKey.type)
-                ? iKey.type.length > 1
-                  ? `["${iKey.type.join(', "')}"]`
-                  : iKey.type[0]
-                : iKey.type
+
+              let typeString = ''
+              if (Array.isArray(iKey.type)) {
+                if (iKey.type.length > 1) {
+                  typeString = `["${iKey.type.join(', "')}"]`
+                } else {
+                  typeString = iKey.type[0]
+                }
+              } else {
+                typeString = iKey.type
+              }
 
               console.error(
                 `${name} expects item.${
