@@ -10,7 +10,11 @@ const redirectStatusCodes = [301, 302, 303, 307, 308]
 export const checkLinks = async ({ staticUrls, links, pages, noRemote = false, root }) => {
   const linkResolvers = links.map(async link => {
     if (link.startsWith(root)) {
-      if (isPageUrl(pages, link) || isHashedUrl(pages, link) || isStaticUrl(staticUrls, link)) {
+      if (isPageUrl(pages, link)) {
+        return
+      } else if (isHashedUrl(pages, link)) {
+        return
+      } else if (isStaticUrl(staticUrls, link, root)) {
         return
       }
     } else {
@@ -57,6 +61,7 @@ export const checkLinks = async ({ staticUrls, links, pages, noRemote = false, r
   })
 
   const unresolvedLinks = await Promise.all(linkResolvers)
+
   const filteredUnresolvedLinks = unresolvedLinks.filter(a => a)
   if (filteredUnresolvedLinks.length) {
     log.error(
