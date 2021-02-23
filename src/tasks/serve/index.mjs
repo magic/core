@@ -32,8 +32,8 @@ export const startServer = async (server, options) => {
   return options
 }
 
-export const serve = async app => {
-  const handle = await handler(app)
+export const serve = async (app, config) => {
+  const handle = await handler(app, config)
 
   const server = http.createServer(handle)
 

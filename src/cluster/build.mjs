@@ -21,7 +21,7 @@ export const build = async ({ commands, config }) => {
     }
 
     if (commands.serve) {
-      serve(app)
+      serve(app, config)
     } else {
       process.send({ evt: 'quit' })
     }

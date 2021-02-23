@@ -6,7 +6,7 @@ import { addTrailingSlash } from '../../lib/index.mjs'
 import { prepareApi } from './prepareApi.mjs'
 import { apiHandler } from './apiHandler.mjs'
 
-export const handler = async app => {
+export const handler = async (app, config) => {
   const { IS_PROD } = config
   const { css, client, static: stat, lambdas: rawLambdas, sw } = app
   const WEB_ROOT = addTrailingSlash(config.WEB_ROOT)
