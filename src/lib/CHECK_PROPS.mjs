@@ -1,4 +1,4 @@
-export const CHECK_PROPS = (props, propTypeDecl, name) => {
+export const CHECK_PROPS = config => (props, propTypeDecl, name) => {
   const currentPage =
     app && app.state ? app.state.url.replace(config.WEB_ROOT, '/') : 'Unknown on client.'
 

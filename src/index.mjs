@@ -15,7 +15,7 @@ export const runCluster = async options => {
 
   if (!global.CHECK_PROPS) {
     const { CHECK_PROPS } = await import('./lib/CHECK_PROPS.mjs')
-    global.CHECK_PROPS = CHECK_PROPS
+    global.CHECK_PROPS = CHECK_PROPS(config)
   }
 
   if (cluster.isMaster) {
