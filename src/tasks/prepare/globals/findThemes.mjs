@@ -5,7 +5,7 @@ import deep from '@magic/deep'
 import error from '@magic/error'
 import is from '@magic/types'
 
-export const findThemes = async conf => {
+export const findThemes = async (modules, conf) => {
   const { DIR, NODE_MODULES } = conf
   let { THEME } = conf
 
@@ -13,8 +13,6 @@ export const findThemes = async conf => {
     if (is.string(THEME)) {
       THEME = [THEME]
     }
-
-    let modules = {}
 
     const url = new URL(import.meta.url)
     const dirName = path.dirname(url.pathname)
@@ -40,13 +38,13 @@ export const findThemes = async conf => {
           path.join(NODE_MODULES, '@magic-themes', theme_name, 'src', 'index.mjs'),
         ]
 
-        const modules = await Promise.all(
+        const mods = await Promise.all(
           themeLocations.map(async location => {
             try {
               const { default: theme, ...maybeModules } = await import(location)
 
-              return Object.fromEntries(
-                Object.entries(maybeModules).map(([name, fn]) => {
+              const results = Object.entries(maybeModules).map(([name, fn]) => {
+                if (is.case.upper(name[0])) {
                   if (is.fn(fn)) {
                     if (!modules[name]) {
                       return [name, fn]
@@ -62,24 +60,24 @@ export const findThemes = async conf => {
                       return [name, fn]
                     }
                   } else if (is.object(fn)) {
-                    if (name[0].toUpperCase() === name[0].toUpperCase()) {
-                      if (!modules[name]) {
-                        return [name, fn]
-                      } else if (is.fn(modules[name])) {
-                        return [name, { View: modules[name], ...fn }]
-                      } else {
-                        return [
-                          name,
-                          {
-                            ...modules[name],
-                            ...fn,
-                          },
-                        ]
-                      }
+                    if (!modules[name]) {
+                      return [name, fn]
+                    } else if (is.fn(modules[name])) {
+                      return [name, { View: modules[name], ...fn }]
+                    } else {
+                      return [
+                        name,
+                        {
+                          ...modules[name],
+                          ...fn,
+                        },
+                      ]
                     }
                   }
-                }),
-              )
+                }
+              })
+
+              return Object.fromEntries(results.filter(a => a))
             } catch (e) {
               if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
                 throw error(e)
@@ -88,20 +86,22 @@ export const findThemes = async conf => {
           }),
         )
 
-        return modules.filter(a => a)
+        return mods.filter(a => a)
       }),
     )
+
+    let mods = {}
 
     // by writing the results after awaiting them above,
     // we force correct order of merges.
     // Promise.all does not wait internally for sequential execution,
     // but await Promise.all returns ordered results.
-    results.map(result => {
+    deep.flatten(results).map(result => {
       if (!is.empty(result)) {
-        modules = deep.merge(modules, result)
+        mods = deep.merge(mods, result)
       }
     })
 
-    return deep.flatten(modules)
+    return mods
   }
 }
