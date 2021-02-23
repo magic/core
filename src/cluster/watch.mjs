@@ -12,6 +12,8 @@ export const watch = ({ args, config }) => {
 
   if (is.array(watchDirs)) {
     dirs = [...dirs, ...watchDirs]
+  } else if (is.string(watchDirs)) {
+    dirs = [...dirs, watchDirs]
   }
 
   dirs = dirs.map(dir => (dir.startsWith(cwd) ? dir : path.join(cwd, dir)))
