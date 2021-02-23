@@ -152,7 +152,9 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
               }
 
               console.error(
-                `${name} expects item.${iKey.key} to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`,
+                `${name} expects item.${
+                  iKey.key
+                } to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`,
               )
             }
           })
