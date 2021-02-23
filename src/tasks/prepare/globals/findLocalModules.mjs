@@ -4,10 +4,10 @@ import fs from '@magic/fs'
 import is from '@magic/types'
 import log from '@magic/log'
 
-export const findLocalModules = async () => {
+export const findLocalModules = async dir => {
   let modules = {}
 
-  const assetModules = await fs.getFiles(config.DIR.ASSETS)
+  const assetModules = await fs.getFiles(dir)
   const assetPromises = assetModules
     .filter(m => is.case.upper(path.basename(m)[0]))
     .filter(m => ['.mjs'].some(ext => m.endsWith(ext)))

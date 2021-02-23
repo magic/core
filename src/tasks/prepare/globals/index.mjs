@@ -32,13 +32,13 @@ export const prepareGlobals = async (app, config) => {
   }
 
   // look for /assets/index.mjs
-  const assetFile = await findAssetFile(modules)
+  const assetFile = await findAssetFile(config.DIR.ASSETS)
   if (assetFile) {
     modules = deep.merge(modules, assetFile)
   }
 
   // look for /assets/Uppercased.mjs and /assets/modules/Uppercased.mjs
-  const localModuleFiles = await findLocalModules(modules)
+  const localModuleFiles = await findLocalModules(config.DIR.ASSETS)
   if (localModuleFiles) {
     modules = deep.merge(modules, { ...localModuleFiles })
   }

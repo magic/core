@@ -2,9 +2,9 @@ import path from 'path'
 
 import is from '@magic/types'
 
-export const findAssetFile = async () => {
+export const findAssetFile = async dir => {
   try {
-    const maybeAssetFile = path.join(config.DIR.ASSETS, 'index.mjs')
+    const maybeAssetFile = path.join(dir, 'index.mjs')
     const assets = await import(maybeAssetFile)
     let modules = {}
     Object.entries(assets).forEach(([name, mod]) => {
