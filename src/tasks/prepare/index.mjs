@@ -15,20 +15,9 @@ import { preparePages } from './pages.mjs'
 import { prepareApi } from './api.mjs'
 import { prepareStateLinks } from './stateLinks.mjs'
 
-export const prepare = async (app, config) => {
-  const defaultApp = {
-    state: {},
-    actions: {},
-    effects: {},
-    helpers: {},
-    cookies: {},
-    subscriptions: [],
-    lib: {},
-    init: [],
-    server: {},
-    links: [],
-  }
+import { defaultApp } from '../../defaultApp.mjs'
 
+export const prepare = async (app, config) => {
   app = { ...defaultApp, ...app }
 
   if (is.fn(app.build)) {
@@ -36,6 +25,10 @@ export const prepare = async (app, config) => {
   }
 
   let { modules, libs } = await prepareGlobals(app, config)
+
+  libs.forEach(lib => {
+    app.lib[lib.key] = lib.path
+  })
 
   app.modules = modules
 
@@ -128,10 +121,6 @@ export const prepare = async (app, config) => {
       await Promise.all(staticPromises)
     }
   }
-
-  libs.forEach(lib => {
-    app.lib[lib.key] = lib.path
-  })
 
   app.style = await prepareThemes(app, config)
 
