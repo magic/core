@@ -70,7 +70,8 @@ export const findLibraries = async (app, modules) => {
       lib = lib.default
     }
 
-    global.lib[cases.camel(key)] = lib
+    const camelKey = cases.camel(key)
+    global.lib[camelKey] = lib
 
     return {
       key,
