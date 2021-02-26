@@ -445,14 +445,12 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 
 ##### 0.0.110
 * update dependencies
-
-##### 0.0.111
 * restructure most of the app tasks and remove global.config.
   this will allow us to seamlessly use @magic/core in the @magic/test library
 * libs can now be static function instead of imports
 * export renderToString
 
-##### 0.0.112 - unreleased
+##### 0.0.111 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
