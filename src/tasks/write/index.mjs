@@ -6,7 +6,7 @@ import { writeFile } from '../../lib/index.mjs'
 
 import { writeServer } from './writeServer.mjs'
 
-export const write = async app => {
+export const write = async (app, config) => {
   const { IS_PROD } = config
   // const zippable = config.FILETYPES.ZIPPABLE
   // const images = config.FILETYPES.IMAGES
@@ -30,7 +30,7 @@ export const write = async app => {
 
         const dir = path.join(config.DIR.PUBLIC, path.dirname(name))
         await fs.mkdirp(dir)
-        await writeFile(file)
+        await writeFile(file, config)
       }),
   )
 
