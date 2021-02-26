@@ -2,7 +2,7 @@ import error from '@magic/error'
 import fs from '@magic/fs'
 import is from '@magic/types'
 
-import { getBlog, getPages, handleLink } from '../../lib/index.mjs'
+import { getBlog, getPages } from '../../lib/index.mjs'
 
 import { prepareBlog } from './blog.mjs'
 import { prepareThemes } from './themes.mjs'
@@ -11,9 +11,9 @@ import { prepareJs } from './js.mjs'
 import { prepareMetaFiles } from './meta.mjs'
 import { prepareModules } from './modules.mjs'
 import { preparePages } from './pages.mjs'
-// import { prepareServiceWorker } from './service-worker.mjs'
 import { prepareApi } from './api.mjs'
 import { prepareStateLinks } from './stateLinks.mjs'
+// import { prepareServiceWorker } from './service-worker.mjs'
 
 import { defaultApp } from '../../defaultApp.mjs'
 
@@ -37,8 +37,6 @@ export const prepare = async (app, config) => {
   app.state = prepareStateLinks(app, config)
 
   app.files = await getPages({ dir: config.DIR.PAGES, root: config.ROOT })
-
-  const moduleNames = Object.keys(app.modules)
 
   // collect the pages, create their states
   app.pages = await preparePages(app, config)
