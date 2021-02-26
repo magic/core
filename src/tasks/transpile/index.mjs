@@ -16,6 +16,8 @@ export const transpile = async (app, config) => {
     INCLUDED_HASH_EXTENSIONS,
     NO_CHECK_LINKS,
     NO_CHECK_LINKS_EXIT,
+    WEB_ROOT: root,
+    NO_CHECK_LINKS_REMOTE: noRemote,
   } = config
 
   const { code, serviceWorker } = await js({ app, config })
@@ -62,10 +64,13 @@ export const transpile = async (app, config) => {
   }
   app.static[`/${HASH_FILE_NAME}`] = JSON.stringify(app.hashes, null, 2)
 
+  const staticUrls = Object.keys(app.static)
+  const links = Array.from(new Set(app.links))
+
   if (!NO_CHECK_LINKS) {
     if (ENV === 'production') {
       log('Checking page links')
-      const unresolvedLinks = await checkLinks(app, pages)
+      const unresolvedLinks = await checkLinks({ staticUrls, links, pages, noRemote, root })
       if (unresolvedLinks.length) {
         log.error('E_BROKEN_LINKS', 'Broken Links found.')
 
@@ -74,11 +79,6 @@ export const transpile = async (app, config) => {
         }
       }
     } else {
-      const staticUrls = Object.keys(app.static)
-      const links = Array.from(new Set(app.links))
-
-      const { NO_CHECK_LINKS_REMOTE: noRemote, WEB_ROOT: root } = config
-
       checkLinks({ staticUrls, links, pages, noRemote, root })
     }
   }
