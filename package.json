@@ -39,7 +39,7 @@
   "dependencies": {
     "@babel/core": "7.13.1",
     "@babel/plugin-transform-react-jsx": "7.12.17",
-    "@babel/preset-env": "7.13.0",
+    "@babel/preset-env": "7.13.5",
     "@magic-libraries/prevent-default": "0.0.5",
     "@magic/cases": "0.0.4",
     "@magic/cli": "0.0.31",
@@ -51,8 +51,8 @@
     "@magic/log": "0.1.8",
     "@magic/tags": "0.0.6",
     "@magic/transmute": "0.0.41",
-    "@magic/types": "0.1.14",
-    "@swc/core": "1.2.48",
+    "@magic/types": "0.1.15",
+    "@swc/core": "1.2.49",
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.1",
     "hyperapp-render": "3.5.0"
