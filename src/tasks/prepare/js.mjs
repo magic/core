@@ -215,7 +215,24 @@ return { ${imports} }
   let initFunc = ''
 
   if (!is.empty(magic.init)) {
-    initFunc = `[${magic.init.join(',')}]`
+    if (is.array(magic.init)) {
+      if (is.string(magic.init[0]) && is.len(magic.init, 1)) {
+        const [name, value] = magic.init
+        initFunc = `[[${name}, ${stringifyObject(value)}]]`
+      } else {
+        const init = magic.init.map(fn => {
+          if (is.array(fn) && is.len(fn, 1) && is.string(fn[0])) {
+            return `[${fn[0]}, ${stringifyObject(fn[1])}]`
+          } else if (is.string(fn)) {
+            return fn
+          }
+        })
+
+        initFunc = `[${init.join(',')}]`
+      }
+    } else {
+      throw error('E_BROKEN_INIT', 'magic.init must be an array.')
+    }
   }
 
   let initString = initState
