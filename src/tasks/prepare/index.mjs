@@ -11,9 +11,9 @@ import { prepareJs } from './js.mjs'
 import { prepareMetaFiles } from './meta.mjs'
 import { prepareModules } from './modules.mjs'
 import { preparePages } from './pages.mjs'
+// import { prepareServiceWorker } from './service-worker.mjs'
 import { prepareApi } from './api.mjs'
 import { prepareStateLinks } from './stateLinks.mjs'
-// import { prepareServiceWorker } from './service-worker.mjs'
 
 import { defaultApp } from '../../defaultApp.mjs'
 
