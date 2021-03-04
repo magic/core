@@ -133,6 +133,12 @@ const visit = ({ app, config, parent }) => {
   } else if (parent.type === 'KeyValuePatternProperty') {
     parent.key = visit({ parent: parent.key, app, config })
     parent.value = visit({ parent: parent.value, app, config })
+  } else if (parent.type === 'TryStatement') {
+    parent.block = visit({ parent: parent.block, app, config })
+    parent.handler = visit({ parent: parent.handler, app, config })
+  } else if (parent.type === 'CatchClause') {
+    parent.param = visit({ parent: parent.param, app, config })
+    parent.body = visit({ parent: parent.body, app, config })
   } else if (parent.type === 'Identifier') {
     // do nothing with Identifiers
     // console.log({ ancestor })
