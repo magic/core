@@ -17,12 +17,11 @@ export const checkLinks = async ({ staticUrls, links, pages, noRemote = false, r
       } else if (isStaticUrl(staticUrls, link, root)) {
         return
       }
-    } else {
+    } else if (link.includes('://') || link.startsWith('//')) {
       if (noRemote) {
         return
       }
 
-      // TODO: http.get those links and check if they resolve
       const { statusCode, headers, error } = await httpGet(link)
 
       if (statusCode === 200) {
