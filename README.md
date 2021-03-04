@@ -450,7 +450,12 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * libs can now be static function instead of imports
 * export renderToString
 
-##### 0.0.111 - unreleased
+##### 0.0.111
+* magic.init can now be an actual array of code, instead of string only
+* update dependencies
+* more robust checkLinks testing
+
+##### 0.0.112 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
