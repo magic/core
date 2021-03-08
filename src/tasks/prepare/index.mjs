@@ -26,8 +26,8 @@ export const prepare = async (app, config) => {
 
   let { modules, libs } = await prepareGlobals(app, config)
 
-  libs.forEach(lib => {
-    app.lib[lib.key] = lib.path
+  libs.forEach(({ key, lib }) => {
+    app.lib[key] = lib
   })
 
   app.modules = modules
