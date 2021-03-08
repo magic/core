@@ -2,6 +2,7 @@ import path from 'path'
 
 import cases from '@magic/cases'
 import fs from '@magic/fs'
+import is from '@magic/types'
 
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 const recursiveSearch = false
@@ -61,21 +62,30 @@ export const findLibraries = async (app, modules) => {
   global.lib = global.lib || {}
 
   const libFnPromises = Object.entries(libraries).map(async ([key, val]) => {
-    if (!val.endsWith('.mjs')) {
-      val = path.join(val, 'src', 'index.mjs')
-    }
-
-    let lib = await import(val)
-    if (lib.default) {
-      lib = lib.default
-    }
-
     const camelKey = cases.camel(key)
+
+    let lib
+
+    if (!is.string(val)) {
+      lib = val
+    } else {
+      if (!val.endsWith('.mjs')) {
+        val = path.join(val, 'src', 'index.mjs')
+      }
+
+      const imported = await import(val)
+
+      if (imported.default) {
+        lib = imported.default
+      } else {
+        lib = imported
+      }
+    }
+
     global.lib[camelKey] = lib
 
     return {
       key,
-      path: val,
       lib,
     }
   })
