@@ -3,6 +3,7 @@ import path from 'path'
 import cases from '@magic/cases'
 import fs from '@magic/fs'
 import is from '@magic/types'
+import log from '@magic/log'
 
 import { stringifyObject } from '../../lib/index.mjs'
 
@@ -141,22 +142,7 @@ return { ${imports} }
   if (!is.empty(magic.lib)) {
     const libPromises = Object.entries(magic.lib)
       .sort(([a], [b]) => (a > b ? 1 : -1))
-      .map(async ([name, lib]) => {
-        let fn = lib
-
-        if (is.string(lib)) {
-          if (lib.startsWith('@')) {
-            lib = path.join(process.cwd(), 'node_modules', lib)
-          }
-
-          if (!lib.endsWith('index.mjs')) {
-            lib = path.join(lib, 'src', 'index.mjs')
-          }
-
-          const imported = await import(lib)
-          fn = imported.default
-        }
-
+      .map(async ([name, fn]) => {
         if (name.includes('-')) {
           name = cases.camel(name)
         }
@@ -168,7 +154,10 @@ return { ${imports} }
         } else if (is.objectNative(fn)) {
           return ` ${name}: ${stringifyObject(fn)},`
         } else {
-          log.error('UNKNOWN_LIB_TYPE', `app.lib[${name}] has to be a function, array or object`)
+          log.error(
+            'UNKNOWN_LIB_TYPE',
+            `app.lib.${name} has to be a function, array or object, got: ${typeof app.lib[name]}`,
+          )
         }
       })
 
