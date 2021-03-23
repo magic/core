@@ -84,18 +84,9 @@ export const prepareBlogPost = ({ pageDir, state = {}, config }) => async file =
     .replace(/index.[m]?js/gm, '')
     .replace(/.[m]?js/gm, '/')
 
-  page.name = replaceSlashSlash(pageName)
+  page.name = replaceSlashSlash(`${config.BLOG_DIR.replace(config.ROOT, config.WEB_ROOT)}/${pageName}`)
 
-  page.path = page.name
-
-  if (page.path.endsWith('/')) {
-    if (page.name === '/404/') {
-      // page path for 404 is /404.html, not /404/index.html
-      page.path = `${page.path.slice(0, -1)}.html`
-    } else {
-      page.path = path.join(page.path, 'index.html')
-    }
-  }
+  page.path = `${page.name}index.html`
 
   if (!page.View || !is.function(page.View.toString)) {
     const pageDir = pageDir.replace(process.cwd(), '')
