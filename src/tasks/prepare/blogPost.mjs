@@ -84,7 +84,9 @@ export const prepareBlogPost = ({ pageDir, state = {}, config }) => async file =
     .replace(/index.[m]?js/gm, '')
     .replace(/.[m]?js/gm, '/')
 
-  page.name = replaceSlashSlash(`${config.BLOG_DIR.replace(config.ROOT, config.WEB_ROOT)}/${pageName}`)
+  page.name = replaceSlashSlash(
+    `${config.BLOG_DIR.replace(config.ROOT, config.WEB_ROOT)}/${pageName}`,
+  )
 
   page.path = `${page.name}index.html`
 
