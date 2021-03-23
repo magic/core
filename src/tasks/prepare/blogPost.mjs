@@ -40,9 +40,9 @@ export const prepareBlogPost = ({ pageDir, state = {}, config }) => async file =
 
     let children = []
     if (is.fn(pageTmp)) {
-      children = page.toString().split('=>')[1]
+      children = pageTmp.toString().split('=>')[1]
     } else if (is.fn(pageTmp.View)) {
-      children = page.View.toString().split('=>')[1]
+      children = pageTmp.View.toString().split('=>')[1]
     }
 
     viewString = `export const View = state => BlogPost(state, ${children})`
