@@ -456,6 +456,7 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * more robust checkLinks testing
 
 ##### 0.0.112 - unreleased
+* libraries can be actual code or a string pointing to a file
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
