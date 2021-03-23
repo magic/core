@@ -1,4 +1,4 @@
-import { h } from '@magic/hyperapp'
+import { h } from 'hyperapp'
 
 export const component = name => (props = {}, children = false) => {
   const is = (ele, ...types) => types.some(type => type === typeof ele)
