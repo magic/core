@@ -458,6 +458,9 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 ##### 0.0.112 - unreleased
 * libraries can be actual code or a string pointing to a file
 * update hyperapp and use 2.0.12
+* update dependencies
+
+##### 0.0.113 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
