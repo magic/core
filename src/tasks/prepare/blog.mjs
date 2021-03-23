@@ -56,9 +56,11 @@ export const prepareBlog = async (app, config) => {
         index[year][month] = {}
       }
 
-      if (day && !index[year][month][day]) {
-        index[year][month][day] = [post]
-      } else {
+      if (day) {
+        if (!index[year][month][day]) {
+          index[year][month][day] = []
+        }
+
         index[year][month][day].push(post)
       }
 
