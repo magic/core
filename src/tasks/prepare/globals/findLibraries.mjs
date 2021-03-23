@@ -12,7 +12,11 @@ export const findLibraries = async (app, modules) => {
 
   if (app.lib) {
     Object.entries(app.lib).forEach(([name, val]) => {
-      libraries[name] = path.resolve(val)
+      if (is.string(val)) {
+        libraries[name] = path.resolve(val)
+      } else {
+        libraries[name] = val
+      }
     })
   }
 
@@ -67,7 +71,11 @@ export const findLibraries = async (app, modules) => {
     let lib
 
     if (!is.string(val)) {
-      lib = val
+      if (val[key] && Object.keys(val).length === 1) {
+        lib = val[key]
+      } else {
+        lib = val
+      }
     } else {
       if (!val.endsWith('.mjs')) {
         val = path.join(val, 'src', 'index.mjs')
@@ -77,6 +85,8 @@ export const findLibraries = async (app, modules) => {
 
       if (imported.default) {
         lib = imported.default
+      } else if (imported[key]) {
+        lib = imported[key]
       } else {
         lib = imported
       }
