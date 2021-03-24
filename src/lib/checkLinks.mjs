@@ -17,6 +17,8 @@ export const checkLinks = async ({ staticUrls, links, pages, noRemote = false, r
       } else if (isStaticUrl(staticUrls, link, root)) {
         return
       }
+    } else if (link.startsWith('mailto:')) {
+      return
     } else if (link.includes('://') || link.startsWith('//')) {
       if (noRemote) {
         return
@@ -60,8 +62,8 @@ export const checkLinks = async ({ staticUrls, links, pages, noRemote = false, r
   })
 
   const unresolvedLinks = await Promise.all(linkResolvers)
-
   const filteredUnresolvedLinks = unresolvedLinks.filter(a => a)
+
   if (filteredUnresolvedLinks.length) {
     log.error(
       'E__CHECKLINKS_UNRESOLVED',

@@ -3,6 +3,10 @@ import log from '@magic/log'
 import { replaceSlashSlash } from './replaceSlashSlash.mjs'
 
 export const handleLink = ({ app, href, parent = {}, config }) => {
+  if (href.startsWith('mailto:')) {
+    return href
+  }
+
   const { WEB_ROOT } = config
 
   if (href.startsWith(WEB_ROOT)) {
