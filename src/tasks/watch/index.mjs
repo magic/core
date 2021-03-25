@@ -1,10 +1,18 @@
 import path from 'path'
 
+import is from '@magic/types'
 import fs from '@magic/fs'
 
 const watchChangeListener = dir => (evt, file) => {
+  if (!is.string(file)) {
+    file = ''
+  }
+
   const filePath = path.join(dir, file)
-  console.log({ evt, file })
+  if (!is.str(evt)) {
+    evt = 'change'
+  }
+
   process.send({ evt, file: filePath })
 }
 
