@@ -15,17 +15,17 @@ const sitemapFooter = `
 export const prepareMetaFiles = async (app, config) => {
   const res = {}
 
-  const remote = config.URL
+  const { CNAME, ROBOTS_TXT, SITEMAP, URL, WEB_ROOT } = config
 
-  if (config.ROBOTS_TXT) {
+  if (ROBOTS_TXT) {
     res['/robots.txt'] = [
       'user-agent: *',
       'allow: /',
-      `sitemap: https://${remote}/sitemap.xml\n`,
+      `sitemap: https://${URL}/sitemap.xml\n`,
     ].join('\n')
   }
 
-  if (config.SITEMAP) {
+  if (SITEMAP) {
     const sitemapArray = [sitemapHeader]
 
     app.pages
@@ -46,7 +46,7 @@ export const prepareMetaFiles = async (app, config) => {
 
         sitemapArray.push(`
 <url>
-  <loc>https://${config.URL}${name.replace(config.WEB_ROOT, '/')}</loc>
+  <loc>https://${URL}${name.replace(WEB_ROOT, '/')}</loc>
   <lastmod>${changeDate}</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
@@ -59,8 +59,8 @@ export const prepareMetaFiles = async (app, config) => {
     res['/sitemap.xml'] = sitemapArray.join('').trim()
   }
 
-  if (config.CNAME) {
-    res['/CNAME'] = config.URL.trim()
+  if (CNAME) {
+    res['/CNAME'] = URL.trim()
   }
 
   return res

@@ -7,7 +7,7 @@ import log from '@magic/log'
 
 import { stringifyObject } from '../../lib/index.mjs'
 
-export const prepareJs = async (magic, config) => {
+export const prepareJs = async (magic, { IS_DEV, HOIST /*, WEB_ROOT*/ }) => {
   const hyperappPath = path.join(
     process.cwd(),
     'node_modules',
@@ -43,7 +43,7 @@ return { ${imports} }
 
   let checkProps = ''
   let propTypeString = ''
-  if (config.IS_DEV) {
+  if (IS_DEV) {
     // add proptype checking
     checkProps = `const CHECK_PROPS = ${global.CHECK_PROPS.toString()}`
 
@@ -191,7 +191,7 @@ return { ${imports} }
   // unused for now
   //   const serviceWorkerString = `
   // if ('serviceWorker' in navigator) {
-  //   navigator.serviceWorker.register('${config.WEB_ROOT}service-worker.js')
+  //   navigator.serviceWorker.register('${WEB_ROOT}service-worker.js')
   // }
   // `
 
@@ -231,16 +231,16 @@ return { ${imports} }
   }
 
   let hoisted = ''
-  if (!is.empty(config.HOIST)) {
-    if (is.array(config.HOIST)) {
-      hoisted = config.HOIST.map(component => `${component}(state)`).join(',')
-      if (config.HOIST.length > 1) {
+  if (!is.empty(HOIST)) {
+    if (is.array(HOIST)) {
+      hoisted = HOIST.map(component => `${component}(state)`).join(',')
+      if (HOIST.length > 1) {
         hoisted = `[${hoisted}]`
-      } else if (config.HOIST.length === 0) {
+      } else if (HOIST.length === 0) {
         hoisted = ''
       }
-    } else if (is.string(config.HOIST)) {
-      hoisted = config.HOIST
+    } else if (is.string(HOIST)) {
+      hoisted = HOIST
       if (!hoisted.includes('state')) {
         hoisted = `${hoisted}(state)`
       }

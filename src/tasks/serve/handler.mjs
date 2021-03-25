@@ -7,8 +7,21 @@ import { prepareApi } from './prepareApi.mjs'
 import { apiHandler } from './apiHandler.mjs'
 
 export const handler = async (app, config) => {
-  const { IS_PROD } = config
-  const { css, client, static: stat, lambdas: rawLambdas, sw } = app
+  const {
+    IS_PROD,
+    CLIENT_LIB_NAME,
+    //CLIENT_SERVICE_WORKER_NAME,
+    FOR_DEATH_CAN_NOT_HAVE_HIM,
+  } = config
+
+  const {
+    css,
+    client,
+    static: stat,
+    lambdas: rawLambdas,
+    // sw
+  } = app
+
   const WEB_ROOT = addTrailingSlash(config.WEB_ROOT)
 
   const lambdas = await prepareApi(rawLambdas)
@@ -21,7 +34,7 @@ export const handler = async (app, config) => {
       pathname = pathname.replace(WEB_ROOT, '/')
     }
 
-    const rawUrl = url.pathname.replace(config.WEB_ROOT, '/')
+    const rawUrl = url.pathname.replace(WEB_ROOT, '/')
 
     if (rawUrl.startsWith('/api')) {
       const handled = await apiHandler(req, res, { lambdas, rawUrl })
@@ -51,7 +64,7 @@ export const handler = async (app, config) => {
       Pragma: 'no-cache',
     }
 
-    const cssUrl = `/${config.CLIENT_LIB_NAME}.css`
+    const cssUrl = `/${CLIENT_LIB_NAME}.css`
 
     if (rawUrl === cssUrl) {
       res.writeHead(200, { ...headers, 'Content-Type': 'text/css' })
@@ -59,14 +72,14 @@ export const handler = async (app, config) => {
       return
     }
 
-    const jsUrl = `/${config.CLIENT_LIB_NAME}.js`
+    const jsUrl = `/${CLIENT_LIB_NAME}.js`
     if (rawUrl === jsUrl) {
       res.writeHead(200, { ...headers, 'Content-Type': 'application/javascript' })
       res.end(client)
       return
     }
 
-    // const swUrl = `/${config.CLIENT_SERVICE_WORKER_NAME}.js`
+    // const swUrl = `/${CLIENT_SERVICE_WORKER_NAME}.js`
     // if (rawUrl === swUrl) {
     //   res.writeHead(200, { ...headers, 'Content-Type': 'application/javascript' })
     //   res.end(sw)
@@ -81,7 +94,7 @@ export const handler = async (app, config) => {
     }
 
     if (pages[url.pathname]) {
-      if (config.FOR_DEATH_CAN_NOT_HAVE_HIM) {
+      if (FOR_DEATH_CAN_NOT_HAVE_HIM) {
         headers['X-Clacks-Overhead'] = 'GNU Terry Pratchet'
       }
 

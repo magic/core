@@ -35,20 +35,22 @@ export const startServer = async (server, options) => {
 export const serve = async (app, config) => {
   const handle = await handler(app, config)
 
+  const { PORT, HOST, WEB_ROOT } = config
+
   const server = http.createServer(handle)
 
   const options = {
-    port: config.PORT,
-    host: config.HOST,
+    port: PORT,
+    host: HOST,
   }
 
   try {
     const { port, host } = await startServer(server, options)
-    if (port !== config.PORT) {
+    if (port !== PORT) {
       log.warn('Address in use', `incrementing port to ${port}...`)
     }
 
-    log(log.paint.green('LISTENING TO'), `http://${host}:${port}${config.WEB_ROOT}`)
+    log(log.paint.green('LISTENING TO'), `http://${host}:${port}${WEB_ROOT}`)
   } catch (e) {
     log.error(e)
   }

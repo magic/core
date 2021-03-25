@@ -1,14 +1,14 @@
 import { createFileHash, replaceSlashSlash } from '../../lib/index.mjs'
 
-export const prepareServiceWorker = async (app, config) => {
+export const prepareServiceWorker = async (app, { CLIENT_LIB_NAME, WEB_ROOT }) => {
   const staticFiles = Object.keys(app.static)
     .filter(f => !f.endsWith('sitemap.xml') || !f.endsWith('robots.txt'))
-    .map(file => replaceSlashSlash(`'${config.WEB_ROOT}${file}',`))
+    .map(file => replaceSlashSlash(`'${WEB_ROOT}${file}',`))
 
   const cacheFileString = `[
-    '${config.WEB_ROOT}',
-    '${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.css',
-    '${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.js',
+    '${WEB_ROOT}',
+    '${WEB_ROOT}${CLIENT_LIB_NAME}.css',
+    '${WEB_ROOT}${CLIENT_LIB_NAME}.js',
     ${staticFiles.join('')}
   ]`
 

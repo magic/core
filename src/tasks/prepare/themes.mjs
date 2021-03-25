@@ -10,15 +10,19 @@ import colors from '../../themes/colors.mjs'
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
-export const prepareThemes = async (app, config) => {
+export const prepareThemes = async (
+  app,
+  { THEME = '', THEME_VARS = {}, DIR, NODE_MODULES, ROOT },
+) => {
   const resetStyles = []
   const themeStyles = []
   const pageStyles = []
   const appStyles = []
 
-  let { THEME = '', THEME_VARS = {} } = config
-
-  THEME_VARS.colors = colors
+  THEME_VARS.colors = {
+    ...THEME_VARS.colors,
+    ...colors,
+  }
 
   if (is.string(THEME)) {
     THEME = [THEME]
@@ -34,7 +38,7 @@ export const prepareThemes = async (app, config) => {
 
     const themePromises = THEME.map(async theme_name => {
       // find reset css in theme dir if it exists
-      const maybeResetCssFile = path.join(config.DIR.THEMES, theme_name, 'reset.css.mjs')
+      const maybeResetCssFile = path.join(DIR.THEMES, theme_name, 'reset.css.mjs')
       const { default: maybeResetCssStyles } = await import(maybeResetCssFile)
       resetStyles.push(maybeResetCssStyles)
     })
@@ -60,9 +64,9 @@ export const prepareThemes = async (app, config) => {
           // see if this is a @magic-themes theme
           `@magic-themes/${theme_name}`,
           // see if it is installed locally.
-          path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
+          path.join(DIR.THEMES, theme_name, 'index.mjs'),
           // if called from globally installed magic, load with absolute path
-          path.join(config.NODE_MODULES, '@magic-themes', theme_name, 'src', 'index.mjs'),
+          path.join(NODE_MODULES, '@magic-themes', theme_name, 'src', 'index.mjs'),
         ]
 
         return await Promise.all(
@@ -110,7 +114,7 @@ export const prepareThemes = async (app, config) => {
       pageStyles.push(page.style)
     })
 
-  const maybeAppFile = path.join(config.ROOT, 'app.mjs')
+  const maybeAppFile = path.join(ROOT, 'app.mjs')
   const fileName = new URL(import.meta.url).pathname
   if (maybeAppFile !== fileName) {
     try {
