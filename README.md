@@ -465,6 +465,8 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * starting to remove usages of config without explicit destructuring
 * replaceSlashSlash all urls in robots.txt and sitemap.xml
 * add ADD_TAGS to append arbitrary html after the #magic root
+* the watch task can now watch files
+* the watch task watches the config file
 
 ##### 0.0.113 - unreleased
 ...
