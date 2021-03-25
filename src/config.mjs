@@ -64,7 +64,17 @@ export const runConfig = async (args = {}) => {
   conf.SITEMAP = conf.hasOwnProperty('SITEMAP') ? conf.SITEMAP : true
 
   // array of scripts that should be appended to the body
-  conf.ADD_SCRIPTS = is.array(conf.ADD_SCRIPTS) ? conf.ADD_SCRIPTS : []
+  const mapScript = src => ({
+    src: src,
+    integrity: hashes[src],
+    crossorigin: 'anonymous',
+  })
+
+  if (conf.ADD_SCRIPTS && !is.array(conf.ADD_SCRIPTS)) {
+    conf.ADD_SCRIPTS = [conf.ADD_SCRIPTS]
+  }
+
+  conf.ADD_SCRIPTS = conf.ADD_SCRIPTS ? conf.ADD_SCRIPTS.map(mapScript) : []
 
   // array of html tags that get appended after the #magic html tag
   // structure: { name, props, children }

@@ -222,9 +222,9 @@ const App = async config => {
           body([
             SkipLink(),
             Page({ page: page.View, state }),
-            is.array(ADD_TAGS) && ADD_TAGS.map(tag => h(tag.name, tag.props, tag.children)),
+            ADD_TAGS.map(tag => h(tag.name, tag.props, tag.children)),
             script(magicJs),
-            is.array(addScripts) && addScripts.map(src => script(src)),
+            ADD_SCRIPTS.map(src => script(src)),
             // script(serviceWorker),
           ]),
         ]),
