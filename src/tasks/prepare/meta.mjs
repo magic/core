@@ -1,5 +1,7 @@
 import is from '@magic/types'
 
+import { replaceSlashSlash } from '../../lib/index.mjs'
+
 const sitemapHeader = `
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset
@@ -18,11 +20,9 @@ export const prepareMetaFiles = async (app, config) => {
   const { CNAME, ROBOTS_TXT, SITEMAP, URL, WEB_ROOT } = config
 
   if (ROBOTS_TXT) {
-    res['/robots.txt'] = [
-      'user-agent: *',
-      'allow: /',
-      `sitemap: https://${URL}/sitemap.xml\n`,
-    ].join('\n')
+    const sitemapUrl = replaceSlashSlash(`https://${URL}/sitemap.xml`)
+
+    res['/robots.txt'] = ['user-agent: *', 'allow: /', `sitemap: ${sitemapUrl}\n`].join('\n')
   }
 
   if (SITEMAP) {
@@ -44,9 +44,11 @@ export const prepareMetaFiles = async (app, config) => {
 
         const changeDate = `${now.getFullYear()}-${month}-${day}`
 
+        const sitemapItemUrl = replaceSlashSlash(`https://${URL}${name.replace(WEB_ROOT, '/')}`)
+
         sitemapArray.push(`
 <url>
-  <loc>https://${URL}${name.replace(WEB_ROOT, '/')}</loc>
+  <loc>${sitemapItemUrl}</loc>
   <lastmod>${changeDate}</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
