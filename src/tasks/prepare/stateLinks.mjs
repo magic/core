@@ -7,7 +7,9 @@ const traverseLinks = ({ state, parent, WEB_ROOT, ...args }) => {
     state.to = handleLink({ href: state.to, parent, WEB_ROOT, ...args })
 
     if (state.items) {
-      state.items = state.items.map(item => traverseLinks({ state: item, parent: state, WEB_ROOT, ...args }))
+      state.items = state.items.map(item =>
+        traverseLinks({ state: item, parent: state, WEB_ROOT, ...args }),
+      )
     }
 
     return state
