@@ -14,7 +14,7 @@ import { replacePathSepForImport } from './lib/index.mjs'
 
 export const runConfig = async (args = {}) => {
   let conf = {
-    CONFIG_FILE_PATH: replacePathSepForImport(path.join(process.cwd(), 'config.mjs'), path.sep)
+    CONFIG_FILE_PATH: replacePathSepForImport(path.join(process.cwd(), 'config.mjs'), path.sep),
   }
 
   try {
