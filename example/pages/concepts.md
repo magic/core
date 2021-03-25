@@ -83,16 +83,16 @@ const effects = {
 
 at the moment, subscriptions can be defined using strings as function names.
 
-if a module exports a subscriptions array, those subscriptions will be added to the app.
+also, if a module exports a subscriptions array, those subscriptions will be added to the app.
 
 ```
-const subscriptions = [
-  subscribe = (dispatch, action) => {
+const subscriptions = {
+  subscribe: (dispatch, action) => {
     setInterval(() => {
       dispatch(action, { arg: Math.random() * 100 })
     })
-  }
-]
+  },
+}
 
 const actions = {
   onSubscription: (state, e) => ({
