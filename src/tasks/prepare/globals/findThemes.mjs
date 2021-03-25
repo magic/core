@@ -5,10 +5,7 @@ import deep from '@magic/deep'
 import error from '@magic/error'
 import is from '@magic/types'
 
-export const findThemes = async (modules, conf) => {
-  const { DIR, NODE_MODULES } = conf
-  let { THEME } = conf
-
+export const findThemes = async (modules, { DIR, NODE_MODULES, THEME }) => {
   if (THEME) {
     if (is.string(THEME)) {
       THEME = [THEME]

@@ -9,7 +9,7 @@ import { findBuiltins } from './findBuiltins.mjs'
 import { findLibraries } from './findLibraries.mjs'
 import { findThemes } from './findThemes.mjs'
 
-export const prepareGlobals = async (app, config) => {
+export const prepareGlobals = async (app, { DIR, NODE_MODULES, THEME }) => {
   global.app = app
 
   let modules = {}
@@ -21,7 +21,7 @@ export const prepareGlobals = async (app, config) => {
   }
 
   // load modules from themes
-  const themeModulefiles = await findThemes(modules, config)
+  const themeModulefiles = await findThemes(modules, { DIR, NODE_MODULES, THEME })
   if (themeModulefiles) {
     modules = deep.merge(modules, themeModulefiles)
   }
@@ -33,13 +33,13 @@ export const prepareGlobals = async (app, config) => {
   }
 
   // look for /assets/index.mjs
-  const assetFile = await findAssetFile(config.DIR.ASSETS)
+  const assetFile = await findAssetFile(DIR.ASSETS)
   if (assetFile) {
     modules = deep.merge(modules, assetFile)
   }
 
   // look for /assets/Uppercased.mjs and /assets/modules/Uppercased.mjs
-  const localModuleFiles = await findLocalModules(config.DIR.ASSETS)
+  const localModuleFiles = await findLocalModules(DIR.ASSETS)
   if (localModuleFiles) {
     modules = deep.merge(modules, localModuleFiles)
   }
