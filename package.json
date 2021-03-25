@@ -46,7 +46,7 @@
     "@magic/css": "0.7.31",
     "@magic/deep": "0.1.5",
     "@magic/error": "0.0.8",
-    "@magic/fs": "0.0.11",
+    "@magic/fs": "0.0.12",
     "@magic/log": "0.1.8",
     "@magic/tags": "0.0.6",
     "@magic/transmute": "0.0.41",
