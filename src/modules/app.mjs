@@ -9,7 +9,9 @@ const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
 const App = async config => {
-  const { WEB_ROOT = '/', LANG = 'en' } = config
+  const { ADD_SCRIPTS, CLIENT_LIB_NAME, DIR, LANG = 'en', NODE_MODULES, ROOT, WEB_ROOT } = config
+
+  let { THEME = [] } = config
 
   let localApp = {
     state: {},
@@ -19,8 +21,6 @@ const App = async config => {
   }
 
   let seo = {}
-
-  let { THEME = [] } = config
 
   if (!is.array(THEME)) {
     THEME = [THEME]
@@ -38,9 +38,9 @@ const App = async config => {
         // see if this is a @magic-themes theme
         `@magic-themes/${theme_name}`,
         // see if it is installed locally.
-        path.join(config.DIR.THEMES, theme_name, 'index.mjs'),
+        path.join(DIR.THEMES, theme_name, 'index.mjs'),
         // npm i -g magic: load magic-themes from node_modules explicitly.
-        path.join(config.NODE_MODULES, '@magic-themes', theme_name, 'src', 'index.mjs'),
+        path.join(NODE_MODULES, '@magic-themes', theme_name, 'src', 'index.mjs'),
       ]
 
       return await Promise.all(
@@ -99,7 +99,7 @@ const App = async config => {
 
   // will be used in the catch clause to make sure it's this file
   // that causes a MODULE_NOT_FOUND error
-  const maybeAppFile = path.join(config.ROOT, 'app.mjs')
+  const maybeAppFile = path.join(ROOT, 'app.mjs')
 
   try {
     const { default: def, ...maybeApp } = await import(maybeAppFile)
@@ -171,7 +171,7 @@ const App = async config => {
 
       const shortJsHash = hashes['/magic.js'].split('-')[1].substr(0, 10)
       const magicJs = {
-        src: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.js?${shortJsHash}`,
+        src: `${WEB_ROOT}${CLIENT_LIB_NAME}.js?${shortJsHash}`,
         integrity: hashes['/magic.js'],
         crossorigin: 'anonymous',
       }
@@ -179,14 +179,14 @@ const App = async config => {
       const shortCssHash = hashes['/magic.css'].split('-')[1].substr(0, 10)
       const magicCss = {
         rel: 'stylesheet',
-        href: `${config.WEB_ROOT}${config.CLIENT_LIB_NAME}.css?${shortCssHash}`,
+        href: `${WEB_ROOT}${CLIENT_LIB_NAME}.css?${shortCssHash}`,
         integrity: hashes['/magic.css'],
         crossorigin: 'anonymous',
       }
 
-      const ADD_SCRIPTS =
-        config.ADD_SCRIPTS &&
-        config.ADD_SCRIPTS.map(src => ({
+      const addScripts =
+        ADD_SCRIPTS &&
+        ADD_SCRIPTS.map(src => ({
           src: src,
           integrity: hashes[src],
           crossorigin: 'anonymous',
@@ -214,7 +214,7 @@ const App = async config => {
             SkipLink(),
             Page({ page: page.View, state }),
             script(magicJs),
-            ADD_SCRIPTS && ADD_SCRIPTS.map(src => script(src)),
+            addScripts && addScripts.map(src => script(src)),
             // script(serviceWorker),
           ]),
         ]),

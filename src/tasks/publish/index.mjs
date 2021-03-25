@@ -2,9 +2,9 @@ import log from '@magic/log'
 
 import { getGitConfig, xc } from '../../lib/index.mjs'
 
-export const publish = async config => {
-  const git = await getGitConfig(config)
-  const outDir = config.DIR.PUBLIC.replace(`${process.cwd()}/`, '')
+export const publish = async ({ DIR, GIT }) => {
+  const git = await getGitConfig(GIT)
+  const outDir = DIR.PUBLIC.replace(`${process.cwd()}/`, '')
 
   const cmdPrefix = `--prefix=${outDir}`
   const cmdOnto = `--onto=${git.ORIGIN}/${git.BRANCH}`

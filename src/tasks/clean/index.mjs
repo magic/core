@@ -7,9 +7,7 @@ import log from '@magic/log'
 
 import { isLocalPath } from '../../lib/index.mjs'
 
-export const clean = async config => {
-  const dir = config.DIR.PUBLIC
-
+export const clean = async dir => {
   if (is.string(dir) && !is.empty(dir)) {
     if (!isLocalPath(path.resolve(dir))) {
       // do not delete above/outside the cwd

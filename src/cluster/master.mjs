@@ -2,28 +2,28 @@ import log from '@magic/log'
 
 import { runCmd } from './runCmd.mjs'
 
-export const master = async ({ cluster, commands, config }) => {
-  if (config.URL_WARNING) {
-    log.warn('Autodetected URL:', `https://${config.URL}`)
+export const master = async ({ cluster, commands, DIR, GIT, URL, URL_WARNING, WEB_ROOT }) => {
+  if (URL_WARNING) {
+    log.warn('Autodetected URL:', `https://${URL}`)
     log.info(`
-  to hide this warning and make startup ${config.URL_WARNING}ms faster,
+  to hide this warning and make startup ${URL_WARNING}ms faster,
   add the following to your config.mjs file (and adjust the values if needed)
 
-  URL: '${config.URL}',
-  WEB_ROOT: '${config.WEB_ROOT}',
+  URL: '${URL}',
+  WEB_ROOT: '${WEB_ROOT}',
   `)
   }
 
   if (commands.clean) {
-    await runCmd('clean', config)
+    await runCmd('clean', DIR.PUBLIC)
   }
 
   if (commands.connect) {
-    await runCmd('connect', config)
+    await runCmd('connect', { DIR, GIT })
   }
 
   if (commands.publish) {
-    await runCmd('publish', config)
+    await runCmd('publish', { DIR, GIT })
   }
 
   const bail = !commands.build && !commands.serve

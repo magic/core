@@ -15,13 +15,15 @@ export const runCluster = async options => {
     global.CHECK_PROPS = CHECK_PROPS
   }
 
+  const { DIR, GIT, ROOT, URL, URL_WARNING, WEB_ROOT } = config
+
   if (cluster.isMaster) {
-    await master({ cluster, commands, config })
+    await master({ cluster, commands, DIR, GIT, URL, URL_WARNING, WEB_ROOT })
   } else if (cluster.isWorker) {
     if (commands.serve && cluster.worker.id === 1) {
       // watcher,
       // watches the directory and tells master to restart the build process when files change
-      watch({ args, config })
+      watch({ args, ROOT })
     } else {
       // builder
       // builds the files and pages needed

@@ -6,9 +6,9 @@ import * as tasks from '../tasks/index.mjs'
 
 const cwd = process.cwd()
 
-export const watch = ({ args, config }) => {
+export const watch = ({ args, ROOT }) => {
   const watchDirs = args.watch
-  let dirs = [config.ROOT]
+  let dirs = [ROOT]
 
   if (is.array(watchDirs)) {
     dirs = [...dirs, ...watchDirs]
