@@ -18,13 +18,7 @@ export const prepareJs = async (magic, { IS_DEV, HOIST /*, WEB_ROOT*/ }) => {
   )
   const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
-  // only load Lazy if requested by user
-  let imports = 'h, app'
-  if (magic.modules.Lazy) {
-    imports += ', Lazy'
-  }
-
-  delete magic.modules.Lazy
+  const imports = 'h, app'
 
   // replace hyperapp exports, wrap it in a closure
   // return needed exports only to allow dead code elimination
