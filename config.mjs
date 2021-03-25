@@ -27,7 +27,5 @@ export default {
   // DO NOT ENABLE IN YOUR APP (unless you need to because reasons...)
   NO_CHECK_LINKS_EXIT: true,
 
-  ADD_TAGS: [
-    { name: 'div', props: { id: 'map' } },
-  ],
+  ADD_TAGS: [{ name: 'div', props: { id: 'map' } }],
 }
