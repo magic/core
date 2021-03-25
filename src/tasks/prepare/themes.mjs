@@ -10,10 +10,9 @@ import colors from '../../themes/colors.mjs'
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
-export const prepareThemes = async (
-  app,
-  { THEME = '', THEME_VARS = {}, DIR, NODE_MODULES, ROOT },
-) => {
+export const prepareThemes = async (app, config) => {
+  const { THEME = '', THEME_VARS = {}, DIR, NODE_MODULES, ROOT } = config
+
   const resetStyles = []
   const themeStyles = []
   const pageStyles = []
