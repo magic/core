@@ -6,7 +6,7 @@ import * as tasks from '../tasks/index.mjs'
 
 const cwd = process.cwd()
 
-export const watch = ({ args, ROOT }) => {
+export const watch = ({ args, ROOT, CONFIG_FILE_PATH }) => {
   const watchDirs = args.watch
   let dirs = [ROOT]
 
@@ -17,6 +17,8 @@ export const watch = ({ args, ROOT }) => {
   }
 
   dirs = dirs.map(dir => (dir.startsWith(cwd) ? dir : path.join(cwd, dir)))
+
+  dirs.push(CONFIG_FILE_PATH)
 
   tasks.watch(dirs)
 }
