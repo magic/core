@@ -14,7 +14,7 @@ const used = {
 }
 
 // collect all used modules, htmlTags, actions, effects, helpers
-const findUsedSpells = (t, app, config) => path => {
+const findUsedSpells = (t, app, WEB_ROOT) => path => {
   // find used modules and html tags in app
   const moduleNames = Object.keys(app.modules)
 
@@ -58,13 +58,13 @@ const findUsedSpells = (t, app, config) => path => {
       if (t.isIdentifier(path.node.key)) {
         if (path.node.value.value) {
           if (validKeys.includes(path.node.key.name)) {
-            path.node.value.value = handleLink({ href: path.node.value.value, app, config })
+            path.node.value.value = handleLink({ href: path.node.value.value, app, WEB_ROOT })
           }
         }
       } else if (t.isStringLiteral(path.node.key)) {
         const { value: name } = path.node.key
         if (validKeys.includes(name)) {
-          path.node.value.value = handleLink({ href: path.node.value.value, app, config })
+          path.node.value.value = handleLink({ href: path.node.value.value, app, WEB_ROOT })
         }
       }
     }
@@ -218,14 +218,14 @@ const removeUnused = (t, app) => path => {
   }
 }
 
-export default (app, config) => ({ types: t }) => ({
+export default (app, { WEB_ROOT }) => ({ types: t }) => ({
   visitor: {
     Program: {
       enter(path) {
-        path.traverse({ enter: findUsedSpells(t, app, config) })
+        path.traverse({ enter: findUsedSpells(t, app, WEB_ROOT) })
       },
       exit(path) {
-        path.traverse({ enter: removeUnused(t, app, config) })
+        path.traverse({ enter: removeUnused(t, app) })
       },
     },
   },
