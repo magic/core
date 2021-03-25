@@ -464,6 +464,7 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * import hyperapp memo instead of Lazy
 * starting to remove usages of config without explicit destructuring
 * replaceSlashSlash all urls in robots.txt and sitemap.xml
+* add ADD_TAGS to append arbitrary html after the #magic root
 
 ##### 0.0.113 - unreleased
 ...
