@@ -13,12 +13,16 @@ import colors from './themes/colors.mjs'
 import { replacePathSepForImport } from './lib/index.mjs'
 
 export const runConfig = async (args = {}) => {
-  let conf = {}
-  const confPath = replacePathSepForImport(path.join(process.cwd(), 'config.mjs'), path.sep)
+  let conf = {
+    CONFIG_FILE_PATH: replacePathSepForImport(path.join(process.cwd(), 'config.mjs'), path.sep)
+  }
 
   try {
-    const { default: imported } = await import(confPath)
-    conf = imported
+    const { default: imported } = await import(conf.CONFIG_FILE_PATH)
+    conf = {
+      ...conf,
+      ...imported,
+    }
   } catch (e) {
     log.warn('no local conf file found.')
   }
