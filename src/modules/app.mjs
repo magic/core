@@ -193,14 +193,6 @@ const App = async config => {
         crossorigin: 'anonymous',
       }
 
-      const addScripts =
-        ADD_SCRIPTS &&
-        ADD_SCRIPTS.map(src => ({
-          src: src,
-          integrity: hashes[src],
-          crossorigin: 'anonymous',
-        }))
-
       // const shortSwHash = hashes.serviceWorker.split('-')[1].substr(0, 10)
       // const serviceWorker = {
       //   src: `${config.WEB_ROOT}${config.CLIENT_SERVICE_WORKER_NAME}.js?${shortSwHash}`,
