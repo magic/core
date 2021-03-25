@@ -1,4 +1,4 @@
-import { h, memo } from 'hyperapp'
+import { memo } from 'hyperapp'
 
 import { bodyTags, headTags, svgTags } from '@magic/tags'
 
