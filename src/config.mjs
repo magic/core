@@ -63,6 +63,17 @@ export const runConfig = async (args = {}) => {
   // set to false to not emit a sitemap.xml file
   conf.SITEMAP = conf.hasOwnProperty('SITEMAP') ? conf.SITEMAP : true
 
+  // array of scripts that should be appended to the body
+  conf.ADD_SCRIPTS = is.array(conf.ADD_SCRIPTS) ? conf.ADD_SCRIPTS : []
+
+  // array of html tags that get appended after the #magic html tag
+  // structure: { name, props, children }
+  if (!conf.ADD_TAGS) {
+    conf.ADD_TAGS = []
+  } else if (!is.array(conf.ADD_TAGS)) {
+    conf.ADD_TAGS = [conf.ADD_TAGS]
+  }
+
   // the pages directory with page files to build
   const PAGES = path.join(conf.ROOT, 'pages')
 
