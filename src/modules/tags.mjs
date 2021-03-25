@@ -13,7 +13,6 @@ const prepareTag = name => {
   exp[name] = prepared
 }
 
-
 bodyTags.forEach(prepareTag)
 
 svgTags.forEach(prepareTag)
