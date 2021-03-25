@@ -463,6 +463,7 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * href link checkers handle mailto: links
 * import hyperapp memo instead of Lazy
 * starting to remove usages of config without explicit destructuring
+* replaceSlashSlash all urls in robots.txt and sitemap.xml
 
 ##### 0.0.113 - unreleased
 ...
