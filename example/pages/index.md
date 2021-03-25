@@ -77,7 +77,7 @@ chat, and all other server side services possible.
 
 ### Broken link tests:
 
-the following links are broken, and it's intentional for magic to warns us on every rebuild.
+the following links are broken, and it's intentional for magic to warn us on every rebuild.
 
 * [redirect link](https://magic.github.io/core)
 * [broken link](https://expect-error)
