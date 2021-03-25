@@ -1,13 +1,18 @@
+import { h, memo } from 'hyperapp'
+
 import { bodyTags, headTags, svgTags } from '@magic/tags'
 
 import { component } from './component.mjs'
 
-const exp = {}
+const exp = {
+  memo,
+}
 
 const prepareTag = name => {
   const prepared = component(name)
   exp[name] = prepared
 }
+
 
 bodyTags.forEach(prepareTag)
 
