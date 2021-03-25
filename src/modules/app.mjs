@@ -9,7 +9,16 @@ const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
 const App = async config => {
-  const { ADD_SCRIPTS, CLIENT_LIB_NAME, DIR, LANG = 'en', NODE_MODULES, ROOT, WEB_ROOT } = config
+  const {
+    ADD_SCRIPTS,
+    ADD_TAGS,
+    CLIENT_LIB_NAME,
+    DIR,
+    LANG = 'en',
+    NODE_MODULES,
+    ROOT,
+    WEB_ROOT,
+  } = config
 
   let { THEME = [] } = config
 
@@ -213,8 +222,9 @@ const App = async config => {
           body([
             SkipLink(),
             Page({ page: page.View, state }),
+            is.array(ADD_TAGS) && ADD_TAGS.map(tag => h(tag.name, tag.props, tag.children)),
             script(magicJs),
-            addScripts && addScripts.map(src => script(src)),
+            is.array(addScripts) && addScripts.map(src => script(src)),
             // script(serviceWorker),
           ]),
         ]),
