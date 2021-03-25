@@ -1,3 +1,3 @@
 user-agent: *
 allow: /
-sitemap: https://magic.github.io/core//sitemap.xml
+sitemap: https:/magic.github.io/core/sitemap.xml
