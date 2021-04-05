@@ -1,7 +1,7 @@
 export { addTrailingSlash } from './addTrailingSlash.mjs'
 export { CHECK_PROPS } from './CHECK_PROPS.mjs'
 export { checkLinks } from './checkLinks.mjs'
-export { createFileHash } from './createFileHash.mjs'
+export { createHash } from './createHash.mjs'
 export { findModuleStyles } from './findModuleStyles.mjs'
 export { getBabelConf } from './babel/index.mjs'
 export { getBlog } from './getBlog.mjs'

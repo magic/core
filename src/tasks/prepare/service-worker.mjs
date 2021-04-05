@@ -1,4 +1,4 @@
-import { createFileHash, replaceSlashSlash } from '../../lib/index.mjs'
+import { createHash, replaceSlashSlash } from '../../lib/index.mjs'
 
 export const prepareServiceWorker = async (app, { CLIENT_LIB_NAME, WEB_ROOT }) => {
   const staticFiles = Object.keys(app.static)
@@ -12,7 +12,7 @@ export const prepareServiceWorker = async (app, { CLIENT_LIB_NAME, WEB_ROOT }) =
     ${staticFiles.join('')}
   ]`
 
-  const fileHash = await createFileHash(cacheFileString)
+  const fileHash = await createHash(cacheFileString)
 
   const serviceWorkerString = `
 const cacheFiles = ${cacheFileString}

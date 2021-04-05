@@ -6,7 +6,7 @@ import html from './html.mjs'
 import js from './js.mjs'
 import style from './css.mjs'
 
-import { createFileHash, checkLinks } from '../../lib/index.mjs'
+import { createHash, checkLinks } from '../../lib/index.mjs'
 
 export const transpile = async (app, config) => {
   const {
@@ -26,16 +26,16 @@ export const transpile = async (app, config) => {
   const css = await style(app.style, config.THEME_VARS)
 
   app.hashes = {
-    '/magic.css': createFileHash(ENV === 'production' ? css.minified : css.css),
-    '/magic.js': createFileHash(code),
-    // 'worker.js': createFileHash(serviceWorker),
+    '/magic.css': createHash(ENV === 'production' ? css.minified : css.css),
+    '/magic.js': createHash(code),
+    // 'worker.js': createHash(serviceWorker),
   }
 
   if (ADD_SCRIPTS) {
     await Promise.all(
       ADD_SCRIPTS.map(async src => {
         const fileContent = app.static[src]
-        const fileHash = createFileHash(fileContent)
+        const fileHash = createHash(fileContent, src)
         app.hashes[src] = fileHash
       }),
     )
@@ -46,7 +46,7 @@ export const transpile = async (app, config) => {
   pages
     .sort((a, b) => (a.name < b.name ? -1 : 1))
     .forEach(page => {
-      page.hash = createFileHash(page.rendered)
+      page.hash = createHash(page.rendered)
       app.hashes[page.name] = page.hash
     })
 
@@ -59,7 +59,7 @@ export const transpile = async (app, config) => {
       .filter(([name]) => included.includes(path.extname(name)) || included.includes(name))
       .sort(([a], [b]) => (a > b ? 1 : -1))
       .forEach(([name, val]) => {
-        app.hashes[name] = createFileHash(val)
+        app.hashes[name] = createHash(val)
       })
   }
   app.static[`/${HASH_FILE_NAME}`] = JSON.stringify(app.hashes, null, 2)
