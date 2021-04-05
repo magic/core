@@ -1,6 +1,7 @@
 import path from 'path'
 
 import log from '@magic/log'
+import error from '@magic/error'
 
 import html from './html.mjs'
 import js from './js.mjs'
@@ -33,9 +34,14 @@ export const transpile = async (app, config) => {
 
   if (ADD_SCRIPTS) {
     await Promise.all(
-      ADD_SCRIPTS.map(async src => {
+      ADD_SCRIPTS.map(async ({ src }) => {
         const fileContent = app.static[src]
-        const fileHash = createHash(fileContent, src)
+
+        if (!fileContent) {
+          throw error(`script ${src} could not be loaded`, 'E_ADD_SCRIPTS')
+        }
+
+        const fileHash = createHash(fileContent)
         app.hashes[src] = fileHash
       }),
     )
@@ -62,6 +68,7 @@ export const transpile = async (app, config) => {
         app.hashes[name] = createHash(val)
       })
   }
+
   app.static[`/${HASH_FILE_NAME}`] = JSON.stringify(app.hashes, null, 2)
 
   const staticUrls = Object.keys(app.static)
@@ -70,7 +77,9 @@ export const transpile = async (app, config) => {
   if (!NO_CHECK_LINKS) {
     if (ENV === 'production') {
       log('Checking page links')
+
       const unresolvedLinks = await checkLinks({ staticUrls, links, pages, noRemote, root })
+
       if (unresolvedLinks.length) {
         log.error('E_BROKEN_LINKS', 'Broken Links found.')
 
