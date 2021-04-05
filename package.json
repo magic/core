@@ -54,7 +54,7 @@
     "@swc/core": "1.2.51",
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.1",
-    "hyperapp": "2.0.12",
+    "hyperapp": "2.0.13",
     "hyperapp-render": "4.0.0"
   },
   "devDependencies": {
