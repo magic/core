@@ -28,4 +28,6 @@ export default {
   NO_CHECK_LINKS_EXIT: true,
 
   ADD_TAGS: [{ name: 'div', props: { id: 'AddTag' } }],
+
+  ADD_SCRIPTS: ['/addScript.js'],
 }
