@@ -1,9 +1,10 @@
 import path from 'path'
+import events from 'events'
 
 import is from '@magic/types'
 import fs from '@magic/fs'
 
-const watchChangeListener = dir => (evt, file) => {
+const onFileChange = dir => (evt, file = '') => {
   if (!is.string(file)) {
     file = ''
   }
@@ -16,17 +17,22 @@ const watchChangeListener = dir => (evt, file) => {
   process.send({ evt, file: filePath })
 }
 
-export const watch = files => {
-  files.map(async file => {
-    const watchListener = watchChangeListener(file)
-    const stat = await fs.stat(file)
+const watchListener = async src => {
+  const stat = await fs.stat(src)
 
-    if (stat.isFile()) {
-      fs.watchFile(file, watchListener)
-    } else if (stat.isDirectory()) {
-      fs.watch(file, watchListener)
-    }
-  })
+  if (stat.isDirectory(src)) {
+    fs.watch(src, onFileChange(src))
+
+    const searchDepth = 1
+    const subDirs = await fs.getDirectories(src, searchDepth)
+    const promises = subDirs.filter(dir => dir !== src).map(watchListener)
+
+    await Promise.all(promises)
+  } else if (stat.isFile(src)) {
+    fs.watchFile(src, onFileChange(src))
+  }
 }
+
+export const watch = async files => await Promise.all(files.map(watchListener))
 
 export default watch
