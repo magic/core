@@ -110,7 +110,8 @@ export const preparePage = ({ WEB_ROOT, pageDir, state = {}, config }) => async 
     // remove all slashes
     const pageName = page.name.replace(/\//g, '')
 
-    throw error(`
+    throw error(
+      `
 ${relativePageDir}/${pageName}.mjs
 needs to either
 export default state => []
