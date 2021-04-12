@@ -106,13 +106,12 @@ export const preparePage = ({ WEB_ROOT, pageDir, state = {}, config }) => async 
   }
 
   if (!page.View || !is.function(page.View.toString)) {
-    const pageDir = pageDir.replace(process.cwd(), '')
+    const relativePageDir = pageDir.replace(process.cwd(), '')
     // remove all slashes
     const pageName = page.name.replace(/\//g, '')
 
-    throw error(
-      `
-${pageDir}/${pageName}.mjs
+    throw error(`
+${relativePageDir}/${pageName}.mjs
 needs to either
 export default state => []
 or
