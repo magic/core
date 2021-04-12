@@ -468,7 +468,10 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * the watch task can now watch files
 * the watch task watches the config file
 
-##### 0.0.113 - unreleased
+##### 0.0.113
+* tasks/prepare/page: change variable name to avoid "access before init" error when pages do not build successfully.
+
+##### 0.0.114 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
