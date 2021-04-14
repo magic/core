@@ -130,6 +130,10 @@ export const state = config => ({
       ],
     },
     { to: '/news/', text: 'news' },
+    {
+      to: '/test/',
+      text: 'test',
+    },
   ],
 })
 
