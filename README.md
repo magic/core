@@ -473,6 +473,9 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * update dependencies
 
 ##### 0.0.114 - unreleased
+* to keep dev builds fast, external links only get checked on build.
+
+##### 0.0.115 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
