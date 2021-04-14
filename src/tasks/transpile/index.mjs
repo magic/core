@@ -11,6 +11,7 @@ import { createHash, checkLinks } from '../../lib/index.mjs'
 
 export const transpile = async (app, config) => {
   const {
+    ADD_CSS,
     ADD_SCRIPTS,
     ENV,
     HASH_FILE_NAME,
@@ -35,14 +36,31 @@ export const transpile = async (app, config) => {
   if (ADD_SCRIPTS) {
     await Promise.all(
       ADD_SCRIPTS.map(async ({ src }) => {
-        const fileContent = app.static[src]
+        const staticSrc = src.replace(config.WEB_ROOT, '')
+        const fileContent = app.static[`/${staticSrc}`]
 
         if (!fileContent) {
-          throw error(`script ${src} could not be loaded`, 'E_ADD_SCRIPTS')
+          throw error(`script ${staticSrc} could not be loaded`, 'E_ADD_SCRIPTS')
         }
 
         const fileHash = createHash(fileContent)
-        app.hashes[src] = fileHash
+        app.hashes[staticSrc] = fileHash
+      }),
+    )
+  }
+
+  if (ADD_CSS) {
+    await Promise.all(
+      ADD_CSS.map(async href => {
+        const staticSrc = href.replace(config.WEB_ROOT, '')
+        const fileContent = app.static[`/${staticSrc}`]
+
+        if (!fileContent) {
+          throw error(`css file ${staticSrc} could not be loaded`, 'E_ADD_CSS')
+        }
+
+        const fileHash = createHash(fileContent)
+        app.hashes[staticSrc] = fileHash
       }),
     )
   }
