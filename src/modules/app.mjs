@@ -10,6 +10,7 @@ const dirName = path.dirname(url.pathname)
 
 const App = async config => {
   const {
+    ADD_CSS,
     ADD_SCRIPTS,
     ADD_TAGS,
     CLIENT_LIB_NAME,
@@ -210,6 +211,7 @@ const App = async config => {
             Seo({ ...state, seo }),
             link(magicCss),
             page.Head && page.Head(state),
+            ADD_CSS.map(href => link({ href, rel: 'stylesheet' })),
           ]),
           body([
             SkipLink(),
