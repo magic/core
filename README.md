@@ -474,6 +474,11 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 
 ##### 0.0.114 - unreleased
 * to keep dev builds fast, external links only get checked on build.
+* deprecate config.mjs in favor of magic.(m)js
+* magic.js config import will now error and exit if config does not exist
+* if no config file is found, output an example config
+* show a warning if config.mjs is still being used
+* only checkLinks external links in production env
 
 ##### 0.0.115 - unreleased
 ...
