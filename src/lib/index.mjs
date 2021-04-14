@@ -21,4 +21,3 @@ export { replaceSlashSlash } from './replaceSlashSlash.mjs'
 export { stringifyObject } from './stringifyObject.mjs'
 export { writeFile } from './writeFile.mjs'
 export { xc } from './xc.mjs'
-

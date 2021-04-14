@@ -78,7 +78,14 @@ export const transpile = async (app, config) => {
     if (ENV === 'production') {
       log('Checking page links')
 
-      const unresolvedLinks = await checkLinks({ staticUrls, links, pages, noRemote, root, dev: config.IS_DEV })
+      const unresolvedLinks = await checkLinks({
+        staticUrls,
+        links,
+        pages,
+        noRemote,
+        root,
+        dev: config.IS_DEV,
+      })
 
       if (unresolvedLinks.length) {
         log.error('E_BROKEN_LINKS', 'Broken Links found.')
