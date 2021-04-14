@@ -41,7 +41,8 @@ export const findConfigFile = async (ROOT, magicConfigNames, oldConfigName) => {
 
 
   if (!filePath) {
-    throw error('No config file found. Please create magic.js (https://magic.github.io/core/files/#config)', 'E_NO_CONFIG')
+    log.error('E_NO_CONFIG', 'No config file found. Please create magic.js (https://magic.github.io/core/files/#config)')
+    process.exit()
   }
 
   return filePath
