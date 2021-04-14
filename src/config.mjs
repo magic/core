@@ -137,7 +137,11 @@ export const runConfig = async (args = {}) => {
     }
   }
 
-  conf.ADD_CSS = conf.ADD_CSS ? conf.ADD_CSS.map(href => href.startsWith(conf.WEB_ROOT) ? href : replaceSlashSlash(`${conf.WEB_ROOT}/${href}`)) : []
+  conf.ADD_CSS = conf.ADD_CSS
+    ? conf.ADD_CSS.map(href =>
+        href.startsWith(conf.WEB_ROOT) ? href : replaceSlashSlash(`${conf.WEB_ROOT}/${href}`),
+      )
+    : []
 
   // array of html tags that get appended after the #magic html tag
   // structure: { name, props, children }
