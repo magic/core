@@ -9,7 +9,7 @@ import is from '@magic/types'
 
 import colors from './themes/colors.mjs'
 
-import { findConfigFile } from './lib/index.mjs'
+import { findConfigFile, replaceSlashSlash } from './lib/index.mjs'
 
 const magicConfigNames = ['magic.mjs', 'magic.js']
 const oldConfigName = 'config.mjs'
@@ -108,17 +108,36 @@ export const runConfig = async (args = {}) => {
   }
 
   // array of scripts that should be appended to the body
-  const mapScript = src => ({
-    src: src,
-    integrity: conf.HASHES[src],
-    crossorigin: 'anonymous',
-  })
+  const mapScript = src => {
+    if (!src.startsWith(conf.WEB_ROOT)) {
+      src = replaceSlashSlash(`${conf.WEB_ROOT}/${src}`)
+    }
+
+    const result = {
+      src,
+      integrity: conf.HASHES[src],
+    }
+
+    if (!src.startsWith(conf.URL) && !src.startsWith('/')) {
+      result.crossorigin = 'anonymous'
+    }
+
+    return result
+  }
 
   if (conf.ADD_SCRIPTS && !is.array(conf.ADD_SCRIPTS)) {
     conf.ADD_SCRIPTS = [conf.ADD_SCRIPTS]
   }
 
   conf.ADD_SCRIPTS = conf.ADD_SCRIPTS ? conf.ADD_SCRIPTS.map(mapScript) : []
+
+  if (conf.ADD_CSS) {
+    if (!is.array(conf.ADD_CSS)) {
+      conf.ADD_CSS = [conf.ADD_CSS]
+    }
+  }
+
+  conf.ADD_CSS = conf.ADD_CSS ? conf.ADD_CSS.map(href => href.startsWith(conf.WEB_ROOT) ? href : replaceSlashSlash(`${conf.WEB_ROOT}/${href}`)) : []
 
   // array of html tags that get appended after the #magic html tag
   // structure: { name, props, children }
