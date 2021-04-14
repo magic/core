@@ -5,27 +5,23 @@ import cases from '@magic/cases'
 import deep from '@magic/deep'
 import error from '@magic/error'
 import fs from '@magic/fs'
-import log from '@magic/log'
 import is from '@magic/types'
 
 import colors from './themes/colors.mjs'
 
-import { replacePathSepForImport } from './lib/index.mjs'
+import { findConfigFile } from './lib/index.mjs'
+
+const magicConfigNames = ['magic.mjs', 'magic.js']
+const oldConfigName = 'config.mjs'
 
 export const runConfig = async (args = {}) => {
-  let conf = {
-    CONFIG_FILE_PATH: replacePathSepForImport(path.join(process.cwd(), 'config.mjs'), path.sep),
-  }
+  let conf = {}
 
-  try {
-    const { default: imported } = await import(conf.CONFIG_FILE_PATH)
-    conf = {
-      ...conf,
-      ...imported,
-    }
-  } catch (e) {
-    log.warn('no local conf file found.')
-  }
+  conf.CONFIG_FILE_PATH = await findConfigFile(process.cwd(), magicConfigNames, oldConfigName)
+
+  const { default: imported } = await import(conf.CONFIG_FILE_PATH)
+
+  conf = deep.merge(conf, imported)
 
   // make sure conf.ROOT starts with or is equal to process.cwd()
   if (!conf.ROOT) {
