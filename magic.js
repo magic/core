@@ -30,4 +30,5 @@ export default {
   ADD_TAGS: [{ name: 'div', props: { id: 'AddTag' } }],
 
   ADD_SCRIPTS: ['/addScript.js'],
+  ADD_CSS: ['/addCss.css']
 }

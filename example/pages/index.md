@@ -94,3 +94,17 @@ while at it, let's test an image, 2 times with a working src:
 and once with a broken src:
 
 * ![Broken Magic Logo](/logo23-broken.png)
+
+### Appending css files
+
+<div id="AddCss">If this text is green, additional css files can be loaded using the config.ADD_CSS array</div>
+
+```
+// /magic.js
+
+export default {
+  // ...otherConfig,
+  ADD_CSS: ['/addCss.css'], // points to src/assets/static/addCss.css
+}
+
+```
