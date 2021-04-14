@@ -472,7 +472,7 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * FIX: tasks/prepare/page: change variable name to avoid "access before init" error when pages do not build successfully.
 * update dependencies
 
-##### 0.0.114 - unreleased
+##### 0.0.114
 * to keep dev builds fast, external links only get checked on build.
 * deprecate config.mjs in favor of magic.(m)js
 * magic.js config import will now error and exit if config does not exist
