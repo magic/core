@@ -158,6 +158,29 @@ const visit = ({ app, config, parent }) => {
     parent.test = visit({ parent: parent.test, app, config })
     parent.update = visit({ parent: parent.update, app, config })
     parent.body = visit({ parent: parent.body, app, config })
+  } else if (parent.type === 'FunctionExpression') {
+    parent.params = visit({ parent: parent.params, app, config })
+    parent.body = visit({ parent: parent.body, app, config })
+    parent.decorators = visit({ parent: parent.decorators, app, config })
+  } else if (parent.type === 'Parameter') {
+    parent.pat = visit({ parent: parent.pat, app, config })
+  } else if (parent.type === 'ForInStatement') {
+    parent.left = visit({ parent: parent.left, app, config })
+    parent.right = visit({ parent: parent.right, app, config })
+    parent.body = visit({ parent: parent.body, app, config })
+  } else if (parent.type === 'UpdateExpression') {
+    parent.argument = visit({ parent: parent.argument, app, config })
+  } else if (parent.type === 'WhileStatement') {
+    parent.test = visit({ parent: parent.test, app, config })
+    parent.body = visit({ parent: parent.body, app, config })
+  } else if (parent.type === 'BreakStatement') {
+    parent.label = visit({ parent: parent.label, app, config })
+  } else if (parent.type === 'SequenceExpression') {
+    parent.expressions = visit({ parent: parent.expressions, app, config })
+  } else if (parent.type === 'ThisExpression') {
+    // do nothing
+  } else if (parent.type === 'ContinueStatement') {
+    parent.label = visit({ parent: parent.label, app, config })
   } else {
     log.warn('unhandled parent type', parent.type)
   }
