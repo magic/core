@@ -4,6 +4,7 @@ import cases from '@magic/cases'
 import fs from '@magic/fs'
 import is from '@magic/types'
 import log from '@magic/log'
+import error from '@magic/error'
 
 import { stringifyObject } from '../../lib/index.mjs'
 
@@ -87,8 +88,10 @@ return { ${imports} }
         let str
         if (is.function(v)) {
           str = `\nconst ${k} = ${v.toString()}\n`
-        } else {
+        } else if (is.function(v.View)) {
           str = `\nconst ${k} = ${v.View.toString()}\n`
+        } else {
+          log.error(`${k} Module does not export a View`, 'E_MODULE_NO_VIEW')
         }
 
         const subStr = Object.entries(v)
