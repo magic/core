@@ -26,6 +26,6 @@ export const build = async ({ commands, config }) => {
       process.send({ evt: 'quit' })
     }
   } catch (e) {
-    log.error('error during build', e)
+    log.error('E_MAGIC_BUILD', e)
   }
 }
