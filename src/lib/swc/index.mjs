@@ -149,6 +149,10 @@ const visit = ({ app, config, parent }) => {
   } else if (ignoredLiterals.includes(parent.type)) {
     // do nothing with literals
     // console.log(parent)
+  } else if (parent.type === 'Computed') {
+    parent.expression = visit({ parent: parent.expression, app, config })
+  } else if (parent.type === 'OptionalChainingExpression') {
+    parent.expr = visit({ parent: parent.expr, app, config })
   } else {
     log.warn('unhandled parent type', parent.type)
   }
