@@ -480,7 +480,12 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * show a warning if config.mjs is still being used
 * only checkLinks external links in production env
 
-##### 0.0.115 - unreleased
+##### 0.0.115 
+* swc handles OptionalChainingExpression and Computed
+* nicer error messages
+* add Permissions-Policy interest-cohort=() to maybe avoid FLOC tracking in chrome.
+
+##### 0.0.116 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
