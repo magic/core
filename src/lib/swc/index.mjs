@@ -153,6 +153,11 @@ const visit = ({ app, config, parent }) => {
     parent.expression = visit({ parent: parent.expression, app, config })
   } else if (parent.type === 'OptionalChainingExpression') {
     parent.expr = visit({ parent: parent.expr, app, config })
+  } else if (parent.type === 'ForStatement') {
+    parent.init = visit({ parent: parent.init, app, config })
+    parent.test = visit({ parent: parent.test, app, config })
+    parent.update = visit({ parent: parent.update, app, config })
+    parent.body = visit({ parent: parent.body, app, config })
   } else {
     log.warn('unhandled parent type', parent.type)
   }
