@@ -1,4 +1,4 @@
-import { h } from 'hyperapp'
+import { h } from '@magic/hyperapp'
 
 export const component = name => (props = {}, children) => {
   if (typeof children === 'undefined') {

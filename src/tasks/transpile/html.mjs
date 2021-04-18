@@ -1,4 +1,4 @@
-import * as render from 'hyperapp-render'
+import { renderToString } from '@magic/hyperapp'
 
 import deep from '@magic/deep'
 import log from '@magic/log'
@@ -13,7 +13,7 @@ export default ({ app, root }) => {
 
       const view = app.View(page, app.hashes)
 
-      let rendered = render.renderToString(view(state))
+      let rendered = renderToString(view(state))
 
       return {
         ...page,

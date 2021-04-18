@@ -1,7 +1,7 @@
 import path from 'path'
 
 import deep from '@magic/deep'
-import { h } from 'hyperapp'
+import { h } from '@magic/hyperapp'
 import is from '@magic/types'
 import log from '@magic/log'
 

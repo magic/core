@@ -12,8 +12,10 @@ export const prepareJs = async (magic, { IS_DEV, HOIST /*, WEB_ROOT*/ }) => {
   const hyperappPath = path.join(
     process.cwd(),
     'node_modules',
+    '@magic',
     'hyperapp',
-    'index.js',
+    'src',
+    'hyperapp.mjs',
   )
   const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
