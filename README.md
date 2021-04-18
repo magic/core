@@ -489,7 +489,11 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * add @magic/hyperapp bundle that exports hyperapp and hyperapp-render
 
 
-##### 0.0.117 - unreleased
+##### 0.0.117
+correctly export renderToString from index (for @magic/test)
+
+
+##### 0.0.118 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
