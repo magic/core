@@ -1,17 +1,14 @@
 import { h } from 'hyperapp'
 
-export const component = name => (props = {}, children = false) => {
-  const is = (ele, ...types) => types.some(type => type === typeof ele)
-
-  if (!children) {
-    if (is(props, 'string', 'number', 'function') || Array.isArray(props)) {
+export const component = name => (props = {}, children) => {
+  if (typeof children === 'undefined') {
+    if (typeof props === 'string' || typeof props === 'number' || Array.isArray(props)) {
       children = props
       props = {}
-    } else if (is(props.View, 'function')) {
-      children = props.View
-      props = {}
-    } else if (props.props || props.children) {
-      return h(name, {}, props)
+    } else if (typeof props.View === 'function') {
+      const { View, ...p } = props
+      children = View
+      props = p
     }
   }
 
