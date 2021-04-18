@@ -50,8 +50,10 @@ export const handleLink = ({ app, href, parent = {}, WEB_ROOT }) => {
     log.error(
       'E_PREPARE_STATE_LINKS_UNKNOWN_HREF',
       '@magic did not handle this href. Please file a bug at https://github.com/magic/core/issues',
-      href,
-      parent,
+      {
+        href,
+        parent,
+      },
     )
   }
 
