@@ -485,7 +485,11 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * nicer error messages
 * add Permissions-Policy interest-cohort=() to maybe avoid FLOC tracking in chrome.
 
-##### 0.0.116 - unreleased
+##### 0.0.116
+* add @magic/hyperapp bundle that exports hyperapp and hyperapp-render
+
+
+##### 0.0.117 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
