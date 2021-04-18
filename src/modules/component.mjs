@@ -2,7 +2,12 @@ import { h } from 'hyperapp'
 
 export const component = name => (props = {}, children) => {
   if (typeof children === 'undefined') {
-    if (typeof props === 'string' || typeof props === 'number' || Array.isArray(props)) {
+    if (
+      typeof props === 'string' ||
+      typeof props === 'number' ||
+      typeof props === 'function' ||
+      Array.isArray(props)
+    ) {
       children = props
       props = {}
     } else if (typeof props.View === 'function') {
