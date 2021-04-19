@@ -492,8 +492,10 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 ##### 0.0.117
 correctly export renderToString from index (for @magic/test)
 
+##### 0.0.118
+add silent option to silence log output and apply to config.
 
-##### 0.0.118 - unreleased
+##### 0.0.119 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
