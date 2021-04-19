@@ -15,4 +15,5 @@ svgTags.forEach(prepareTag)
 
 headTags.forEach(prepareTag)
 
-tags.description = content => tags.meta({ name: 'description', property: 'og:description', content })
+tags.description = content =>
+  tags.meta({ name: 'description', property: 'og:description', content })
