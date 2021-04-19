@@ -5,7 +5,7 @@ import log from '@magic/log'
 
 import { replacePathSepForImport } from './replacePathSepForImport.mjs'
 
-export const findConfigFile = async (ROOT, magicConfigNames, oldConfigName) => {
+export const findConfigFile = async (ROOT, magicConfigNames, oldConfigName, silent = false) => {
   let filePath
 
   let configFound = false
@@ -45,11 +45,12 @@ export const findConfigFile = async (ROOT, magicConfigNames, oldConfigName) => {
   }
 
   if (!filePath) {
-    log.error(
-      'E_NO_CONFIG',
-      `No config file found. Please create ${ROOT}/magic.js (https://magic.github.io/core/files/#config)`,
-    )
-    log(`
+    if (!silent) {
+      log.error(
+        'E_NO_CONFIG',
+        `No config file found. Please create ${ROOT}/magic.js (https://magic.github.io/core/files/#config)`,
+      )
+      log(`
 Example Config:
 
 export default {
@@ -65,6 +66,7 @@ export default {
   URL: 'https://example.com', ${log.paint('green', '// the root url of the site')}
   WEB_ROOT: '/', ${log.paint('green', '// gets appended to the URL, should start and end with a /')}
 }`)
+    }
 
     process.exit()
   }

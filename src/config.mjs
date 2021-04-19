@@ -17,7 +17,12 @@ const oldConfigName = 'config.mjs'
 export const runConfig = async (args = {}) => {
   let conf = {}
 
-  conf.CONFIG_FILE_PATH = await findConfigFile(process.cwd(), magicConfigNames, oldConfigName)
+  conf.CONFIG_FILE_PATH = await findConfigFile(
+    process.cwd(),
+    magicConfigNames,
+    oldConfigName,
+    args.silent,
+  )
 
   const { default: imported } = await import(conf.CONFIG_FILE_PATH)
 
@@ -71,8 +76,10 @@ export const runConfig = async (args = {}) => {
 
   // assets dir, can include themes, modules, libraries
   const ASSETS = path.join(conf.ROOT, 'assets')
+
   // module dir, modules get imported from here
   const MODULES = path.join(ASSETS, 'modules')
+
   // static directory, files in this dir get copied to conf.PUBLIC
   const STATIC = path.join(ASSETS, 'static')
 
