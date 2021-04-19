@@ -19,8 +19,13 @@ export const View = state => [
     li(Link({ text: 'redirect link', to: 'https://magic.github.io/core' })),
 
     li(Link({ to: 'broken link', text: 'https://expect-error' })),
-    li(Link({ to: '404 link', text: 'https://en.wikipedia.org/hMdYfVaKY4btraQcgD0me6RRBDnugbpJ4FLpgJgeB7' })),
-    li(Img({ alt: 'Broken Image Link', src: 'https://broken-image-link' }))
+    li(
+      Link({
+        to: '404 link',
+        text: 'https://en.wikipedia.org/hMdYfVaKY4btraQcgD0me6RRBDnugbpJ4FLpgJgeB7',
+      }),
+    ),
+    li(Img({ alt: 'Broken Image Link', src: 'https://broken-image-link' })),
   ]),
 
   h3('Image test'),
@@ -36,10 +41,12 @@ export const View = state => [
 
   Img({ alt: 'Broken Magic Logo', src: '/logo23-broken.png' }),
 
-
   h3('Appending css files'),
 
-  div({ id: 'AddCss' }, 'If this text is green, additional css files can be loaded using the config.ADD_CSS array'),
+  div(
+    { id: 'AddCss' },
+    'If this text is green, additional css files can be loaded using the config.ADD_CSS array',
+  ),
 
   Pre(`
 // /magic.js
