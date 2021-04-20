@@ -496,6 +496,10 @@ correctly export renderToString from index (for @magic/test)
 add silent option to silence log output and apply to config.
 
 ##### 0.0.119 - unreleased
+* update dependencies
+* conf.ADD_STATIC can be used to import static files from multiple directories
+
+##### 0.0.120 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
