@@ -81,7 +81,15 @@ export const runConfig = async (args = {}) => {
   const MODULES = path.join(ASSETS, 'modules')
 
   // static directory, files in this dir get copied to conf.PUBLIC
-  const STATIC = path.join(ASSETS, 'static')
+  let STATIC = path.join(ASSETS, 'static')
+
+  if (conf.ADD_STATIC) {
+    if (!is.array(conf.ADD_STATIC)) {
+      conf.ADD_STATIC = [conf.ADD_STATIC]
+    }
+
+    STATIC = [STATIC, ...conf.ADD_STATIC]
+  }
 
   // themes dir, files in this dir get used as themes
   const THEMES = path.join(ASSETS, 'themes')
@@ -146,8 +154,8 @@ export const runConfig = async (args = {}) => {
 
   conf.ADD_CSS = conf.ADD_CSS
     ? conf.ADD_CSS.map(href =>
-        href.startsWith(conf.WEB_ROOT) ? href : replaceSlashSlash(`${conf.WEB_ROOT}/${href}`),
-      )
+      href.startsWith(conf.WEB_ROOT) ? href : replaceSlashSlash(`${conf.WEB_ROOT}/${href}`),
+    )
     : []
 
   // array of html tags that get appended after the #magic html tag

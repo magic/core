@@ -95,28 +95,30 @@ export const prepare = async (app, config) => {
 
   app.static = await prepareMetaFiles(app, config)
 
-  let staticExists = false
   try {
-    await fs.stat(config.DIR.STATIC)
-    staticExists = true
+    let staticDirs = config.DIR.STATIC
+    if (!is.array(staticDirs)) {
+      staticDirs = [staticDirs]
+    }
+
+    await Promise.all(staticDirs.map(async dir => {
+      const staticFiles = await fs.getFiles(dir)
+
+      if (!is.empty(staticFiles)) {
+        const staticPromises = staticFiles.map(async f => {
+          const name = f.replace(dir, '')
+          // TODO: use streams here
+          app.static[name] = await fs.readFile(f)
+        })
+
+        await Promise.all(staticPromises)
+      }
+    }))
   } catch (e) {
     // it's fine if the static dir does not exist,
     // but all other errors will throw.
     if (e.code !== 'ENOENT') {
       throw error(e)
-    }
-  }
-
-  if (staticExists) {
-    const staticFiles = await fs.getFiles(config.DIR.STATIC)
-    if (!is.empty(staticFiles)) {
-      const staticPromises = staticFiles.map(async f => {
-        const name = f.replace(config.DIR.STATIC, '')
-        // TODO: use streams here
-        app.static[name] = await fs.readFile(f)
-      })
-
-      await Promise.all(staticPromises)
     }
   }
 
