@@ -1,19 +1,20 @@
 import { h } from '@magic/hyperapp'
 
 export const component = name => (props = {}, children) => {
-  if (typeof children === 'undefined') {
-    if (
-      typeof props === 'string' ||
-      typeof props === 'number' ||
-      typeof props === 'function' ||
-      Array.isArray(props)
-    ) {
+  const is = (ele, ...types) => types.some(type => type === typeof ele)
+
+  if (is(children, 'undefined')) {
+    // are there children that have been processed by h already?
+    if (props.name && props.props && props.children) {
+      return h(name, {}, [props])
+    }
+
+    if (is(props, 'string', 'number', 'function') || Array.isArray(props)) {
       children = props
       props = {}
-    } else if (typeof props.View === 'function') {
-      const { View, ...p } = props
-      children = View
-      props = p
+    } else if (is(props.View, 'function')) {
+      children = props.View
+      props = {}
     }
   }
 
