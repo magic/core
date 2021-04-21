@@ -3,6 +3,8 @@ import { renderToString } from '@magic/hyperapp'
 import deep from '@magic/deep'
 import log from '@magic/log'
 
+import { replaceSlashSlash } from '../../lib/replaceSlashSlash.mjs'
+
 export default ({ app, root }) => {
   app.state.root = root
 
@@ -13,7 +15,24 @@ export default ({ app, root }) => {
 
       const view = app.View(page, app.hashes)
 
-      const rendered = renderToString(view(state))
+      let rendered = renderToString(view(state))
+
+      // dirty url cleanup. makes all local urls in html files point to WEB_ROOT
+      const tags = ['href', 'src']
+      tags.map(tag => {
+        const urlsTangle = rendered.split(`${tag}="`)
+
+        const urls = urlsTangle.map(url => {
+          url = url.split('"')[0]
+          if (url.startsWith('/') && !url.startsWith(root)) {
+            return [url, replaceSlashSlash(`${root}/${url}`)]
+          }
+        }).filter(a => a)
+
+        urls.forEach(([oldUrl, newUrl]) => {
+          rendered = rendered.replace(new RegExp(`${tag}="${oldUrl}"`, 'gim'), `${tag}="${newUrl}"`)
+        })
+      })
 
       return {
         ...page,
