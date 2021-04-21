@@ -56,4 +56,6 @@ export default {
   ADD_CSS: ['/addCss.css'], // points to src/assets/static/addCss.css
 }
 `),
+
+  p(Link({ to: '/', text: 'Link in a paragraph' })),
 ]
