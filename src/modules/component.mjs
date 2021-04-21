@@ -5,7 +5,7 @@ export const component = name => (props = {}, children) => {
 
   if (is(children, 'undefined')) {
     // are there children that have been processed by h already?
-    if (props.name && props.props && props.children) {
+    if (props.props) {
       return h(name, {}, [props])
     }
 
