@@ -13,7 +13,7 @@ export default ({ app, root }) => {
 
       const view = app.View(page, app.hashes)
 
-      let rendered = renderToString(view(state))
+      const rendered = renderToString(view(state))
 
       return {
         ...page,
