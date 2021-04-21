@@ -498,6 +498,7 @@ add silent option to silence log output and apply to config.
 ##### 0.0.119 - unreleased
 * update dependencies
 * conf.ADD_STATIC can be used to import static files from multiple directories
+* component handles prerendered hyperapp objects correctly again.
 
 ##### 0.0.120 - unreleased
 ...
