@@ -495,10 +495,11 @@ correctly export renderToString from index (for @magic/test)
 ##### 0.0.118
 add silent option to silence log output and apply to config.
 
-##### 0.0.119 - unreleased
+##### 0.0.119
 * update dependencies
 * conf.ADD_STATIC can be used to import static files from multiple directories
 * component handles prerendered hyperapp objects correctly again.
+* html pages have their href and src elements prefixed with WEB_ROOT
 
 ##### 0.0.120 - unreleased
 ...
