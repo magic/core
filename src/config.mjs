@@ -24,6 +24,10 @@ export const runConfig = async (args = {}) => {
     args.silent,
   )
 
+  if (!conf.CONFIG_FILE_PATH) {
+    return
+  }
+
   const { default: imported } = await import(conf.CONFIG_FILE_PATH)
 
   conf = deep.merge(conf, imported)
