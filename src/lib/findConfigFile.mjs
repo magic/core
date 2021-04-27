@@ -66,9 +66,9 @@ export default {
   URL: 'https://example.com', ${log.paint('green', '// the root url of the site')}
   WEB_ROOT: '/', ${log.paint('green', '// gets appended to the URL, should start and end with a /')}
 }`)
-    }
 
-    process.exit()
+      process.exit()
+    }
   }
 
   return filePath
