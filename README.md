@@ -501,7 +501,11 @@ add silent option to silence log output and apply to config.
 * component handles prerendered hyperapp objects correctly again.
 * html pages have their href and src elements prefixed with WEB_ROOT
 
-##### 0.0.120 - unreleased
+##### 0.0.120
+* runConfig: bail early if config file is not found
+* lib/findConfigFile: only process.exit if args.silent is false
+
+##### 0.0.121 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
