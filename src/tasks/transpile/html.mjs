@@ -22,12 +22,14 @@ export default ({ app, root }) => {
       tags.map(tag => {
         const urlsTangle = rendered.split(`${tag}="`)
 
-        const urls = urlsTangle.map(url => {
-          url = url.split('"')[0]
-          if (url.startsWith('/') && !url.startsWith(root)) {
-            return [url, replaceSlashSlash(`${root}/${url}`)]
-          }
-        }).filter(a => a)
+        const urls = urlsTangle
+          .map(url => {
+            url = url.split('"')[0]
+            if (url.startsWith('/') && !url.startsWith(root)) {
+              return [url, replaceSlashSlash(`${root}/${url}`)]
+            }
+          })
+          .filter(a => a)
 
         urls.forEach(([oldUrl, newUrl]) => {
           rendered = rendered.replace(new RegExp(`${tag}="${oldUrl}"`, 'gim'), `${tag}="${newUrl}"`)
