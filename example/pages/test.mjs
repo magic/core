@@ -18,11 +18,11 @@ export const View = state => [
   ul([
     li(Link({ text: 'redirect link', to: 'https://magic.github.io/core' })),
 
-    li(Link({ to: 'broken link', text: 'https://expect-error' })),
+    li(Link({ text: 'broken link', to: 'https://expect-error' })),
     li(
       Link({
-        to: '404 link',
-        text: 'https://en.wikipedia.org/hMdYfVaKY4btraQcgD0me6RRBDnugbpJ4FLpgJgeB7',
+        text: '404 link',
+        to: 'https://en.wikipedia.org/hMdYfVaKY4btraQcgD0me6RRBDnugbpJ4FLpgJgeB7',
       }),
     ),
     li(Img({ alt: 'Broken Image Link', src: 'https://broken-image-link' })),
