@@ -505,7 +505,10 @@ add silent option to silence log output and apply to config.
 * runConfig: bail early if config file is not found
 * lib/findConfigFile: only process.exit if args.silent is false
 
-##### 0.0.121 - unreleased
+##### 0.0.121
+update dependencies
+
+##### 0.0.122 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
