@@ -509,6 +509,13 @@ add silent option to silence log output and apply to config.
 update dependencies
 
 ##### 0.0.122 - unreleased
+* update @babel/preset-env to avoid security issue
+* add PREPEND_SCRIPT and APPEND_SCRIPT to allow adding js before and after the magic js
+* add PREPEND_CSS and APPEND_CSS to allow adding css before and after magic js
+* add PREPEND_TAGS and APPEND_TAGS to allow adding html tags before and after #magic tag
+
+
+##### 0.0.123 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
