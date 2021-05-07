@@ -517,7 +517,10 @@ update dependencies
 * config: add PREPEND_TAGS and APPEND_TAGS to allow adding html tags before and after #magic tag
 
 
-##### 0.0.123 - unreleased
+##### 0.0.123
+BUG: do not try to return an undefined hashes var if PREPEND_SCRIPTS or APPEND_SCRIPTS is empty
+
+##### 0.0.124 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
