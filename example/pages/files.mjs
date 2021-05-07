@@ -247,6 +247,9 @@ export default {
   // use this to overwrite the generated app css
   APPEND_CSS: ['/appendCss.css'],
 
+  // add additional static file directories that will get added to app.static[name]
+  ADD_STATIC: ['node_modules/dir/name/'],
+
   // this option adds the
   // 'X-Clacks-Overhead', 'GNU Terry Pratchet'
   // http header
