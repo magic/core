@@ -186,18 +186,72 @@ export const style = {
 
   Pre(`
 export default {
+  // the local root directory of the magic app
   ROOT: 'example',
-  THEME: 'blue',
+
+  // gets suffixed to the url. in this case domain.com/core/ will be the page root.
   WEB_ROOT: '/core/',
+
+  // the theme in use, lives in {ROOT}/assets/themes/{name} or can be installed as either '@magic-themes/{name}' or 'magic-theme-{name}'
+  THEME: 'docs',
+
+  // the full url of the page.
+  URL: 'magic.github.io/core/',
+
+  // the public dir the bundles get written to
+  PUBLIC: 'docs',
+
+  // the directory in the pages directory that holds the blog posts
+  // if this is not set, no blog is created.
+  BLOG_DIR: 'news',
+
+  // append these modules after the app loaded and only if javascript is enabled.
+  // can be used to add features that won't do anything without js anyways.
+  HOIST: ['LightSwitch', 'NoSpy'],
+
+  // default CLIENT_LIB_NAME, overwrite to change names of transpiled css and js files
+  CLIENT_LIB_NAME: 'magic',
+
+  // show babel debug information
+  BABEL: {
+    BABEL_DEBUG: true,
+  },
+
+  // this is set to be able to test broken link behaviour.
+  // DO NOT ENABLE IN YOUR APP (unless you need to because reasons...)
+  NO_CHECK_LINKS_EXIT: true,
+
+  // tags written to the html before the #magic container
+  PREPEND_TAGS: [{ name: 'div', props: { id: 'PREPENDTag' } }],
+
+  // tags written to the html after the #magic container
+  APPEND_TAGS: [{ name: 'div', props: { id: 'APPENDTag' } }],
+
+  // script files, embedded before the magic.js script
+  PREPEND_SCRIPTS: ['/prependScript.js'],
+
+  // script files, embedded after the magic.js script
+  APPEND_SCRIPTS: ['/appendScript.js'],
+
+  // js files that get written directly into the magic.js script, before the magic code.
+  PREPEND_JS: ['/prependJs.js'],
+
+  // js files that get written directly into the magic.js script, after the magic code.
+  APPEND_JS: ['/appendJs.js'],
+
+  // css written into the magic.css file, before the magic css
+  // use this to set defaults that get overwritten by the generated app css
+  PREPEND_CSS: ['/prependCss.css'],
+
+  // css written into the magic.css file, after the magic css
+  // use this to overwrite the generated app css
+  APPEND_CSS: ['/appendCss.css'],
 
   // this option adds the
   // 'X-Clacks-Overhead', 'GNU Terry Pratchet'
   // http header
   // see http://www.gnuterrypratchett.com/
   FOR_DEATH_CAN_NOT_HAVE_HIM: true,
-
-  // default CLIENT_LIB_NAME, overwrite to change names of transpiled css and js files
-  CLIENT_LIB_NAME: 'magic',
 }
 `),
 
