@@ -144,30 +144,45 @@ export const runConfig = async (args = {}) => {
     return result
   }
 
-  if (conf.ADD_SCRIPTS && !is.array(conf.ADD_SCRIPTS)) {
-    conf.ADD_SCRIPTS = [conf.ADD_SCRIPTS]
-  }
+  const scriptKeys = ['PREPEND_SCRIPTS', 'APPEND_SCRIPTS']
 
-  conf.ADD_SCRIPTS = conf.ADD_SCRIPTS ? conf.ADD_SCRIPTS.map(mapScript) : []
-
-  if (conf.ADD_CSS) {
-    if (!is.array(conf.ADD_CSS)) {
-      conf.ADD_CSS = [conf.ADD_CSS]
+  scriptKeys.forEach(key => {
+    // scripts that get added as script tags before of magic.js
+    if (is.empty(conf[key])) {
+      conf[key] = []
+    } else if (!is.array(conf.PREPEND_SCRIPTS)) {
+      conf[key] = [conf[key]]
     }
-  }
 
-  conf.ADD_CSS = conf.ADD_CSS
-    ? conf.ADD_CSS.map(href =>
-        href.startsWith(conf.WEB_ROOT) ? href : replaceSlashSlash(`${conf.WEB_ROOT}/${href}`),
-      )
-    : []
+    conf[key] = conf[key].map(mapScript)
+  })
+
+  const addKeys = ['PREPEND_JS', 'APPEND_JS', 'PREPEND_CSS', 'APPEND_CSS']
+
+  addKeys.forEach(key => {
+    if (!conf[key]) {
+      conf[key] = []
+    }
+
+    if (!is.array(conf[key])) {
+      conf[key] = conf[key]
+    }
+  })
+
+  // array of html tags that get prepended before the #magic html tag
+  // structure: { name, props, children }
+  if (!conf.PREPEND_TAGS) {
+    conf.PREPEND_TAGS = []
+  } else if (!is.array(conf.PREPEND_TAGS)) {
+    conf.PREPEND_TAGS = [conf.PREPEND_TAGS]
+  }
 
   // array of html tags that get appended after the #magic html tag
   // structure: { name, props, children }
-  if (!conf.ADD_TAGS) {
-    conf.ADD_TAGS = []
-  } else if (!is.array(conf.ADD_TAGS)) {
-    conf.ADD_TAGS = [conf.ADD_TAGS]
+  if (!conf.APPEND_TAGS) {
+    conf.APPEND_TAGS = []
+  } else if (!is.array(conf.APPEND_TAGS)) {
+    conf.APPEND_TAGS = [conf.APPEND_TAGS]
   }
 
   conf.INCLUDED_HASH_EXTENSIONS = conf.INCLUDED_HASH_EXTENSIONS || ['.txt', '.xml']

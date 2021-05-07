@@ -6,9 +6,11 @@ import is from '@magic/types'
 import log from '@magic/log'
 import error from '@magic/error'
 
-import { stringifyObject } from '../../lib/index.mjs'
+import { stringifyObject, replaceSlashSlash } from '../../lib/index.mjs'
 
-export const prepareJs = async (magic, { IS_DEV, HOIST /*, WEB_ROOT*/ }) => {
+export const prepareJs = async (magic, config) => {
+  const { IS_DEV, HOIST, PREPEND_JS, APPEND_JS /*, WEB_ROOT*/ } = config
+
   const hyperappPath = path.join(
     process.cwd(),
     'node_modules',
@@ -269,7 +271,33 @@ app({
 })
 `
 
+  const prependJSContents = PREPEND_JS.map(file => {
+    const fullFilePath = replaceSlashSlash(`/${file}`)
+    const fileContent = app.static[fullFilePath]
+
+    if (is.empty(fileContent) || !is.function(fileContent.toString)) {
+      throw error(`fileContent undefined for config.PREPEND_JS: ${file}`, 'E_PREPEND_JS_EMPTY')
+    }
+
+    return fileContent.toString()
+  })
+
+  const appendJSContents = APPEND_JS.map(file => {
+    const fullFilePath = replaceSlashSlash(`/${file}`)
+    const fileContent = app.static[fullFilePath]
+
+    if (is.empty(fileContent) || !is.function(fileContent.toString)) {
+      throw error(`fileContent undefined for config.APPEND_JS: ${file}`, 'E_PREPEND_JS_EMPTY')
+    }
+
+    return fileContent
+  })
+
   const clientString = [
+    prependJSContents.join('\n'),
+
+    // isolate magic js from the rest of the javascript
+    ';(() => {',
     hyperapp,
     checkProps,
     propTypeString,
@@ -284,6 +312,12 @@ app({
     pageString,
     appString,
     // serviceWorkerString,
+
+    // isolate magic js from the rest of the javascript
+    '})()',
+    '\n',
+
+    appendJSContents.join('\n'),
   ]
     .join('\n')
     .trim()

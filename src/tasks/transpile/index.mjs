@@ -1,18 +1,21 @@
 import path from 'path'
 
 import log from '@magic/log'
-import error from '@magic/error'
+import deep from '@magic/deep'
+import is from '@magic/types'
 
 import html from './html.mjs'
 import js from './js.mjs'
 import style from './css.mjs'
 
-import { createHash, checkLinks } from '../../lib/index.mjs'
+import { addEmbeddedCss, createHash, checkLinks, addJsFiles } from '../../lib/index.mjs'
 
 export const transpile = async (app, config) => {
   const {
-    ADD_CSS,
-    ADD_SCRIPTS,
+    PREPEND_CSS,
+    APPEND_CSS,
+    PREPEND_SCRIPTS,
+    APPEND_SCRIPTS,
     ENV,
     HASH_FILE_NAME,
     INCLUDED_HASH_EXTENSIONS,
@@ -27,42 +30,37 @@ export const transpile = async (app, config) => {
 
   const css = await style(app.style, config.THEME_VARS)
 
+
+  if (!is.empty(PREPEND_CSS)) {
+    const prependStyles = PREPEND_CSS.map(addEmbeddedCss).join('\n')
+    css.minified = `${prependStyles}\n${css.minified}`
+    css.css = `${prependStyles}\n${css.css}`
+  }
+
+  if (!is.empty(APPEND_CSS)) {
+    const appendStyles = APPEND_CSS.map(addEmbeddedCss).join('\n')
+    css.minified = `${css.minified}\n${appendStyles}`
+    css.css = `${css.css}\n${appendStyles}`
+  }
+
   app.hashes = {
     '/magic.css': createHash(ENV === 'production' ? css.minified : css.css),
     '/magic.js': createHash(code),
     // 'worker.js': createHash(serviceWorker),
   }
 
-  if (ADD_SCRIPTS) {
-    await Promise.all(
-      ADD_SCRIPTS.map(async ({ src }) => {
-        const staticSrc = src.replace(config.WEB_ROOT, '')
-        const fileContent = app.static[`/${staticSrc}`]
-
-        if (!fileContent) {
-          throw error(`script ${staticSrc} could not be loaded`, 'E_ADD_SCRIPTS')
-        }
-
-        const fileHash = createHash(fileContent)
-        app.hashes[staticSrc] = fileHash
-      }),
-    )
+  if (PREPEND_SCRIPTS) {
+    const prependScripts = addJsFiles({ js: PREPEND_SCRIPTS, WEB_ROOT: config.WEB_ROOT })
+    if (!is.empty(prependScripts)) {
+      app.hashes = deep.merge(app.hashes, prependScripts)
+    }
   }
 
-  if (ADD_CSS) {
-    await Promise.all(
-      ADD_CSS.map(async href => {
-        const staticSrc = href.replace(config.WEB_ROOT, '')
-        const fileContent = app.static[`/${staticSrc}`]
-
-        if (!fileContent) {
-          throw error(`css file ${staticSrc} could not be loaded`, 'E_ADD_CSS')
-        }
-
-        const fileHash = createHash(fileContent)
-        app.hashes[staticSrc] = fileHash
-      }),
-    )
+  if (APPEND_SCRIPTS) {
+    const appendScripts = addJsFiles({ js: APPEND_SCRIPTS, WEB_ROOT: config.WEB_ROOT })
+    if (!is.empty(appendScripts)) {
+      app.hashes = deep.merge(app.hashes, appendScripts)
+    }
   }
 
   const pages = html({ app, root: config.WEB_ROOT })

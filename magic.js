@@ -27,8 +27,15 @@ export default {
   // DO NOT ENABLE IN YOUR APP (unless you need to because reasons...)
   NO_CHECK_LINKS_EXIT: true,
 
-  ADD_TAGS: [{ name: 'div', props: { id: 'AddTag' } }],
+  PREPEND_TAGS: [{ name: 'div', props: { id: 'PREPENDTag' } }],
+  APPEND_TAGS: [{ name: 'div', props: { id: 'APPENDTag' } }],
 
-  ADD_SCRIPTS: ['/addScript.js'],
-  ADD_CSS: ['/addCss.css']
+  PREPEND_SCRIPTS: ['/prependScript.js'],
+  APPEND_SCRIPTS: ['/appendScript.js'],
+
+  PREPEND_JS: ['/prependJs.js'],
+  APPEND_JS: ['/appendJs.js'],
+
+  PREPEND_CSS: ['/prependCss.css'],
+  APPEND_CSS: ['/appendCss.css'],
 }

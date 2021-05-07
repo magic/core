@@ -5,14 +5,17 @@ import { h } from '@magic/hyperapp'
 import is from '@magic/types'
 import log from '@magic/log'
 
+import { replaceSlashSlash } from '../lib/index.mjs'
+
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
 const App = async config => {
   const {
-    ADD_CSS,
-    ADD_SCRIPTS,
-    ADD_TAGS,
+    PREPEND_TAGS,
+    APPEND_TAGS,
+    PREPEND_SCRIPTS,
+    APPEND_SCRIPTS,
     CLIENT_LIB_NAME,
     DIR,
     LANG = 'en',
@@ -212,14 +215,17 @@ const App = async config => {
             Seo({ ...state, seo }),
             link(magicCss),
             page.Head && page.Head(state),
-            ADD_CSS.map(href => link({ href, rel: 'stylesheet' })),
           ]),
+
           body([
             SkipLink(),
+            PREPEND_TAGS.map(tag => h(tag.name, tag.props, tag.children)),
             Page({ page: page.View, state }),
-            ADD_TAGS.map(tag => h(tag.name, tag.props, tag.children)),
+            APPEND_TAGS.map(tag => h(tag.name, tag.props, tag.children)),
+
+            PREPEND_SCRIPTS.map(scr => script(scr)),
             script(magicJs),
-            ADD_SCRIPTS.map(src => script(src)),
+            APPEND_SCRIPTS.map(scr => script(scr)),
             // script(serviceWorker),
           ]),
         ]),
