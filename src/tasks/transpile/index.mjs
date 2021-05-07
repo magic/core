@@ -30,7 +30,6 @@ export const transpile = async (app, config) => {
 
   const css = await style(app.style, config.THEME_VARS)
 
-
   if (!is.empty(PREPEND_CSS)) {
     const prependStyles = PREPEND_CSS.map(addEmbeddedCss).join('\n')
     css.minified = `${prependStyles}\n${css.minified}`
