@@ -6,7 +6,7 @@ import { replaceSlashSlash } from './replaceSlashSlash.mjs'
 
 export const addJsFiles = ({ js = [], WEB_ROOT }) => {
   if (is.empty(js)) {
-    return hashes
+    return
   }
 
   if (!is.array(js)) {
