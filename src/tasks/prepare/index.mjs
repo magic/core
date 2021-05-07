@@ -2,7 +2,7 @@ import error from '@magic/error'
 import fs from '@magic/fs'
 import is from '@magic/types'
 
-import { getBlog, getPages } from '../../lib/index.mjs'
+import { getBlog, getPages, replaceSlashSlash } from '../../lib/index.mjs'
 
 import { prepareBlog } from './blog.mjs'
 import { prepareThemes } from './themes.mjs'
@@ -107,7 +107,7 @@ export const prepare = async (app, config) => {
 
         if (!is.empty(staticFiles)) {
           const staticPromises = staticFiles.map(async f => {
-            const name = f.replace(dir, '')
+            const name = replaceSlashSlash(`/${f.replace(dir, '')}`)
             // TODO: use streams here
             app.static[name] = await fs.readFile(f)
           })
