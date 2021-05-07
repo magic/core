@@ -143,12 +143,6 @@ const visit = ({ app, config, parent }) => {
   } else if (parent.type === 'CatchClause') {
     parent.param = visit({ parent: parent.param, app, config })
     parent.body = visit({ parent: parent.body, app, config })
-  } else if (parent.type === 'Identifier') {
-    // do nothing with Identifiers
-    // console.log({ ancestor })
-  } else if (ignoredLiterals.includes(parent.type)) {
-    // do nothing with literals
-    // console.log(parent)
   } else if (parent.type === 'Computed') {
     parent.expression = visit({ parent: parent.expression, app, config })
   } else if (parent.type === 'OptionalChainingExpression') {
@@ -177,10 +171,16 @@ const visit = ({ app, config, parent }) => {
     parent.label = visit({ parent: parent.label, app, config })
   } else if (parent.type === 'SequenceExpression') {
     parent.expressions = visit({ parent: parent.expressions, app, config })
-  } else if (parent.type === 'ThisExpression') {
-    // do nothing
   } else if (parent.type === 'ContinueStatement') {
     parent.label = visit({ parent: parent.label, app, config })
+  } else if (parent.type === 'ThisExpression') {
+    // noop
+  } else if (parent.type === 'EmptyStatement') {
+    // noop
+  } else if (parent.type === 'Identifier') {
+    // noop
+  } else if (ignoredLiterals.includes(parent.type)) {
+    // noop
   } else {
     log.warn('unhandled parent type', parent.type)
   }
