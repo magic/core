@@ -41,11 +41,16 @@ export const View = state => [
 
   Img({ alt: 'Broken Magic Logo', src: '/logo23-broken.png' }),
 
-  h3('Appending css files'),
+  h3('Prepending and Appending css files'),
 
   div(
-    { id: 'AddCss' },
-    'If this text is green, additional css files can be loaded using the config.ADD_CSS array',
+    { id: 'PrependCss' },
+    'If this text is green, additional css files can be loaded BEFORE magic.css using the config.PREPEND_CSS array',
+  ),
+
+  div(
+    { id: 'AppendCss' },
+    'If this text is green, additional css files can be loaded AFTER magic.css using the config.APPEND_CSS array',
   ),
 
   Pre(`
@@ -53,7 +58,8 @@ export const View = state => [
 
 export default {
   // ...otherConfig,
-  ADD_CSS: ['/addCss.css'], // points to src/assets/static/addCss.css
+  PREPEND_CSS: ['prependCss.css'], // points to src/assets/static/prependCss.css
+  APPEND_CSS: ['appendCss.css'], // points to src/assets/static/appendCss.css
 }
 `),
 
