@@ -508,11 +508,13 @@ add silent option to silence log output and apply to config.
 ##### 0.0.121
 update dependencies
 
-##### 0.0.122 - unreleased
+##### 0.0.122
 * update @babel/preset-env to avoid security issue
-* add PREPEND_SCRIPT and APPEND_SCRIPT to allow adding js before and after the magic js
-* add PREPEND_CSS and APPEND_CSS to allow adding css before and after magic js
-* add PREPEND_TAGS and APPEND_TAGS to allow adding html tags before and after #magic tag
+
+* config: add PREPEND_SCRIPT and APPEND_SCRIPT to allow adding js script tags before and after the magic js
+* config: add PREPEND_JS and APPEND_JS to allow adding js contents before and after the magic js, directly into magic.js
+* config: add PREPEND_CSS and APPEND_CSS to allow adding css before and after magic js
+* config: add PREPEND_TAGS and APPEND_TAGS to allow adding html tags before and after #magic tag
 
 
 ##### 0.0.123 - unreleased
