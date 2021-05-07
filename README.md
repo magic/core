@@ -520,6 +520,7 @@ update dependencies
 ##### 0.0.123
 * BUG: do not try to return an undefined hashes var if PREPEND_SCRIPTS or APPEND_SCRIPTS is empty
 * swc: handle EmptyStatement
+* update dependencies
 
 ##### 0.0.124 - unreleased
 ...
