@@ -525,7 +525,10 @@ update dependencies
 ##### 0.0.124
 make sure all app.static[key] keys start with a slash (config.ADD_STATIC)
 
-##### 0.0.125 - unreleased
+##### 0.0.125
+cluster.watch now also watches config.DIR.STATIC directories
+
+##### 0.0.126 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
