@@ -1,5 +1,4 @@
 import path from 'path'
-import events from 'events'
 
 import is from '@magic/types'
 import fs from '@magic/fs'
