@@ -344,10 +344,10 @@ update deps
 ##### 0.0.85
 icon sizes can be customized
 
-##### 0.0.86 
+##### 0.0.86
 update icon size usage
 
-##### 0.0.87 
+##### 0.0.87
 themes/reset.css: add icon animation for hoisted icons
 
 ##### 0.0.88
@@ -356,7 +356,7 @@ update dependencies
 ##### 0.0.89
 update babel
 
-##### 0.0.90 
+##### 0.0.90
 * remove unused imports
 * formatting
 * split tasks/globals into separate files
@@ -480,7 +480,7 @@ debump hyperapp-render from 4.0.0 to 3.5.0
 * show a warning if config.mjs is still being used
 * only checkLinks external links in production env
 
-##### 0.0.115 
+##### 0.0.115
 * swc handles OptionalChainingExpression and Computed
 * nicer error messages
 * add Permissions-Policy interest-cohort=() to maybe avoid FLOC tracking in chrome.
@@ -526,7 +526,8 @@ update dependencies
 make sure all app.static[key] keys start with a slash (config.ADD_STATIC)
 
 ##### 0.0.125
-cluster.watch now also watches config.DIR.STATIC directories
+* cluster.watch now also watches config.DIR.STATIC directories
+* update dependencies
 
 ##### 0.0.126 - unreleased
 ...
