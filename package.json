@@ -37,9 +37,9 @@
     "url": "https://github.com/magic/core/issues"
   },
   "dependencies": {
-    "@babel/core": "7.14.0",
-    "@babel/plugin-transform-react-jsx": "7.13.12",
-    "@babel/preset-env": "7.14.1",
+    "@babel/core": "7.14.3",
+    "@babel/plugin-transform-react-jsx": "7.14.3",
+    "@babel/preset-env": "7.14.2",
     "@magic-libraries/prevent-default": "0.0.5",
     "@magic/cases": "0.0.4",
     "@magic/cli": "0.0.32",
@@ -52,7 +52,7 @@
     "@magic/tags": "0.0.7",
     "@magic/transmute": "0.0.44",
     "@magic/types": "0.1.15",
-    "@swc/core": "1.2.54",
+    "@swc/core": "1.2.58",
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.1"
   },
