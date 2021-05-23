@@ -213,6 +213,8 @@ return { ${imports} }
             return `[${fn[0]}, ${stringifyObject(fn[1])}]`
           } else if (is.string(fn)) {
             return fn
+          } else if (is.fn(fn)) {
+            return fn.toString()
           }
         })
 
