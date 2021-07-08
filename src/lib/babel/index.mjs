@@ -1,14 +1,8 @@
 import magic from './dead_code.mjs'
 
 export const getBabelConf = (app, config) => {
-  const {
-    CLIENT_LIB_NAME,
-    BABEL_DEBUG,
-    REMOVE_CHECK_PROPS,
-    MINIFY,
-    USE_PRESETS,
-    KEEP_COMMENTS,
-  } = config.BABEL
+  const { CLIENT_LIB_NAME, BABEL_DEBUG, REMOVE_CHECK_PROPS, MINIFY, USE_PRESETS, KEEP_COMMENTS } =
+    config.BABEL
 
   const presets = [
     [

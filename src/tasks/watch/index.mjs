@@ -3,18 +3,20 @@ import path from 'path'
 import is from '@magic/types'
 import fs from '@magic/fs'
 
-const onFileChange = dir => (evt, file = '') => {
-  if (!is.string(file)) {
-    file = ''
-  }
+const onFileChange =
+  dir =>
+  (evt, file = '') => {
+    if (!is.string(file)) {
+      file = ''
+    }
 
-  const filePath = path.join(dir, file)
-  if (!is.str(evt)) {
-    evt = 'change'
-  }
+    const filePath = path.join(dir, file)
+    if (!is.str(evt)) {
+      evt = 'change'
+    }
 
-  process.send({ evt, file: filePath })
-}
+    process.send({ evt, file: filePath })
+  }
 
 const watchListener = async src => {
   const stat = await fs.stat(src)

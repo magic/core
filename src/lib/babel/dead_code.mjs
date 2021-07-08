@@ -218,15 +218,16 @@ const removeUnused = (t, app) => path => {
   }
 }
 
-export default (app, { WEB_ROOT }) => ({ types: t }) => ({
-  visitor: {
-    Program: {
-      enter(path) {
-        path.traverse({ enter: findUsedSpells(t, app, WEB_ROOT) })
-      },
-      exit(path) {
-        path.traverse({ enter: removeUnused(t, app) })
+export default (app, { WEB_ROOT }) =>
+  ({ types: t }) => ({
+    visitor: {
+      Program: {
+        enter(path) {
+          path.traverse({ enter: findUsedSpells(t, app, WEB_ROOT) })
+        },
+        exit(path) {
+          path.traverse({ enter: removeUnused(t, app) })
+        },
       },
     },
-  },
-})
+  })
