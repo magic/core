@@ -330,9 +330,18 @@ export const runConfig = async (args = {}) => {
     ...conf.BABEL,
   }
 
+  // merge commandline arguments into config.
+  // --keep-client = KEEP_CLIENT
+  // --no-mangle-names = NO_MANGLE_NAMES
+  // --keep-console = KEEP_CONSOLE
+  // --keep-dead-code = KEEP_DEAD_CODE
+  // --keep-debugger = KEEP_DEBUGGER
+  // --no-check-links = NO_CHECK_LINKS
+  // --no-check-links-remote = NO_CHECK_LINKS_REMOTE
+  // --no-check-links-exit = NO_CHECK_LINKS_EXIT
   Object.entries(args).map(([k, v]) => {
     const snaked = cases.snakeCaps(k)
-    conf[snaked] = v
+    conf[snaked] = v || v === ''
   })
 
   return conf
