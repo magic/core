@@ -532,7 +532,10 @@ make sure all app.static[key] keys start with a slash (config.ADD_STATIC)
 ##### 0.0.126
 update dependencies
 
-##### 0.0.127 - unreleased
+##### 0.0.127
+update dependencies
+
+##### 0.0.128 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
