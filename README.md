@@ -535,7 +535,10 @@ update dependencies
 ##### 0.0.127
 update dependencies to avoid circular dependency in @magic/types
 
-##### 0.0.128 - unreleased
+##### 0.0.128
+update dependencies
+
+##### 0.0.129 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
