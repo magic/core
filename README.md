@@ -533,7 +533,7 @@ make sure all app.static[key] keys start with a slash (config.ADD_STATIC)
 update dependencies
 
 ##### 0.0.127
-update dependencies
+update dependencies to avoid circular dependency in @magic/types
 
 ##### 0.0.128 - unreleased
 ...
