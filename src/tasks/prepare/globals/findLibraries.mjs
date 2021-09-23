@@ -5,7 +5,6 @@ import fs from '@magic/fs'
 import is from '@magic/types'
 
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
-const recursiveSearch = false
 
 export const findLibraries = async (app, modules) => {
   const libraries = {}
@@ -21,10 +20,10 @@ export const findLibraries = async (app, modules) => {
   }
 
   const libNodeModuleDir = path.join(nodeModuleDir, '@magic-libraries')
-  let libOfficialNodeModuleFiles = await fs.getDirectories(libNodeModuleDir, recursiveSearch)
+  let libOfficialNodeModuleFiles = await fs.getDirectories(libNodeModuleDir, { depth: false })
   libOfficialNodeModuleFiles = libOfficialNodeModuleFiles.filter(n => n !== libNodeModuleDir)
 
-  const nodeModules = await fs.getDirectories(nodeModuleDir, recursiveSearch)
+  const nodeModules = await fs.getDirectories(nodeModuleDir, { depth: false })
   const libInofficialNodeModuleFiles = nodeModules.filter(
     n => n.includes('magic-library-') || n.includes('magic-libraries-'),
   )

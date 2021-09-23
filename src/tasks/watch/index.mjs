@@ -24,8 +24,7 @@ const watchListener = async src => {
   if (stat.isDirectory(src)) {
     fs.watch(src, onFileChange(src))
 
-    const searchDepth = 1
-    const subDirs = await fs.getDirectories(src, searchDepth)
+    const subDirs = await fs.getDirectories(src, { depth: 1 })
     const promises = subDirs.filter(dir => dir !== src).map(watchListener)
 
     await Promise.all(promises)

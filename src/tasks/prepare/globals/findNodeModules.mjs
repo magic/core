@@ -11,12 +11,11 @@ import { replacePathSepForImport } from '../../../lib/index.mjs'
 const localLibIndexPath = path.join('src', 'lib', 'index.mjs')
 const localLibMjsPath = path.join('src', 'lib.mjs')
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
-const recursiveSearch = false
 
 export const findNodeModules = async () => {
   let modules = {}
 
-  const dirs = await fs.getDirectories(nodeModuleDir, recursiveSearch)
+  const dirs = await fs.getDirectories(nodeModuleDir, { depth: false })
 
   const dirPromises = dirs
     .filter(dir => dir.includes('magic-module-') || dir.includes('magic-modules-'))
@@ -59,7 +58,7 @@ export const findNodeModules = async () => {
     })
 
   const magicModuleDir = path.join(nodeModuleDir, '@magic-modules')
-  const nodeModules = await fs.getDirectories(magicModuleDir, recursiveSearch)
+  const nodeModules = await fs.getDirectories(magicModuleDir, { depth: false })
 
   const modulePromises = nodeModules
     .filter(n => nodeModuleDir !== n)
