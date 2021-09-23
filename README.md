@@ -541,7 +541,10 @@ update dependencies
 ##### 0.0.129
 update dependencies
 
-##### 0.0.130 - unreleased
+##### 0.0.130
+update dependencies
+
+##### 0.0.131 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
