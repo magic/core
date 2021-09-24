@@ -46,7 +46,7 @@
     "@magic/css": "0.7.39",
     "@magic/deep": "0.1.7",
     "@magic/error": "0.0.10",
-    "@magic/fs": "0.0.16",
+    "@magic/fs": "0.0.17",
     "@magic/hyperapp": "2.0.4-alpha.0.1",
     "@magic/log": "0.1.10",
     "@magic/tags": "0.0.8",
@@ -66,7 +66,7 @@
     "@magic-modules/theme-list": "0.0.14",
     "@magic-themes/docs": "0.0.14",
     "@magic/format": "0.0.30",
-    "@magic/test": "0.1.74"
+    "@magic/test": "0.1.75"
   },
   "keywords": [
     "magic",
