@@ -40,14 +40,6 @@ to achieve this, one can simply create /assets/lib.mjs and export an object from
 this object will get merged into the globalThis.lib object,
 making it available as "lib" throughout your app.
 
-alternatively, you can create a /assets/modules directory
-and place UpperCaseNamed.mjs files in there.
-
-their names will be deferred from the filename
-and they will be available in your app without importing them.
-if you do not use one of the modules,
-dead code elimination will simply remove it in production.
-
 <Pre>export default { name: () => {} }</Pre>
 
 will turn into
