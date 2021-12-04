@@ -27,12 +27,6 @@ input[type="file"] > input[type="button"]`
 // all other styles will be added as keys onto this map,
 // which means that order should be preserved
 export const reset = (vars = {}) => ({
-  html: {
-    scrollBehavior: 'smooth',
-    // always show scrollbar to prevent layout glitch if page resizes
-    overflowY: 'scroll',
-  },
-
   [all]: {
     border: 0,
     boxSizing: 'border-box',
@@ -52,7 +46,10 @@ export const reset = (vars = {}) => ({
     margin: 0,
     maxWidth: '100vw',
     overflowX: 'hidden',
+    // always show scrollbar to prevent layout glitch if page resizes
+    overflowY: 'scroll',
     padding: 0,
+    scrollBehavior: 'smooth',
   },
   ul: {
     display: 'inline-block',
