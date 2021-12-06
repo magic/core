@@ -551,8 +551,8 @@ update dependencies
 update dependencies
 
 ##### 0.0.133
-update dependencies
-theme: move css from html to body to prevent duplicate scrollbars in blink/webkit
+* update dependencies
+* theme: move css from html to body to prevent duplicate scrollbars in blink/webkit
 
 ##### 0.0.134 - unreleased
 ...
