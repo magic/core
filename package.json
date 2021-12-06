@@ -43,16 +43,16 @@
     "@magic-libraries/prevent-default": "0.0.5",
     "@magic/cases": "0.0.5",
     "@magic/cli": "0.0.34",
-    "@magic/css": "0.7.40",
+    "@magic/css": "0.7.42",
     "@magic/deep": "0.1.7",
     "@magic/error": "0.0.10",
-    "@magic/fs": "0.0.17",
+    "@magic/fs": "0.0.18",
     "@magic/hyperapp": "2.0.4-alpha.0.1",
     "@magic/log": "0.1.10",
     "@magic/tags": "0.0.8",
-    "@magic/transmute": "0.0.48",
+    "@magic/transmute": "0.0.50",
     "@magic/types": "0.1.16",
-    "@swc/core": "1.2.117",
+    "@swc/core": "1.2.118",
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.1"
   },
@@ -65,8 +65,8 @@
     "@magic-modules/pre": "0.0.11",
     "@magic-modules/theme-list": "0.0.14",
     "@magic-themes/docs": "0.0.14",
-    "@magic/format": "0.0.32",
-    "@magic/test": "0.1.76"
+    "@magic/format": "0.0.33",
+    "@magic/test": "0.1.77"
   },
   "keywords": [
     "magic",
