@@ -1,6 +1,6 @@
 import cluster from 'cluster'
 
-import { build, master, watch } from './cluster/index.mjs'
+import { build, primary, watch } from './cluster/index.mjs'
 
 import { runConfig } from './config.mjs'
 
@@ -17,12 +17,12 @@ export const runCluster = async options => {
 
   const { CONFIG_FILE_PATH, DIR, GIT, ROOT, URL, URL_WARNING, WEB_ROOT } = config
 
-  if (cluster.isMaster) {
-    await master({ cluster, commands, DIR, GIT, URL, URL_WARNING, WEB_ROOT })
+  if (cluster.isPrimary || cluster.isMaster) {
+    await primary({ cluster, commands, DIR, GIT, URL, URL_WARNING, WEB_ROOT })
   } else if (cluster.isWorker) {
     if (commands.serve && cluster.worker.id === 1) {
       // watcher,
-      // watches the directory and tells master to restart the build process when files change
+      // watches the directory and tells primary to restart the build process when files change
       watch({ args, ROOT, CONFIG_FILE_PATH, STATIC: DIR.STATIC })
     } else {
       // builder

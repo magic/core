@@ -2,7 +2,7 @@ import log from '@magic/log'
 
 import { runCmd } from './runCmd.mjs'
 
-export const master = async ({ cluster, commands, DIR, GIT, URL, URL_WARNING, WEB_ROOT }) => {
+export const primary = async ({ cluster, commands, DIR, GIT, URL, URL_WARNING, WEB_ROOT }) => {
   if (URL_WARNING) {
     log.warn('Autodetected URL:', `https://${URL}`)
     log.info(`

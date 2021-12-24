@@ -1,3 +1,3 @@
 export { build } from './build.mjs'
-export { master } from './master.mjs'
+export { primary } from './primary.mjs'
 export { watch } from './watch.mjs'
