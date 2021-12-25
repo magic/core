@@ -53,14 +53,14 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
     const { key, required, type } = propType
     let value = props[key]
 
-    const types = Array.isArray(type) ? type : [type]
+    const types = is.array(type) ? type : [ type ]
 
     if (!required && !types.includes('undefined')) {
       types.push('undefined')
     }
     const match = is(value, ...types)
 
-    if (Array.isArray(required)) {
+    if (is.array(required)) {
       if (!match) {
         const altExists = required.filter(key => is(props[key], ...types))
         if (altExists.length) {
