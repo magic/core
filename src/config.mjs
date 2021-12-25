@@ -81,6 +81,8 @@ export const runConfig = async (args = {}) => {
   // assets dir, can include themes, modules, libraries
   const ASSETS = path.join(conf.ROOT, 'assets')
 
+  const LIB = path.join(ASSETS, 'lib')
+
   // module dir, modules get imported from here
   const MODULES = path.join(ASSETS, 'modules')
 
@@ -222,6 +224,7 @@ export const runConfig = async (args = {}) => {
       STATIC,
       THEMES,
       API,
+      LIB,
     },
     FILETYPES: {
       ZIPPABLE,
