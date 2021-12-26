@@ -7,6 +7,5 @@ export default async () => {
 
   const App = await runApp(config)
 
-  const app = await tasks.prepare(App, config)
-  // console.log(config, app)
+  await tasks.prepare(App, config)
 }
