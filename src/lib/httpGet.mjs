@@ -7,7 +7,6 @@ export const httpGet = url =>
 
     const req = handler.get(url, res => {
       const { statusCode, headers } = res
-      // console.log('statusCode:', res.statusCode);
 
       const data = []
       res.on('data', d => {
