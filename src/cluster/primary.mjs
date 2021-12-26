@@ -36,6 +36,7 @@ export const primary = async ({ cluster, commands, DIR, GIT, URL, URL_WARNING, W
   if (commands.serve) {
     watchWorker = cluster.fork()
   }
+
   let buildWorker = cluster.fork()
 
   let lastCall = new Date().getTime()
