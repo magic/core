@@ -554,7 +554,11 @@ update dependencies
 * update dependencies
 * theme: move css from html to body to prevent duplicate scrollbars in blink/webkit
 
-##### 0.0.134 - unreleased
+##### 0.0.134
+* update dependencies
+* config.DIR.LIB is an array and imports lib files from each of them
+
+##### 0.0.135 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
