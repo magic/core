@@ -16,7 +16,7 @@ export const apiHandler = async (req, res, { lambdas, rawUrl }) => {
     req.body = []
 
     req.on('data', chunk => {
-      if (typeof chunk === 'string') {
+      if (is.string(chunk)) {
         chunk = Buffer.from(chunk)
       }
 
