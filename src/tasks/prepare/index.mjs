@@ -24,7 +24,12 @@ export const prepare = async (app, config) => {
     app = await app.build({ app, config })
   }
 
-  let { modules, libs } = await prepareGlobals(app, config)
+  app.files = await getPages({ dir: config.DIR.PAGES, root: config.ROOT })
+
+  // collect the pages, create their states
+  app.pages = await preparePages(app, config)
+
+  const { modules, libs } = await prepareGlobals(app, config)
 
   libs.forEach(({ key, lib }) => {
     app.lib[key] = lib
@@ -35,11 +40,6 @@ export const prepare = async (app, config) => {
   // make all links WEB_ROOTED
   // mutates app.state
   app.state = prepareStateLinks(app, config)
-
-  app.files = await getPages({ dir: config.DIR.PAGES, root: config.ROOT })
-
-  // collect the pages, create their states
-  app.pages = await preparePages(app, config)
 
   if (config.BLOG_DIR) {
     app.blog = await getBlog(config)
