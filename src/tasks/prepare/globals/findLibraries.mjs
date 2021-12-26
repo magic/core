@@ -6,7 +6,7 @@ import is from '@magic/types'
 
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 
-export const findLibraries = async (app, modules) => {
+export const findLibraries = async (app, modules, { DIR }) => {
   const libraries = {}
 
   if (app.lib) {
@@ -28,27 +28,32 @@ export const findLibraries = async (app, modules) => {
     n => n.includes('magic-library-') || n.includes('magic-libraries-'),
   )
 
-  const libDirs = [...libOfficialNodeModuleFiles, ...libInofficialNodeModuleFiles]
+  await Promise.all(
+    DIR.LIB.map(async dir => {
+      const files = await fs.getFiles(dir, { depth: 1 })
 
-  const libPromises = libDirs.map(async libDir => {
+      return files.map(file => {
+        const libName = file.replace(`${dir}/`, '').replace('.mjs', '').replace('.js', '')
+        libraries[libName] = file
+      })
+    })
+  )
+
+  const libDirs = [...libOfficialNodeModuleFiles, ...libInofficialNodeModuleFiles]
+  libDirs.forEach(async libDir => {
     let libName = ''
     if (libDir.includes('@magic-libraries')) {
       libName = libDir.split('@magic-libraries' + path.sep)[1]
-      // libDir = `@magic-libraries/${libName}`
     } else if (libDir.includes('magic-libraries-')) {
       libName = libDir.split('magic-libraries-')[1]
-      // libDir = `magic-libraries-${libName}`
     } else if (libDir.includes('magic-library-')) {
       libName = libDir.split('magic-library-')[1]
-      // libDir = `magic-library-${libName}`
     }
 
     libraries[libName] = libDir
   })
 
-  await Promise.all(libPromises)
-
-  Object.entries(modules).forEach(([key, val]) => {
+  const handleModuleLibs = ([key, val]) => {
     key = `${key[0].toLowerCase()}${key.substring(1)}`
     if (val.lib) {
       libraries[key] = val.lib
@@ -60,7 +65,17 @@ export const findLibraries = async (app, modules) => {
         libraries[viewKey] = view.lib
       }
     })
-  })
+  }
+
+  // Object.entries(app.pages).forEach(([ k, v ]) => {
+  //   if (v.lib) {
+  //     Object.entries(v.lib).forEach(([ key, lib ]) => {
+  //       handleModuleLibs([ key, { lib } ])
+  //     })
+  //   }
+  // })
+
+  Object.entries(modules).forEach(handleModuleLibs)
 
   global.lib = global.lib || {}
 
