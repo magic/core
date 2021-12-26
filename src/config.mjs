@@ -81,7 +81,7 @@ export const runConfig = async (args = {}) => {
   // assets dir, can include themes, modules, libraries
   const ASSETS = path.join(conf.ROOT, 'assets')
 
-  const LIB = path.join(ASSETS, 'lib')
+  const LIB = [path.join(ASSETS, 'lib'), path.join(conf.ROOT, 'lib')]
 
   // module dir, modules get imported from here
   const MODULES = path.join(ASSETS, 'modules')
