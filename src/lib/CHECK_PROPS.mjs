@@ -53,7 +53,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
     const { key, required, type } = propType
     let value = props[key]
 
-    const types = is.array(type) ? type : [ type ]
+    const types = is.array(type) ? type : [type]
 
     if (!required && !types.includes('undefined')) {
       types.push('undefined')

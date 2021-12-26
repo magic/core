@@ -36,7 +36,7 @@ export const findLibraries = async (app, modules, { DIR }) => {
         const libName = file.replace(`${dir}/`, '').replace('.mjs', '').replace('.js', '')
         libraries[libName] = file
       })
-    })
+    }),
   )
 
   const libDirs = [...libOfficialNodeModuleFiles, ...libInofficialNodeModuleFiles]
