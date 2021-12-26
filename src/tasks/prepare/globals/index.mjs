@@ -9,8 +9,10 @@ import { findBuiltins } from './findBuiltins.mjs'
 import { findLibraries } from './findLibraries.mjs'
 import { findThemes } from './findThemes.mjs'
 
-export const prepareGlobals = async (app, { DIR, NODE_MODULES, THEME }) => {
+export const prepareGlobals = async (app, config) => {
   global.app = app
+
+  const { DIR, NODE_MODULES, ROOT, THEME } = config
 
   let modules = {}
 
