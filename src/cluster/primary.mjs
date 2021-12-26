@@ -7,7 +7,7 @@ export const primary = async ({ cluster, commands, DIR, GIT, URL, URL_WARNING, W
     log.warn('Autodetected URL:', `https://${URL}`)
     log.info(`
   to hide this warning and make startup ${URL_WARNING}ms faster,
-  add the following to your config.mjs file (and adjust the values if needed)
+  add the following to your magic.js file (and adjust the values if needed)
 
   URL: '${URL}',
   WEB_ROOT: '${WEB_ROOT}',
