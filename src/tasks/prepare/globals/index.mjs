@@ -67,7 +67,7 @@ export const prepareGlobals = async (app, config) => {
     })
   })
 
-  const libs = await findLibraries(app, modules)
+  const libs = await findLibraries(app, modules, { DIR, ROOT })
 
   return {
     modules,
