@@ -188,7 +188,6 @@ export const runConfig = async (args = {}) => {
     conf.APPEND_TAGS = [conf.APPEND_TAGS]
   }
 
-
   conf.INCLUDED_HASH_EXTENSIONS = conf.INCLUDED_HASH_EXTENSIONS || ['.txt', '.xml']
 
   // the following files are zippable
