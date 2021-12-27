@@ -158,13 +158,14 @@ const App = async config => {
 
   // default app state. gets merged with /assets/app.js if it exists.
   // /assets/app.js overwrites the values defined here.
-  const app = deep.merge(localApp, {
+  const defaultApp = {
     state: {
       url: WEB_ROOT,
       root: WEB_ROOT,
     },
 
-    // this View gets server rendered.
+    // this View gets server rendered,
+    // the inner function that accepts state gets used to render this app on the client.
     View: (page, hashes) => state => {
       if (is.fn(localApp.state)) {
         localApp.state = localApp.state(config)
@@ -229,7 +230,9 @@ const App = async config => {
         ]),
       ]
     },
-  })
+  }
+
+  const app = deep.merge(defaultApp, localApp)
 
   // admin
   // if (config.ENV === 'development') {
