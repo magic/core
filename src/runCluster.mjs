@@ -1,5 +1,7 @@
 import cluster from 'cluster'
 
+import log from '@magic/log'
+
 import { build, primary, watch } from './cluster/index.mjs'
 
 import { runConfig } from './config.mjs'
@@ -18,6 +20,11 @@ export const runCluster = async options => {
   const { CONFIG_FILE_PATH, DIR, GIT, ROOT, URL, URL_WARNING, WEB_ROOT } = config
 
   if (cluster.isPrimary || cluster.isMaster) {
+    const { __DEPRECATED__ = [] } = config
+    __DEPRECATED__.forEach(key => {
+      log.error(`E_${key.toUpperCase()}_USED`, `conf.${key} is deprecated.`)
+    })
+
     await primary({ cluster, commands, DIR, GIT, URL, URL_WARNING, WEB_ROOT })
   } else if (cluster.isWorker) {
     if (commands.serve && cluster.worker.id === 1) {

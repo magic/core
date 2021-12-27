@@ -6,6 +6,7 @@ import deep from '@magic/deep'
 import error from '@magic/error'
 import fs from '@magic/fs'
 import is from '@magic/types'
+import log from '@magic/log'
 
 import colors from './themes/colors.mjs'
 
@@ -187,6 +188,7 @@ export const runConfig = async (args = {}) => {
     conf.APPEND_TAGS = [conf.APPEND_TAGS]
   }
 
+
   conf.INCLUDED_HASH_EXTENSIONS = conf.INCLUDED_HASH_EXTENSIONS || ['.txt', '.xml']
 
   // the following files are zippable
@@ -346,6 +348,8 @@ export const runConfig = async (args = {}) => {
     const snaked = cases.snakeCaps(k)
     conf[snaked] = v || v === ''
   })
+
+  conf.__DEPRECATED__ = [...scriptKeys, ...addKeys].filter(k => conf[k] && conf[k].length)
 
   return conf
 }
