@@ -115,9 +115,7 @@ export const preparePage =
       throw error(
         `
 ${relativePageDir}/${pageName}.mjs
-needs to either
-export default state => []
-or
+needs to
 export const View = state => []
 `,
         'E_INVALID_PAGE',
