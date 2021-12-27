@@ -5,8 +5,6 @@ import { h } from '@magic/hyperapp'
 import is from '@magic/types'
 import log from '@magic/log'
 
-import { replaceSlashSlash } from '../lib/index.mjs'
-
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
