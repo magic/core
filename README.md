@@ -559,6 +559,8 @@ update dependencies
 * config.DIR.LIB is an array and imports lib files from each of them
 
 ##### 0.0.135 - unreleased
+* theme imports now throw MODULE_NOT_FOUND errors in their internal imports, they got swallowed before
+
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
@@ -575,3 +577,4 @@ update dependencies
 [coveralls-url]: https://coveralls.io/github/magic/core
 [snyk-image]: https://snyk.io/test/github/magic/core/badge.svg
 [snyk-url]: https://snyk.io/test/github/magic/core
+
