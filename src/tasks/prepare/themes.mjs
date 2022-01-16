@@ -78,7 +78,7 @@ export const prepareThemes = async (app, config) => {
                 vars,
               }
             } catch (e) {
-              const inc = e.message.endsWith('themes.mjs')
+              const inc = e.message.endsWith('themes.mjs') || e.message.endsWith('themes.js')
               if (!inc || !e.code || !e.code.includes('MODULE_NOT_FOUND')) {
                 throw error(e)
               }
