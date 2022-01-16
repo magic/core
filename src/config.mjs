@@ -6,7 +6,6 @@ import deep from '@magic/deep'
 import error from '@magic/error'
 import fs from '@magic/fs'
 import is from '@magic/types'
-import log from '@magic/log'
 
 import colors from './themes/colors.mjs'
 
