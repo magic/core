@@ -73,13 +73,13 @@ export const prepareThemes = async (app, config) => {
           themeLocations.map(async location => {
             try {
               const { default: theme, vars } = await import(location)
-
               return {
                 theme,
                 vars,
               }
             } catch (e) {
-              if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
+              const inc = e.message.endsWith('themes.mjs')
+              if (!inc || !e.code || !e.code.includes('MODULE_NOT_FOUND')) {
                 throw error(e)
               }
             }
