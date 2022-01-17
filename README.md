@@ -560,7 +560,7 @@ update dependencies
 
 ##### 0.0.135 - unreleased
 * theme imports now throw MODULE_NOT_FOUND errors in their internal imports, they got swallowed before
-
+* CHECK_PROPS can be silenced
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
