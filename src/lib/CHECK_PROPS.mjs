@@ -1,20 +1,24 @@
-export const CHECK_PROPS = (props, propTypeDecl, name) => {
+export const CHECK_PROPS = (props, propTypeDecl, name, log = true) => {
   const currentPage = app && app.state ? app.state.url : 'Unknown on client.'
 
-  if (!name) {
-    const err = new Error()
-    console.error(
-      `CHECK_PROPS: expected Module name as third argument ${err.stack} on page ${currentPage}`,
-    )
-    return
-  }
+  const errors = []
 
   if (!propTypeDecl) {
-    const err = new Error()
-    console.error(
-      `CHECK_PROPS: expected propTypes as second argument ${err.stack} on page ${currentPage}`,
-    )
-    return
+    const err = new Error('CHECK_PROPS: expected propTypes as second argument')
+    if (log) {
+      console.error(`${err.stack} on page ${currentPage}`)
+    }
+    errors.push(err)
+    return false
+  }
+
+  if (!name) {
+    const err = new Error('CHECK_PROPS: expected Module name as third argument')
+    if (log) {
+      console.error(`${err.stack} on page ${currentPage}`)
+    }
+    errors.push(err)
+    return false
   }
 
   const is = (e, ...types) =>
@@ -34,10 +38,15 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
   let propTypes = propTypeDecl[name]
 
   if (!is.array(propTypes)) {
-    console.error(
-      `CHECK_PROPS: expected propTypes to be an array. received: ${propTypes} on page ${currentPage} in component ${name}`,
-    )
-    return
+    const err = new Error(`CHECK_PROPS: expected propTypes to be an array.. received: ${propTypes} on page ${currentPage} in component ${name}`)
+    errors.push(err)
+  }
+
+  if (errors.length) {
+    if (log) {
+      errors.forEach(console.error)
+    }
+    return false
   }
 
   if (!propTypes[0].key) {
@@ -45,7 +54,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
     propTypes = pT
 
     if (FALLBACK && typeof props === FALLBACK.type) {
-      return
+      return true
     }
   }
 
@@ -58,6 +67,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
     if (!required && !types.includes('undefined')) {
       types.push('undefined')
     }
+
     const match = is(value, ...types)
 
     if (is.array(required)) {
@@ -73,9 +83,8 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
     const typeString = types.length > 1 ? `["${types.join(', "')}"]` : types[0]
 
     if (!is(value, ...types)) {
-      console.error(
-        `${name} needs props.${key} to be ${typeInfo} ${typeString}. received ${typeof value}`,
-      )
+      const err = new Error(`${name} needs props.${key} to be ${typeInfo} ${typeString}. received ${typeof value}`)
+      errors.push(err)
     } else if (required) {
       if (typeof value === 'object' && !Object.keys(value).length) {
         let typeString = ''
@@ -88,7 +97,9 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
           }
           typeString += ' object'
         }
-        console.error(`${name} needs props.${key} to be a non empty ${typeString}`)
+        const err = new Error(`${name} needs props.${key} to be a non empty ${typeString}`)
+        console.error(err.message)
+        errors.push(err)
       }
     }
 
@@ -97,9 +108,11 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
       const { max = Number.MAX_SAFE_INTEGER, min = Number.MIN_SAFE_INTEGER } = propType
 
       if (max && value > max) {
-        console.error(`${name}: number expected to be <= ${max}, was ${value}`)
+        const err = new Error(`${name}: number expected to be <= ${max}, was ${value}`)
+        errors.push(err)
       } else if (min > 0 && value < min) {
-        console.error(`${name}: number expected to be >= ${min}, was ${value}`)
+        const err = new Error(`${name}: number expected to be >= ${min}, was ${value}`)
+        errors.push(err)
       }
     }
 
@@ -107,9 +120,11 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
       const { max = 500, min = 0 } = propType
 
       if (max && value.length > max) {
-        console.error(`${name}: string length expected to be <= ${max}, length was ${value.length}`)
+        const err = new Error(`${name}: string length expected to be <= ${max}, length was ${value.length}`)
+        errors.push(err)
       } else if (min > 0 && value.length < min) {
-        console.error(`${name}: string length expected to be >= ${min}, length was ${value.length}`)
+        const err = new Error(`${name}: string length expected to be >= ${min}, length was ${value.length}`)
+        errors.push(err)
       }
     }
 
@@ -117,7 +132,8 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
       const { item } = propType
 
       if (!is(value, 'array')) {
-        console.error(`${name} needs props.${key} to be an array. received ${typeof value}`)
+        const err = new Error(`${name} needs props.${key} to be an array. received ${typeof value}`)
+        errors.push(err)
       }
 
       value.forEach(val => {
@@ -129,9 +145,8 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
           : item.type
 
         if (!is(val, item.type)) {
-          console.error(
-            `${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}`,
-          )
+          const err = new Error(`${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}`)
+          errors.push(err)
         }
 
         if (item.type === 'object') {
@@ -151,21 +166,25 @@ export const CHECK_PROPS = (props, propTypeDecl, name) => {
                 typeString = iKey.type
               }
 
-              console.error(
-                `${name} expects item.${
-                  iKey.key
+              const err = new Error(
+                `${name} expects item.${iKey.key
                 } to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`,
               )
+
+              errors.push(err)
             }
           })
         } else if (!is(val, item.type)) {
-          console.error(
-            `${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}, on page ${currentPage}`,
-          )
+          const err = new Error(`${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}, on page ${currentPage}`)
+          errors.push(err)
         }
       })
     }
   })
 
-  return true
+  if (log) {
+    errors.forEach(console.error)
+  }
+
+  return !errors.length
 }
