@@ -558,9 +558,12 @@ update dependencies
 * update dependencies
 * config.DIR.LIB is an array and imports lib files from each of them
 
-##### 0.0.135 - unreleased
+##### 0.0.135
 * theme imports now throw MODULE_NOT_FOUND errors in their internal imports, they got swallowed before
 * CHECK_PROPS can be silenced
+* update dependencies
+
+##### 0.0.136 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
