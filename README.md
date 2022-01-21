@@ -563,7 +563,10 @@ update dependencies
 * CHECK_PROPS can be silenced
 * update dependencies
 
-##### 0.0.136 - unreleased
+##### 0.0.136
+update dependencies
+
+##### 0.0.137 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
