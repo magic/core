@@ -122,6 +122,9 @@ export const prepareThemes = async (app, config) => {
       if (style) {
         appStyles.push(style)
       }
+      if (styleVars) {
+        THEME_VARS = deep.merge(THEME_VARS, styleVars)
+      }
     } catch (e) {
       if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
         throw error(e)
