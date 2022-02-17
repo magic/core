@@ -91,7 +91,7 @@ export const findLibraries = async (app, modules, { DIR }) => {
         lib = val
       }
     } else {
-      if (!val.endsWith('.mjs')) {
+      if (!val.endsWith('.mjs') && !val.endsWith('.js')) {
         val = path.join(val, 'src', 'index.mjs')
       }
 
