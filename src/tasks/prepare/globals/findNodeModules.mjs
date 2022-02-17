@@ -37,17 +37,19 @@ export const findNodeModules = async () => {
 
       // find lib file of module if it exists
       const extensions = ['.mjs', '.js']
-      await Promise.all(extensions.map(async ext => {
-        try {
-          const libPath = path.join(nodeModule, localLibIndexPath + ext)
-          await fs.stat(libPath)
-          modules[name].lib = path.join(loadPath, localLibIndexPath + ext)
-        } catch (e) {
-          if (e.code !== 'ENOENT') {
-            throw error(e)
+      await Promise.all(
+        extensions.map(async ext => {
+          try {
+            const libPath = path.join(nodeModule, localLibIndexPath + ext)
+            await fs.stat(libPath)
+            modules[name].lib = path.join(loadPath, localLibIndexPath + ext)
+          } catch (e) {
+            if (e.code !== 'ENOENT') {
+              throw error(e)
+            }
           }
-        }
-      }))
+        }),
+      )
 
       try {
         const libMjsPath = path.join(nodeModule, localLibMjsPath)
