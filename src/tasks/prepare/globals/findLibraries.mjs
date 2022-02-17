@@ -92,7 +92,17 @@ export const findLibraries = async (app, modules, { DIR }) => {
       }
     } else {
       if (!val.endsWith('.mjs') && !val.endsWith('.js')) {
-        val = path.join(val, 'src', 'index.mjs')
+        const rootPath = path.join(val, 'index.mjs')
+        const rootExists = await fs.exists(rootPath)
+        if (rootExists) {
+          val = rootPath
+        } else {
+          const srcPath = path.join(val, 'src', 'index.mjs')
+          const srcExists = await fs.exists(srcPath)
+          if (srcExists) {
+            val = srcPath
+          }
+        }
       }
 
       const imported = await import(val)
