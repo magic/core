@@ -8,8 +8,8 @@ import log from '@magic/log'
 
 import { replacePathSepForImport } from '../../../lib/index.mjs'
 
-const localLibIndexPath = path.join('src', 'lib', 'index.mjs')
-const localLibMjsPath = path.join('src', 'lib.mjs')
+const localLibIndexPath = path.join('src', 'lib', 'index')
+const localLibMjsPath = path.join('src', 'lib')
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 
 export const findNodeModules = async () => {
@@ -36,15 +36,18 @@ export const findNodeModules = async () => {
       }
 
       // find lib file of module if it exists
-      try {
-        const libPath = path.join(nodeModule, localLibIndexPath)
-        await fs.stat(libPath)
-        modules[name].lib = path.join(loadPath, localLibIndexPath)
-      } catch (e) {
-        if (e.code !== 'ENOENT') {
-          throw error(e)
+      const extensions = ['.mjs', '.js']
+      await Promise.all(extensions.map(async ext => {
+        try {
+          const libPath = path.join(nodeModule, localLibIndexPath + ext)
+          await fs.stat(libPath)
+          modules[name].lib = path.join(loadPath, localLibIndexPath + ext)
+        } catch (e) {
+          if (e.code !== 'ENOENT') {
+            throw error(e)
+          }
         }
-      }
+      }))
 
       try {
         const libMjsPath = path.join(nodeModule, localLibMjsPath)

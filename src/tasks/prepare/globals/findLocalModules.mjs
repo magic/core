@@ -10,7 +10,7 @@ export const findLocalModules = async dir => {
   const assetModules = await fs.getFiles(dir)
   const assetPromises = assetModules
     .filter(m => is.case.upper(path.basename(m)[0]))
-    .filter(m => ['.mjs'].some(ext => m.endsWith(ext)))
+    .filter(m => ['.mjs', '.js'].some(ext => m.endsWith(ext)))
     .map(async m => {
       try {
         const name = path.basename(m).replace(path.extname(m), '')
