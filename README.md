@@ -566,10 +566,9 @@ update dependencies
 ##### 0.0.136
 update dependencies
 
-##### 0.0.137 - unreleased
+##### 0.0.137
 * allow .js files for modules and libraries
 * update dependencies
-* ...
 
 ##### 0.0.138 - unreleased
 ...
