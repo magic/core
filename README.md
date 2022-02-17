@@ -567,6 +567,11 @@ update dependencies
 update dependencies
 
 ##### 0.0.137 - unreleased
+* allow .js files for modules and libraries
+* update dependencies
+* ...
+
+##### 0.0.138 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
