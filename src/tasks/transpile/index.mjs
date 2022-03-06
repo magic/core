@@ -104,6 +104,7 @@ export const transpile = async (app, config) => {
 
       if (unresolvedLinks.length) {
         log.error('E_BROKEN_LINKS', 'Broken Links found.')
+        log('to ignore run "npm run build -- --no-check-links" or magic build --no-check-links')
 
         if (!NO_CHECK_LINKS_EXIT) {
           process.exit(0)
