@@ -8,7 +8,11 @@ export const stringifyObject = (obj, indent = '') => {
   }
 
   if (is.string(obj)) {
-    obj = `'${obj}'`
+    if (obj.includes("'")) {
+      obj = `"${obj}"`
+    } else {
+      obj = `'${obj}'`
+    }
   } else if (is.array(obj)) {
     obj = `[${obj.map(o => stringifyObject(o, indent)).join(',')}]`
   } else if (is.fn(obj)) {
