@@ -51,7 +51,7 @@ always delete .tmp dir
 ##### 0.0.7
 fix 404 page regression
 
-##### 0.0.8 - unreleased
+##### 0.0.8
 * blog/year/month archive pages are not 404'ing.
 * blog archive pages now have links in them if needed
   (year page links to each month archive page)
@@ -570,9 +570,9 @@ update dependencies
 * allow .js files for modules and libraries
 * update dependencies
 
-##### 0.0.138 - unreleased
+##### 0.0.138
 * better encoding for ' characters in state strings
-* ...
+* update dependencies
 
 ##### 0.0.139 - unreleased
 ...
