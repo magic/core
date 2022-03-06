@@ -52,7 +52,7 @@
     "@magic/tags": "0.0.9",
     "@magic/transmute": "0.0.52",
     "@magic/types": "0.1.18",
-    "@swc/core": "1.2.141",
+    "@swc/core": "1.2.150",
     "babel-plugin-remove-code": "0.0.6",
     "babel-preset-minify": "0.5.1"
   },
