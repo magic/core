@@ -574,7 +574,10 @@ update dependencies
 * better encoding for ' characters in state strings
 * update dependencies
 
-##### 0.0.139 - unreleased
+##### 0.0.139
+* update dependencies
+
+##### 0.0.140 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
