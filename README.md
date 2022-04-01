@@ -577,7 +577,11 @@ update dependencies
 ##### 0.0.139
 * update dependencies
 
-##### 0.0.140 - unreleased
+##### 0.0.140
+* update dependencies
+* @magic/test can now test @magic/core again
+
+##### 0.0.141 - unreleased
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
