@@ -37,24 +37,24 @@
     "url": "https://github.com/magic/core/issues"
   },
   "dependencies": {
-    "@babel/core": "7.17.8",
+    "@babel/core": "7.17.10",
     "@babel/plugin-transform-react-jsx": "7.17.3",
-    "@babel/preset-env": "7.16.11",
+    "@babel/preset-env": "7.17.10",
     "@magic-libraries/prevent-default": "0.0.6",
     "@magic/cases": "0.0.8",
-    "@magic/cli": "0.0.41",
-    "@magic/css": "0.7.50",
-    "@magic/deep": "0.1.13",
-    "@magic/error": "0.0.14",
-    "@magic/fs": "0.0.25",
+    "@magic/cli": "0.0.42",
+    "@magic/css": "0.7.51",
+    "@magic/deep": "0.1.14",
+    "@magic/error": "0.0.15",
+    "@magic/fs": "0.0.26",
     "@magic/hyperapp": "2.0.4-alpha.0.3",
-    "@magic/log": "0.1.15",
+    "@magic/log": "0.1.16",
     "@magic/tags": "0.0.11",
-    "@magic/transmute": "0.0.54",
-    "@magic/types": "0.1.20",
-    "@swc/core": "1.2.163",
+    "@magic/transmute": "0.0.55",
+    "@magic/types": "0.1.21",
+    "@swc/core": "1.2.183",
     "babel-plugin-remove-code": "0.0.6",
-    "babel-preset-minify": "0.5.1"
+    "babel-preset-minify": "0.5.2"
   },
   "devDependencies": {
     "@magic-modules/git-badges": "0.0.12",
@@ -65,8 +65,8 @@
     "@magic-modules/pre": "0.0.11",
     "@magic-modules/theme-list": "0.0.14",
     "@magic-themes/docs": "0.0.14",
-    "@magic/format": "0.0.40",
-    "@magic/test": "0.2.11"
+    "@magic/format": "0.0.41",
+    "@magic/test": "0.2.12"
   },
   "keywords": [
     "magic",
