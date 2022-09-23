@@ -65,13 +65,15 @@ return { ${imports} }
               }
             }
 
-            return Object.entries(sm.propTypes)
-              // sort alphabetically
-              .sort(([a], [b]) => (a > b ? 1 : -1))
-              // stringify the props
-              // JSON.stringify makes sure no code is hiding
-              .map(([k, t]) => `${k}: ${JSON.stringify(t, null, 2)}`)
-              .join(',\n')
+            return (
+              Object.entries(sm.propTypes)
+                // sort alphabetically
+                .sort(([a], [b]) => (a > b ? 1 : -1))
+                // stringify the props
+                // JSON.stringify makes sure no code is hiding
+                .map(([k, t]) => `${k}: ${JSON.stringify(t, null, 2)}`)
+                .join(',\n')
+            )
           })
           .filter(a => a)
           .join(',\n')
