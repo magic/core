@@ -19,12 +19,12 @@ we think that all of that bloat is unneeded, unheeded and, frankly, not optimal.
 
 magic has one external client side dependency,
 [hyperapp](https://github.com/jorgebucaran/hyperapp/),
- [~500 lines that provide our ui state machine]. thats it. and it won't change.
+[~500 lines that provide our ui state machine]. thats it. and it won't change.
 
 we also have the tendency to write libraries specialized for our usecase, see
 [@magic/css](https://github.com/magic/css),
- [@magic/test](https://github.com/magic/test),
- [@magic/cli](https://github.com/magic/cli)
+[@magic/test](https://github.com/magic/test),
+[@magic/cli](https://github.com/magic/cli)
 and others.
 
 once there is a lib key in at least one component,
@@ -48,7 +48,7 @@ will turn into
 
 ### npm
 
-all @magic-libraries and all npm packages starting with magic-library-* will be loaded automatically
+all @magic-libraries and all npm packages starting with magic-library-\* will be loaded automatically
 
 #### Example
 

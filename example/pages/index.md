@@ -28,14 +28,15 @@ we believe that this is the best compromise.
 ## #buzzwords why should i use magic?
 
 ### features
-* static html pages with opengraph seo.
-* pages are hosted for free using gitlab, github or any other git-pages style hosting.
-* static css output with selector and rule deduplication.
-* no javascript required where possible.
-* minimal client boilerplate.
-* no spyware included.
-* WIP: lambda faas and graphql api generator.
-* WIP: server side rendering (if needed).
+
+- static html pages with opengraph seo.
+- pages are hosted for free using gitlab, github or any other git-pages style hosting.
+- static css output with selector and rule deduplication.
+- no javascript required where possible.
+- minimal client boilerplate.
+- no spyware included.
+- WIP: lambda faas and graphql api generator.
+- WIP: server side rendering (if needed).
 
 ### @magic is tiny
 
@@ -53,8 +54,8 @@ some buttons and realtime user interactions obviously won't,
 but @magic always tries to provide a non-javascript fallback via css.
 
 ### @magic generates static pages
-this makes free hosting (using github or gitlab pages) possible. and it's easy.
 
+this makes free hosting (using github or gitlab pages) possible. and it's easy.
 
 @magic publishes to [github](https://github.com), [gitlab](https://about.gitlab.com/),
 and any other git-pages enabled hosting service.

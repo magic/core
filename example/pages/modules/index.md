@@ -5,7 +5,6 @@
 }
 ---
 
-
 # ${state.title}
 
 magic modules are predefined modules for webapps.
@@ -44,7 +43,6 @@ export default {
 </Pre>
 
 after this, the module will be a global in your app and can be used like any other component.
-
 
 <Pre>
 // any page or module

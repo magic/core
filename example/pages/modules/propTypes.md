@@ -5,7 +5,6 @@
 }
 ---
 
-
 # @magic-modules/prop-types
 
 <h2 id='check-props'>CHECK_PROPS</h2>

@@ -13,6 +13,7 @@ but can be overwritten by adding them to the config.BLOG_DIR dir of your @magic 
 
 to use the blog,
 create an archive dir, for example
+
 <Pre>
 src/blog/2019/12/22/
 </Pre>

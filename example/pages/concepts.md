@@ -27,7 +27,7 @@ this can lead to inception.
 ### state
 
 state is a javascript object.
-state can be mutated by actions, 
+state can be mutated by actions,
 effects and subscriptions can call actions to change the state.
 every rendering frame, the state determines the output of the html views.
 
@@ -125,9 +125,8 @@ module.style < page.style < app.style < theme.style
 this allows css to be inherited in both directions.
 
 a module automatically creates it's own css namespace,
-that same namespace can be used in page, app and theme css styles 
+that same namespace can be used in page, app and theme css styles
 to overwrite module specific styles.
-
 
 ### #styles- @magic/css
 
@@ -135,7 +134,6 @@ internally, magic uses it's own css-in-js library.
 
 to find out more, click the following link:
 [@magic/css](https://magic.github.io/css/)
-
 
 ## globals
 
