@@ -13,7 +13,7 @@
   "engineStrict": true,
   "scripts": {
     "start": "t -p",
-    "build": "NODE_ENV=production src/bin.mjs build",
+    "build": "NODE_ENV=production src/bin.mjs build --no-check-links-exit",
     "devbuild": "src/bin.mjs build",
     "serve": "src/bin.mjs serve --watch src",
     "prod": "NODE_ENV=production src/bin.mjs build serve --watch src",
