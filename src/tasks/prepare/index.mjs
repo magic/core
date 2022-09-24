@@ -141,6 +141,7 @@ export const prepare = async (app, config) => {
   const tmpExists = await fs.exists(config.TMP_DIR)
   if (tmpExists && !config.KEEP_CLIENT) {
     await fs.rmrf(config.TMP_DIR)
+    await fs.mkdirp(config.TMP_DIR)
   }
 
   return app
