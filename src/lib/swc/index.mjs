@@ -66,10 +66,6 @@ const visit = ({ app, config, parent }) => {
     if (parent.callee.type === 'Identifier') {
       declarations.used[parent.callee.value] = true
     }
-
-    // if (parent.callee.type === 'Import') {
-    //   console.log(parent)
-    // }
   } else if (parent.type === 'VariableDeclarator') {
     parent.id = visit({ parent: parent.id, app, config })
     parent.init = visit({ parent: parent.init, app, config })
