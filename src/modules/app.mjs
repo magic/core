@@ -186,6 +186,7 @@ const App = async config => {
         src: `${WEB_ROOT}${CLIENT_LIB_NAME}.js?${shortJsHash}`,
         integrity: hashes['/magic.js'],
         crossorigin: 'anonymous',
+        type: 'module',
       }
 
       const shortCssHash = hashes['/magic.css'].split('-')[1].substr(0, 10)
