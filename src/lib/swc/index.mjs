@@ -177,6 +177,10 @@ const visit = ({ app, config, parent }) => {
     parent.expressions = visit({ parent: parent.expressions, app, config })
   } else if (parent.type === 'ContinueStatement') {
     parent.label = visit({ parent: parent.label, app, config })
+  } else if (parent.type === 'ImportDeclaration') {
+    parent.specifiers = visit({ parent: parent.specifiers, app, config })
+  } else if (parent.type === 'ImportSpecifier') {
+    parent.local = visit({ parent: parent.local, app, config })
   } else if (noopTypes.includes(parent.type)) {
     // noop
   } else if (parent.type) {
@@ -203,7 +207,7 @@ const plugin = (app, config) => m => {
 }
 
 export const getSwcConf = (app, config) => {
-  const fileName = `${config.BABEL.CLIENT_LIB_NAME}.js`
+  const fileName = `${config.CLIENT_LIB_NAME}.js`
 
   return {
     // Some options cannot be specified in .swcrc
