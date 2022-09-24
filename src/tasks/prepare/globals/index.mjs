@@ -45,6 +45,7 @@ export const prepareGlobals = async (app, config) => {
   if (localModuleFiles) {
     modules = deep.merge(modules, localModuleFiles)
   }
+
   Object.entries(modules).forEach(([name, mod]) => {
     if (is.fn(mod)) {
       global[name] = mod
