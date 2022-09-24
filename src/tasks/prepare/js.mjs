@@ -122,11 +122,11 @@ return { ${imports} }
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
 
-  const { checkProps, propTypeString} = prepareCheckProps(magic, config)
+  const { checkProps, propTypeString } = prepareCheckProps(magic, config)
 
   let depString = ''
   let htmlTagString = ''
-  Object.entries(magic.modules)
+  Object.entries({ ...magic.modules, ...magic.tags })
     .filter(([k]) => k !== 'Magic' && k !== 'component')
     .sort(([a], [b]) => (a > b ? 1 : -1))
     .forEach(([k, v]) => {
