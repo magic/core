@@ -1,5 +1,7 @@
 import log from '@magic/log'
 
+import { config as swcConfig } from '@swc/core/spack.js'
+
 import { handleLink } from '../handleLink.mjs'
 
 const validKeys = ['src', 'logo', 'href', 'to']
@@ -64,6 +66,10 @@ const visit = ({ app, config, parent }) => {
     if (parent.callee.type === 'Identifier') {
       declarations.used[parent.callee.value] = true
     }
+
+    // if (parent.callee.type === 'Import') {
+    //   console.log(parent)
+    // }
   } else if (parent.type === 'VariableDeclarator') {
     parent.id = visit({ parent: parent.id, app, config })
     parent.init = visit({ parent: parent.init, app, config })
@@ -199,42 +205,64 @@ const plugin = (app, config) => m => {
 
   n.body = m.body.map(item => visit({ parent: item, app, config }))
 
-  const unusedTopLevel = []
-  Object.keys(declarations.declared).map(key => {
-    if (!declarations.used[key]) {
-      unusedTopLevel.push(key)
-    }
-  })
+  /*
+   * this gets handled fine by swc and dead code elimination
+   */
+  // const unusedTopLevel = []
+  // Object.keys(declarations.declared).map(key => {
+  //   if (!declarations.used[key]) {
+  //     unusedTopLevel.push(key)
+  //   }
+  // })
 
-  // console.log(unusedTopLevel, declarations.used)
+  // app.modules = Object.fromEntries(Object.entries(app.modules).filter(([name, mod]) => {
+  //   if (unusedTopLevel.includes(name)) {
+  //     return false
+  //   }
+  //   return true
+  // }))
+
   return n
 }
 
 export const getSwcConf = (app, config) => {
   const fileName = `${config.CLIENT_LIB_NAME}.js`
 
-  return {
+  let minify = {
+    compress: {
+      unused: true,
+    },
+    mangle: false,
+  }
+
+  if (config.IS_PROD) {
+    minify.compress = true
+    minify.mangle = true
+    minify.format = {
+      comments: false,
+    }
+  }
+
+  return swcConfig({
     // Some options cannot be specified in .swcrc
     filename: fileName,
 
-    sourceMaps: true,
+    // TODO: actually write those into files during dev
+    sourceMaps: config.IS_DEV,
+
     // Input files are treated as module.
     isModule: true,
 
     // All options below can be configured via .swcrc
     jsc: {
       parser: {
-        syntax: 'ecmascript',
+        syntax: 'typescript',
       },
       transform: {},
-      minify: {
-        compress: {
-          unused: true,
-        },
-        mangle: false,
-      },
+      minify,
     },
     minify: true,
+
     plugin: plugin(app, config),
-  }
+  })
 }

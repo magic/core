@@ -732,6 +732,7 @@ update dependencies
 
 ##### 0.0.144
 
+- remove babel, swc can handle it.
 - update dependencies
 - propTypes no longer need to be namespaces
   ```
