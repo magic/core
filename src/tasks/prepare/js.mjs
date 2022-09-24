@@ -8,38 +8,12 @@ import error from '@magic/error'
 
 import { stringifyObject, replaceSlashSlash } from '../../lib/index.mjs'
 
-export const prepareJs = async (magic, config) => {
-  const { IS_DEV, HOIST, PREPEND_JS, APPEND_JS /*, WEB_ROOT*/ } = config
-
-  const hyperappPath = path.join(
-    process.cwd(),
-    'node_modules',
-    '@magic',
-    'hyperapp',
-    'src',
-    'hyperapp.mjs',
-  )
-  const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
-
-  const imports = 'h, app'
-
-  // replace hyperapp exports, wrap it in a closure
-  // return needed exports only to allow dead code elimination
-  const hyperapp = `
-const { ${imports} } = (() => {
-${hyperappContent.replace(/export /g, ' ')}
-return { ${imports} }
-})()`
-
-  // add the Component module that wraps all other html tags
-  const componentString = `const C = ${global.component.toString()}\n`
-    // replace names of variables to enforce minification
-    .replace(/attributes/gm, 'a')
-    .replace(/name/gm, 'n')
-    .replace(/children/gm, 'c')
+const prepareCheckProps = (magic, config) => {
+  const { IS_DEV } = config
 
   let checkProps = ''
   let propTypeString = ''
+
   if (IS_DEV) {
     // add proptype checking
     checkProps = `const CHECK_PROPS = ${global.CHECK_PROPS.toString()}`
@@ -111,6 +85,44 @@ return { ${imports} }
 
     propTypeString += '\n}'
   }
+
+  return {
+    checkProps,
+    propTypeString,
+  }
+}
+
+export const prepareJs = async (magic, config) => {
+  const { IS_DEV, HOIST, PREPEND_JS, APPEND_JS /*, WEB_ROOT*/ } = config
+
+  const hyperappPath = path.join(
+    process.cwd(),
+    'node_modules',
+    '@magic',
+    'hyperapp',
+    'src',
+    'hyperapp.mjs',
+  )
+  const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
+
+  const imports = 'h, app'
+
+  // replace hyperapp exports, wrap it in a closure
+  // return needed exports only to allow dead code elimination
+  const hyperapp = `
+const { ${imports} } = (() => {
+${hyperappContent.replace(/export /g, ' ')}
+return { ${imports} }
+})()`
+
+  // add the Component module that wraps all other html tags
+  const componentString = `const C = ${global.component.toString()}\n`
+    // replace names of variables to enforce minification
+    .replace(/attributes/gm, 'a')
+    .replace(/name/gm, 'n')
+    .replace(/children/gm, 'c')
+
+  const { checkProps, propTypeString} = prepareCheckProps(magic, config)
 
   let depString = ''
   let htmlTagString = ''
@@ -202,20 +214,23 @@ return { ${imports} }
   }
 
   // create pages object, each Page is a html View
-  let pageString = 'const pages = {\n'
-  let pageTitles = {}
 
-  magic.pages
+  const createPageString = page =>
+    `
+'${page.name}': {
+  path: '${page.path.replace('.html', '.js')}',
+  loaded: false,
+},
+`.trim()
+
+  const pageString = `
+const pages = {
+  ${magic.pages
     .sort(({ name: a }, { name: b }) => (a > b ? 1 : -1))
-    .forEach(page => {
-      pageString += `\n  '${page.name}': ${page.View.toString()},`
-
-      if (page.state && page.state.title) {
-        pageTitles[page.name] = page.state.title
-      }
-    })
-
-  pageString += '\n}\n'
+    .map(createPageString)
+    .join('\n')}
+}
+`
 
   // const pageTitleString = Object.entries(pageTitles)
   //   .map(([name, title]) => `"${name}": "${title}",`)
@@ -333,7 +348,7 @@ app({
     prependJSContents.join('\n'),
 
     // isolate magic js from the rest of the javascript
-    ';(() => {',
+    'const __MAGIC__ = () => {',
     hyperapp,
     checkProps,
     propTypeString,
@@ -350,7 +365,8 @@ app({
     // serviceWorkerString,
 
     // isolate magic js from the rest of the javascript
-    '})()',
+    '}',
+    '__MAGIC__()',
     '\n',
 
     appendJSContents.join('\n'),
