@@ -15,7 +15,9 @@ export default ({ app, root }) => {
 
       const view = app.View(page, app.hashes)
 
-      let rendered = renderToString(view(state))
+      const pageObj = view(state)
+
+      let rendered = renderToString(pageObj)
 
       // dirty url cleanup. makes all local urls in html files point to WEB_ROOT
       const tags = ['href', 'src']
