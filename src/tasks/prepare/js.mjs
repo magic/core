@@ -215,19 +215,11 @@ return { ${imports} }
 
   // create pages object, each Page is a html View
 
-  const createPageString = page =>
-    `
-'${page.name}': {
-  path: '${page.path.replace('.html', '.js')}',
-  loaded: false,
-},
-`.trim()
-
   const pageString = `
 const pages = {
   ${magic.pages
     .sort(({ name: a }, { name: b }) => (a > b ? 1 : -1))
-    .map(createPageString)
+    .map(page => `\n  '${page.name}': ${page.View.toString()},`)
     .join('\n')}
 }
 `
