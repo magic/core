@@ -10,18 +10,22 @@ const declarations = {
   used: {},
 }
 
-const ignoredLiterals = [
+const noopTypes = [
   'StringLiteral',
   'BooleanLiteral',
   'NullLiteral',
   'NumericLiteral',
   'RegExpLiteral',
+  'ThisExpression',
+  'EmptyStatement',
+  'Identifier',
 ]
 
 const visit = ({ app, config, parent }) => {
   if (!parent) {
     return parent
   }
+
   if (Array.isArray(parent)) {
     return parent.map(n => visit({ parent: n, app, config }))
   }
@@ -173,16 +177,10 @@ const visit = ({ app, config, parent }) => {
     parent.expressions = visit({ parent: parent.expressions, app, config })
   } else if (parent.type === 'ContinueStatement') {
     parent.label = visit({ parent: parent.label, app, config })
-  } else if (parent.type === 'ThisExpression') {
+  } else if (noopTypes.includes(parent.type)) {
     // noop
-  } else if (parent.type === 'EmptyStatement') {
-    // noop
-  } else if (parent.type === 'Identifier') {
-    // noop
-  } else if (ignoredLiterals.includes(parent.type)) {
-    // noop
-  } else {
-    log.warn('unhandled parent type', parent.type)
+  } else if (parent.type) {
+    log.warn('unexpected parent type', parent.type, parent)
   }
 
   return parent
