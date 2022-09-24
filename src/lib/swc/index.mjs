@@ -182,7 +182,7 @@ const visit = ({ app, config, parent }) => {
   } else if (parent.type === 'ImportSpecifier') {
     parent.local = visit({ parent: parent.local, app, config })
   } else if (parent.type === 'ExportNamedDeclaration') {
-    parent.specifiers = visit({ parent: parent.specifiers , app, config})
+    parent.specifiers = visit({ parent: parent.specifiers, app, config })
   } else if (parent.type === 'ExportSpecifier') {
     parent.orig = visit({ parent: parent.orig, app, config })
   } else if (noopTypes.includes(parent.type)) {
@@ -232,7 +232,6 @@ export const getSwcConf = (app, config) => {
           unused: true,
         },
         mangle: false,
-
       },
     },
     minify: true,
