@@ -125,7 +125,7 @@ export const actions = {
   },
 }
 
-export const helpers = {
+export const effects = {
   listenPopState: (dispatch, action) => {
     const listener = e => dispatch(action, e)
 
@@ -135,12 +135,15 @@ export const helpers = {
   },
 }
 
-export const subscriptions = [['helpers.listenPopState', 'actions.pop']]
+export const subscriptions = [['effects.listenPopState', 'actions.pop']]
 
 export const global = {
   actions: {
     go: true,
     pop: true,
+  },
+  effects: {
+    listenPopState: true,
   },
   state: {
     pageClass: true,
