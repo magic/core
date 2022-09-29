@@ -735,6 +735,8 @@ update dependencies
 - update dependencies
 - remove babel, swc can handle it by now
   (bundle js size 87k to 88k for this page).
+- config.BABEL deprecation warning
+- app.helpers deprecation warning
 - propTypes no longer need to be namespaced
 
   ```
