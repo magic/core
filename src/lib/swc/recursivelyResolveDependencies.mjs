@@ -60,14 +60,15 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
       const subViews = []
 
       if (is.objectNative(module)) {
-
-        const modSubViews = Object.entries(module).filter(([name]) => isModuleName(name)).map(([_name, subModule]) => {
-          if (is.function(subModule)) {
-            return subModule.toString()
-          } else if (is.function(subModule.View)) {
-            return subModule.View.toString()
-          }
-        })
+        const modSubViews = Object.entries(module)
+          .filter(([name]) => isModuleName(name))
+          .map(([_name, subModule]) => {
+            if (is.function(subModule)) {
+              return subModule.toString()
+            } else if (is.function(subModule.View)) {
+              return subModule.View.toString()
+            }
+          })
 
         subViews.push(...modSubViews)
       }
@@ -75,17 +76,18 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
       const ast = await swc.parse(view)
       let usedInModule = resolveDependencies({ parent: ast, app })
 
-      await Promise.all(subViews.map(async view => {
-        const ast = await swc.parse(view)
-        const usedInSubModule = resolveDependencies({ parent: ast, app })
-        usedInModule = uniqueMerge(usedInSubModule, usedInModule)
-      }))
+      await Promise.all(
+        subViews.map(async view => {
+          const ast = await swc.parse(view)
+          const usedInSubModule = resolveDependencies({ parent: ast, app })
+          usedInModule = uniqueMerge(usedInSubModule, usedInModule)
+        }),
+      )
 
       moduleDependencies[name] = usedInModule
       totalUsed = uniqueMerge(usedInModule, totalUsed)
-    })
+    }),
   )
-
 
   await Promise.all(
     app.pages.map(async page => {
@@ -93,7 +95,13 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
       const ast = await swc.parse(pageView)
       let usedInPage = resolveDependencies({ parent: ast, app })
 
-      usedInPage.modules.forEach(moduleName => mergeSubModules({ used: usedInPage, name: moduleName, dependencies: moduleDependencies[moduleName] }))
+      usedInPage.modules.forEach(moduleName =>
+        mergeSubModules({
+          used: usedInPage,
+          name: moduleName,
+          dependencies: moduleDependencies[moduleName],
+        }),
+      )
 
       totalUsed.pages[page.name] = usedInPage
       totalUsed = uniqueMerge(usedInPage, totalUsed)
@@ -107,7 +115,9 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
 
   totalUsed.modulesByPage = modulePages
 
-  totalUsed.singlePageModules = Object.entries(modulePages).filter(([name, pages]) => pages.length === 1)
+  totalUsed.singlePageModules = Object.entries(modulePages).filter(
+    ([name, pages]) => pages.length === 1,
+  )
 
   return totalUsed
 }

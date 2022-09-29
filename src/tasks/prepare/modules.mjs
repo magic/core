@@ -47,7 +47,11 @@ export const prepareModule =
       })
 
     if (!is.empty(component.helpers)) {
-      log.warn('E_HELPERS_DEPRECATED', `module: ${name}`, 'using app.helpers is deprecated, use actions, effects or lib instead.')
+      log.warn(
+        'E_HELPERS_DEPRECATED',
+        `module: ${name}`,
+        'using app.helpers is deprecated, use actions, effects or lib instead.',
+      )
 
       app.helpers = deep.merge(app.helpers, component.helpers)
     }
