@@ -43,9 +43,11 @@ we believe that this is the best compromise.
 ~4 kb javascript boilerplate.
 usually, all the javascript in your homepage will be 30-60kb big (after unpacking),
 10-30kb get transmitted from the server to the client.
-this documentation page you are reading loads less than 20kb of gzipped javascript,
-which, when parsing, turns into ~55kb of uncompressed javascript.
-this includes all content of all subpages, no additional server requests needed for all navigations.
+this documentation page you are reading loads 20kb of gzipped javascript,
+which, when parsing, turns into ~88kb of uncompressed javascript.
+this includes all content of all subpages, no additional server requests needed for any navigations in the page.
+
+WIP: code splitting for bigger pages.
 
 ### @magic works without javascript
 
