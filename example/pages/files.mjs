@@ -63,7 +63,7 @@ export const state = {
 }
 
 export const actions = {
-  changeVar: () => ({ variable: 'changed' }),
+  changeVar: state => ({ ...state, variable: 'changed' }),
 }
 
 export const style = {
@@ -171,7 +171,7 @@ export const state = {
 export const actions = {
   globalAction: () => ({ globalStateVar: 'overwritten.' }),
 }
- 
+
 export const style = {
   'body': {
     color: 'green',
