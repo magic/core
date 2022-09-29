@@ -732,17 +732,18 @@ update dependencies
 
 ##### 0.0.144
 
-- remove babel, swc can handle it.
 - update dependencies
-- propTypes no longer need to be namespaces
+- remove babel, swc can handle it by now
+  (bundle js size 87k to 88k for this page).
+- propTypes no longer need to be namespaced
 
-```
+  ```
   // Module.mjs
   export const propTypes = [//...propTypes]
 
   // will turn into:
   export const propTypes = { Module: [//..propTypes]}
-```
+  ```
 
 ##### 0.0.145 - unreleased
 
@@ -762,7 +763,3 @@ update dependencies
 [coveralls-url]: https://coveralls.io/github/magic/core
 [snyk-image]: https://snyk.io/test/github/magic/core/badge.svg
 [snyk-url]: https://snyk.io/test/github/magic/core
-
-```
-
-```
