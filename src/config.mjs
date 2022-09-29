@@ -322,15 +322,8 @@ export const runConfig = async (args = {}) => {
   conf.HOIST = conf.HOIST || []
 
   // set to true to get babel build info
-  conf.BABEL = conf.BABEL || {}
-
-  conf.BABEL = {
-    DEBUG: false,
-    REMOVE_CHECK_PROPS: conf.IS_PROD,
-    MINIFY: conf.IS_PROD && !is.defined(args.noMinify),
-    USE_PRESETS: true,
-    KEEP_COMMENTS: conf.IS_DEV,
-    ...conf.BABEL,
+  if (conf.BABEL) {
+    log.warn('W_DEPRECATED', 'config.BABEL is deprecated.')
   }
 
   // merge commandline arguments into config.
