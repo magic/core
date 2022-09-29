@@ -14,6 +14,7 @@ import { preparePages } from './pages.mjs'
 // import { prepareServiceWorker } from './service-worker.mjs'
 import { prepareApi } from './api.mjs'
 import { prepareStateLinks } from './stateLinks.mjs'
+import { prepareDependencies } from './dependencies.mjs'
 
 import { defaultApp } from '../../defaultApp.mjs'
 
@@ -137,6 +138,10 @@ export const prepare = async (app, config) => {
 
   // create client magic.js file
   app.client = await prepareJs(app, config)
+
+  if (config.SPLIT) {
+    app.dependencies = await prepareDependencies(app, config)
+  }
 
   // extract lambdas and prepare them
   app.lambdas = await prepareApi(app, config)
