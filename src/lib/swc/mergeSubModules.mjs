@@ -1,11 +1,10 @@
 import { isModuleName, uniqueMerge } from '../../lib/index.mjs'
 
-export const mergeSubModules = ({ used = {}, name }) => {
+export const mergeSubModules = ({ used = {}, name, dependencies }) => {
   if (isModuleName(name)) {
-    const modDeps = moduleDependencies[name]
-    if (modDeps) {
-      used = uniqueMerge(modDeps, used)
-      const added = modDeps.modules.forEach(module => mergeSubModules({ name: module, used }))
+    if (dependencies) {
+      used = uniqueMerge(dependencies, used)
+      const added = dependencies.modules.forEach(module => mergeSubModules({ name: module, used }))
       used = uniqueMerge(added, used)
     }
   }
