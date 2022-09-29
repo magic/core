@@ -212,11 +212,6 @@ export default {
   // default CLIENT_LIB_NAME, overwrite to change names of transpiled css and js files
   CLIENT_LIB_NAME: 'magic',
 
-  // show babel debug information
-  BABEL: {
-    BABEL_DEBUG: true,
-  },
-
   // this is set to be able to test broken link behaviour.
   // DO NOT ENABLE IN YOUR APP (unless you need to because reasons...)
   NO_CHECK_LINKS_EXIT: true,
