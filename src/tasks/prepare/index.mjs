@@ -78,6 +78,7 @@ export const prepare = async (app, config) => {
     }
 
     if (!is.empty(page.helpers)) {
+      log.warn('E_HELPERS_DEPRECATED', `page: ${page.name}`, 'using app.helpers is deprecated, use actions, effects or lib')
       app.helpers = deep.merge(app.helpers, page.helpers)
     }
 
