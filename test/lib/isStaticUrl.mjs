@@ -15,13 +15,20 @@ const rootedLink = `${root}rooted/`
 const matchingLink = `/local/`
 const notMatchingLink = `/not-static/`
 
-const list = [
-  '/rooted/',
-  '/local/',
-]
+const list = ['/rooted/', '/local/']
 
 export default [
-  { fn: isStaticUrl(list, rootedLink, root), info: 'isStaticUrl: rooted links in list return true' },
-  { fn: isStaticUrl(list, matchingLink, root), info: 'isStaticUrl: non-rooted links in list return true' },
-  { fn: isStaticUrl(list, notMatchingLink, root), expect: false,info: 'isStaticUrl: links not in list return false' },
+  {
+    fn: isStaticUrl(list, rootedLink, root),
+    info: 'isStaticUrl: rooted links in list return true',
+  },
+  {
+    fn: isStaticUrl(list, matchingLink, root),
+    info: 'isStaticUrl: non-rooted links in list return true',
+  },
+  {
+    fn: isStaticUrl(list, notMatchingLink, root),
+    expect: false,
+    info: 'isStaticUrl: links not in list return false',
+  },
 ]
