@@ -735,17 +735,17 @@ update dependencies
 - remove babel, swc can handle it.
 - update dependencies
 - propTypes no longer need to be namespaces
-  ```
+
+```
   // Module.mjs
   export const propTypes = [//...propTypes]
-  ```
 
-// will turn into:
-export const propTypes = { Module: [//..propTypes]}
-
+  // will turn into:
+  export const propTypes = { Module: [//..propTypes]}
 ```
 
 ##### 0.0.145 - unreleased
+
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
@@ -762,5 +762,7 @@ export const propTypes = { Module: [//..propTypes]}
 [coveralls-url]: https://coveralls.io/github/magic/core
 [snyk-image]: https://snyk.io/test/github/magic/core/badge.svg
 [snyk-url]: https://snyk.io/test/github/magic/core
+
+```
 
 ```
