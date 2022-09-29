@@ -34,11 +34,13 @@ you can import it in /assets/index.mjs
 
 <Pre>
 // /assets/index.mjs
+import NpmModule from 'non-standard-named-magic-module-from-npm'
+
 export default {
   // ...otherModules
 
   // load module from node_modules
-  NpmModule: require('not-standard-named-magic-module-from-npm'),
+  NpmModule,
 }
 </Pre>
 

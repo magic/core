@@ -47,20 +47,19 @@ export const View = state => {
 }
 
 // output:
-<nav class="Menu">
-  <ul>
-    <li>
-      <a onclick="actions.go" href="/">example page</a>
-    </li>
-    <li>
-      <a href="https://example.com" target="_blank" rel="noopener">example.com</a>
-    </li>
-    <li>
-      <a href="https://example.com" target="utopia" rel="noopener nofollow noreferrer">nofollow and noref</a>
-    </li>
-  </ul>
-</nav>
-}
+&lt;nav class="Menu">
+  &lt;ul>
+    &lt;li>
+      &lt;a onclick="actions.go" href="/">example page</a>
+    &lt;/li>
+    &lt;li>
+      &lt;a href="https://example.com" target="_blank" rel="noopener">example.com</a>
+    &lt;/li>
+    &lt;li>
+      &lt;a href="https://example.com" target="utopia" rel="noopener nofollow noreferrer">nofollow and noref</a>
+    &lt;/li>
+  &lt;/ul>
+&lt;/nav>
 </Pre>
 
 <h3 id='menu-props'>Menu props</h3>
@@ -124,11 +123,11 @@ the link module allows you to link to things.
 // in any page or module View
 export default () => [
   Link({ to: '/', text: 'page' }),
-  // output: <a href="/" onclick="actions.go">page</a>
+  // output: &lt;a href="/" onclick="actions.go">page</a>
   Link({ to: 'https://example.com', text: 'page' }),
-  // output: <a href="https://example.com" target="_blank" rel="noopener">page</a>
+  // output: &lt;a href="https://example.com" target="_blank" rel="noopener">page</a>
   Link({ to: '/', text: 'page', nofollow: true, noreferrer: true }),
-  // output: <a href="https://example.com" target="_blank" rel="nofollow noreferrer noopener">page</a>
+  // output: &lt;a href="https://example.com" target="_blank" rel="nofollow noreferrer noopener">page</a>
 
   // you can also use children syntax instead of the text prop:
   Link({ to: '/' }, 'home'),
@@ -162,7 +161,8 @@ export default () => [
 
 the footer module contains a small info text and a link to the magic github repository.
 
-to overwrite this behaviour, just place a Footer.mjs file in your assets and require it in /assets/index.mjs.
+to overwrite this behaviour, just place a Footer.mjs file in your assets
+and require it in /assets/index.mjs.
 
 <Pre>
 // /assets/Footer.mjs:
