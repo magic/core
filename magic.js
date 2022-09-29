@@ -10,6 +10,9 @@ export default {
   // if this is not set, no blog is created.
   BLOG_DIR: 'news',
 
+  // should this page utilize code splitting
+  SPLIT: false,
+
   // this option adds the
   // 'X-Clacks-Overhead', 'GNU Terry Pratchet'
   // http header
