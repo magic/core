@@ -2,13 +2,13 @@ import swc from '@swc/core'
 
 import is from '@magic/types'
 
-import { getSwcConf, stringifyObject, isModuleName, uniqueMerge } from '../../lib/index.mjs'
+import { stringifyObject, isModuleName, uniqueMerge } from '../../lib/index.mjs'
 import { resolveDependencies } from '../../lib/swc/resolveDependencies.mjs'
 
 import { moduleViewToString } from './moduleViewToString.mjs'
 import { mergeSubModules } from './mergeSubModules.mjs'
 
-const recursivelyResolveDependencies = async ({ app, config }) => {
+export const recursivelyResolveDependencies = async ({ app, config }) => {
   let totalUsed = {
     modules: [],
     lib: [],
@@ -93,7 +93,7 @@ const recursivelyResolveDependencies = async ({ app, config }) => {
       const ast = await swc.parse(pageView)
       let usedInPage = resolveDependencies({ parent: ast, app })
 
-      usedInPage.modules.forEach(moduleName => mergeSubModules({ used: usedInPage, name: moduleName }))
+      usedInPage.modules.forEach(moduleName => mergeSubModules({ used: usedInPage, name: moduleName, dependencies: moduleDependencies[moduleName] }))
 
       totalUsed.pages[page.name] = usedInPage
       totalUsed = uniqueMerge(usedInPage, totalUsed)
@@ -108,28 +108,6 @@ const recursivelyResolveDependencies = async ({ app, config }) => {
   totalUsed.modulesByPage = modulePages
 
   totalUsed.singlePageModules = Object.entries(modulePages).filter(([name, pages]) => pages.length === 1)
-  console.log(totalUsed.singlePageModules)
 
   return totalUsed
-}
-
-export default async ({ app, config }) => {
-  const swcOpts = getSwcConf(app, config)
-
-  // console.log(Object.keys(app.modules).filter(a => a[0].toUpperCase() === a[0]))
-
-  const allUsed = await recursivelyResolveDependencies({ app, config })
-  console.log(allUsed.modulesByPage)
-
-  // Object.entries(allUsed.pages).map(page => {
-  //   console.log(page)
-  // })
-
-  const { code } = await swc.transform(app.client, swcOpts)
-
-  // const sw = await swc.transform(app.serviceWorker, swcOpts)
-  return {
-    code,
-    // serviceWorker: sw.code,
-  }
 }
