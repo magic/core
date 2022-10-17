@@ -37,6 +37,8 @@ export const state = config => ({
         { to: '#modules', text: 'modules' },
         { to: '#state', text: 'state' },
         { to: '#actions', text: 'actions' },
+        { to: '#effects', text: 'effects' },
+        { to: '#subscriptions', text: 'subscriptions' },
         { to: '#views', text: 'views' },
         { to: '#styles', text: 'styles' },
         { to: '#globals', text: 'global' },
