@@ -21,7 +21,9 @@ export const uniqueMerge = (a, b) => {
         }
       })
 
-      b[key] = b[key].sort()
+      if (b[key]) {
+        b[key] = b[key].sort()
+      }
     })
 
   return b
