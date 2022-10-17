@@ -1,23 +1,26 @@
-export const CHECK_PROPS = (props, propTypeDecl, name, log = true) => {
+import error from '@magic/error'
+import log from '@magic/log'
+
+export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
   const currentPage = app && app.state ? app.state.url : 'Unknown on client.'
 
   const errors = []
 
   if (!propTypeDecl) {
-    const err = new Error('CHECK_PROPS: expected propTypes as second argument')
-    if (log) {
-      console.error(`${err.stack} on page ${currentPage}`)
+    const err = error('CHECK_PROPS: expected propTypes as second argument', `E_CHECK_PROPS_${currentPage}`)
+    if (doLog) {
+      log.error(err)
     }
-    errors.push(err)
+
     return false
   }
 
   if (!name) {
-    const err = new Error('CHECK_PROPS: expected Module name as third argument')
-    if (log) {
-      console.error(`${err.stack} on page ${currentPage}`)
+    const err = error('expected Module name as third argument', 'E_CHECK_PROPS')
+    if (doLog) {
+      log.error(`${err.stack} on page ${currentPage}`)
     }
-    errors.push(err)
+
     return false
   }
 
@@ -38,16 +41,11 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = true) => {
   let propTypes = propTypeDecl[name]
 
   if (!is.array(propTypes)) {
-    const err = new Error(
-      `CHECK_PROPS: expected propTypes to be an array.. received: ${propTypes} on page ${currentPage} in component ${name}`,
+    const err = error(
+      `expected propTypes to be an array.. received: ${propTypes} on page ${currentPage} in component ${name}`,
+      'E_CHECK_PROPS',
     )
-    errors.push(err)
-  }
-
-  if (errors.length) {
-    if (log) {
-      errors.forEach(console.error)
-    }
+    log.error(err)
     return false
   }
 
@@ -195,7 +193,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = true) => {
     }
   })
 
-  if (log) {
+  if (doLog) {
     errors.forEach(console.error)
   }
 
