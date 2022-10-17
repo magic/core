@@ -10,7 +10,7 @@
 
 # @magic/core concepts
 
-magic concepts. These are the building blocks of every module in a magic app
+magic concepts. these are the building blocks of every module in a magic app
 
 <h2 id='modules'>@magic-modules</h2>
 
@@ -86,7 +86,9 @@ at the moment, subscriptions can be defined using strings as function names.
 also, if a module exports a subscriptions array, those subscriptions will be added to the app.
 
 ```
-const subscriptions = {
+// in a module:
+
+export const lib = {
   subscribe: (dispatch, action) => {
     setInterval(() => {
       dispatch(action, { arg: Math.random() * 100 })
@@ -94,14 +96,14 @@ const subscriptions = {
   },
 }
 
-const actions = {
+export const actions = {
   onSubscription: (state, e) => ({
     ...state,
     arg: e.arg,
   })
 }
 
-export const subscriptions = ['subscriptions.subscribe', 'actions.onSubscription']
+export const subscriptions = ['lib.subscribe', 'actions.onSubscription']
 ```
 
 ## views
