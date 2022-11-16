@@ -17,6 +17,7 @@ const args = {
     '--no-check-links',
     '--no-check-links-remote',
     '--no-check-links-exit',
+    '--force-publish',
   ],
   env: [[['--production', '--prod', '--p', '-p'], 'NODE_ENV', 'production']],
   commands: [['serve', 'dev', 'development', 'start'], 'clean', 'connect', 'publish', 'build'],
@@ -30,6 +31,7 @@ const args = {
     '--no-check-links',
     '--no-check-links-remote',
     '--no-check-links-exit',
+    '--force-publish',
   ],
   help: {
     name: 'magic',
@@ -54,6 +56,7 @@ const args = {
       '--no-check-links': 'do not check any links for validity',
       '--no-check-links-remote': 'do not check external links for validity',
       '--no-check-links-exit': 'do not exit production build on broken links',
+      '--force-publish': 'add -f to the publishing git push call',
     },
     example: `
 production:

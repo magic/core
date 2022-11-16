@@ -2,7 +2,7 @@ import log from '@magic/log'
 
 import { getGitConfig, xc } from '../../lib/index.mjs'
 
-export const publish = async ({ DIR, GIT }) => {
+export const publish = async ({ DIR, FORCE = false, GIT }) => {
   const git = await getGitConfig(GIT)
   const outDir = DIR.PUBLIC.replace(`${process.cwd()}/`, '')
 
@@ -16,7 +16,7 @@ export const publish = async ({ DIR, GIT }) => {
   const id = stdout.trim()
   log.timeEnd(cmd)
 
-  const pushCommand = `git push ${git.ORIGIN} ${id.trim()}:${git.BRANCH}`
+  const pushCommand = `git push${FORCE ? ' -f' : ''} ${git.ORIGIN} ${id.trim()}:${git.BRANCH}`
   log.time(pushCommand)
   await xc(pushCommand)
   log.timeEnd(pushCommand)

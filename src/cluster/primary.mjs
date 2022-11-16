@@ -2,7 +2,16 @@ import log from '@magic/log'
 
 import { runCmd } from './runCmd.mjs'
 
-export const primary = async ({ cluster, commands, DIR, GIT, URL, URL_WARNING, WEB_ROOT }) => {
+export const primary = async ({
+  args,
+  cluster,
+  commands,
+  DIR,
+  GIT,
+  URL,
+  URL_WARNING,
+  WEB_ROOT,
+}) => {
   if (URL_WARNING) {
     log.warn('Autodetected URL:', `https://${URL}`)
     log.info(`
@@ -23,7 +32,8 @@ export const primary = async ({ cluster, commands, DIR, GIT, URL, URL_WARNING, W
   }
 
   if (commands.publish) {
-    await runCmd('publish', { DIR, GIT })
+    const FORCE = !!args.forcePublish
+    await runCmd('publish', { DIR, GIT, FORCE })
   }
 
   const bail = !commands.build && !commands.serve

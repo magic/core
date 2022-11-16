@@ -25,7 +25,7 @@ export const runCluster = async options => {
       log.error(`E_${key.toUpperCase()}_USED`, `conf.${key} is deprecated.`)
     })
 
-    await primary({ cluster, commands, DIR, GIT, URL, URL_WARNING, WEB_ROOT })
+    await primary({ cluster, commands, args, DIR, GIT, URL, URL_WARNING, WEB_ROOT })
   } else if (cluster.isWorker) {
     if (commands.serve && cluster.worker.id === 1) {
       // watcher,
