@@ -136,12 +136,13 @@ export const prepare = async (app, config) => {
   // init, cookies, actions, effects, state, helpers, subscriptions
   prepareModules(app, config)
 
+  if (config.SPLIT_BUNDLES) {
+    app.dependencies = await prepareDependencies(app, config)
+  }
+
   // create client magic.js file
   app.client = await prepareJs(app, config)
 
-  if (config.SPLIT) {
-    app.dependencies = await prepareDependencies(app, config)
-  }
 
   // extract lambdas and prepare them
   app.lambdas = await prepareApi(app, config)

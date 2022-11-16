@@ -6,7 +6,6 @@ import { stringifyObject, isModuleName, uniqueMerge } from '../../lib/index.mjs'
 import { resolveDependencies } from '../../lib/swc/resolveDependencies.mjs'
 
 import { moduleViewToString } from './moduleViewToString.mjs'
-import { mergeSubModules } from './mergeSubModules.mjs'
 
 export const recursivelyResolveDependencies = async ({ app, config }) => {
   let totalUsed = {
@@ -15,23 +14,28 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
     actions: [],
     effects: [],
     subscriptions: [],
-    helpers: [],
     pages: {},
-    dependencies: {},
-    resolved: [],
+    cssid: [],
+    cssclass: [],
   }
 
   const moduleDependencies = {}
-  const modulePages = {}
+  const modulesByPage = {}
 
   {
     const rootCode = app.View.toString()
 
-    const hoistedString = `\nconst hoisted = ${app.hoisted}`
-
-    const ast = await swc.parse(rootCode + hoistedString)
+    const ast = await swc.parse(rootCode)
     const usedInRoot = resolveDependencies({ parent: ast, app })
     totalUsed = uniqueMerge(usedInRoot, totalUsed)
+  }
+
+  if (app.hoisted) {
+    const hoistedString = `const hoisted = ${app.hoisted}`
+
+    const ast = await swc.parse(hoistedString)
+    const usedInHoisted = resolveDependencies({ parent: ast, app })
+    totalUsed = uniqueMerge(usedInHoisted, totalUsed)
   }
 
   {
@@ -51,22 +55,28 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
     const totalString = [actionString, effectString, subString, libString].join('\n')
     const ast = await swc.parse(totalString)
     const usedInFunctions = resolveDependencies({ parent: ast, app })
+
     totalUsed = uniqueMerge(usedInFunctions, totalUsed)
   }
 
   await Promise.all(
     Object.entries(app.modules).map(async ([name, module]) => {
       const view = moduleViewToString(module)
+
+      /*
+       * Modules may export multiple Views,
+       * all exports with UpperCamelCase namestyle will be considered Views.
+       */
       const subViews = []
 
       if (is.objectNative(module)) {
         const modSubViews = Object.entries(module)
-          .filter(([name]) => isModuleName(name))
-          .map(([_name, subModule]) => {
+          .filter(([name]) => isModuleName(name) && name !== 'View')
+          .map(([name, subModule]) => {
             if (is.function(subModule)) {
-              return subModule.toString()
+              return [name, subModule.toString()]
             } else if (is.function(subModule.View)) {
-              return subModule.View.toString()
+              return [name, subModule.View.toString()]
             }
           })
 
@@ -74,50 +84,73 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
       }
 
       const ast = await swc.parse(view)
-      let usedInModule = resolveDependencies({ parent: ast, app })
+      const usedInModule = resolveDependencies({ parent: ast, app })
 
       await Promise.all(
-        subViews.map(async view => {
+        subViews.map(async ([subName, view]) => {
           const ast = await swc.parse(view)
           const usedInSubModule = resolveDependencies({ parent: ast, app })
-          usedInModule = uniqueMerge(usedInSubModule, usedInModule)
+          moduleDependencies[`${name}.${subName}`] = usedInSubModule
         }),
       )
 
       moduleDependencies[name] = usedInModule
-      totalUsed = uniqueMerge(usedInModule, totalUsed)
     }),
   )
+
+  const recursivelyResolve = ([name, deps]) => {
+    if (!isModuleName(name)) {
+      return []
+    }
+
+    let dependencies = { ...deps }
+
+    deps.modules.filter(subName => subName !== name).forEach(subName => {
+      const [_, subDeps] = recursivelyResolve([subName, moduleDependencies[subName]])
+
+      dependencies = uniqueMerge(subDeps, dependencies)
+    })
+
+    return [name, dependencies]
+  }
+
+  const fullDepEntries = Object.entries(moduleDependencies).map(recursivelyResolve).filter(([_, a]) => a)
+  const fullDepObject = Object.fromEntries(fullDepEntries)
 
   await Promise.all(
     app.pages.map(async page => {
       const pageView = page.View.toString()
       const ast = await swc.parse(pageView)
-      let usedInPage = resolveDependencies({ parent: ast, app })
 
-      usedInPage.modules.forEach(moduleName =>
-        mergeSubModules({
-          used: usedInPage,
-          name: moduleName,
-          dependencies: moduleDependencies[moduleName],
-        }),
-      )
+      let usedInPage = resolveDependencies({ parent: ast, app })
+      let modules = [...usedInPage.modules]
+
+      modules.map(name => {
+        const subDeps = fullDepObject[name]
+        if (subDeps) {
+          // console.log('add subDeps', page.name, name, subDeps)
+          usedInPage = uniqueMerge(subDeps, usedInPage)
+        }
+      })
 
       totalUsed.pages[page.name] = usedInPage
-      totalUsed = uniqueMerge(usedInPage, totalUsed)
 
-      usedInPage.modules.forEach(moduleName => {
-        modulePages[moduleName] = modulePages[moduleName] || []
-        modulePages[moduleName].push(page.name)
+      usedInPage.modules.forEach(name => {
+        modulesByPage[name] = modulesByPage[name] || []
+        modulesByPage[name].push(page.name)
       })
     }),
   )
 
-  totalUsed.modulesByPage = modulePages
+  Object.entries(modulesByPage).filter(([_, pages]) => pages.length === 1).map(([name, pages]) => {
+    const pageName = pages[0]
+    const deps = totalUsed.pages[pageName].exclusiveDependencies || []
+    if (isModuleName(name)) {
+      deps.push(name)
+    }
 
-  totalUsed.singlePageModules = Object.entries(modulePages).filter(
-    ([name, pages]) => pages.length === 1,
-  )
+    totalUsed.pages[pageName].exclusiveDependencies = deps
+  })
 
   return totalUsed
 }

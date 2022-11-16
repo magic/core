@@ -3,6 +3,10 @@ import { config as swcConfig } from '@swc/core/spack.js'
 import { visit } from './visit.mjs'
 
 const plugin = (app, config) => m => {
+  if (!m) {
+    return
+  }
+
   const n = m
 
   n.body = m.body.map(item => visit({ parent: item, app, config }))

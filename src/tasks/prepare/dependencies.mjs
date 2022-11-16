@@ -1,8 +1,7 @@
 import { recursivelyResolveDependencies } from '../../lib/swc/recursivelyResolveDependencies.mjs'
+import { resolveCssDependencies } from '../../lib/swc/resolveCssDependencies.mjs'
 
 export const prepareDependencies = async (app, config) => {
-  const dependencies = await recursivelyResolveDependencies({ app, config })
-  // console.log(dependencies.modulesByPage)
-
-  return dependencies
+  // const css = await resolveCssDependencies(app, config)
+  return await recursivelyResolveDependencies({ app, config })
 }

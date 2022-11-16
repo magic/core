@@ -1,5 +1,7 @@
 import log from '@magic/log'
 
+import swc from '@swc/core'
+
 import { isModuleName } from '../isModuleName.mjs'
 
 const noopTypes = [
@@ -25,6 +27,8 @@ const visit = ({ parent, app, used }) => {
 
   if (Array.isArray(parent)) {
     return parent.map(n => visit({ parent: n, app, used }))
+  } else if (Array.isArray(parent?.body)) {
+    return parent.body.map(n => visit({ parent: n, app, used }))
   }
 
   if (parent.type === 'VariableDeclaration') {
@@ -75,26 +79,6 @@ const visit = ({ parent, app, used }) => {
   } else if (parent.type === 'KeyValueProperty') {
     parent.key = visit({ parent: parent.key, app, used })
     parent.value = visit({ parent: parent.value, app, used })
-
-    if (parent.key.value === 'id' || parent.key.value === 'class') {
-        if (parent.value.type === 'StringLiteral') {
-          if (!used[`css${parent.key.value}`].includes(parent.value.value)) {
-            used[`css${parent.key.value}`].push(parent.value.value)
-          }
-        } else if (parent.value.properties) {
-          parent.value.properties.forEach(prop => {
-            if (prop.key.type === 'Identifier') {
-              if (!used[`css${parent.key.value}`].includes(prop.key.value)) {
-                used[`css${parent.key.value}`].push(prop.key.value)
-              }
-            }
-          })
-        } else if (parent.value.expressions) {
-          console.log('expressions', parent.key, parent.value.expressions, parent.value.quasis)
-        } else {
-          console.log('uncaught', parent.key, parent.value)
-        }
-    }
   } else if (parent.type === 'MemberExpression') {
     parent.property = visit({ parent: parent.property, app, used })
     parent.object = visit({ parent: parent.object, app, used })
@@ -201,26 +185,42 @@ const visit = ({ parent, app, used }) => {
   } else if (noopTypes.includes(parent.type)) {
     // noop
   } else if (parent.type) {
-    console.log(Object.keys(app))
     log.warn('unexpected parent type', parent.type, parent)
   }
 
   return parent
 }
 
-export const resolveDependencies = ({ parent: m, app }) => {
+export const resolveCssDependencies = async (app, config) => {
   const used = {
-    modules: [],
-    lib: [],
-    actions: [],
-    effects: [],
-    subscriptions: [],
-    helpers: [],
-    cssid: [],
-    cssclass: [],
+    classes: [],
+    ids: [],
+    tags: [],
   }
 
-  m.body.map(item => visit({ parent: item, app, used }))
+  const available = {
+    classes: [],
+    ids: [],
+    tags: [],
+  }
+
+  app.style.forEach(style => {
+    Object.keys(style).forEach(selector => {
+      if (!available.classes.includes(selector)) {
+        if (selector.startsWith('.')) {
+          available.classes.push(selector)
+        } else if (selector.startsWith('#')) {
+          available.ids.push(selector)
+        } else {
+          available.tags.push(selector)
+        }
+      }
+    })
+  })
+
+  // const parent = await swc.parse(app.client)
+
+  // visit({ parent, app, used, available })
 
   return used
 }

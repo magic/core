@@ -8,10 +8,9 @@ import error from '@magic/error'
 
 import { stringifyObject, replaceSlashSlash } from '../../lib/index.mjs'
 import { prepareCheckProps } from './checkProps.mjs'
+import { prepareHoisted } from './hoisted.mjs'
 
-export const prepareJs = async (magic, config) => {
-  const { HOIST, PREPEND_JS, APPEND_JS /*, WEB_ROOT*/ } = config
-
+const importHyperapp =  async () => {
   const hyperappPath = path.join(
     process.cwd(),
     'node_modules',
@@ -22,16 +21,10 @@ export const prepareJs = async (magic, config) => {
   )
   const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
 
-  const imports = 'h, app'
+  return hyperappContent
+}
 
-  // replace hyperapp exports, wrap it in a closure
-  // return needed exports only to allow dead code elimination
-  const hyperapp = `
-const { ${imports} } = (() => {
-${hyperappContent.replace(/export /g, ' ')}
-return { ${imports} }
-})()`
-
+const createComponentString = () => {
   // add the Component module that wraps all other html tags
   const componentString = `const C = ${global.component.toString()}\n`
     // replace names of variables to enforce minification
@@ -39,8 +32,10 @@ return { ${imports} }
     .replace(/name/gm, 'n')
     .replace(/children/gm, 'c')
 
-  const { checkProps, propTypeString } = prepareCheckProps(magic, config)
+  return componentString
+}
 
+const createDependencyString = (magic) => {
   let depString = ''
   let htmlTagString = ''
   Object.entries({ ...magic.modules, ...magic.tags })
@@ -68,6 +63,33 @@ return { ${imports} }
         depString += `${str}\n${subStr}`
       }
     })
+
+  return {
+    depString,
+    htmlTagString,
+  }
+}
+
+export const prepareSingleJs = async (magic, config) => {
+  const { PREPEND_JS, APPEND_JS /*, WEB_ROOT*/ } = config
+
+  const hyperappContent = await importHyperapp()
+
+  const imports = 'h, app'
+
+  // replace hyperapp exports, wrap it in a closure
+  // return needed exports only to allow dead code elimination
+  const hyperapp = `
+const { ${imports} } = (() => {
+${hyperappContent.replace(/export /g, ' ')}
+return { ${imports} }
+})()`
+
+  const componentString = createComponentString()
+
+  const { checkProps, propTypeString } = prepareCheckProps(magic, config)
+
+  const { depString, htmlTagString } = createDependencyString(magic, config)
 
   const stateForString = stringifyObject(magic.state)
 
@@ -189,25 +211,6 @@ const pages = {
     initString = `[${initString}, ${initFunc}]`
   }
 
-  let hoisted = ''
-  if (!is.empty(HOIST)) {
-    if (is.array(HOIST)) {
-      hoisted = HOIST.map(component => `${component}(state)`).join(',')
-      if (HOIST.length > 1) {
-        hoisted = `[${hoisted}]`
-      } else if (HOIST.length === 0) {
-        hoisted = ''
-      }
-    } else if (is.string(HOIST)) {
-      hoisted = HOIST
-      if (!hoisted.includes('state')) {
-        hoisted = `${hoisted}(state)`
-      }
-    }
-  }
-
-  app.hoisted = hoisted
-
   // generate string to write to client js
   const appString = `
 app({
@@ -227,7 +230,7 @@ app({
 
     state.url = url
 
-    return Page({ page, state }${hoisted ? `, ${hoisted}` : ''})
+    return Page({ page, state }${magic.hoisted ? `, ${magic.hoisted}` : ''})
   },
   node: document.getElementById('Magic'),
 })
@@ -286,4 +289,25 @@ app({
     .trim()
 
   return clientString
+}
+
+const prepareBundleJs = (magic, config) => {
+  log.warn('W_NOT_IMPLEMENTED tasks/prepare/js.mjs', 'should build bundle')//, magic, config)
+
+  const mainBundle = ``
+
+}
+
+export const prepareJs = (magic, config) => {
+  magic.hoisted = prepareHoisted(config.HOIST)
+
+  /*
+   * if config.SPLIT_BUNDLES exist, we want to split our bundle
+   * if it does not, we just create one bundle file.
+   */
+  if (config.SPLIT_BUNDLES) {
+    return prepareBundleJs(magic, config)
+  } else {
+    return prepareSingleJs(magic, config)
+  }
 }

@@ -11,7 +11,7 @@ export default {
   BLOG_DIR: 'news',
 
   // should this page utilize code splitting
-  SPLIT: false,
+  SPLIT_BUNDLES: true,
 
   // this option adds the
   // 'X-Clacks-Overhead', 'GNU Terry Pratchet'
