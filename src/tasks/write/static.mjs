@@ -4,7 +4,7 @@ import fs from '@magic/fs'
 
 import { writeFile } from '../../lib/index.mjs'
 
-const handleImage = (file) => {
+const handleImage = file => {
   // check if file is image
   // if is image, check if alternative formats (webp, avif) exist in docs
   // if not in docs, check if they are in src/assets/static
@@ -15,10 +15,7 @@ const handleImage = (file) => {
 }
 
 export const writeStatic = async (app, config) => {
-  const {
-    DIR,
-    IGNORED_STATIC,
-  } = config
+  const { DIR, IGNORED_STATIC } = config
 
   const { static: stat } = app
   await fs.mkdirp(DIR.PUBLIC)

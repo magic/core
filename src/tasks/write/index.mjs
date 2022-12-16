@@ -38,7 +38,6 @@ export const write = async (app, config) => {
     await fs.writeFile(cssFile, usedCss)
   }
 
-
   // const serviceWorkerFile = path.join(DIR.PUBLIC, `${CLIENT_SERVICE_WORKER_NAME}.js`)
   // await fs.writeFile(serviceWorkerFile, app.sw)
 

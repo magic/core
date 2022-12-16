@@ -3,11 +3,7 @@ import path from 'path'
 import fs from '@magic/fs'
 
 export const writePages = async (app, config) => {
-  const {
-    DIR,
-    HASHES,
-    WEB_ROOT,
-  } = config
+  const { DIR, HASHES, WEB_ROOT } = config
 
   const { pages } = app
   await fs.mkdirp(DIR.PUBLIC)
