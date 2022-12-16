@@ -7,7 +7,10 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
   const errors = []
 
   if (!propTypeDecl) {
-    const err = error('CHECK_PROPS: expected propTypes as second argument', `E_CHECK_PROPS_${currentPage}`)
+    const err = error(
+      'CHECK_PROPS: expected propTypes as second argument',
+      `E_CHECK_PROPS_${currentPage}`,
+    )
     if (doLog) {
       log.error(err)
     }
