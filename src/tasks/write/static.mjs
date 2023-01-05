@@ -11,7 +11,7 @@ const handleImage = file => {
   // if in src/assets/static, just copy
   // if not in src/assets/static
   //   convert using sharp.
-  console.log({ file })
+  // console.log({ file })
 }
 
 export const writeStatic = async (app, config) => {
