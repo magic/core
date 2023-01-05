@@ -732,11 +732,9 @@ update dependencies
 
 ##### 0.0.144
 
-##### 0.0.145 - unreleased
-
 - update dependencies
 - remove babel, swc can handle it by now
-  (bundle js size 87k to 88k for this page).
+  (bundle js size 88k babel to 90k swc for this page, 18 byte difference if using zopfli).
 - config.BABEL deprecation warning
 - app.helpers deprecation warning
 - propTypes no longer need to be namespaced
@@ -748,6 +746,10 @@ update dependencies
   // will turn into:
   export const propTypes = { Module: [//..propTypes]}
   ```
+
+##### 0.0.145 - unreleased
+
+...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
 [npm-url]: https://www.npmjs.com/package/@magic/core
