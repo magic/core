@@ -62,13 +62,30 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
   }
 
   propTypes.map(propType => {
-    const { key, required, type } = propType
+    const { key, required, type, oneOf } = propType
     let value = props[key]
 
     const types = is.array(type) ? type : [type]
 
     if (!required && !types.includes('undefined')) {
       types.push('undefined')
+    }
+
+    if (oneOf) {
+      if (!value && !required) {
+        value = propType.default
+      }
+
+      const includes = oneOf.includes(value)
+      if (!includes && value !== propType.default) {
+        const err = new Error(
+          `${name} needs value to be one of [${oneOf.join(', ')}]. received ${value}`,
+        )
+
+        log(error.message)
+
+        console.log(value, propType.default, oneOf)
+      }
     }
 
     const match = is(value, ...types)
@@ -103,7 +120,6 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
           typeString += ' object'
         }
         const err = new Error(`${name} needs props.${key} to be a non empty ${typeString}`)
-        console.error(err.message)
         errors.push(err)
       }
     }
