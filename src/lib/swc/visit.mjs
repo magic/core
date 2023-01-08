@@ -60,7 +60,6 @@ export const visit = ({ app, config, parent, par }) => {
         arg.expression?.properties?.map(prop => {
           if (prop.type === 'KeyValueProperty') {
             if (validKeys.includes(prop.key?.value)) {
-
               let url = prop.value.quasis[0].cooked
 
               const isInternal = !url.includes('://')
@@ -70,7 +69,6 @@ export const visit = ({ app, config, parent, par }) => {
                 if (!url) {
                   url = config.WEB_ROOT
                 } else {
-
                   url = handleLink({
                     app,
                     href: url.substr(0, url.length - 1),
@@ -149,7 +147,6 @@ export const visit = ({ app, config, parent, par }) => {
     )
   } else if (parent.type === 'KeyValueProperty') {
     if (parent.value.type === 'StringLiteral') {
-
       if (validKeys.includes(parent.key.value)) {
         parent.value.value = handleLink({
           app,
