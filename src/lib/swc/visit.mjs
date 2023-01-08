@@ -67,11 +67,16 @@ export const visit = ({ app, config, parent, par }) => {
               const isRooted = url.startsWith(config.WEB_ROOT)
 
               if (isInternal && !isRooted) {
-                url = handleLink({
-                  app,
-                  href: url.substr(0, url.length - 1),
-                  WEB_ROOT: config.WEB_ROOT,
-                })
+                if (!url) {
+                  url = config.WEB_ROOT
+                } else {
+
+                  url = handleLink({
+                    app,
+                    href: url.substr(0, url.length - 1),
+                    WEB_ROOT: config.WEB_ROOT,
+                  })
+                }
 
                 prop.value.quasis[0].cooked = url
                 prop.value.quasis[0].raw = url
