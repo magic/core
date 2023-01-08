@@ -1,8 +1,10 @@
+import is from '@magic/types'
 import log from '@magic/log'
 
 import { handleLink } from '../handleLink.mjs'
+import { replaceSlashSlash } from '../replaceSlashSlash.mjs'
 
-const validKeys = ['src', 'logo', 'href', 'to']
+const validKeys = ['src', 'srcset', 'logo', 'href', 'to']
 
 const noopTypes = [
   'BooleanLiteral',
@@ -53,6 +55,32 @@ export const visit = ({ app, config, parent, par }) => {
       parent.alternate = visit({ par: parent, parent: parent.alternate, app, config })
     }
   } else if (parent.type === 'CallExpression') {
+    if (parent.callee.value === 'source' || parent.callee.value === 'img') {
+      parent.arguments.map(arg => {
+        arg.expression?.properties?.map(prop => {
+          if (prop.type === 'KeyValueProperty') {
+            if (validKeys.includes(prop.key?.value)) {
+
+              let url = prop.value.quasis[0].cooked
+
+              const isInternal = !url.includes('://')
+              const isRooted = url.startsWith(config.WEB_ROOT)
+
+              if (isInternal && !isRooted) {
+                url = handleLink({
+                  app,
+                  href: url.substr(0, url.length - 1),
+                  WEB_ROOT: config.WEB_ROOT,
+                })
+
+                prop.value.quasis[0].cooked = url
+                prop.value.quasis[0].raw = url
+              }
+            }
+          }
+        })
+      })
+    }
     parent.arguments = parent.arguments.map(arg => {
       arg.expression = visit({ par: parent, parent: arg.expression, app, config })
 
@@ -116,6 +144,7 @@ export const visit = ({ app, config, parent, par }) => {
     )
   } else if (parent.type === 'KeyValueProperty') {
     if (parent.value.type === 'StringLiteral') {
+
       if (validKeys.includes(parent.key.value)) {
         parent.value.value = handleLink({
           app,
