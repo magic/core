@@ -48,7 +48,10 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
       `expected propTypes to be an array.. received: ${propTypes} on page ${currentPage} in component ${name}`,
       'E_CHECK_PROPS',
     )
-    log.error(err)
+    if (doLog) {
+      log.error(err)
+    }
+
     return false
   }
 
@@ -61,8 +64,8 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
     }
   }
 
-  propTypes.map(propType => {
-    const { key, required, type, oneOf } = propType
+  propTypes.forEach(propType => {
+    const { key, required, type, oneOf, someOf } = propType
     let value = props[key]
 
     const types = is.array(type) ? type : [type]
@@ -78,13 +81,37 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
 
       const includes = oneOf.includes(value)
       if (!includes && value !== propType.default) {
-        const err = new Error(
-          `${name} needs value to be one of [${oneOf.join(', ')}]. received ${value}`,
+        const err = error(
+          `${name} needs value to be one of [${oneOf
+            .filter(a => a)
+            .join(', ')}]. received ${value}`,
+          'E_ONEOF_MISMATCH',
+        )
+        errors.push(err)
+      }
+    }
+
+    if (someOf) {
+      if (!value && !required) {
+        value = propType.default
+      }
+
+      if (!is.array(value)) {
+        const err = error(
+          `${name} has someOf, someOf needs value to be an array.
+        received ${value}, which is a ${typeof value}`,
+          'E_SOMEOF_ARG_NOT_ARRAY',
+        )
+        errors.push(err)
+      }
+
+      const includes = !value.some(inc => !someOf.includes(inc))
+      if (!includes && value !== propType.default) {
+        const err = error(
+          `${name} needs value to be one of [${someOf.join(', ')}]. received ${value}`,
         )
 
-        log(error.message)
-
-        console.log(value, propType.default, oneOf)
+        errors.push(err)
       }
     }
 
@@ -169,14 +196,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
             : item.type[0]
           : item.type
 
-        if (!is(val, item.type)) {
-          const err = new Error(
-            `${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}`,
-          )
-          errors.push(err)
-        }
-
-        if (item.type === 'object') {
+        if (item.type.includes('object') && is(val, 'object')) {
           item.keys.forEach(iKey => {
             const v = val[iKey.key]
             if (!is(v, iKey.type)) {
@@ -194,26 +214,28 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
               }
 
               const err = new Error(
-                `${name} expects item.${
-                  iKey.key
+                `${name} expects item.${iKey.key
                 } to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`,
               )
 
               errors.push(err)
             }
           })
-        } else if (!is(val, item.type)) {
-          const err = new Error(
-            `${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}, on page ${currentPage}`,
-          )
-          errors.push(err)
+        } else {
+          const type = is(item.type, 'array') ? item.type : [item.type]
+          if (!is(val, ...type)) {
+            const err = new Error(
+              `${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}, on page ${currentPage}`,
+            )
+            errors.push(err)
+          }
         }
       })
     }
   })
 
   if (doLog) {
-    errors.forEach(console.error)
+    errors.forEach(log.error)
   }
 
   return !errors.length
