@@ -235,7 +235,6 @@ const tests = [
     types: {
       ShouldNotLog: [{ key: 'str', type: 'string' }],
     },
-    log: true,
     name: 'ShouldNotLog',
     expect: true,
     info: 'array item types work for strings and objects in one array if false',
