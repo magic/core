@@ -259,43 +259,43 @@ const expectedErrors = {
   Test: 2,
   TestArrayItemTypesFalse: 1,
   expected: 1,
-  TestArrayItemObjectFalse: 3
+  TestArrayItemObjectFalse: 3,
 }
 
 const log = {
-  error: (err) => {
-    if (!err.msg)
-      console.log(err)
+  error: err => {
+    if (!err.msg) console.log(err)
     const name = err.msg.split(' ')[0]
     if (!errored.hasOwnProperty(name)) {
       errored[name] = 1
     } else {
       errored[name] += 1
     }
-  }
+  },
 }
 
 export default {
-  tests: [{
-    fn: tryCatch(CHECK_PROPS, undefined, undefined, undefined, false),
-    expect: is.err,
-    info: 'without arguments errors',
-  },
-  // { fn: tryCatch(CHECK_PROPS, { key: false }, { key: 'boolean' }), expect: t => t[0].message.includes('expected Module name as third argument'), info: 'CHECK_PROPS without arguments errors with third arg error.' },
-  {
-    fn: tryCatch(CHECK_PROPS, undefined, undefined, undefined, false),
-    expect: false,
-    info: 'CHECK_PROPS without second argument errors and returns false.',
-  },
-  ...tests.map(t => ({
-    fn: CHECK_PROPS(t.props, t.types, t.name, log),
-    expect: t.expect,
-    info: t.info,
-  })),
+  tests: [
+    {
+      fn: tryCatch(CHECK_PROPS, undefined, undefined, undefined, false),
+      expect: is.err,
+      info: 'without arguments errors',
+    },
+    // { fn: tryCatch(CHECK_PROPS, { key: false }, { key: 'boolean' }), expect: t => t[0].message.includes('expected Module name as third argument'), info: 'CHECK_PROPS without arguments errors with third arg error.' },
+    {
+      fn: tryCatch(CHECK_PROPS, undefined, undefined, undefined, false),
+      expect: false,
+      info: 'CHECK_PROPS without second argument errors and returns false.',
+    },
+    ...tests.map(t => ({
+      fn: CHECK_PROPS(t.props, t.types, t.name, log),
+      expect: t.expect,
+      info: t.info,
+    })),
   ],
   afterAll: () => {
     if (!is.deep.equal(errored, expectedErrors)) {
-      console.error('log error messages did not match.', { errored, expectedErrors})
+      console.error('log error messages did not match.', { errored, expectedErrors })
     }
-  }
+  },
 }

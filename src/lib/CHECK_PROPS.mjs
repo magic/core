@@ -11,10 +11,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
   const errors = []
 
   if (!propTypeDecl) {
-    const err = error(
-      'expected propTypes as second argument',
-      `E_CHECK_PROPS_${currentPage}`,
-    )
+    const err = error('expected propTypes as second argument', `E_CHECK_PROPS_${currentPage}`)
     log.error(err)
 
     return false
@@ -108,7 +105,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
       if (!includes && value !== propType.default) {
         const err = error(
           `${name} needs value to be one of [${someOf.join(', ')}]. received ${value}`,
-          'E_CHECK_PROPS_SOME_OF_ARG_MISMATCH'
+          'E_CHECK_PROPS_SOME_OF_ARG_MISMATCH',
         )
 
         errors.push(err)
@@ -132,7 +129,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
     if (!is(value, ...types)) {
       const err = error(
         `${name} needs props.${key} to be ${typeInfo} ${typeString}. received ${typeof value}`,
-        'E_CHECK_PROPS_TYPE_MISMATCH'
+        'E_CHECK_PROPS_TYPE_MISMATCH',
       )
       errors.push(err)
     } else if (required) {
@@ -149,7 +146,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
         }
         const err = error(
           `${name} needs props.${key} to be a non empty ${typeString}`,
-          'E_CHECK_PROPS_PROP_EMPTY'
+          'E_CHECK_PROPS_PROP_EMPTY',
         )
         errors.push(err)
       }
@@ -162,13 +159,13 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
       if (max && value > max) {
         const err = error(
           `${name} number expected to be <= ${max}, was ${value}`,
-          'E_CHECK_PROPS_NUMBER_TOO_BIG'
+          'E_CHECK_PROPS_NUMBER_TOO_BIG',
         )
         errors.push(err)
       } else if (min > 0 && value < min) {
         const err = error(
           `${name} number expected to be >= ${min}, was ${value}`,
-          'E_CHECK_PROPS_NUMBER_TOO_SMALL'
+          'E_CHECK_PROPS_NUMBER_TOO_SMALL',
         )
         errors.push(err)
       }
@@ -180,13 +177,13 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
       if (max && value.length > max) {
         const err = error(
           `${name} string length expected to be <= ${max}, length was ${value.length}`,
-          'E_CHECK_PROPS_STRING_TO_LONG'
+          'E_CHECK_PROPS_STRING_TO_LONG',
         )
         errors.push(err)
       } else if (min > 0 && value.length < min) {
         const err = error(
           `${name} string length expected to be >= ${min}, length was ${value.length}`,
-          'E_CHECK_PROPS_STRING_TO_SHORT'
+          'E_CHECK_PROPS_STRING_TO_SHORT',
         )
         errors.push(err)
       }
@@ -198,7 +195,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
       if (!is(value, 'array')) {
         const err = error(
           `${name} needs props.${key} to be an array. received ${typeof value}`,
-          'E_CHECK_PROPS_ARRAY_MISMATCH'
+          'E_CHECK_PROPS_ARRAY_MISMATCH',
         )
         errors.push(err)
       }
@@ -232,7 +229,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
                 `${name} expects item.${
                   iKey.key
                 } to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`,
-                'E_CHECK_PROPS_OBJECT_KEY_MISMATCH'
+                'E_CHECK_PROPS_OBJECT_KEY_MISMATCH',
               )
 
               errors.push(err)
@@ -243,7 +240,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
           if (!is(val, ...type)) {
             const err = error(
               `${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}, on page ${currentPage}`,
-              'E_CHECK_PROPS_ARRAY_ITEM_MISMATCH'
+              'E_CHECK_PROPS_ARRAY_ITEM_MISMATCH',
             )
             errors.push(err)
           }
