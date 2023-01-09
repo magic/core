@@ -49,7 +49,7 @@
     "@magic/tags": "0.0.11",
     "@magic/transmute": "0.0.56",
     "@magic/types": "0.1.22",
-    "@swc/core": "1.3.24"
+    "@swc/core": "1.3.25"
   },
   "devDependencies": {
     "@magic-modules/git-badges": "0.0.12",
@@ -60,7 +60,7 @@
     "@magic-modules/pre": "0.0.11",
     "@magic-modules/theme-list": "0.0.14",
     "@magic-themes/docs": "0.0.14",
-    "@magic/format": "0.0.48",
+    "@magic/format": "0.0.49",
     "@magic/test": "0.2.14"
   },
   "keywords": [
