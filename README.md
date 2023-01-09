@@ -747,7 +747,13 @@ update dependencies
   export const propTypes = { Module: [//..propTypes]}
   ```
 
-##### 0.0.145 - unreleased
+##### 0.0.145
+
+- update dependencies
+- swc will prepend links in the return statements of modules with WEB_ROOT if needed.
+- CHECK_PROPS supports oneOf and someOf. added some tests.
+
+##### 0.0.146 - unreleased
 
 ...
 
