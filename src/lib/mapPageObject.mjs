@@ -14,5 +14,6 @@ export const mapPageObject =
         o[key][k] = v
       }
     }
+
     return o
   }
