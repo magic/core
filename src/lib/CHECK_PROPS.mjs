@@ -1,28 +1,28 @@
 import error from '@magic/error'
-import log from '@magic/log'
+import l from '@magic/log'
 
-export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
+export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
   const currentPage = app && app.state ? app.state.url : 'Unknown on client.'
+
+  if (!log) {
+    log = { error: () => {} }
+  }
 
   const errors = []
 
   if (!propTypeDecl) {
     const err = error(
-      'CHECK_PROPS: expected propTypes as second argument',
+      'expected propTypes as second argument',
       `E_CHECK_PROPS_${currentPage}`,
     )
-    if (doLog) {
-      log.error(err)
-    }
+    log.error(err)
 
     return false
   }
 
   if (!name) {
     const err = error('expected Module name as third argument', 'E_CHECK_PROPS')
-    if (doLog) {
-      log.error(`${err.stack} on page ${currentPage}`)
-    }
+    log.error(`${err.stack} on page ${currentPage}`)
 
     return false
   }
@@ -45,12 +45,11 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
 
   if (!is.array(propTypes)) {
     const err = error(
-      `expected propTypes to be an array.. received: ${propTypes} on page ${currentPage} in component ${name}`,
+      `expected propTypes to be an array. received: ${propTypes} on page ${currentPage} in component ${name}`,
       'E_CHECK_PROPS',
     )
-    if (doLog) {
-      log.error(err)
-    }
+
+    log.error(err)
 
     return false
   }
@@ -85,7 +84,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
           `${name} needs value to be one of [${oneOf
             .filter(a => a)
             .join(', ')}]. received ${value}`,
-          'E_ONEOF_MISMATCH',
+          'E_CHECK_PROPS_ONEOF_MISMATCH',
         )
         errors.push(err)
       }
@@ -100,7 +99,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
         const err = error(
           `${name} has someOf, someOf needs value to be an array.
         received ${value}, which is a ${typeof value}`,
-          'E_SOMEOF_ARG_NOT_ARRAY',
+          'E_CHECK_PROPS_SOMEOF_ARG_NOT_ARRAY',
         )
         errors.push(err)
       }
@@ -109,6 +108,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
       if (!includes && value !== propType.default) {
         const err = error(
           `${name} needs value to be one of [${someOf.join(', ')}]. received ${value}`,
+          'E_CHECK_PROPS_SOME_OF_ARG_MISMATCH'
         )
 
         errors.push(err)
@@ -130,8 +130,9 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
     const typeString = types.length > 1 ? `["${types.join(', "')}"]` : types[0]
 
     if (!is(value, ...types)) {
-      const err = new Error(
+      const err = error(
         `${name} needs props.${key} to be ${typeInfo} ${typeString}. received ${typeof value}`,
+        'E_CHECK_PROPS_TYPE_MISMATCH'
       )
       errors.push(err)
     } else if (required) {
@@ -146,7 +147,10 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
           }
           typeString += ' object'
         }
-        const err = new Error(`${name} needs props.${key} to be a non empty ${typeString}`)
+        const err = error(
+          `${name} needs props.${key} to be a non empty ${typeString}`,
+          'E_CHECK_PROPS_PROP_EMPTY'
+        )
         errors.push(err)
       }
     }
@@ -156,10 +160,16 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
       const { max = Number.MAX_SAFE_INTEGER, min = Number.MIN_SAFE_INTEGER } = propType
 
       if (max && value > max) {
-        const err = new Error(`${name}: number expected to be <= ${max}, was ${value}`)
+        const err = error(
+          `${name} number expected to be <= ${max}, was ${value}`,
+          'E_CHECK_PROPS_NUMBER_TOO_BIG'
+        )
         errors.push(err)
       } else if (min > 0 && value < min) {
-        const err = new Error(`${name}: number expected to be >= ${min}, was ${value}`)
+        const err = error(
+          `${name} number expected to be >= ${min}, was ${value}`,
+          'E_CHECK_PROPS_NUMBER_TOO_SMALL'
+        )
         errors.push(err)
       }
     }
@@ -168,13 +178,15 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
       const { max = 500, min = 0 } = propType
 
       if (max && value.length > max) {
-        const err = new Error(
-          `${name}: string length expected to be <= ${max}, length was ${value.length}`,
+        const err = error(
+          `${name} string length expected to be <= ${max}, length was ${value.length}`,
+          'E_CHECK_PROPS_STRING_TO_LONG'
         )
         errors.push(err)
       } else if (min > 0 && value.length < min) {
-        const err = new Error(
-          `${name}: string length expected to be >= ${min}, length was ${value.length}`,
+        const err = error(
+          `${name} string length expected to be >= ${min}, length was ${value.length}`,
+          'E_CHECK_PROPS_STRING_TO_SHORT'
         )
         errors.push(err)
       }
@@ -184,7 +196,10 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
       const { item } = propType
 
       if (!is(value, 'array')) {
-        const err = new Error(`${name} needs props.${key} to be an array. received ${typeof value}`)
+        const err = error(
+          `${name} needs props.${key} to be an array. received ${typeof value}`,
+          'E_CHECK_PROPS_ARRAY_MISMATCH'
+        )
         errors.push(err)
       }
 
@@ -213,9 +228,11 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
                 typeString = iKey.type
               }
 
-              const err = new Error(
-                `${name} expects item.${iKey.key
+              const err = error(
+                `${name} expects item.${
+                  iKey.key
                 } to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`,
+                'E_CHECK_PROPS_OBJECT_KEY_MISMATCH'
               )
 
               errors.push(err)
@@ -224,8 +241,9 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
         } else {
           const type = is(item.type, 'array') ? item.type : [item.type]
           if (!is(val, ...type)) {
-            const err = new Error(
+            const err = error(
               `${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}, on page ${currentPage}`,
+              'E_CHECK_PROPS_ARRAY_ITEM_MISMATCH'
             )
             errors.push(err)
           }
@@ -234,9 +252,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, doLog = true) => {
     }
   })
 
-  if (doLog) {
-    errors.forEach(log.error)
-  }
+  errors.forEach(log.error)
 
   return !errors.length
 }
