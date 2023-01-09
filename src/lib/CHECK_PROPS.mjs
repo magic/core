@@ -249,7 +249,9 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
     }
   })
 
-  errors.forEach(log.error)
+  if (log.error) {
+    errors.forEach(log.error)
+  }
 
   return !errors.length
 }
