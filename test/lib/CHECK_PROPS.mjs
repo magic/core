@@ -122,16 +122,16 @@ const tests = [
   },
   {
     props: { str: 'abcdefg' },
-    types: { TestIntMin: [{ key: 'str', type: 'string', min: 124 }] },
-    name: 'TestIntMin',
+    types: { TestStringTooShort: [{ key: 'str', type: 'string', min: 124 }] },
+    name: 'TestStringTooShort',
     expect: false,
     info: 'can test if string is shorter than min',
   },
   {
     props: { str: 'teststring' },
-    types: { TestStringTooShort: [{ key: 'str', oneOf: ['teststring'] }] },
-    name: 'TestStringTooShort',
-    expect: t => true,
+    types: { TestOneOfString: [{ key: 'str', type: 'string', oneOf: ['teststring'] }] },
+    name: 'TestOneOfString',
+    expect: true,
     info: 'oneOf works if true',
   },
   {
@@ -157,7 +157,8 @@ const tests = [
     name: 'TestArrayItemTypesTrue',
     expect: true,
     info: 'array item types work for strings and numbers in one array if true',
-  }, {
+  },
+  {
     props: { arr: [1, 2, 3, 'testing', false] },
     types: {
       TestArrayItemTypesFalse: [
@@ -193,7 +194,25 @@ const tests = [
     info: 'array item types work for strings and objects in one array if true',
   },
   {
-    props: { arr: ['testing', 1,2,3] },
+    props: { arr: ['testing', { str: 123 }] },
+    types: {
+      TestArrayItemObjectTrue: [
+        {
+          key: 'arr',
+          type: 'array',
+          item: {
+            type: ['string', 'object'],
+            keys: [{ type: 'string', key: 'str' }],
+          },
+        },
+      ],
+    },
+    name: 'TestArrayItemObjectMismatch',
+    expect: false,
+    info: 'array item types can check objcets for wrong values if false',
+  },
+  {
+    props: { arr: ['testing', 1, 2, 3] },
     types: {
       TestArrayItemObjectFalse: [
         {
@@ -210,10 +229,54 @@ const tests = [
     expect: false,
     info: 'array item types work for strings and objects in one array if false',
   },
+
+  {
+    props: { str: 'str' },
+    types: {
+      ShouldNotLog: [{ key: 'str', type: 'string' }],
+    },
+    log: true,
+    name: 'ShouldNotLog',
+    expect: true,
+    info: 'array item types work for strings and objects in one array if false',
+  },
 ]
 
-export default [
-  {
+const errored = {}
+
+const expectedErrors = {
+  TestRequiredMissing: 1,
+  TestRequiredEmptyObj: 1,
+  TestRequiredNonEmptyObj: 1,
+  TestRequiredEmptyArray: 1,
+  TestStringFalse: 1,
+  TestNumFalse: 1,
+  TestIntFalse: 1,
+  TestIntMax: 1,
+  TestIntMin: 1,
+  TestStringTooLong: 1,
+  TestStringTooShort: 1,
+  Test: 2,
+  TestArrayItemTypesFalse: 1,
+  expected: 1,
+  TestArrayItemObjectFalse: 3
+}
+
+const log = {
+  error: (err) => {
+    if (!err.msg)
+      console.log(err)
+    const name = err.msg.split(' ')[0]
+    if (!errored.hasOwnProperty(name)) {
+      errored[name] = 1
+    } else {
+      errored[name] += 1
+    }
+  }
+}
+
+export default {
+  tests: [{
     fn: tryCatch(CHECK_PROPS, undefined, undefined, undefined, false),
     expect: is.err,
     info: 'without arguments errors',
@@ -225,8 +288,14 @@ export default [
     info: 'CHECK_PROPS without second argument errors and returns false.',
   },
   ...tests.map(t => ({
-    fn: CHECK_PROPS(t.props, t.types, t.name, t.log || false),
+    fn: CHECK_PROPS(t.props, t.types, t.name, log),
     expect: t.expect,
     info: t.info,
   })),
-]
+  ],
+  afterAll: () => {
+    if (!is.deep.equal(errored, expectedErrors)) {
+      console.error('log error messages did not match.', { errored, expectedErrors})
+    }
+  }
+}
