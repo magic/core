@@ -1,27 +1,16 @@
-import error from '@magic/error'
-import l from '@magic/log'
+export const CHECK_PROPS = (props, propTypeDecl, name, log) => {
+  const currentPage = app && app.state?.url ? app.state.url : 'Unknown on client.'
 
-export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
-  const currentPage = app && app.state ? app.state.url : 'Unknown on client.'
-
-  if (!log) {
-    log = { error: () => {} }
+  if (log === false) {
+    log = () => {}
+  } else if (!log) {
+    log = e => console.log(e.code, e.message)
   }
 
-  const errors = []
-
-  if (!propTypeDecl) {
-    const err = error('expected propTypes as second argument', `E_CHECK_PROPS_${currentPage}`)
-    log.error(err)
-
-    return false
-  }
-
-  if (!name) {
-    const err = error('expected Module name as third argument', 'E_CHECK_PROPS')
-    log.error(`${err.stack} on page ${currentPage}`)
-
-    return false
+  const error = (msg, code = 'E_CHECK_PROPS') => {
+    const err = new Error(msg)
+    err.code = code
+    return err
   }
 
   const is = (e, ...types) =>
@@ -37,6 +26,20 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
   is.error = e => e instanceof Error
   is.null = e => e === null
   is.promise = e => e instanceof Promise
+
+  if (!propTypeDecl) {
+    const err = error('expected propTypes as second argument', `E_CHECK_PROPS_${currentPage}`)
+    log(err)
+
+    return false
+  }
+
+  if (!name) {
+    const err = error('expected Module name as third argument', 'E_CHECK_PROPS')
+    log(`${err.stack} on page ${currentPage}`)
+
+    return false
+  }
 
   let propTypes = propTypeDecl[name]
 
@@ -59,6 +62,8 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log = l) => {
       return true
     }
   }
+
+  const errors = []
 
   propTypes.forEach(propType => {
     const { key, required, type, oneOf, someOf } = propType
