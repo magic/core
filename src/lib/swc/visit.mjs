@@ -60,7 +60,15 @@ export const visit = ({ app, config, parent, par }) => {
         arg.expression?.properties?.map(prop => {
           if (prop.type === 'KeyValueProperty') {
             if (validKeys.includes(prop.key?.value)) {
-              let url = prop.value.quasis[0].cooked
+              let url
+              if (prop.value.type === 'StringLiteral') {
+                url = prop.value.value
+              } else if (prop.value?.quasis) {
+                url = prop.value.quasis[0].cooked
+              } else {
+                log.warn('W_UNKNOWN_URL_TYPE', `could not find valid ast url type for ${prop}`)
+                url = config.WEB_ROOT
+              }
 
               const isInternal = !url.includes('://')
               const isRooted = url.startsWith(config.WEB_ROOT)
@@ -76,8 +84,13 @@ export const visit = ({ app, config, parent, par }) => {
                   })
                 }
 
-                prop.value.quasis[0].cooked = url
-                prop.value.quasis[0].raw = url
+                if (prop.value.type === 'StringLiteral') {
+                  prop.value.value = url
+                  prop.value.raw = `'${url}'`
+                } else if (prop.value?.quasis) {
+                  prop.value.quasis[0].cooked = url
+                  prop.value.quasis[0].raw = `'${url}'`
+                }
               }
             }
           }
