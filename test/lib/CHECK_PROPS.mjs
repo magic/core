@@ -263,8 +263,11 @@ const expectedErrors = {
 
 const log = {
   error: err => {
-    if (!err.msg) console.log(err)
-    const name = err.msg.split(' ')[0]
+    if (!err.message) {
+      console.log('E_NO_MESSAGE', 'error without a message received!', { err }, typeof err)
+    }
+
+    const name = err.message.split(' ')[0]
     if (!errored.hasOwnProperty(name)) {
       errored[name] = 1
     } else {
