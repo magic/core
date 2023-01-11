@@ -753,7 +753,13 @@ update dependencies
 - swc will prepend links in the return statements of modules with WEB_ROOT if needed.
 - CHECK_PROPS supports oneOf and someOf. added some tests.
 
-##### 0.0.146 - unreleased
+##### 0.0.146
+
+- update dependencies
+- FIX from 0.0.145: CHECK_PROPS now can handle logging and errors.
+- FIX from 0.0.145: swc can handle string literals in img src and srcset parameters
+
+##### 0.0.147 - unreleased
 
 ...
 
