@@ -759,7 +759,11 @@ update dependencies
 - FIX from 0.0.145: CHECK_PROPS now can handle logging and errors.
 - FIX from 0.0.145: swc can handle string literals in img src and srcset parameters
 
-##### 0.0.147 - unreleased
+##### 0.0.147
+
+swc will now remove CHECK_PROPS from magic.js production bundles.
+
+##### 0.0.148 - unreleased
 
 ...
 
