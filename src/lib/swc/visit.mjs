@@ -55,102 +55,108 @@ export const visit = ({ app, config, parent, par }) => {
       parent.alternate = visit({ par: parent, parent: parent.alternate, app, config })
     }
   } else if (parent.type === 'CallExpression') {
-    if (parent.callee.value === 'source' || parent.callee.value === 'img') {
-      parent.arguments.map(arg => {
-        arg.expression?.properties?.map(prop => {
-          if (prop.type === 'KeyValueProperty') {
-            if (validKeys.includes(prop.key?.value)) {
-              let url
-              if (prop.value.type === 'StringLiteral') {
-                url = prop.value.value
-              } else if (prop.value?.quasis) {
-                url = prop.value.quasis[0].cooked
-              } else {
-                log.warn('W_UNKNOWN_URL_TYPE', `could not find valid ast url type for ${prop}`)
-                url = config.WEB_ROOT
-              }
-
-              const isInternal = !url.includes('://')
-              const isRooted = url.startsWith(config.WEB_ROOT)
-
-              if (isInternal && !isRooted) {
-                if (!url) {
-                  url = config.WEB_ROOT
+    /* remove CHECK_PROPS function calls */
+    if (parent.callee.value === 'CHECK_PROPS') {
+      parent.type = 'Invalid'
+    } else {
+      if (parent.callee.value === 'source' || parent.callee.value === 'img') {
+        parent.arguments.map(arg => {
+          arg.expression?.properties?.map(prop => {
+            if (prop.type === 'KeyValueProperty') {
+              if (validKeys.includes(prop.key?.value)) {
+                let url
+                if (prop.value.type === 'StringLiteral') {
+                  url = prop.value.value
+                } else if (prop.value?.quasis) {
+                  url = prop.value.quasis[0].cooked
                 } else {
-                  url = handleLink({
-                    app,
-                    href: url.substr(0, url.length - 1),
-                    WEB_ROOT: config.WEB_ROOT,
-                  })
+                  log.warn('W_UNKNOWN_URL_TYPE', `could not find valid ast url type for ${prop}`)
+                  url = config.WEB_ROOT
                 }
 
-                if (prop.value.type === 'StringLiteral') {
-                  prop.value.value = url
-                  prop.value.raw = `'${url}'`
-                } else if (prop.value?.quasis) {
-                  prop.value.quasis[0].cooked = url
-                  prop.value.quasis[0].raw = `'${url}'`
+                const isInternal = !url.includes('://')
+                const isRooted = url.startsWith(config.WEB_ROOT)
+
+                if (isInternal && !isRooted) {
+                  if (!url) {
+                    url = config.WEB_ROOT
+                  } else {
+                    url = handleLink({
+                      app,
+                      href: url.substr(0, url.length - 1),
+                      WEB_ROOT: config.WEB_ROOT,
+                    })
+                  }
+
+                  if (prop.value.type === 'StringLiteral') {
+                    prop.value.value = url
+                    prop.value.raw = `'${url}'`
+                  } else if (prop.value?.quasis) {
+                    prop.value.quasis[0].cooked = url
+                    prop.value.quasis[0].raw = `'${url}'`
+                  }
                 }
               }
             }
-          }
+          })
         })
-      })
-    }
-    parent.arguments = parent.arguments.map(arg => {
-      arg.expression = visit({ par: parent, parent: arg.expression, app, config })
+      }
 
-      if (arg.expression.type === 'StringLiteral') {
-        if (Object.keys(app.modules).includes(parent.callee.value)) {
-          const expr = {
-            type: 'ExpressionStatement',
-            span: {
-              start: 0,
-              end: 22,
-              ctxt: 0,
-            },
-            expression: {
-              type: 'CallExpression',
+      parent.arguments = parent.arguments.map(arg => {
+        arg.expression = visit({ par: parent, parent: arg.expression, app, config })
+
+        if (arg.expression.type === 'StringLiteral') {
+          if (Object.keys(app.modules).includes(parent.callee.value)) {
+            const expr = {
+              type: 'ExpressionStatement',
               span: {
                 start: 0,
                 end: 22,
                 ctxt: 0,
               },
-              callee: {
-                type: 'Identifier',
+              expression: {
+                type: 'CallExpression',
                 span: {
                   start: 0,
-                  end: 4,
+                  end: 22,
                   ctxt: 0,
                 },
-                value: 'text',
-                optional: false,
-              },
-              arguments: [
-                {
-                  spread: null,
-                  expression: {
-                    type: 'StringLiteral',
-                    span: {
-                      start: 5,
-                      end: 21,
-                      ctxt: 0,
-                    },
-                    value: arg.expression.value,
-                    raw: arg.expression.raw,
+                callee: {
+                  type: 'Identifier',
+                  span: {
+                    start: 0,
+                    end: 4,
+                    ctxt: 0,
                   },
+                  value: 'text',
+                  optional: false,
                 },
-              ],
-              typeArguments: null,
-            },
+                arguments: [
+                  {
+                    spread: null,
+                    expression: {
+                      type: 'StringLiteral',
+                      span: {
+                        start: 5,
+                        end: 21,
+                        ctxt: 0,
+                      },
+                      value: arg.expression.value,
+                      raw: arg.expression.raw,
+                    },
+                  },
+                ],
+                typeArguments: null,
+              },
+            }
+
+            // arg = expr
           }
-
-          // arg = expr
         }
-      }
 
-      return arg
-    })
+        return arg
+      })
+    }
   } else if (parent.type === 'VariableDeclarator') {
     parent.id = visit({ par: parent, parent: parent.id, app, config })
     parent.init = visit({ par: parent, parent: parent.init, app, config })
