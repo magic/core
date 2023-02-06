@@ -21,6 +21,7 @@ export const transpile = async (app, config) => {
     INCLUDED_HASH_EXTENSIONS,
     NO_CHECK_LINKS,
     NO_CHECK_LINKS_EXIT,
+    NO_CHECK_LINKS_LIST,
     WEB_ROOT: root,
     NO_CHECK_LINKS_REMOTE: noRemote,
   } = config
@@ -90,6 +91,8 @@ export const transpile = async (app, config) => {
   const links = Array.from(new Set(app.links))
 
   if (!NO_CHECK_LINKS) {
+    const ignoredLinks = NO_CHECK_LINKS_LIST || []
+
     if (ENV === 'production') {
       log('Checking page links')
 
@@ -99,6 +102,7 @@ export const transpile = async (app, config) => {
         pages,
         noRemote,
         root,
+        ignoredLinks,
         dev: config.IS_DEV,
       })
 
@@ -111,7 +115,7 @@ export const transpile = async (app, config) => {
         }
       }
     } else {
-      checkLinks({ staticUrls, links, pages, noRemote, root, dev: config.IS_DEV })
+      checkLinks({ staticUrls, links, pages, noRemote, ignoredLinks, root, dev: config.IS_DEV })
     }
   }
 

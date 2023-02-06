@@ -7,7 +7,15 @@ import { isStaticUrl } from './isStaticUrl.mjs'
 
 const redirectStatusCodes = [301, 302, 303, 307, 308]
 
-export const checkLinks = async ({ staticUrls, links, pages, noRemote = false, root, dev }) => {
+export const checkLinks = async ({
+  staticUrls,
+  links,
+  pages,
+  ignoredLinks = [],
+  noRemote = false,
+  root,
+  dev,
+}) => {
   const linkResolvers = links.map(async link => {
     if (link.startsWith(root)) {
       if (isPageUrl(pages, link)) {
@@ -20,7 +28,7 @@ export const checkLinks = async ({ staticUrls, links, pages, noRemote = false, r
     } else if (link.startsWith('mailto:')) {
       return
     } else if (link.includes('://') || link.startsWith('//')) {
-      if (noRemote || dev) {
+      if (noRemote || dev || ignoredLinks.includes(link)) {
         return
       }
 
