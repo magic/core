@@ -2,7 +2,7 @@ import is from '@magic/types'
 import log from '@magic/log'
 
 import { handleLink } from '../handleLink.mjs'
-import { replaceSlashSlash } from '../replaceSlashSlash.mjs'
+// import { replaceSlashSlash } from '../replaceSlashSlash.mjs'
 
 const validKeys = ['src', 'srcset', 'logo', 'href', 'to']
 
@@ -15,6 +15,10 @@ const noopTypes = [
   'EmptyStatement',
   'Identifier',
 ]
+
+export const used = {
+  modules: new Set(),
+}
 
 export const visit = ({ app, config, parent, par }) => {
   if (!parent) {
@@ -55,6 +59,23 @@ export const visit = ({ app, config, parent, par }) => {
       parent.alternate = visit({ par: parent, parent: parent.alternate, app, config })
     }
   } else if (parent.type === 'CallExpression') {
+    const isModule = Object.keys(app.modules).includes(parent.callee?.value)
+    const lib = Object.keys(app.lib).find(v => v === parent.callee?.value)
+    const isLib = lib && is.function(lib)
+
+    const name = parent.callee.value
+    if (isModule) {
+      // console.log('is module', name)
+      used.modules.add(name)
+
+      // } else {
+      //   console.log('not a module', name)
+    }
+
+    if (isLib) {
+      // console.log('is lib', name)
+    }
+
     /* remove CHECK_PROPS function calls */
     if (parent.callee.value === 'CHECK_PROPS') {
       parent.type = 'Invalid'

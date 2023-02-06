@@ -1,28 +1,26 @@
 import { config as swcConfig } from '@swc/core/spack.js'
 
-import { visit } from './visit.mjs'
+import { visit, used } from './visit.mjs'
 
 const plugin = (app, config) => m => {
   const n = m
 
+  // console.log('used before', used)
+
   n.body = m.body.map(item => visit({ parent: item, app, config }))
 
-  /*
-   * this gets handled fine by swc and dead code elimination
-   */
-  // const unusedTopLevel = []
-  // Object.keys(declarations.declared).map(key => {
-  //   if (!declarations.used[key]) {
-  //     unusedTopLevel.push(key)
-  //   }
-  // })
+  // console.log('used after', used)
 
-  // app.modules = Object.fromEntries(Object.entries(app.modules).filter(([name, mod]) => {
-  //   if (unusedTopLevel.includes(name)) {
-  //     return false
-  //   }
-  //   return true
-  // }))
+  app.modules = Object.fromEntries(
+    Object.entries(app.modules).filter(([name, mod]) => {
+      if (!used.modules.has(name)) {
+        return false
+      }
+      return true
+    }),
+  )
+
+  // console.log('after', Object.keys(app.modules).length)
 
   return n
 }
