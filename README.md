@@ -768,7 +768,13 @@ swc will now remove CHECK_PROPS from magic.js production bundles.
 - update dependencies
 - checkLinks supports NO_CHECK_LINKS_LIST in magic.js, which allows us to ignore known broken links, for example when pages block our http requests.
 
-##### 0.0.149 - unreleased
+##### 0.0.149
+
+- update dependencies
+- better error message if a module can not be required
+- global html tags will always be defined in order to make sure they exist before requiring other Modules
+
+##### 0.0.150
 
 ...
 
