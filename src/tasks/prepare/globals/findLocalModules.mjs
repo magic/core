@@ -14,6 +14,7 @@ export const findLocalModules = async dir => {
     .map(async m => {
       try {
         const name = path.basename(m).replace(path.extname(m), '')
+
         const mod = await import(m)
         if (mod.default) {
           modules[name] = mod.default
@@ -23,7 +24,8 @@ export const findLocalModules = async dir => {
           modules[name] = { ...mod }
         }
       } catch (e) {
-        log.error('Error', `requiring local magic-module: ${m}, error: ${e.message}`)
+        const stack = e.stack.split('at')
+        log.error('Error', `requiring local magic-module: ${m}, error:`, stack[0], stack[1])
       }
     })
 
