@@ -8,6 +8,7 @@ import { findAssetFile } from './findAssetFile.mjs'
 import { findBuiltins } from './findBuiltins.mjs'
 import { findLibraries } from './findLibraries.mjs'
 import { findThemes } from './findThemes.mjs'
+import { registerModule } from './registerModule.mjs'
 
 export const prepareGlobals = async (app, config) => {
   global.app = app
@@ -20,53 +21,38 @@ export const prepareGlobals = async (app, config) => {
   const builtinFiles = await findBuiltins(modules)
   if (builtinFiles) {
     modules = deep.merge(modules, builtinFiles)
+    Object.entries(builtinFiles).map(registerModule)
   }
 
   // load modules from themes
   const themeModulefiles = await findThemes(modules, { DIR, NODE_MODULES, THEME })
   if (themeModulefiles) {
     modules = deep.merge(modules, themeModulefiles)
+    Object.entries(themeModulefiles).map(registerModule)
   }
 
   // load plugins from node_modules
   const nodeModuleFiles = await findNodeModules(modules)
   if (nodeModuleFiles) {
     modules = deep.merge(modules, nodeModuleFiles)
+    Object.entries(nodeModuleFiles).map(registerModule)
   }
 
   // look for /assets/index.mjs
   const assetFile = await findAssetFile(DIR.ASSETS)
   if (assetFile) {
     modules = deep.merge(modules, assetFile)
+    Object.entries(assetFile).map(registerModule)
   }
 
   // look for /assets/Uppercased.mjs and /assets/modules/Uppercased.mjs
   const localModuleFiles = await findLocalModules(DIR.ASSETS)
   if (localModuleFiles) {
     modules = deep.merge(modules, localModuleFiles)
+    Object.entries(localModuleFiles).map(registerModule)
   }
 
-  Object.entries(modules).forEach(([name, mod]) => {
-    if (is.fn(mod)) {
-      global[name] = mod
-    } else if (is.fn(mod.View)) {
-      global[name] = mod.View
-    } else if (is.fn(mod[name])) {
-      global[name] = mod[name]
-    }
-
-    const views = Object.entries(mod).filter(
-      ([k]) => k !== name && is.case.upper(k[0]) && k !== 'View',
-    )
-
-    views.forEach(([k, v]) => {
-      if (is.function(v)) {
-        global[name][k] = v
-      } else {
-        global[name][k] = v.View
-      }
-    })
-  })
+  // Object.entries(modules).forEach(registerModule)
 
   const libs = await findLibraries(app, modules, { DIR, ROOT })
 
