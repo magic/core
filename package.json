@@ -60,7 +60,7 @@
     "@magic-modules/pre": "0.0.11",
     "@magic-modules/theme-list": "0.0.14",
     "@magic-themes/docs": "0.0.14",
-    "@magic/format": "0.0.49",
+    "@magic/format": "0.0.50",
     "@magic/test": "0.2.14"
   },
   "keywords": [
