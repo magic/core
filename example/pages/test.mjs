@@ -16,7 +16,7 @@ export const View = state => [
   p("the following links are broken, and it's intentional for magic to warn us on every rebuild."),
 
   ul([
-    li(Link({ text: 'redirect link', to: 'https://magic.github.io/core' })),
+    li(Link({ text: 'redirect link', to: 'https://magic.github.io/core#expected-redirect' })),
 
     li(Link({ text: 'broken link', to: 'https://expect-error' })),
     li(
