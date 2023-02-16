@@ -776,6 +776,10 @@ swc will now remove CHECK_PROPS from magic.js production bundles.
 
 ##### 0.0.150
 
+update dependencies
+
+##### 0.0.151
+
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
