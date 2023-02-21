@@ -6,7 +6,7 @@ export const prepareModule =
   ([name, component]) => {
     const lowerName = name.toLowerCase()
 
-    const glob = component.global || {}
+    const glob = component.global || component.globals || {}
 
     let tempState = {}
 
@@ -15,7 +15,7 @@ export const prepareModule =
         if (glob.state && glob.state[key] === true) {
           tempState[key] = val
         } else {
-          tempState[lowerName] = app.state[lowerName] || {}
+          tempState[lowerName] = tempState[lowerName] || {}
           tempState[lowerName][key] = val
         }
       })
