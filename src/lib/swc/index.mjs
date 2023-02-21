@@ -57,7 +57,9 @@ export const getSwcConf = (app, config) => {
     jsc: {
       parser: {
         syntax: 'typescript',
+        jsx: true,
       },
+      target: 'es2017',
       transform: {},
       minify,
     },
