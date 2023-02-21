@@ -1,7 +1,5 @@
 import deep from '@magic/deep'
 
-import is from '@magic/types'
-
 import { findNodeModules } from './findNodeModules.mjs'
 import { findLocalModules } from './findLocalModules.mjs'
 import { findAssetFile } from './findAssetFile.mjs'
