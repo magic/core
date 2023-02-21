@@ -8,7 +8,7 @@ export const prepareModule =
 
     const glob = component.global || component.globals || {}
 
-    let tempState = {}
+    const tempState = {}
 
     if (!is.empty(component.state)) {
       Object.entries(component.state).forEach(([key, val]) => {
