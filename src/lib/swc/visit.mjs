@@ -291,8 +291,10 @@ export const visit = ({ app, config, parent, par }) => {
     parent.orig = visit({ par: parent, parent: parent.orig, app, config })
   } else if (parent.type === 'StringLiteral') {
     // console.log(parent, par)
-  } else if (noopTypes.includes(parent.type)) {
+  } else if (parent.type === 'AwaitExpression') {
+    parent.argument = visit({ par: parent, parent: parent.argument, app, config })
     // noop
+  } else if (noopTypes.includes(parent.type)) {
   } else if (parent.type) {
     log.warn('unexpected parent type', parent.type, parent)
   }
