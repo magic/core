@@ -783,6 +783,7 @@ update dependencies
 - FIX: bug when assigning local state of modules, only the last item was written, now they all get added to state.componentname.
 - swc: add AwaitExpression and set swc.jsc.target to es2017, leading to async-await making it into the final bundle.
 - module.global can now also be called module.globals
+- tasks/prepare/js now makes sure that `import`ed modules work.
 
 ##### 0.0.152 - unreleased
 
