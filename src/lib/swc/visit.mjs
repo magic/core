@@ -81,17 +81,22 @@ export const visit = ({ app, config, parent, par }) => {
       parent.type = 'Invalid'
     } else {
       if (parent.callee.value === 'source' || parent.callee.value === 'img') {
-        parent.arguments.map(arg => {
-          arg.expression?.properties?.map(prop => {
+        parent.arguments.forEach(arg => {
+          arg.expression?.properties?.forEach(prop => {
             if (prop.type === 'KeyValueProperty') {
               if (validKeys.includes(prop.key?.value)) {
                 let url
                 if (prop.value.type === 'StringLiteral') {
                   url = prop.value.value
-                } else if (prop.value?.quasis) {
-                  url = prop.value.quasis[0].cooked
+                } else if (prop.value.type === 'Identifier') {
+                  /*
+                   * we return on identifiers,
+                   * they mean this is a variable or function being passed,
+                   * that we do not want to mutate
+                   */
+                  return
                 } else {
-                  log.warn('W_UNKNOWN_URL_TYPE', `could not find valid ast url type for ${prop}`)
+                  log.warn('W_UNKNOWN_URL_TYPE', 'could not find valid ast url type for', prop)
                   url = config.WEB_ROOT
                 }
 
