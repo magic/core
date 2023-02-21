@@ -113,7 +113,7 @@ return { ${imports} }
           return ` ${name}: ${fn.toString()},`
         } else if (is.array(fn)) {
           return ` ${name}: ${JSON.stringify(fn)},`
-        } else if (is.objectNative(fn)) {
+        } else if (is.object(fn) && is.objectNative({ ...fn })) {
           return ` ${name}: ${stringifyObject(fn)},`
         } else {
           log.error(
