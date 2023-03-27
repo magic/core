@@ -787,7 +787,11 @@ update dependencies
 - tasks/prepare/js now makes sure that `import`ed modules work.
 - swc: add ForOfStatement
 
-##### 0.0.152 - unreleased
+##### 0.0.152
+
+- downgrade swc
+
+##### 0.0.153 - unreleased
 
 ...
 
