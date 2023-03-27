@@ -13,19 +13,19 @@ export const addJsFiles = ({ js = [], WEB_ROOT }) => {
     js = [js]
   }
 
-  const hashes = {}
+  const hashes = Object.fromEntries(
+    js.map(({ src }) => {
+      const staticSrc = src.replace(WEB_ROOT, '')
+      const fileContent = app.static[replaceSlashSlash(`/${staticSrc}`)]
 
-  js.forEach(({ src }) => {
-    const staticSrc = src.replace(WEB_ROOT, '')
-    const fileContent = app.static[replaceSlashSlash(`/${staticSrc}`)]
+      if (!fileContent) {
+        throw error(`script ${staticSrc} could not be loaded`, 'E_EXTERNAL_SCRIPT')
+      }
 
-    if (!fileContent) {
-      throw error(`script ${staticSrc} could not be loaded`, 'E_EXTERNAL_SCRIPT')
-    }
-
-    const fileHash = createHash(fileContent)
-    hashes[staticSrc] = fileHash
-  })
+      const fileHash = createHash(fileContent)
+      return [staticSrc, fileHash]
+    }),
+  )
 
   return hashes
 }
