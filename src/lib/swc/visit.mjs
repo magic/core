@@ -299,6 +299,10 @@ export const visit = ({ app, config, parent, par }) => {
   } else if (parent.type === 'AwaitExpression') {
     parent.argument = visit({ par: parent, parent: parent.argument, app, config })
     // noop
+  } else if (parent.type === 'ForOfStatement') {
+    parent.body = visit({ par: parent, parent: parent.body, app, config })
+    parent.left = visit({ par: parent, parent: parent.left, app, config })
+    parent.right = visit({ par: parent, parent: parent.right, app, config })
   } else if (noopTypes.includes(parent.type)) {
   } else if (parent.type) {
     log.warn('unexpected parent type', parent.type, parent)
