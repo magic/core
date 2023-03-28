@@ -1,7 +1,7 @@
 import is from '@magic/types'
 import log from '@magic/log'
 
-export const prepareApi = async rawLambdas => {
+export const prepareApi = async (rawLambdas = {}) => {
   const lambdaPromises = await Promise.all(
     Object.entries(rawLambdas).map(async ([key, lambda]) => {
       try {
