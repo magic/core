@@ -11,6 +11,7 @@ export const build = async ({ commands, config }) => {
     const app = await runCmd('prepare', App, config)
 
     const { code, css, pages /*, serviceWorker */ } = await runCmd('transpile', app, config)
+
     app.pages = pages
     app.css = css
     app.client = code
