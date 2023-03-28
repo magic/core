@@ -37,6 +37,15 @@ export const apiHandler = async (req, res, { lambdas, rawUrl }) => {
     req.on('end', async (...args) => {
       req.body = Buffer.concat(req.body).toString()
 
+      if (req.headers['content-type'] === 'application/json') {
+        try {
+          req.body = JSON.parse(req.body)
+        } catch (e) {
+          log.error('E_JSON_PARSE', e)
+          req.body = e
+        }
+      }
+
       const result = await lambda(req, res, ...args)
       const { code = 500, body = 'Internal Server Error', type = 'text/plain' } = result
 
