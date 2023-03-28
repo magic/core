@@ -15,6 +15,7 @@ export const prepareApi = async (rawLambdas = {}) => {
       } catch (e) {
         // lambda does not return a creator function,
         // use as is by returning it below
+        log.error('E_BUILDING_LAMBDA', e)
       }
 
       return [key, lambda]
