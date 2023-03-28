@@ -3,7 +3,6 @@ import cluster from 'cluster'
 import log from '@magic/log'
 
 import { build, primary, watch } from './cluster/index.mjs'
-
 import { runConfig } from './config.mjs'
 
 export const runCluster = async options => {
