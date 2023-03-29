@@ -4,6 +4,8 @@ import cases from '@magic/cases'
 import fs from '@magic/fs'
 import is from '@magic/types'
 
+import { saveImport } from '../../../lib/index.mjs'
+
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 
 export const findLibraries = async (app, modules, { DIR }) => {
@@ -33,7 +35,11 @@ export const findLibraries = async (app, modules, { DIR }) => {
       const files = await fs.getFiles(dir, { depth: 1 })
 
       return files.map(file => {
-        const libName = file.replace(`${dir}/`, '').replace('.mjs', '').replace('.js', '')
+        const libName = file
+          .replace(`${dir}${path.sep}`, '')
+          .replace('.mjs', '')
+          .replace('.js', '')
+          .replace(/\\/gim, '/')
         libraries[libName] = file
       })
     }),
@@ -105,7 +111,7 @@ export const findLibraries = async (app, modules, { DIR }) => {
         }
       }
 
-      const imported = await import(val)
+      const imported = await saveImport(val)
 
       if (imported.default) {
         lib = imported.default

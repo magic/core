@@ -5,7 +5,7 @@ import fs from '@magic/fs'
 import is from '@magic/types'
 import transmute from '@magic/transmute'
 
-import { replaceSlashSlash } from '../../lib/index.mjs'
+import { replaceSlashSlash, saveImport } from '../../lib/index.mjs'
 
 export const prepareBlogPost =
   ({ pageDir, state = {}, config }) =>
@@ -36,9 +36,9 @@ export const prepareBlogPost =
       const fileTmpPath = path.join(TMP_DIR, path.basename(file))
       await fs.mkdirp(TMP_DIR)
       await fs.writeFile(fileTmpPath, viewString)
-      pageTmp = await import(fileTmpPath)
+      pageTmp = await saveImport(fileTmpPath)
     } else {
-      pageTmp = await import(file)
+      pageTmp = await saveImport(file)
 
       let children = []
       if (is.fn(pageTmp)) {
@@ -52,7 +52,7 @@ export const prepareBlogPost =
       const fileTmpPath = path.join(TMP_DIR, path.basename(file))
       await fs.mkdirp(TMP_DIR)
       await fs.writeFile(fileTmpPath, viewString)
-      pageTmp = await import(fileTmpPath)
+      pageTmp = await saveImport(fileTmpPath)
     }
 
     let page
@@ -68,7 +68,7 @@ export const prepareBlogPost =
       page = { ...pageTmp }
     }
 
-    page.file = file
+    page.file = file.replace(/\\/gim, '/')
 
     // has to be initialized!
     page.state = {}
@@ -85,9 +85,10 @@ export const prepareBlogPost =
       .replace(pageDir, '')
       .replace(/index.[m]?js/gm, '')
       .replace(/.[m]?js/gm, '/')
+      .replace(/\\/gim, '/')
 
     page.name = replaceSlashSlash(
-      `${config.BLOG_DIR.replace(config.ROOT, config.WEB_ROOT)}/${pageName}`,
+      `${config.BLOG_DIR.replace(config.ROOT, config.WEB_ROOT)}/${pageName}`.replace(/\\/gim, '/'),
     )
 
     page.path = `${page.name}index.html`

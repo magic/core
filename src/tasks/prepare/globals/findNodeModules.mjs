@@ -6,7 +6,7 @@ import error from '@magic/error'
 import fs from '@magic/fs'
 import log from '@magic/log'
 
-import { replacePathSepForImport } from '../../../lib/index.mjs'
+import { replacePathSepForImport, saveImport } from '../../../lib/index.mjs'
 
 const localLibIndexPath = path.join('src', 'lib', 'index')
 const localLibMjsPath = path.join('src', 'lib')
@@ -26,7 +26,7 @@ export const findNodeModules = async () => {
 
       // find module itself
       try {
-        const mod = await import(loadPath)
+        const mod = await saveImport(loadPath)
         // copy the imported module into a new object to be able to extend it below
         modules[name] = {
           ...mod,
@@ -75,7 +75,7 @@ export const findNodeModules = async () => {
 
         try {
           const importPath = path.join(nodeModule, 'src', 'index.mjs')
-          const mod = await import(importPath)
+          const mod = await saveImport(importPath)
           // copy the imported module into a new object to be able to extend it below
           modules[name] = {
             ...mod,

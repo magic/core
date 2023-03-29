@@ -4,6 +4,8 @@ import fs from '@magic/fs'
 import is from '@magic/types'
 import log from '@magic/log'
 
+import { saveImport } from '../../../lib/index.mjs'
+
 export const findLocalModules = async dir => {
   let modules = {}
 
@@ -15,7 +17,7 @@ export const findLocalModules = async dir => {
       try {
         const name = path.basename(m).replace(path.extname(m), '')
 
-        const mod = await import(m)
+        const mod = await saveImport(m)
         if (mod.default) {
           modules[name] = mod.default
         } else if (is.fn(mod)) {

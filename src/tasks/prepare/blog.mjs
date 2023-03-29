@@ -5,7 +5,7 @@ import { prepareBlogPost } from './blogPost.mjs'
 import { replaceSlashSlash } from '../../lib/index.mjs'
 
 export const prepareBlog = async (app, config) => {
-  const relativeBlogDir = config.BLOG_DIR.replace(`${config.ROOT}/`, '')
+  const relativeBlogDir = config.BLOG_DIR.replace(`${config.ROOT}${path.sep}`, '')
 
   const extensions = ['.markdown', '.js', '.htm', '.mjs', '.html', '.md']
 
@@ -24,7 +24,7 @@ export const prepareBlog = async (app, config) => {
 
       const post = await preparePost(file)
       const rootedBlogPath = file.replace(config.BLOG_DIR, '')
-      let [year, month, day, ...postPath] = rootedBlogPath.split('/').filter(a => a)
+      let [year, month, day, ...postPath] = rootedBlogPath.split(path.sep).filter(a => a)
 
       if (year.startsWith('index')) {
         return post
@@ -72,8 +72,8 @@ export const prepareBlog = async (app, config) => {
   if (!file) {
     const post = {
       View: state => BlogArchive(state),
-      name: `${root}/`,
-      path: `${root}/index.html`,
+      name: `${root}/`.replace(/\\/gim, '/'),
+      path: `${root}/index.html`.replace(/\\/gim, '/'),
     }
 
     posts.push(post)
@@ -87,8 +87,8 @@ export const prepareBlog = async (app, config) => {
     if (!file) {
       const post = {
         View: state => BlogYear(state),
-        name: `${root}/${year}/`,
-        path: `${root}/${year}/index.html`,
+        name: `${root}/${year}/`.replace(/\\/gim, '/'),
+        path: `${root}/${year}/index.html`.replace(/\\/gim, '/'),
         state: {
           year,
         },
@@ -104,8 +104,8 @@ export const prepareBlog = async (app, config) => {
       if (!file) {
         const post = {
           View: state => BlogMonth(state),
-          name: `${root}/${year}/${month}/`,
-          path: `${root}/${year}/${month}/index.html`,
+          name: `${root}/${year}/${month}/`.replace(/\\/gim, '/'),
+          path: `${root}/${year}/${month}/index.html`.replace(/\\/gim, '/'),
           state: {
             year,
             month,

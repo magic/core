@@ -2,6 +2,8 @@ import path from 'path'
 
 import fs from '@magic/fs'
 
+import { saveImport } from '../../lib/index.mjs'
+
 export const prepareApi = async (app, config) => {
   const { API_DIR: apiDir, DIR } = config
   const apiDirResolved = DIR.API
@@ -24,7 +26,7 @@ export const prepareApi = async (app, config) => {
     apiLambdas = await Promise.all(
       apiLambdaFiles.map(async file => {
         if (file.endsWith('.mjs')) {
-          const { default: lambda } = await import(file)
+          const { default: lambda } = await saveImport(file)
           const name = path.basename(file, '.mjs')
           return [name, lambda]
         }

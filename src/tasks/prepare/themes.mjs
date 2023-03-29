@@ -4,7 +4,7 @@ import error from '@magic/error'
 import is from '@magic/types'
 import deep from '@magic/deep'
 
-import { findModuleStyles } from '../../lib/index.mjs'
+import { findModuleStyles, saveImport } from '../../lib/index.mjs'
 import colors from '../../themes/colors.mjs'
 
 const url = new URL(import.meta.url)
@@ -31,16 +31,17 @@ export const prepareThemes = async (app, config) => {
   // merge user created custom reset.css into styles, if it exists
   try {
     // merge default reset css into styles
-    const libResetCssFile = path.join(dirName, '..', '..', 'themes', 'reset.css.mjs')
-    let { reset } = await import(libResetCssFile)
+    let { reset } = await saveImport('../themes/reset.css.mjs')
 
     resetStyles.push(reset)
 
     const themePromises = THEME.map(async theme_name => {
       // find reset css in theme dir if it exists
       const maybeResetCssFile = path.join(DIR.THEMES, theme_name, 'reset.css.mjs')
-      const { default: maybeResetCssStyles } = await import(maybeResetCssFile)
-      resetStyles.push(maybeResetCssStyles)
+      const { default: maybeResetCssStyles } = await saveImport(maybeResetCssFile)
+      if (maybeResetCssStyles) {
+        resetStyles.push(maybeResetCssStyles)
+      }
     })
 
     await Promise.all(themePromises)
@@ -72,7 +73,7 @@ export const prepareThemes = async (app, config) => {
         return await Promise.all(
           themeLocations.map(async location => {
             try {
-              const { default: theme, vars } = await import(location)
+              const { default: theme, vars } = await saveImport(location)
               return {
                 theme,
                 vars,
@@ -118,7 +119,7 @@ export const prepareThemes = async (app, config) => {
   const fileName = new URL(import.meta.url).pathname
   if (maybeAppFile !== fileName) {
     try {
-      const { style, styleVars } = await import(maybeAppFile)
+      const { style, styleVars } = await saveImport(maybeAppFile)
       if (style) {
         appStyles.push(style)
       }

@@ -5,6 +5,8 @@ import { h } from '@magic/hyperapp'
 import is from '@magic/types'
 import log from '@magic/log'
 
+import { saveImport } from '../lib/index.mjs'
+
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
@@ -57,7 +59,7 @@ const App = async config => {
       return await Promise.all(
         themeLocations.map(async location => {
           try {
-            const { state, actions, effects, subscriptions } = await import(location)
+            const { state, actions, effects, subscriptions } = await saveImport(location)
 
             return {
               state,
@@ -113,7 +115,7 @@ const App = async config => {
   const maybeAppFile = path.join(ROOT, 'app.mjs')
 
   try {
-    const { default: def, ...maybeApp } = await import(maybeAppFile)
+    const { default: def, ...maybeApp } = await saveImport(maybeAppFile)
 
     if (def) {
       let state = def.state

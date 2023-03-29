@@ -1,9 +1,10 @@
 import path from 'path'
 
 import deep from '@magic/deep'
-
 import error from '@magic/error'
 import is from '@magic/types'
+
+import { saveImport } from '../../../lib/index.mjs'
 
 export const findThemes = async (modules, { DIR, NODE_MODULES, THEME }) => {
   if (THEME) {
@@ -38,7 +39,7 @@ export const findThemes = async (modules, { DIR, NODE_MODULES, THEME }) => {
         const mods = await Promise.all(
           themeLocations.map(async location => {
             try {
-              const { default: theme, ...maybeModules } = await import(location)
+              const { default: theme, ...maybeModules } = await saveImport(location)
 
               const results = Object.entries(maybeModules).map(([name, fn]) => {
                 if (is.case.upper(name[0])) {

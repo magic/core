@@ -6,7 +6,7 @@ import fs from '@magic/fs'
 import log from '@magic/log'
 import transmute from '@magic/transmute'
 
-import { replaceSlashSlash } from '../../lib/index.mjs'
+import { replaceSlashSlash, saveImport } from '../../lib/index.mjs'
 
 export const preparePage =
   ({ WEB_ROOT, pageDir, state = {}, config }) =>
@@ -38,10 +38,10 @@ export const preparePage =
       await fs.mkdirp(subDir)
 
       await fs.writeFile(fileTmpPath, viewString)
-      pageTmp = await import(fileTmpPath)
+      pageTmp = await saveImport(fileTmpPath)
     } else {
       try {
-        pageTmp = await import(file)
+        pageTmp = await saveImport(file)
       } catch (e) {
         if (e.code === 'ERR_UNKNOWN_FILE_EXTENSION') {
           log.warn('UNKNOWN_FILE_TYPE', `${file} is not an es6 component. Ignored.`)
@@ -66,7 +66,7 @@ export const preparePage =
       page = { ...pageTmp }
     }
 
-    page.file = file
+    page.file = file.replace(/\\/gim, '/')
 
     // has to be initialized!
     // we also have to make sure to create a copy,
@@ -93,6 +93,7 @@ export const preparePage =
       .replace(pageDir, '')
       .replace(/index.[m]?js/gm, '')
       .replace(/.[m]?js/gm, '/')
+      .replace(/\\/gim, '/')
 
     page.name = replaceSlashSlash(`${WEB_ROOT}${pageName}`)
 
@@ -103,7 +104,7 @@ export const preparePage =
         // page path for 404 is /404.html, not /404/index.html
         page.path = `${page.path.slice(0, -1)}.html`
       } else {
-        page.path = path.join(page.path, 'index.html')
+        page.path = `${page.path}index.html`
       }
     }
 
