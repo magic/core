@@ -16,7 +16,7 @@ export const registerModule = ([name, mod]) => {
   views.forEach(([k, v]) => {
     if (is.function(v)) {
       global[name][k] = v
-    } else {
+    } else if (v.View) {
       global[name][k] = v.View
     }
   })
