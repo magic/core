@@ -9,7 +9,7 @@ import is from '@magic/types'
 
 import colors from './themes/colors.mjs'
 
-import { findConfigFile, replaceSlashSlash } from './lib/index.mjs'
+import { findConfigFile, replaceSlashSlash, saveImport } from './lib/index.mjs'
 
 const magicConfigNames = ['magic.mjs', 'magic.js']
 const oldConfigName = 'config.mjs'
@@ -28,7 +28,7 @@ export const runConfig = async (args = {}) => {
     return
   }
 
-  const { default: imported } = await import(conf.CONFIG_FILE_PATH)
+  const { default: imported } = await saveImport(conf.CONFIG_FILE_PATH)
 
   conf = deep.merge(conf, imported)
 
