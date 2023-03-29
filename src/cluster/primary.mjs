@@ -60,9 +60,16 @@ export const primary = async ({
         const delay = now - lastCall
         lastCall = now
         if (delay > 10) {
-          // files have changed, restart build worker
-          buildWorker.kill(1)
-          buildWorker = cluster.fork()
+          if (process.platform === 'win32') {
+            log.error(
+              'E_WIN_RESTART',
+              'windows can not restart the process yet. please manually restart.',
+            )
+          } else {
+            // files have changed, restart build worker
+            buildWorker.kill(1)
+            buildWorker = cluster.fork()
+          }
         }
       } else {
         log.warn('Unexpected message from watch worker', msg)
