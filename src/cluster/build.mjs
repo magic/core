@@ -8,14 +8,9 @@ import { serve } from '../tasks/index.mjs'
 export const build = async ({ commands, config }) => {
   try {
     const App = await runApp(config)
-    const app = await runCmd('prepare', App, config)
+    let app = await runCmd('prepare', App, config)
 
-    const { code, css, pages /*, serviceWorker */ } = await runCmd('transpile', app, config)
-
-    app.pages = pages
-    app.css = css
-    app.client = code
-    // app.sw = serviceWorker
+    app = await runCmd('transpile', app, config)
 
     if (commands.build) {
       await runCmd('write', app, config)
