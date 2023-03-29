@@ -791,7 +791,11 @@ update dependencies
 
 - downgrade swc
 
-##### 0.0.153 - unreleased
+##### 0.0.153
+
+- magic now seems to work on windows.
+
+##### 0.0.154 - unreleased
 
 ...
 
