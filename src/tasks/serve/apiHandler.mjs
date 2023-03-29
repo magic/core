@@ -4,7 +4,9 @@ export const apiHandler = async (req, res, { lambdas, rawUrl }) => {
   if (rawUrl === '/api/' || rawUrl === '/api') {
     const code = 200
 
-    const lambdaEntries = Object.fromEntries(Object.entries(lambdas).map(([k, v]) => [k, typeof v === 'function' ? true : v]))
+    const lambdaEntries = Object.fromEntries(
+      Object.entries(lambdas).map(([k, v]) => [k, typeof v === 'function' ? true : v]),
+    )
 
     const body = JSON.stringify(lambdaEntries, null, 2)
     res.writeHead(code, { 'Content-Type': 'text/plain' })
