@@ -81,6 +81,8 @@ export const visit = ({ app, config, parent, par }) => {
       parent.type = 'Invalid'
     } else {
       if (parent.callee.value === 'source' || parent.callee.value === 'img') {
+        const ignoredProps = ['Identifier', 'TemplateLiteral', 'BinaryExpression']
+
         parent.arguments.forEach(arg => {
           arg.expression?.properties?.forEach(prop => {
             if (prop.type === 'KeyValueProperty') {
@@ -88,9 +90,9 @@ export const visit = ({ app, config, parent, par }) => {
                 let url
                 if (prop.value.type === 'StringLiteral') {
                   url = prop.value.value
-                } else if (prop.value.type === 'Identifier') {
+                } else if (ignoredProps.includes(prop.value.type)) {
                   /*
-                   * we return on identifiers,
+                   * we return on Identifier, TemplateLiteral and BinaryExpression
                    * they mean this is a variable or function being passed,
                    * that we do not want to mutate
                    */
