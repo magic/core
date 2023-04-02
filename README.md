@@ -797,6 +797,8 @@ update dependencies
 
 ##### 0.0.154 - unreleased
 
+- link WEB_ROOT prefixing ignores Identifier, TemplateLiteral and BinaryExpression ast nodes, they are dynamic and should not be manipulated
+
 ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
