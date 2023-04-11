@@ -7,19 +7,21 @@ export const View = props => {
 
   CHECK_PROPS(props, propTypes, 'Img')
 
+  const { loading = 'lazy' } = props
+
   if (!props.src) {
     return
   }
 
-  if (!props.alt) {
+  if (!props.hasOwnProperty('alt')) {
     if (props.title) {
       props.alt = props.title
     } else {
-      props.role = 'presentation'
       props.alt = ''
-      props.loading = props.loading || 'lazy'
     }
   }
+
+  props.loading = loading
 
   return img(props)
 }
