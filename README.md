@@ -799,7 +799,7 @@ update dependencies
 
 - link WEB_ROOT prefixing ignores Identifier, TemplateLiteral and BinaryExpression ast nodes, they are dynamic and should not be manipulated
 - Img module will not automatically set role="presentation" when alt="", props.loading will always be set to lazy unless provided
-...
+  ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
 [npm-url]: https://www.npmjs.com/package/@magic/core
