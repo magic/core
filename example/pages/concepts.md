@@ -155,7 +155,7 @@ export const actions = {
   internal: state => ({
     ...state,
     module: {
-      internal: state.module.interal + 1,
+      internal: state.module.internal + 1,
     },
   }),
   external: state => ({
