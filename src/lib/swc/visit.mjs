@@ -90,6 +90,13 @@ export const visit = ({ app, config, parent, par }) => {
                 let url
                 if (prop.value.type === 'StringLiteral') {
                   url = prop.value.value
+                } else if (prop.value.type === 'TemplateLiteral') {
+                  /*
+                   * We return on TemplateLiterals
+                   * there are variable in play here,
+                   * we do not want to risk mutating them
+                   */
+                  return
                 } else if (ignoredProps.includes(prop.value.type)) {
                   /*
                    * we return on Identifier, TemplateLiteral and BinaryExpression
