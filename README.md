@@ -795,11 +795,16 @@ update dependencies
 
 - magic now seems to work on windows.
 
-##### 0.0.154 - unreleased
+##### 0.0.154
 
 - link WEB_ROOT prefixing ignores Identifier, TemplateLiteral and BinaryExpression ast nodes, they are dynamic and should not be manipulated
 - Img module will not automatically set role="presentation" when alt="", props.loading will always be set to lazy unless provided
 - CheckLinks will not error if TemplateLiterals are used in the url
+- Magic exports replaceSlashSlash from library
+- modules/app will not error if state of a page is undefined in src/app.mjs
+
+
+##### 0.0.155 - unreleased
   ...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
