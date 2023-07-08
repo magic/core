@@ -5,9 +5,9 @@ import { replaceSlashSlash } from '../../lib/index.mjs'
 export const preparePages = async (app, config) => {
   const { WEB_ROOT, DIR } = config
 
-  let pages = await Promise.all(
-    app.files.map(preparePage({ WEB_ROOT, pageDir: DIR.PAGES, state: app.state, config })),
-  )
+  const pageWorker = preparePage({ WEB_ROOT, pageDir: DIR.PAGES, state: app.state, config })
+
+  let pages = await Promise.all(app.files.map(pageWorker))
 
   if (app.pages) {
     pages = [...app.pages, ...pages]
