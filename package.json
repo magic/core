@@ -39,7 +39,7 @@
   "dependencies": {
     "@magic-libraries/prevent-default": "0.0.6",
     "@magic/cases": "0.0.9",
-    "@magic/cli": "0.0.45",
+    "@magic/cli": "0.0.46",
     "@magic/css": "0.7.54",
     "@magic/deep": "0.1.16",
     "@magic/error": "0.0.17",
@@ -49,7 +49,7 @@
     "@magic/tags": "0.0.12",
     "@magic/transmute": "0.0.57",
     "@magic/types": "0.1.23",
-    "@swc/core": "1.3.41"
+    "@swc/core": "1.3.68"
   },
   "devDependencies": {
     "@magic-modules/git-badges": "0.0.12",
@@ -61,7 +61,7 @@
     "@magic-modules/theme-list": "0.0.14",
     "@magic-themes/docs": "0.0.15",
     "@magic/format": "0.0.51",
-    "@magic/test": "0.2.17"
+    "@magic/test": "0.2.18"
   },
   "keywords": [
     "magic",
