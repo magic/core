@@ -118,7 +118,7 @@ const App = async config => {
     const { default: def, ...maybeApp } = await saveImport(maybeAppFile)
 
     if (def) {
-      let state = def.state
+      let { state = {} } = def
       if (is.fn(def.state)) {
         state = def.state(config)
       }
@@ -132,7 +132,7 @@ const App = async config => {
       }
       localApp.state = { ...localApp.state, ...s }
     } else {
-      let state = maybeApp.state
+      let { state = {} } = maybeApp
       if (is.fn(maybeApp.state)) {
         state = maybeApp.state(config)
       }
