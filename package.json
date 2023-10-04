@@ -40,10 +40,10 @@
     "@magic-libraries/prevent-default": "0.0.6",
     "@magic/cases": "0.0.9",
     "@magic/cli": "0.0.46",
-    "@magic/css": "0.7.54",
+    "@magic/css": "0.7.55",
     "@magic/deep": "0.1.16",
     "@magic/error": "0.0.17",
-    "@magic/fs": "0.0.28",
+    "@magic/fs": "0.0.29",
     "@magic/hyperapp": "2.0.4-alpha.0.4",
     "@magic/log": "0.1.18",
     "@magic/tags": "0.0.12",
@@ -60,7 +60,7 @@
     "@magic-modules/pre": "0.0.12",
     "@magic-modules/theme-list": "0.0.14",
     "@magic-themes/docs": "0.0.15",
-    "@magic/format": "0.0.51",
+    "@magic/format": "0.0.53",
     "@magic/test": "0.2.18"
   },
   "keywords": [
