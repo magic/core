@@ -804,8 +804,8 @@ update dependencies
 - Magic exports replaceSlashSlash from library
 - modules/app will not error if state of a page is undefined in src/app.mjs
 
-
 ##### 0.0.155
+
 - reduce @swc/core version back to 1.3.41 to prevent errors when transpiling
 
 ##### 0.0.156
@@ -813,7 +813,8 @@ update dependencies
 update dependencies
 
 ##### 0.0.157 - unreleased
-  ...
+
+...
 
 [npm-image]: https://img.shields.io/npm/v/@magic/core.svg
 [npm-url]: https://www.npmjs.com/package/@magic/core
