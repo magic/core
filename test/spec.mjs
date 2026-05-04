@@ -25,6 +25,7 @@ const colorObject = [
 const spec = {
   renderToString: 'fn',
   reset: 'fn',
+  replaceSlashSlash: 'fn',
   colors: [
     'object',
     {
