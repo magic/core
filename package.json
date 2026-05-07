@@ -61,7 +61,7 @@
     "@magic-modules/theme-list": "0.0.14",
     "@magic-themes/docs": "0.0.15",
     "@magic/format": "0.0.73",
-    "@magic/test": "0.2.30"
+    "@magic/test": "0.3.8"
   },
   "keywords": [
     "magic",
