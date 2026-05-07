@@ -1,5 +1,3 @@
-import URL from 'url'
-
 import fs from '@magic/fs'
 
 import { addTrailingSlash } from '../../lib/index.mjs'
@@ -12,6 +10,7 @@ export const handler = async (app, config) => {
     CLIENT_LIB_NAME,
     //CLIENT_SERVICE_WORKER_NAME,
     FOR_DEATH_CAN_NOT_HAVE_HIM,
+    HOST,
   } = config
 
   const {
@@ -27,7 +26,7 @@ export const handler = async (app, config) => {
   const lambdas = await prepareApi(rawLambdas)
 
   return async (req, res) => {
-    const url = URL.parse(req.url)
+    const url = new URL(req.url, `http://${HOST}`)
     let { pathname } = url
 
     if (pathname.startsWith(WEB_ROOT)) {
