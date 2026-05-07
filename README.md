@@ -816,7 +816,11 @@ update dependencies
 
 update dependencies
 
-##### 0.0.158 - unreleased
+##### 0.0.158
+
+update @magic/test and fix spec tests
+
+##### 0.0.159 - unreleased
 
 ...
 
