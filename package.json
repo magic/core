@@ -43,13 +43,13 @@
     "@magic/css": "0.7.59",
     "@magic/deep": "0.1.21",
     "@magic/error": "0.0.23",
-    "@magic/fs": "0.0.29",
+    "@magic/fs": "0.0.39",
     "@magic/hyperapp": "2.0.4-alpha.0.6",
     "@magic/log": "0.1.22",
     "@magic/tags": "0.0.15",
     "@magic/transmute": "0.0.59",
     "@magic/types": "0.1.37",
-    "@swc/core": "1.3.41"
+    "@swc/core": "1.15.43"
   },
   "devDependencies": {
     "@magic-modules/git-badges": "0.0.12",
