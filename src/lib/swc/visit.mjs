@@ -34,7 +34,15 @@ export const visit = ({ app, config, parent, par }) => {
       visit({ par: parent, parent: decl, app, config }),
     )
   } else if (parent.type === 'ExpressionStatement') {
-    parent.expression = visit({ par: parent, parent: parent.expression, app, config })
+    const result = visit({ par: parent, parent: parent.expression, app, config })
+    // If result is undefined (e.g., CHECK_PROPS was removed), replace with EmptyStatement
+    if (result === undefined) {
+      return {
+        type: 'EmptyStatement',
+        span: parent.span,
+      }
+    }
+    parent.expression = result
   } else if (parent.type === 'AssignmentExpression') {
     parent.right = visit({ par: parent, parent: parent.right, app, config })
     parent.left = visit({ par: parent, parent: parent.left, app, config })
@@ -78,7 +86,9 @@ export const visit = ({ app, config, parent, par }) => {
 
     /* remove CHECK_PROPS function calls */
     if (parent.callee.value === 'CHECK_PROPS') {
-      parent.type = 'Invalid'
+      // Return undefined to signal that this expression should be removed
+      // The parent ExpressionStatement handler will replace it with an EmptyStatement
+      return undefined
     } else {
       if (parent.callee.value === 'source' || parent.callee.value === 'img') {
         const ignoredProps = ['Identifier', 'TemplateLiteral', 'BinaryExpression']

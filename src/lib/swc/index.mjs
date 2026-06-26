@@ -1,70 +1,57 @@
-import { config as swcConfig } from '@swc/core/spack.js'
+import swc from '@swc/core'
 
 import { visit, used } from './visit.mjs'
 
-const plugin = (app, config) => m => {
-  const n = m
-
-  // console.log('used before', used)
-
-  n.body = m.body.map(item => visit({ parent: item, app, config }))
-
-  // console.log('used after', used)
-
-  app.modules = Object.fromEntries(
-    Object.entries(app.modules).filter(([name, mod]) => {
-      if (!used.modules.has(name)) {
-        return false
-      }
-      return true
-    }),
-  )
-
-  // console.log('after', Object.keys(app.modules).length)
-
-  return n
-}
-
-export const getSwcConf = (app, config) => {
+/**
+ * Transform the client code using SWC:
+ * 1. Parse the code to AST
+ * 2. Visit and transform the AST
+ * 3. Generate code from AST
+ * 4. Minify the output
+ */
+export const transformClient = async (code, app, config) => {
   const fileName = `${config.CLIENT_LIB_NAME}.js`
 
-  let minify = {
-    compress: {
-      unused: true,
-    },
-    mangle: false,
-  }
+  // Reset used modules tracking
+  used.modules = new Set()
 
-  if (config.IS_PROD) {
-    minify.compress = true
-    minify.mangle = true
-    minify.format = {
-      comments: false,
-    }
-  }
-
-  return swcConfig({
-    // Some options cannot be specified in .swcrc
-    filename: fileName,
-
-    // TODO: actually write those into files during dev
-    sourceMaps: config.IS_DEV,
-
-    // Input files are treated as module.
+  // Parse the code to AST
+  const ast = await swc.parse(code, {
+    syntax: 'typescript',
+    jsx: true,
     isModule: true,
-
-    // All options below can be configured via .swcrc
-    jsc: {
-      parser: {
-        syntax: 'typescript',
-        jsx: true,
-      },
-      target: 'es2017',
-      transform: {},
-      minify,
-    },
-    minify: true,
-
-    plugin: plugin(app, config),
+    target: 'es2017',
   })
+
+  // Transform the AST
+  ast.body = ast.body.map(item => visit({ parent: item, app, config }))
+
+  // Filter unused modules from app.modules
+  app.modules = Object.fromEntries(
+    Object.entries(app.modules).filter(([name]) => used.modules.has(name)),
+  )
+
+  // Generate code from AST
+  const { code: generated } = await swc.print(ast, {
+    filename: fileName,
+    isModule: true,
+  })
+
+  // Minify the output
+  const minify = config.IS_PROD
+    ? {
+        compress: true,
+        mangle: true,
+        format: {
+          comments: false,
+        },
+      }
+    : {
+        compress: { unused: true },
+        mangle: false,
+      }
+
+  const { code: minified } = await swc.minify(generated, minify)
+
+  return minified
 }

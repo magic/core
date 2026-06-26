@@ -1,15 +1,12 @@
 import log from '@magic/log'
 
-import swc from '@swc/core'
-
-import { getSwcConf } from '../../lib/index.mjs'
+import { transformClient } from '../../lib/index.mjs'
 
 export default async ({ app, config }) => {
-  const swcOpts = getSwcConf(app, config)
   try {
-    const { code } = await swc.transform(app.client, swcOpts)
+    const code = await transformClient(app.client, app, config)
 
-    // const sw = await swc.transform(app.serviceWorker, swcOpts)
+    // const sw = await transformClient(app.serviceWorker, app, config)
     return {
       code,
       // serviceWorker: sw.code,
