@@ -42,13 +42,62 @@ return { ${imports} }
   const { checkProps, propTypeString } = prepareCheckProps(magic, config)
 
   let depString = ''
+  // Reserved JavaScript keywords that can't be used as variable names
+  const reservedKeywords = new Set([
+    'break',
+    'case',
+    'catch',
+    'class',
+    'const',
+    'continue',
+    'debugger',
+    'default',
+    'delete',
+    'do',
+    'else',
+    'export',
+    'extends',
+    'false',
+    'finally',
+    'for',
+    'function',
+    'if',
+    'import',
+    'in',
+    'instanceof',
+    'let',
+    'new',
+    'null',
+    'return',
+    'static',
+    'super',
+    'switch',
+    'this',
+    'throw',
+    'true',
+    'try',
+    'typeof',
+    'undefined',
+    'var',
+    'void',
+    'while',
+    'with',
+    'yield',
+  ])
+
+  const toVarName = name => {
+    const camelName = cases.camel(name)
+    return reservedKeywords.has(camelName) ? `${camelName}El` : camelName
+  }
+
   let htmlTagString = ''
   Object.entries({ ...magic.modules, ...magic.tags })
     .filter(([k]) => k !== 'Magic' && k !== 'component')
     .sort(([a], [b]) => (a > b ? 1 : -1))
     .forEach(([k, v]) => {
       if (!is.case.upper(k[0])) {
-        htmlTagString += `const ${k} = C('${k}')\n`
+        const varName = toVarName(k)
+        htmlTagString += `const ${varName} = C('${k}')\n`
       } else {
         let str
         if (is.function(v)) {
