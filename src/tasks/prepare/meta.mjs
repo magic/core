@@ -44,7 +44,7 @@ export const prepareMetaFiles = async (app, config) => {
 
         const changeDate = `${now.getFullYear()}-${month}-${day}`
 
-        const sitemapItemUrl = replaceSlashSlash(`https://${URL}${name.replace(WEB_ROOT, '/')}`)
+        const sitemapItemUrl = `https://${replaceSlashSlash(`${URL}${name.replace(WEB_ROOT, '/')}`)}`
 
         sitemapArray.push(`
 <url>
