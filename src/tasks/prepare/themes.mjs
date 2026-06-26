@@ -1,4 +1,5 @@
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 import error from '@magic/error'
 import is from '@magic/types'
@@ -7,8 +8,7 @@ import deep from '@magic/deep'
 import { findModuleStyles, saveImport } from '../../lib/index.mjs'
 import colors from '../../themes/colors.mjs'
 
-const url = new URL(import.meta.url)
-const dirName = path.dirname(url.pathname)
+const dirName = path.dirname(fileURLToPath(import.meta.url))
 
 export const prepareThemes = async (app, config) => {
   const { DIR, NODE_MODULES, ROOT } = config

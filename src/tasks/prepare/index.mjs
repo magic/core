@@ -1,6 +1,8 @@
 import error from '@magic/error'
 import fs from '@magic/fs'
 import is from '@magic/types'
+import deep from '@magic/deep'
+import log from '@magic/log'
 
 import { getBlog, getPages, replaceSlashSlash } from '../../lib/index.mjs'
 

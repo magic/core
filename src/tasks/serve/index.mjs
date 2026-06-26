@@ -5,7 +5,9 @@ import log from '@magic/log'
 
 import { handler } from './handler.mjs'
 
-export const startServer = async (server, options) => {
+const MAX_PORT_RETRIES = 10
+
+export const startServer = async (server, options, attempts = 0) => {
   try {
     server.listen(options)
 
@@ -21,12 +23,14 @@ export const startServer = async (server, options) => {
     // if the requested port is in use,
     // increment portnumber by 1, then retry starting the server
     if (e.code === 'EADDRINUSE') {
+      if (attempts >= MAX_PORT_RETRIES) {
+        throw error(`Could not find available port after ${MAX_PORT_RETRIES} attempts`)
+      }
       options.port += 1
+      return startServer(server, options, attempts + 1)
     } else {
       throw error(e)
     }
-
-    return startServer(server, options)
   }
 
   return options
