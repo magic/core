@@ -86,6 +86,11 @@ export const actions = {
   },
 
   go: (state, e) => {
+    // if called without an event, do nothing
+    if (!e || !e.currentTarget) {
+      return state
+    }
+
     // make sure our to never includes the origin
     // this makes sure we can distinguish between local and external links below
     let to = e.currentTarget.href.replace(window.location.origin, '')
