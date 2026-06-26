@@ -67,17 +67,13 @@ export const visit = ({ app, config, parent, par }) => {
       parent.alternate = visit({ par: parent, parent: parent.alternate, app, config })
     }
   } else if (parent.type === 'CallExpression') {
-    const isModule = Object.keys(app.modules).includes(parent.callee?.value)
-    const lib = Object.keys(app.lib).find(v => v === parent.callee?.value)
+    const name = parent.callee.value
+    const isModule = used.moduleNames.has(name)
+    const lib = Object.keys(app.lib).find(v => v === name)
     const isLib = lib && is.function(lib)
 
-    const name = parent.callee.value
     if (isModule) {
-      // console.log('is module', name)
       used.modules.add(name)
-
-      // } else {
-      //   console.log('not a module', name)
     }
 
     if (isLib) {
@@ -151,7 +147,7 @@ export const visit = ({ app, config, parent, par }) => {
         arg.expression = visit({ par: parent, parent: arg.expression, app, config })
 
         if (arg.expression.type === 'StringLiteral') {
-          if (Object.keys(app.modules).includes(parent.callee.value)) {
+          if (used.moduleNames.has(parent.callee.value)) {
             const expr = {
               type: 'ExpressionStatement',
               span: {
@@ -217,6 +213,14 @@ export const visit = ({ app, config, parent, par }) => {
           href: parent.value.value,
           WEB_ROOT: config.WEB_ROOT,
         })
+      }
+    }
+
+    // Track module references used as values in objects (e.g., pages object: { '/a/': A })
+    if (parent.value?.type === 'Identifier') {
+      const valueName = parent.value.value
+      if (used.moduleNames.has(valueName)) {
+        used.modules.add(valueName)
       }
     }
 
