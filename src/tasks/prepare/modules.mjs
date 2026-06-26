@@ -1,5 +1,6 @@
 import deep from '@magic/deep'
 import is from '@magic/types'
+import log from '@magic/log'
 
 export const prepareModule =
   app =>

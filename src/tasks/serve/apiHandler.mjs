@@ -1,4 +1,5 @@
 import is from '@magic/types'
+import log from '@magic/log'
 
 export const apiHandler = async (req, res, { lambdas, rawUrl }) => {
   if (rawUrl === '/api/' || rawUrl === '/api') {
