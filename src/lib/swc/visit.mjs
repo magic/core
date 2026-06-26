@@ -6,7 +6,7 @@ import { handleLink } from '../handleLink.mjs'
 
 const validKeys = ['src', 'srcset', 'logo', 'href', 'to']
 
-const noopTypes = [
+const noopTypes = new Set([
   'BooleanLiteral',
   'NullLiteral',
   'NumericLiteral',
@@ -14,7 +14,7 @@ const noopTypes = [
   'ThisExpression',
   'EmptyStatement',
   'Identifier',
-]
+])
 
 export const used = {
   modules: new Set(),
@@ -326,7 +326,7 @@ export const visit = ({ app, config, parent, par }) => {
     parent.body = visit({ par: parent, parent: parent.body, app, config })
     parent.left = visit({ par: parent, parent: parent.left, app, config })
     parent.right = visit({ par: parent, parent: parent.right, app, config })
-  } else if (noopTypes.includes(parent.type)) {
+  } else if (noopTypes.has(parent.type)) {
   } else if (parent.type) {
     log.warn('unexpected parent type', parent.type, parent)
   }
