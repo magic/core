@@ -27,6 +27,11 @@ export const findNodeModules = async () => {
       // find module itself
       try {
         const mod = await saveImport(loadPath)
+        // saveImport returns the error object on failure - check for it
+        if (mod.code && mod.url) {
+          log.warn('E_MODULE_NOT_FOUND', `skipping node_module: ${nodeModule}`)
+          return
+        }
         // copy the imported module into a new object to be able to extend it below
         modules[name] = {
           ...mod,
@@ -76,6 +81,11 @@ export const findNodeModules = async () => {
         try {
           const importPath = path.join(nodeModule, 'src', 'index.mjs')
           const mod = await saveImport(importPath)
+          // saveImport returns the error object on failure - check for it
+          if (mod.code && mod.url) {
+            log.warn('E_MODULE_NOT_FOUND', `skipping node_module: ${nodeModule}`)
+            return
+          }
           // copy the imported module into a new object to be able to extend it below
           modules[name] = {
             ...mod,

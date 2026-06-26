@@ -48,15 +48,18 @@ export const findLibraries = async (app, modules, { DIR }) => {
   const libDirs = [...libOfficialNodeModuleFiles, ...libInofficialNodeModuleFiles]
   libDirs.forEach(async libDir => {
     let libName = ''
+    const cleanLibDir = libDir.split(path.sep).slice(0, -1).join(path.sep) // Remove last segment (/src)
+    const lastSegment = libDir.split(path.sep).pop()
+
     if (libDir.includes('@magic-libraries')) {
-      libName = libDir.split('@magic-libraries' + path.sep)[1]
+      libName = cleanLibDir.split('@magic-libraries' + path.sep)[1]
     } else if (libDir.includes('magic-libraries-')) {
-      libName = libDir.split('magic-libraries-')[1]
+      libName = cleanLibDir.split('magic-libraries-')[1]
     } else if (libDir.includes('magic-library-')) {
-      libName = libDir.split('magic-library-')[1]
+      libName = cleanLibDir.split('magic-library-')[1]
     }
 
-    libraries[libName] = libDir
+    libraries[libName] = cleanLibDir
   })
 
   const handleModuleLibs = ([key, val]) => {
