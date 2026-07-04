@@ -820,7 +820,11 @@ update dependencies
 
 update @magic/test and fix spec tests
 
-##### 0.0.159 - unreleased
+##### 0.0.159
+
+- better .js loading, .mjs file loading will fallback to .js for app.js
+
+##### 0.0.160 - unreleased
 
 ...
 
