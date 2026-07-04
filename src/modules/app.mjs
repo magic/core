@@ -112,10 +112,24 @@ const App = async config => {
 
   // will be used in the catch clause to make sure it's this file
   // that causes a MODULE_NOT_FOUND error
-  const maybeAppFile = path.join(ROOT, 'app.mjs')
+  const maybeAppFileMjs = path.join(ROOT, 'app.mjs')
+  const maybeAppFileJs = path.join(ROOT, 'app.js')
 
-  try {
-    const { default: def, ...maybeApp } = await saveImport(maybeAppFile)
+  const loadAppFile = async filePath => {
+    const result = await saveImport(filePath)
+    if (result instanceof Error) {
+      return null
+    }
+    return result
+  }
+
+  let appResult = await loadAppFile(maybeAppFileJs)
+  if (!appResult) {
+    appResult = await loadAppFile(maybeAppFileMjs)
+  }
+
+  if (appResult) {
+    const { default: def, ...maybeApp } = appResult
 
     if (def) {
       let { state = {} } = def
@@ -150,11 +164,6 @@ const App = async config => {
       localApp = deep.merge(localApp, maybeApp)
 
       localApp.state = { ...localApp.state, ...s }
-    }
-  } catch (e) {
-    // happy without maybeApp
-    if (e.code !== 'ERR_MODULE_NOT_FOUND' && !e.message.includes(maybeAppFile)) {
-      throw e
     }
   }
 
