@@ -115,21 +115,32 @@ export const prepareThemes = async (app, config) => {
       pageStyles.push(page.style)
     })
 
-  const maybeAppFile = path.join(ROOT, 'app.mjs')
+  const maybeAppFileMjs = path.join(ROOT, 'app.mjs')
+  const maybeAppFileJs = path.join(ROOT, 'app.js')
   const fileName = new URL(import.meta.url).pathname
-  if (maybeAppFile !== fileName) {
+
+  const loadAppFile = async filePath => {
+    if (filePath === fileName) {
+      return null
+    }
     try {
-      const { style, styleVars } = await saveImport(maybeAppFile)
-      if (style) {
-        appStyles.push(style)
-      }
-      if (styleVars) {
-        THEME_VARS = deep.merge(THEME_VARS, styleVars)
-      }
+      return await saveImport(filePath)
     } catch (e) {
-      if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-        throw error(e)
+      if (e.code && e.code.includes('MODULE_NOT_FOUND')) {
+        return null
       }
+      throw e
+    }
+  }
+
+  const appResult = (await loadAppFile(maybeAppFileJs)) || (await loadAppFile(maybeAppFileMjs))
+  if (appResult) {
+    const { style, styleVars } = appResult
+    if (style) {
+      appStyles.push(style)
+    }
+    if (styleVars) {
+      THEME_VARS = deep.merge(THEME_VARS, styleVars)
     }
   }
 
