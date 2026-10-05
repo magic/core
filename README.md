@@ -828,7 +828,12 @@ update @magic/test and fix spec tests
 
 - update dependencies
 
-##### 0.0.161 - unreleased
+##### 0.0.161
+
+- better safety for undefined app.modules or undefined code in swc bundler
+- update dependencies
+
+##### 0.0.162 - unreleased
 
 ...
 
