@@ -29,7 +29,9 @@ const collectUsedModuleVars = block => {
   const usedVars = new Set()
 
   const traverse = node => {
-    if (!node || typeof node !== 'object') return
+    if (!is.objectNative(node)) {
+      return
+    }
 
     if (node.type === 'ObjectExpression' && node.properties) {
       for (const prop of node.properties) {
@@ -45,7 +47,7 @@ const collectUsedModuleVars = block => {
       const child = node[key]
       if (Array.isArray(child)) {
         child.forEach(traverse)
-      } else if (child && typeof child === 'object') {
+      } else if (is.objectNative(child)) {
         traverse(child)
       }
     }
@@ -147,9 +149,15 @@ export const transformClient = async (code, app, config) => {
   // Reset used modules tracking
   used.modules = new Set()
   // Cache modules as Set for O(1) lookups
-  used.moduleNames = new Set(Object.keys(app.modules))
+  // Guard against app.modules being undefined/null in some build contexts
+  used.moduleNames = new Set(is.objectNative(app.modules) ? Object.keys(app.modules) : [])
 
-  // Parse the code to AST
+  // Ensure code is a string for SWC parsing
+  // If code is not a string (e.g., undefined), return a minimal valid magic client
+  if (!is.string(code)) {
+    return 'const __MAGIC__ = () => {};\n__MAGIC__();\n'
+  }
+
   const ast = await swc.parse(code, {
     syntax: 'typescript',
     jsx: true,
