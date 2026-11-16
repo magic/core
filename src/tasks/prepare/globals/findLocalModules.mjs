@@ -6,7 +6,12 @@ import log from '@magic/log'
 
 import { saveImport } from '../../../lib/index.mjs'
 
+/**
+ * @param {string} dir
+ * @returns {Promise<Record<string, unknown>>}
+ */
 export const findLocalModules = async dir => {
+  /** @type {Record<string, unknown>} */
   const modules = {}
 
   const assetModules = await fs.getFiles(dir)
@@ -18,6 +23,11 @@ export const findLocalModules = async dir => {
         const name = path.basename(m).replace(path.extname(m), '')
 
         const mod = await saveImport(m)
+        if (mod instanceof Error) {
+          const stack = mod.stack ? mod.stack.split('at') : []
+          log.error('Error', `requiring local magic-module: ${m}, error:`, stack[0], stack[1])
+          return
+        }
         if (mod.default) {
           modules[name] = mod.default
         } else if (is.fn(mod)) {
@@ -26,7 +36,7 @@ export const findLocalModules = async dir => {
           modules[name] = { ...mod }
         }
       } catch (e) {
-        const stack = e.stack.split('at')
+        const stack = e instanceof Error && e.stack ? e.stack.split('at') : []
         log.error('Error', `requiring local magic-module: ${m}, error:`, stack[0], stack[1])
       }
     })

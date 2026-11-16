@@ -8,15 +8,25 @@ import deep from '@magic/deep'
 import { findModuleStyles, saveImport } from '../../lib/index.mjs'
 import colors from '../../themes/colors.mjs'
 
+/** @import { AppObject, Config, ThemeVars, NodeError } from '../../types.mjs' */
+
 const dirName = path.dirname(fileURLToPath(import.meta.url))
 
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<unknown[]>}
+ */
 export const prepareThemes = async (app, config) => {
   const { DIR, NODE_MODULES, ROOT } = config
   let { THEME = '', THEME_VARS = {} } = config
 
   const resetStyles = []
+  /** @type {unknown[]} */
   const themeStyles = []
+  /** @type {unknown[]} */
   const pageStyles = []
+  /** @type {unknown[]} */
   const appStyles = []
 
   THEME_VARS.colors = {
@@ -31,14 +41,17 @@ export const prepareThemes = async (app, config) => {
   // merge user created custom reset.css into styles, if it exists
   try {
     // merge default reset css into styles
-    const { reset } = await saveImport('../themes/reset.css.mjs')
+    const importedReset = await saveImport('../themes/reset.css.mjs')
+    const reset = importedReset instanceof Error ? undefined : importedReset.reset
 
     resetStyles.push(reset)
 
     const themePromises = THEME.map(async theme_name => {
       // find reset css in theme dir if it exists
       const maybeResetCssFile = path.join(DIR.THEMES, theme_name, 'reset.css.mjs')
-      const { default: maybeResetCssStyles } = await saveImport(maybeResetCssFile)
+      const importedThemeReset = await saveImport(maybeResetCssFile)
+      const maybeResetCssStyles =
+        importedThemeReset instanceof Error ? undefined : importedThemeReset.default
       if (maybeResetCssStyles) {
         resetStyles.push(maybeResetCssStyles)
       }
@@ -46,8 +59,13 @@ export const prepareThemes = async (app, config) => {
 
     await Promise.all(themePromises)
   } catch (e) {
-    if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-      throw error(e)
+    // saveImport returns Errors instead of throwing, so this is
+    // only reachable if the theme modules themselves throw.
+    if (is.error(e)) {
+      const eCode = /** @type {NodeError} */ (e).code
+      if (!eCode || !eCode.includes('MODULE_NOT_FOUND')) {
+        throw error(e)
+      }
     }
   }
 
@@ -73,15 +91,19 @@ export const prepareThemes = async (app, config) => {
         return await Promise.all(
           themeLocations.map(async location => {
             try {
-              const { default: theme, vars } = await saveImport(location)
+              const imported = await saveImport(location)
+              const theme = imported instanceof Error ? undefined : imported.default
+              const vars = imported instanceof Error ? undefined : imported.vars
               return {
                 theme,
                 vars,
               }
             } catch (e) {
-              const inc = e.message.endsWith('themes.mjs') || e.message.endsWith('themes.js')
-              if (!inc || !e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-                throw error(e)
+              const nodeErr = /** @type {NodeError} */ (e)
+              const inc =
+                nodeErr.message?.endsWith('themes.mjs') || nodeErr.message?.endsWith('themes.js')
+              if (!inc || !nodeErr.code || !nodeErr.code.includes('MODULE_NOT_FOUND')) {
+                throw error(e instanceof Error ? e : new Error(String(e)))
               }
             }
           }),
@@ -89,15 +111,16 @@ export const prepareThemes = async (app, config) => {
       }),
     )
 
+    /** @type {Record<string, unknown>} */
     let themeVars = {}
 
     result
-      .filter(a => a)
+      .filter(a => a !== undefined)
       .forEach(list => {
         list
-          .filter(a => a)
+          .filter(a => a !== undefined && a !== null)
           .forEach(({ theme, vars }) => {
-            if (!is.empty(vars)) {
+            if (!is.empty(vars) && is.objectNative(vars)) {
               themeVars = deep.merge(themeVars, vars)
             }
             if (!is.empty(theme)) {
@@ -109,16 +132,22 @@ export const prepareThemes = async (app, config) => {
     THEME_VARS = deep.merge(themeVars, THEME_VARS)
   }
 
-  app.pages
-    .filter(p => p.style)
-    .forEach(page => {
-      pageStyles.push(page.style)
-    })
+  if (app.pages) {
+    app.pages
+      .filter(p => p.style)
+      .forEach(page => {
+        pageStyles.push(page.style)
+      })
+  }
 
   const maybeAppFileMjs = path.join(ROOT, 'app.mjs')
   const maybeAppFileJs = path.join(ROOT, 'app.js')
   const fileName = new URL(import.meta.url).pathname
 
+  /**
+   * @param {string} filePath
+   * @returns {Promise<Record<string, unknown> | Error | null>}
+   */
   const loadAppFile = async filePath => {
     if (filePath === fileName) {
       return null
@@ -126,26 +155,30 @@ export const prepareThemes = async (app, config) => {
     try {
       return await saveImport(filePath)
     } catch (e) {
-      if (e.code && e.code.includes('MODULE_NOT_FOUND')) {
+      const eCode = is.error(e) ? /** @type {NodeError} */ (e).code : undefined
+      if (eCode && eCode.includes('MODULE_NOT_FOUND')) {
         return null
       }
-      throw e
+      if (e instanceof Error) {
+        throw e
+      }
+      throw new Error(String(e), { cause: e })
     }
   }
 
   const appResult = (await loadAppFile(maybeAppFileJs)) || (await loadAppFile(maybeAppFileMjs))
-  if (appResult) {
+  if (appResult && !(appResult instanceof Error)) {
     const { style, styleVars } = appResult
     if (style) {
       appStyles.push(style)
     }
-    if (styleVars) {
+    if (styleVars && is.objectNative(styleVars)) {
       THEME_VARS = deep.merge(THEME_VARS, styleVars)
     }
   }
 
   // load all styles from all modules
-  const moduleStyles = findModuleStyles(app.modules, THEME_VARS)
+  const moduleStyles = findModuleStyles(app.modules ?? {}, THEME_VARS)
 
   const styles = [...resetStyles, moduleStyles, ...themeStyles, ...pageStyles, ...appStyles]
 

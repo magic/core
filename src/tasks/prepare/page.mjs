@@ -8,6 +8,12 @@ import transmute from '@magic/transmute'
 
 import { replaceSlashSlash, saveImport } from '../../lib/index.mjs'
 
+/** @import { Config, PageObject, ModuleView, NodeError } from '../../types.mjs' */
+
+/**
+ * @param {{ WEB_ROOT?: string, pageDir: string, state?: Record<string, unknown>, config: Config }} params
+ * @returns {(file: string) => Promise<PageObject | undefined>}
+ */
 export const preparePage =
   ({ WEB_ROOT, pageDir, state = {}, config }) =>
   async file => {
@@ -16,6 +22,7 @@ export const preparePage =
     const markdownExtensions = ['.md', '.markdown']
     const htmlExtensions = ['.html', '.htm']
 
+    /** @type {Record<string, unknown> & { rendered?: string, originalState?: unknown }} */
     let transmuted = {}
 
     if (markdownExtensions.includes(ext)) {
@@ -28,6 +35,7 @@ export const preparePage =
       file = file.replace('.html', '.mjs').replace('.htm', '.mjs')
     }
 
+    /** @type {Record<string, unknown> | Error | undefined} */
     let pageTmp
     if (!is.empty(transmuted)) {
       const viewString = `export const View = state => [${transmuted.rendered}]`
@@ -43,27 +51,36 @@ export const preparePage =
       try {
         pageTmp = await saveImport(file)
       } catch (e) {
-        if (e.code === 'ERR_UNKNOWN_FILE_EXTENSION') {
+        if (is.error(e) && /** @type {NodeError} */ (e).code === 'ERR_UNKNOWN_FILE_EXTENSION') {
           log.warn('UNKNOWN_FILE_TYPE', `${file} is not an es6 component. Ignored.`)
           return
         }
+        if (e instanceof Error) {
+          throw e
+        }
+        throw new Error(String(e), { cause: e })
       }
     }
 
+    /** @type {PageObject} */
     let page = {
       state: {},
     }
 
     if (is.fn(pageTmp)) {
-      page = {
+      page = /** @type {PageObject} */ ({
         ...transmuted,
-        View: pageTmp,
-      }
+        View: /** @type {ModuleView} */ (pageTmp),
+      })
     } else if (transmuted) {
-      const { rendered, ...t } = transmuted
-      page = { ...t, ...pageTmp }
+      const { rendered: _rendered, ...t } = transmuted
+      /** @type {Record<string, unknown>} */
+      const importedPage = is.undefined(pageTmp) || pageTmp instanceof Error ? {} : pageTmp
+      page = /** @type {PageObject} */ ({ ...t, ...importedPage })
     } else {
-      page = { ...pageTmp }
+      /** @type {Record<string, unknown>} */
+      const importedPage = is.undefined(pageTmp) || pageTmp instanceof Error ? {} : pageTmp
+      page = /** @type {PageObject} */ ({ ...importedPage })
     }
 
     page.file = file.replace(/\\/gim, '/')
@@ -83,9 +100,11 @@ export const preparePage =
         transmuted.originalState = transmuted.originalState(config)
       }
 
-      page.state = {
-        ...page.state,
-        ...transmuted.originalState,
+      if (is.objectNative(transmuted.originalState)) {
+        page.state = {
+          ...page.state,
+          ...transmuted.originalState,
+        }
       }
     }
 

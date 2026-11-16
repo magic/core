@@ -1,11 +1,15 @@
 import is from '@magic/types'
 import log from '@magic/log'
 
+/**
+ * @param {Record<string, unknown>} [rawLambdas]
+ * @returns {Promise<Record<string, unknown>>}
+ */
 export const prepareApi = async (rawLambdas = {}) => {
   const lambdaPromises = await Promise.all(
     Object.entries(rawLambdas).map(async ([key, lambda]) => {
       try {
-        const result = await lambda()
+        const result = await /** @type {() => unknown} */ (lambda)()
 
         if (is.fn(result)) {
           return [key, result]

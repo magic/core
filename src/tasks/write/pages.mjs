@@ -2,24 +2,31 @@ import path from 'path'
 
 import fs from '@magic/fs'
 
+/** @import { AppObject, Config } from '../../types.mjs' */
+
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<void>}
+ */
 export const writePages = async (app, config) => {
   const { DIR, HASHES, WEB_ROOT } = config
 
   const { pages } = app
   await fs.mkdirp(DIR.PUBLIC)
 
-  const pagePromises = pages.map(async page => {
-    const oldHash = HASHES[page.name]
+  const pagePromises = (pages ?? []).map(async page => {
+    const oldHash = page.name ? HASHES[page.name] : undefined
     if (oldHash && oldHash === page.hash) {
       return
     }
 
-    const pagePath = page.path.replace(WEB_ROOT, `${DIR.PUBLIC}/`)
+    const pagePath = String(page.path).replace(WEB_ROOT ?? '', `${DIR.PUBLIC}/`)
 
     const dir = path.dirname(pagePath)
     await fs.mkdirp(dir)
 
-    await fs.writeFile(pagePath, page.rendered)
+    await fs.writeFile(pagePath, /** @type {string} */ (page.rendered))
   })
 
   await Promise.all(pagePromises)

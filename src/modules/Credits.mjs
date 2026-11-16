@@ -1,9 +1,14 @@
+/** @import { ThemeVars } from '../types.mjs' */
+
 export const View = () =>
   div({ class: 'Credits' }, [
     'made with a few bits of ',
     Link({ to: 'https://magic.github.io/', target: '_blank', rel: 'noopener' }, 'magic'),
   ])
 
+/**
+ * @param {ThemeVars} vars
+ */
 export const style = vars => ({
   clear: 'both',
   display: 'block',

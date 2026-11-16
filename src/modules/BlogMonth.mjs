@@ -1,7 +1,13 @@
+/** @import { BlogData } from '../types.mjs' */
+
+/**
+ * @param {Record<string, unknown> & { blog: BlogData, month: string, url: string, year: string, link?: string }} state
+ */
 export const View = state => {
-  const { blog, link, month, url, year } = state
+  const { blog, link, month, year } = state
   const months = Object.entries(blog[year][month])
 
+  /** @type {string | undefined} */
   let to
   const title = [month]
   if (link) {

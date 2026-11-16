@@ -1,4 +1,8 @@
-export const View = (state, children = []) =>
+/**
+ * @param {Record<string, unknown>} _state
+ * @param {unknown[]} [children]
+ */
+export const View = (_state, children = []) =>
   footer({ class: 'Footer' }, [div({ class: 'Container' }, [Credits(), children])])
 
 export const style = {

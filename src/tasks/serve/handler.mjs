@@ -4,6 +4,13 @@ import { addTrailingSlash } from '../../lib/index.mjs'
 import { prepareApi } from './prepareApi.mjs'
 import { apiHandler } from './apiHandler.mjs'
 
+/** @import { AppObject, Config } from '../../types.mjs' */
+
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<(req: import('http').IncomingMessage, res: import('http').ServerResponse) => Promise<void>>}
+ */
 export const handler = async (app, config) => {
   const {
     IS_PROD,
@@ -14,19 +21,21 @@ export const handler = async (app, config) => {
   } = config
 
   const {
-    css,
     client,
     static: stat,
     lambdas: rawLambdas,
     // sw
   } = app
+  const css = /** @type {{ css: string, minified: string }} */ (app.css)
 
   const WEB_ROOT = addTrailingSlash(config.WEB_ROOT)
+  /** @type {Record<string, unknown>} */
+  const statObj = /** @type {Record<string, unknown>} */ (stat ?? {})
 
-  const lambdas = await prepareApi(rawLambdas)
+  const lambdas = await prepareApi(/** @type {Record<string, unknown>} */ (rawLambdas ?? {}))
 
   return async (req, res) => {
-    const url = new URL(req.url, `http://${HOST}`)
+    const url = new URL(req.url ?? '/', `http://${HOST}`)
     let { pathname } = url
 
     if (pathname.startsWith(WEB_ROOT)) {
@@ -52,11 +61,14 @@ export const handler = async (app, config) => {
       }
     }
 
-    const pages = Object.fromEntries(app.pages.map(page => [page.name, page.rendered]))
+    const pages = Object.fromEntries(
+      (app.pages ?? []).map(page => [page.name ?? '', page.rendered ?? '']),
+    )
 
     const style = IS_PROD ? css.minified : css.css
 
     const expiryTime = new Date(new Date().getTime() - 1000).toUTCString()
+    /** @type {Record<string, string>} */
     const headers = {
       Expires: expiryTime,
       'Cache-Control': 'no-cache, must-revalidate',
@@ -85,10 +97,10 @@ export const handler = async (app, config) => {
     //   return
     // }
 
-    if (stat[rawUrl]) {
+    if (statObj[rawUrl]) {
       const contentType = fs.getContentType(rawUrl)
       res.writeHead(200, { ...headers, 'Content-Type': contentType })
-      res.end(stat[rawUrl])
+      res.end(/** @type {string} */ (statObj[rawUrl]))
       return
     }
 

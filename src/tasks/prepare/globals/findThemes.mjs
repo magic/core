@@ -6,6 +6,13 @@ import is from '@magic/types'
 
 import { saveImport } from '../../../lib/index.mjs'
 
+/** @import { ConfigDir, NodeError } from '../../../types.mjs' */
+
+/**
+ * @param {Record<string, unknown>} modules
+ * @param {{ DIR: ConfigDir, NODE_MODULES: string, THEME?: string | string[] }} config
+ * @returns {Promise<Record<string, unknown> | undefined>}
+ */
 export const findThemes = async (modules, { DIR, NODE_MODULES, THEME }) => {
   if (THEME) {
     if (is.string(THEME)) {
@@ -38,56 +45,66 @@ export const findThemes = async (modules, { DIR, NODE_MODULES, THEME }) => {
 
         const mods = await Promise.all(
           themeLocations.map(async location => {
-            try {
-              const { default: theme, ...maybeModules } = await saveImport(location)
+            const imported = await saveImport(location)
 
-              const results = Object.entries(maybeModules).map(([name, fn]) => {
-                if (is.case.upper(name[0])) {
-                  if (is.fn(fn)) {
-                    if (!modules[name]) {
-                      return [name, fn]
-                    } else if (modules[name].View) {
-                      return [
-                        name,
-                        {
-                          ...modules[name],
-                          View: fn,
-                        },
-                      ]
-                    } else {
-                      return [name, fn]
-                    }
-                  } else if (is.object(fn)) {
-                    if (!modules[name]) {
-                      return [name, fn]
-                    } else if (is.fn(modules[name])) {
-                      return [name, { View: modules[name], ...fn }]
-                    } else {
-                      return [
-                        name,
-                        {
-                          ...modules[name],
-                          ...fn,
-                        },
-                      ]
-                    }
+            if (imported instanceof Error) {
+              const eCode = /** @type {NodeError} */ (imported).code
+              if (!eCode || !eCode.includes('MODULE_NOT_FOUND')) {
+                throw error(imported)
+              }
+              return {}
+            }
+
+            const { default: _theme, ...maybeModules } = imported
+
+            /** @type {unknown} */
+            let existing
+            const results = Object.entries(maybeModules).map(([name, fn]) => {
+              if (is.case.upper(name[0])) {
+                existing = modules[name]
+                if (is.fn(fn)) {
+                  if (!existing) {
+                    return [name, fn]
+                  } else if (is.objectNative(existing) && existing.View) {
+                    return [
+                      name,
+                      {
+                        ...existing,
+                        View: fn,
+                      },
+                    ]
+                  } else {
+                    return [name, fn]
+                  }
+                } else if (is.object(fn)) {
+                  if (!existing) {
+                    return [name, fn]
+                  } else if (is.fn(existing)) {
+                    return [name, { View: existing, ...fn }]
+                  } else if (is.objectNative(existing)) {
+                    return [
+                      name,
+                      {
+                        ...existing,
+                        ...fn,
+                      },
+                    ]
+                  } else {
+                    return [name, fn]
                   }
                 }
-              })
-
-              return Object.fromEntries(results.filter(a => a))
-            } catch (e) {
-              if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-                throw error(e)
               }
-            }
+            })
+
+            return Object.fromEntries(results.filter(a => a !== undefined))
           }),
         )
 
-        return mods.filter(a => a)
+        return mods.filter(a => a !== undefined)
       }),
     )
 
+    /** @type {Record<string, unknown>} */
     let mods = {}
 
     // by writing the results after awaiting them above,
@@ -95,7 +112,7 @@ export const findThemes = async (modules, { DIR, NODE_MODULES, THEME }) => {
     // Promise.all does not wait internally for sequential execution,
     // but await Promise.all returns ordered results.
     deep.flatten(results).map(result => {
-      if (!is.empty(result)) {
+      if (!is.empty(result) && is.objectNative(result)) {
         mods = deep.merge(mods, result)
       }
     })

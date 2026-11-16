@@ -8,11 +8,20 @@ import log from '@magic/log'
 
 import { replacePathSepForImport, saveImport } from '../../../lib/index.mjs'
 
+/** @import { NodeError } from '../../../types.mjs' */
+
+/** @typedef {{ [key: string]: unknown, lib?: string } } FoundModule */
+
 const localLibIndexPath = path.join('src', 'lib', 'index')
 const localLibMjsPath = path.join('src', 'lib')
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 
-export const findNodeModules = async () => {
+/**
+ * @param {Record<string, unknown>} [_modules]
+ * @returns {Promise<{ [key: string]: FoundModule }>}
+ */
+export const findNodeModules = async _modules => {
+  /** @type {{ [key: string]: FoundModule }} */
   const modules = {}
 
   const dirs = await fs.getDirectories(nodeModuleDir, { depth: false })
@@ -28,16 +37,23 @@ export const findNodeModules = async () => {
       try {
         const mod = await saveImport(loadPath)
         // saveImport returns the error object on failure - check for it
-        if (mod.code && mod.url) {
+        const modIsError = mod instanceof Error
+        const modCode = modIsError ? /** @type {NodeError} */ (mod).code : mod.code
+        const modUrl = modIsError ? /** @type {NodeError} */ (mod).url : mod.url
+        if (modCode && modUrl) {
           log.warn('E_MODULE_NOT_FOUND', `skipping node_module: ${nodeModule}`)
           return
         }
         // copy the imported module into a new object to be able to extend it below
+        const modRecord = modIsError
+          ? /** @type {Record<string, unknown>} */ (/** @type {unknown} */ (mod))
+          : mod
         modules[name] = {
-          ...mod,
+          ...modRecord,
         }
       } catch (e) {
-        log.error('Error', `requiring node_module: ${nodeModule}, error: ${e.message}`)
+        const msg = e instanceof Error ? e.message : String(e)
+        log.error('Error', `requiring node_module: ${nodeModule}, error: ${msg}`)
       }
 
       // find lib file of module if it exists
@@ -49,8 +65,9 @@ export const findNodeModules = async () => {
             await fs.stat(libPath)
             modules[name].lib = path.join(loadPath, localLibIndexPath + ext)
           } catch (e) {
-            if (e.code !== 'ENOENT') {
-              throw error(e)
+            const eCode = e instanceof Error ? /** @type {NodeError} */ (e).code : undefined
+            if (eCode !== 'ENOENT') {
+              throw e instanceof Error ? error(e) : new Error(String(e))
             }
           }
         }),
@@ -61,8 +78,9 @@ export const findNodeModules = async () => {
         await fs.stat(libMjsPath)
         modules[name].lib = path.join(loadPath, localLibMjsPath)
       } catch (e) {
-        if (e.code !== 'ENOENT') {
-          throw error(e)
+        const eCode = e instanceof Error ? /** @type {NodeError} */ (e).code : undefined
+        if (eCode !== 'ENOENT') {
+          throw e instanceof Error ? error(e) : new Error(String(e))
         }
       }
     })
@@ -82,16 +100,27 @@ export const findNodeModules = async () => {
           const importPath = path.join(nodeModule, 'src', 'index.mjs')
           const mod = await saveImport(importPath)
           // saveImport returns the error object on failure - check for it
-          if (mod.code && mod.url) {
+          const modIsError = mod instanceof Error
+          const modCode = modIsError ? /** @type {NodeError} */ (mod).code : mod.code
+          const modUrl = modIsError ? /** @type {NodeError} */ (mod).url : mod.url
+          if (modCode && modUrl) {
             log.warn('E_MODULE_NOT_FOUND', `skipping node_module: ${nodeModule}`)
             return
           }
           // copy the imported module into a new object to be able to extend it below
+          const modRecord = modIsError
+            ? /** @type {Record<string, unknown>} */ (/** @type {unknown} */ (mod))
+            : mod
           modules[name] = {
-            ...mod,
+            ...modRecord,
           }
         } catch (e) {
-          log.error(e.code, `requiring node_module: ${nodeModule}, error: ${e.message}`)
+          const eNode = e instanceof Error ? /** @type {NodeError} */ (e) : undefined
+          const msg = e instanceof Error ? e.message : String(e)
+          log.error(
+            eNode && eNode.code ? eNode.code : 'Error',
+            `requiring node_module: ${nodeModule}, error: ${msg}`,
+          )
           process.exit(1)
         }
 
@@ -102,8 +131,9 @@ export const findNodeModules = async () => {
           const resolvedLibPath = replacePathSepForImport(importPath, path.sep)
           modules[name].lib = resolvedLibPath
         } catch (e) {
-          if (e.code !== 'ENOENT') {
-            throw error(e)
+          const eCode = e instanceof Error ? /** @type {NodeError} */ (e).code : undefined
+          if (eCode !== 'ENOENT') {
+            throw e instanceof Error ? error(e) : new Error(String(e))
           }
         }
 
@@ -112,8 +142,9 @@ export const findNodeModules = async () => {
           await fs.stat(libMjsPath)
           modules[name].lib = path.join(loadPath, localLibMjsPath)
         } catch (e) {
-          if (e.code !== 'ENOENT') {
-            throw error(e)
+          const eCode = e instanceof Error ? /** @type {NodeError} */ (e).code : undefined
+          if (eCode !== 'ENOENT') {
+            throw e instanceof Error ? error(e) : new Error(String(e))
           }
         }
       }

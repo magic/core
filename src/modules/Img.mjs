@@ -1,3 +1,6 @@
+/**
+ * @param {string | Record<string, unknown>} props
+ */
 export const View = props => {
   if (typeof props === 'string') {
     props = {
@@ -13,7 +16,7 @@ export const View = props => {
     return
   }
 
-  if (!props.hasOwnProperty('alt')) {
+  if (!Object.hasOwn(props, 'alt')) {
     if (props.title) {
       props.alt = props.title
     } else {

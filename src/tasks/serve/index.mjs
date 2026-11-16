@@ -5,37 +5,54 @@ import log from '@magic/log'
 
 import { handler } from './handler.mjs'
 
+/** @import { AppObject, Config, NodeError } from '../../types.mjs' */
+
 const MAX_PORT_RETRIES = 10
 
+/**
+ * @param {import('http').Server} server
+ * @param {{ port: number, host?: string }} options
+ * @param {number} [attempts]
+ * @returns {Promise<{ port: number, host?: string }>}
+ */
 export const startServer = async (server, options, attempts = 0) => {
   try {
     server.listen(options)
 
     // await a thenable async/await struct
     // this "promise" waits for the server either erroring or starting to listen
-    await {
+    await /** @type {Promise<unknown>} */ ({
+      /**
+       * @param {() => void} r
+       * @param {(err: Error) => void} f
+       */
       then(r, f) {
         server.on('listening', r)
         server.on('error', f)
       },
-    }
+    })
   } catch (e) {
     // if the requested port is in use,
     // increment portnumber by 1, then retry starting the server
-    if (e.code === 'EADDRINUSE') {
+    if (/** @type {NodeError} */ (e).code === 'EADDRINUSE') {
       if (attempts >= MAX_PORT_RETRIES) {
         throw error(`Could not find available port after ${MAX_PORT_RETRIES} attempts`)
       }
       options.port += 1
       return startServer(server, options, attempts + 1)
     } else {
-      throw error(e)
+      throw error(/** @type {Error} */ (e))
     }
   }
 
   return options
 }
 
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<import('http').Server>}
+ */
 export const serve = async (app, config) => {
   const handle = await handler(app, config)
 
@@ -56,7 +73,7 @@ export const serve = async (app, config) => {
 
     log(log.paint.green('LISTENING TO'), `http://${host}:${port}${WEB_ROOT}`)
   } catch (e) {
-    log.error(e)
+    log.error(/** @type {Error} */ (e))
   }
 
   return server

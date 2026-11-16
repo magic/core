@@ -4,6 +4,7 @@ import cli from '@magic/cli'
 
 import { runCluster } from './runCluster.mjs'
 
+/** @type {import('@magic/cli').ParseProps} */
 const args = {
   options: [
     ['--help', '-help', 'help', '--h', '-h'],

@@ -2,12 +2,19 @@ import { preparePage } from './page.mjs'
 
 import { replaceSlashSlash } from '../../lib/index.mjs'
 
+/** @import { AppObject, Config, PageObject, ModuleView } from '../../types.mjs' */
+
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<PageObject[]>}
+ */
 export const preparePages = async (app, config) => {
   const { WEB_ROOT, DIR } = config
 
   const pageWorker = preparePage({ WEB_ROOT, pageDir: DIR.PAGES, state: app.state, config })
 
-  let pages = await Promise.all(app.files.map(pageWorker))
+  let pages = await Promise.all((app.files ?? []).map(pageWorker))
 
   if (app.pages) {
     pages = [...app.pages, ...pages]
@@ -19,7 +26,7 @@ export const preparePages = async (app, config) => {
     const page404 = {
       name: replaceSlashSlash(`${WEB_ROOT}/404/`),
       path: replaceSlashSlash(`${WEB_ROOT}/404.html`),
-      View: () => div('404 - not found.'),
+      View: /** @type {ModuleView} */ (() => div('404 - not found.')),
       state: {
         title: '404 - not found',
         description: '404 - not found.',
@@ -33,7 +40,7 @@ export const preparePages = async (app, config) => {
     pages.push(page404)
   }
 
-  return pages.filter(a => a)
+  return pages.filter(a => a !== undefined)
 }
 
 export default preparePages

@@ -2,6 +2,8 @@ import is from '@magic/types'
 
 import { replaceSlashSlash } from '../../lib/index.mjs'
 
+/** @import { AppObject, Config } from '../../types.mjs' */
+
 const sitemapHeader = `
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset
@@ -14,7 +16,13 @@ const sitemapFooter = `
 </urlset>
 `
 
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<Record<string, string>>}
+ */
 export const prepareMetaFiles = async (app, config) => {
+  /** @type {Record<string, string>} */
   const res = {}
 
   const { CNAME, ROBOTS_TXT, SITEMAP, URL, WEB_ROOT } = config
@@ -28,23 +36,23 @@ export const prepareMetaFiles = async (app, config) => {
   if (SITEMAP) {
     const sitemapArray = [sitemapHeader]
 
-    app.pages
-      .sort(({ name }, { name: n2 }) => (is.ln.gt(name, n2) || name > n2 ? 1 : -1))
+    ;(app.pages ?? [])
+      .sort(({ name }, { name: n2 }) => (is.ln.gt(name, n2) || (name ?? '') > (n2 ?? '') ? 1 : -1))
       .forEach(({ name }) => {
         const now = new Date()
-        let month = now.getMonth() + 1
-        if (month < 10) {
+        let month = String(now.getMonth() + 1)
+        if (Number(month) < 10) {
           month = `0${month}`
         }
 
-        let day = now.getDate()
-        if (day < 10) {
+        let day = String(now.getDate())
+        if (Number(day) < 10) {
           day = `0${day}`
         }
 
         const changeDate = `${now.getFullYear()}-${month}-${day}`
 
-        const sitemapItemUrl = `https://${replaceSlashSlash(`${URL}${name.replace(WEB_ROOT, '/')}`)}`
+        const sitemapItemUrl = `https://${replaceSlashSlash(`${URL}${String(name).replace(String(WEB_ROOT), '/')}`)}`
 
         sitemapArray.push(`
 <url>
@@ -62,7 +70,7 @@ export const prepareMetaFiles = async (app, config) => {
   }
 
   if (CNAME) {
-    res['/CNAME'] = URL.trim()
+    res['/CNAME'] = String(URL).trim()
   }
 
   return res

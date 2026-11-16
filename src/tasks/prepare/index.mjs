@@ -20,49 +20,69 @@ import { prepareDependencies } from './dependencies.mjs'
 
 import { defaultApp } from '../../defaultApp.mjs'
 
-export const prepare = async (app, config) => {
-  app = { ...defaultApp, ...app }
+/** @import { AppObject, Config, PageObject, NodeError, Subscription } from '../../types.mjs' */
+
+/**
+ * @param {AppObject} paramApp
+ * @param {Config} config
+ * @returns {Promise<AppObject>}
+ */
+export const prepare = async (paramApp, config) => {
+  /** @type {AppObject} */
+  let app = /** @type {AppObject} */ ({
+    .../** @type {Record<string, unknown>} */ (defaultApp),
+    ...paramApp,
+  })
 
   if (is.fn(app.build)) {
-    app = await app.build({ app, config })
+    app = /** @type {AppObject} */ (
+      await /** @type {(params: { app: AppObject, config: Config }) => Promise<unknown>} */ (
+        /** @type {unknown} */ (app.build)
+      )({ app, config })
+    )
   }
 
-  app.files = await getPages({ dir: config.DIR.PAGES, root: config.ROOT })
+  app.files = /** @type {string[]} */ (await getPages({ dir: config.DIR.PAGES, root: config.ROOT }))
 
   // collect the pages, create their states
-  app.pages = await preparePages(app, config)
+  app.pages = /** @type {PageObject[]} */ (await preparePages(app, config))
 
   const { modules, libs } = await prepareGlobals(app, config)
 
+  app.lib = app.lib ?? {}
   libs.forEach(({ key, lib }) => {
-    app.lib[key] = lib
+    ;/** @type {Record<string, unknown>} */ (app.lib)[key] = lib
   })
 
   app.modules = modules
 
   // make all links WEB_ROOTED
   // mutates app.state
-  app.state = prepareStateLinks(app, config)
+  const state = prepareStateLinks(app, config)
+  app.state = state
 
   if (config.BLOG_DIR) {
-    app.blog = await getBlog(config)
+    app.blog = /** @type {string[]} */ (await getBlog(config))
 
     const { posts, index } = await prepareBlog(app, config)
 
-    app.state.blog = index
+    state.blog = index
 
-    app.pages = [...app.pages, ...posts]
+    app.pages = [...app.pages, .../** @type {PageObject[]} */ (posts)]
   }
 
   // collect all page states, actions, effects, helpers and subscriptions
-  app.pages.forEach(page => {
-    if (!is.empty(page.state)) {
-      app.state.pages = app.state.pages || {}
+  ;/** @type {PageObject[]} */ (app.pages).forEach(page => {
+    if (page.state && !is.empty(page.state)) {
+      state.pages = state.pages || {}
 
       // filter page.state that is equal to already existing global state
-      const tmpPageState = Object.entries(page.state).filter(([k, v]) => app.state[k] !== v)
+      const tmpPageState = Object.entries(
+        /** @type {Record<string, unknown>} */ (page.state),
+      ).filter(([k, v]) => state[k] !== v)
 
-      app.state.pages[page.name] = Object.fromEntries(tmpPageState)
+      ;/** @type {Record<string, unknown>} */ (state.pages)[String(page.name)] =
+        Object.fromEntries(tmpPageState)
     }
 
     const actionTypes = ['actions', 'effects']
@@ -70,13 +90,15 @@ export const prepare = async (app, config) => {
       // do nothing if page has no actions or effects (type)
       .filter(type => !is.empty(page[type]))
       .forEach(type => {
-        app[type].pages = app[type].pages || {}
-        app[type].pages[page.name] = page[type]
+        const section = /** @type {{ pages?: Record<string, unknown> }} */ (app[type])
+        section.pages = section.pages || {}
+        section.pages[String(page.name)] = page[type]
       })
 
-    if (!is.empty(page.subscriptions)) {
-      page.subscriptions.forEach(sub => {
-        app.subscriptions.push(sub)
+    if (page.subscriptions && !is.empty(page.subscriptions)) {
+      ;/** @type {Subscription[]} */ (page.subscriptions).forEach(sub => {
+        const subs = /** @type {Subscription[]} */ (app.subscriptions)
+        subs.push(sub)
       })
     }
 
@@ -86,15 +108,27 @@ export const prepare = async (app, config) => {
         `page: ${page.name}`,
         'using app.helpers is deprecated, use actions, effects or lib',
       )
-      app.helpers = deep.merge(app.helpers, page.helpers)
+      app.helpers = /** @type {Record<string, unknown>} */ (
+        deep.merge(
+          /** @type {Record<string, unknown>} */ (app.helpers),
+          /** @type {Record<string, unknown>} */ (page.helpers),
+        )
+      )
     }
 
     if (!is.empty(page.cookies)) {
-      app.cookies = deep.merge(app.cookies, page.cookies)
+      app.cookies = /** @type {Record<string, unknown>} */ (
+        deep.merge(
+          /** @type {Record<string, unknown>} */ (app.cookies),
+          /** @type {Record<string, unknown>} */ (page.cookies),
+        )
+      )
     }
 
     if (!is.empty(page.init)) {
-      app.init = deep.merge(app.init, page.init)
+      app.init = /** @type {unknown} */ (
+        deep.merge(/** @type {unknown} */ (app.init), /** @type {unknown} */ (page.init))
+      )
     }
   })
 
@@ -104,10 +138,11 @@ export const prepare = async (app, config) => {
   app.static = await prepareMetaFiles(app, config)
 
   try {
-    let staticDirs = config.DIR.STATIC
-    if (!is.array(staticDirs)) {
-      staticDirs = [staticDirs]
-    }
+    const staticDirsRaw = config.DIR.STATIC
+    /** @type {string[]} */
+    const staticDirs = is.array(staticDirsRaw)
+      ? /** @type {string[]} */ (staticDirsRaw)
+      : [/** @type {string} */ (staticDirsRaw)]
 
     await Promise.all(
       staticDirs.map(async dir => {
@@ -116,8 +151,9 @@ export const prepare = async (app, config) => {
         if (!is.empty(staticFiles)) {
           const staticPromises = staticFiles.map(async f => {
             const name = replaceSlashSlash(`/${f.replace(dir, '')}`)
+
             // TODO: use streams here
-            app.static[name] = await fs.readFile(f)
+            ;/** @type {Record<string, unknown>} */ (app.static)[name] = await fs.readFile(f)
           })
 
           await Promise.all(staticPromises)
@@ -127,8 +163,8 @@ export const prepare = async (app, config) => {
   } catch (e) {
     // it's fine if the static dir does not exist,
     // but all other errors will throw.
-    if (e.code !== 'ENOENT') {
-      throw error(e)
+    if (/** @type {NodeError} */ (e).code !== 'ENOENT') {
+      throw error(/** @type {Error} */ (e))
     }
   }
 
@@ -136,7 +172,7 @@ export const prepare = async (app, config) => {
 
   // mutates app
   // init, cookies, actions, effects, state, helpers, subscriptions
-  prepareModules(app, config)
+  prepareModules(app)
 
   // create client magic.js file
   app.client = await prepareJs(app, config)

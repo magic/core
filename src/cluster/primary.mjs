@@ -2,6 +2,21 @@ import log from '@magic/log'
 
 import { runCmd } from './runCmd.mjs'
 
+/** @import { ConfigDir } from '../types.mjs' */
+
+/**
+ * @param {{
+ *   args: Record<string, unknown>,
+ *   cluster: import('cluster'),
+ *   commands: Record<string, unknown>,
+ *   DIR: ConfigDir,
+ *   GIT: unknown,
+ *   URL: string | false | undefined,
+ *   URL_WARNING: number | undefined,
+ *   WEB_ROOT: string | undefined,
+ * }} params
+ * @returns {Promise<void>}
+ */
 export const primary = async ({
   args,
   cluster,
@@ -42,6 +57,7 @@ export const primary = async ({
     return
   }
 
+  /** @type {import('cluster').Worker | undefined} */
   let watchWorker
   if (commands.serve) {
     watchWorker = cluster.fork()
@@ -67,7 +83,7 @@ export const primary = async ({
             )
           } else {
             // files have changed, restart build worker
-            buildWorker.kill(1)
+            buildWorker.kill('SIGHUP')
             buildWorker = cluster.fork()
           }
         }
@@ -88,7 +104,7 @@ export const primary = async ({
     }
   })
 
-  cluster.on('exit', (worker, code, signal) => {
+  cluster.on('exit', (_worker, code, _signal) => {
     if (code !== null && code !== 0) {
       log('exit', code)
       process.exit(code)

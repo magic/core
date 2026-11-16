@@ -7,6 +7,10 @@ import log from '@magic/log'
 
 import { isLocalPath } from '../../lib/index.mjs'
 
+/**
+ * @param {string | undefined} dir
+ * @returns {Promise<void>}
+ */
 export const clean = async dir => {
   if (is.string(dir) && !is.empty(dir)) {
     if (!isLocalPath(path.resolve(dir))) {

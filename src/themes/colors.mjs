@@ -1,3 +1,4 @@
+/** @type {{ [key: string]: unknown }} */
 export const colors = {
   red: {
     50: '#FFEBEE',

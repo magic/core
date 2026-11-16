@@ -1,6 +1,12 @@
 import is from '@magic/types'
 import log from '@magic/log'
 
+/**
+ * @param {import('http').IncomingMessage & { body?: unknown }} req
+ * @param {import('http').ServerResponse} res
+ * @param {{ lambdas: Record<string, unknown>, rawUrl: string }} params
+ * @returns {Promise<boolean | undefined>}
+ */
 export const apiHandler = async (req, res, { lambdas, rawUrl }) => {
   if (rawUrl === '/api/' || rawUrl === '/api') {
     const code = 200
@@ -27,29 +33,33 @@ export const apiHandler = async (req, res, { lambdas, rawUrl }) => {
   }
 
   if (is.function(lambda)) {
-    req.body = []
+    /** @type {Buffer[]} */
+    const chunks = []
+    req.body = chunks
 
     req.on('data', chunk => {
       if (is.string(chunk)) {
         chunk = Buffer.from(chunk)
       }
 
-      req.body.push(chunk)
+      chunks.push(/** @type {Buffer} */ (chunk))
     })
 
-    req.on('end', async (...args) => {
-      req.body = Buffer.concat(req.body).toString()
+    req.on('end', async () => {
+      req.body = Buffer.concat(chunks).toString()
 
       if (req.headers['content-type'] === 'application/json') {
         try {
-          req.body = JSON.parse(req.body)
+          req.body = JSON.parse(/** @type {string} */ (req.body))
         } catch (e) {
           log.error('E_JSON_PARSE', e)
           req.body = e
         }
       }
 
-      const result = await lambda(req, res, ...args)
+      const result = /** @type {{ code?: number, body?: string, type?: string }} */ (
+        await lambda(req, res)
+      )
       const { code = 500, body = 'Internal Server Error', type = 'text/plain' } = result
 
       res.writeHead(code, { 'Content-Type': type })

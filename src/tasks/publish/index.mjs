@@ -2,8 +2,12 @@ import log from '@magic/log'
 
 import { getGitConfig, xc } from '../../lib/index.mjs'
 
+/**
+ * @param {{ DIR: { PUBLIC: string }, FORCE?: boolean, GIT?: { ORIGIN?: string, BRANCH?: string, [key: string]: unknown } }} params
+ * @returns {Promise<void>}
+ */
 export const publish = async ({ DIR, FORCE = false, GIT }) => {
-  const git = await getGitConfig(GIT)
+  const git = (await getGitConfig(GIT)) ?? {}
   const outDir = DIR.PUBLIC.replace(`${process.cwd()}/`, '')
 
   const cmdPrefix = `--prefix=${outDir}`

@@ -7,15 +7,21 @@ import log from '@magic/log'
 
 import { saveImport } from '../lib/index.mjs'
 
+/** @import { Config, AppObject, PageObject, Hashes, ViewResult } from '../types.mjs' */
+
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
+/**
+ * @param {Config} config
+ * @returns {Promise<AppObject>}
+ */
 const App = async config => {
   const {
-    PREPEND_TAGS,
-    APPEND_TAGS,
-    PREPEND_SCRIPTS,
-    APPEND_SCRIPTS,
+    PREPEND_TAGS = [],
+    APPEND_TAGS = [],
+    PREPEND_SCRIPTS = [],
+    APPEND_SCRIPTS = [],
     CLIENT_LIB_NAME,
     DIR,
     LANG = 'en',
@@ -24,20 +30,21 @@ const App = async config => {
     WEB_ROOT,
   } = config
 
-  let { THEME = [] } = config
+  const rawTheme = config.THEME
 
+  /** @type {string[]} */
+  const THEME = is.array(rawTheme) ? rawTheme : is.string(rawTheme) ? [rawTheme] : []
+
+  /** @type {{ state: Record<string, unknown>, actions: Record<string, unknown>, effects: Record<string, unknown>, subscriptions: Record<string, unknown> }} */
   let localApp = {
     state: {},
     actions: {},
     effects: {},
-    subscriptions: [],
+    subscriptions: /** @type {Record<string, unknown>} */ (/** @type {unknown} */ ([])),
   }
 
+  /** @type {{ [key: string]: unknown }} */
   let seo = {}
-
-  if (!is.array(THEME)) {
-    THEME = [THEME]
-  }
 
   const themeData = await Promise.all(
     THEME.map(async theme_name => {
@@ -58,26 +65,30 @@ const App = async config => {
 
       return await Promise.all(
         themeLocations.map(async location => {
-          try {
-            const { state, actions, effects, subscriptions } = await saveImport(location)
+          const theme = await saveImport(location)
 
-            return {
-              state,
-              actions,
-              effects,
-              subscriptions,
-            }
-          } catch (e) {
-            if (!e.code || !e.code.includes('MODULE_NOT_FOUND')) {
-              if (e.name === 'SyntaxError') {
+          if (theme instanceof Error) {
+            const themeCode = /** @type {{ code?: string }} */ (theme).code
+            if (!themeCode || !themeCode.includes('MODULE_NOT_FOUND')) {
+              if (theme.name === 'SyntaxError') {
                 log.error(
                   'SYNTAX_ERROR',
                   '@magic/core: SyntaxError in your source files. Please run `npm run format` to get more information.',
                 )
                 process.exit(1)
               }
-              throw e
+              throw theme
             }
+            return null
+          }
+
+          const { state, actions, effects, subscriptions } = theme
+
+          return {
+            state,
+            actions,
+            effects,
+            subscriptions,
           }
         }),
       )
@@ -85,26 +96,26 @@ const App = async config => {
   )
 
   themeData
-    .filter(a => a)
+    .filter(a => a !== null)
     .forEach(theme => {
       theme
-        .filter(a => a)
-        .forEach((props = {}) => {
+        .filter(a => a !== null)
+        .forEach(props => {
           const { state, actions, effects, subscriptions } = props
 
-          if (state) {
+          if (state && is.objectNative(state)) {
             if (is.fn(localApp.state)) {
               localApp.state = localApp.state(config)
             }
             localApp.state = { ...localApp.state, ...state }
           }
-          if (actions) {
+          if (actions && is.objectNative(actions)) {
             localApp.actions = { ...localApp.actions, ...actions }
           }
-          if (effects) {
+          if (effects && is.objectNative(effects)) {
             localApp.effects = { ...localApp.effects, ...effects }
           }
-          if (subscriptions) {
+          if (subscriptions && is.objectNative(subscriptions)) {
             localApp.subscriptions = { ...localApp.subscriptions, ...subscriptions }
           }
         })
@@ -115,6 +126,10 @@ const App = async config => {
   const maybeAppFileMjs = path.join(ROOT, 'app.mjs')
   const maybeAppFileJs = path.join(ROOT, 'app.js')
 
+  /**
+   * @param {string} filePath
+   * @returns {Promise<Record<string, unknown> | null>}
+   */
   const loadAppFile = async filePath => {
     const result = await saveImport(filePath)
     if (result instanceof Error) {
@@ -131,14 +146,16 @@ const App = async config => {
   if (appResult) {
     const { default: def, ...maybeApp } = appResult
 
-    if (def) {
+    if (is.objectNative(def)) {
       let { state = {} } = def
       if (is.fn(def.state)) {
         state = def.state(config)
       }
 
-      const { seo: _, ...s } = state
-      seo = state.seo
+      /** @type {Record<string, unknown>} */
+      const stateObj = is.objectNative(state) ? state : {}
+      const { seo: _seo, ...s } = stateObj
+      seo = is.objectNative(stateObj.seo) ? stateObj.seo : {}
 
       localApp = deep.merge(localApp, def)
       if (is.fn(localApp.state)) {
@@ -151,8 +168,10 @@ const App = async config => {
         state = maybeApp.state(config)
       }
 
-      const { seo: _, ...s } = state
-      seo = state.seo
+      /** @type {Record<string, unknown>} */
+      const stateObj = is.objectNative(state) ? state : {}
+      const { seo: _seo2, ...s } = stateObj
+      seo = is.objectNative(stateObj.seo) ? stateObj.seo : {}
 
       if (is.fn(maybeApp.state)) {
         maybeApp.state = maybeApp.state(config)
@@ -177,71 +196,85 @@ const App = async config => {
 
     // this View gets server rendered,
     // the inner function that accepts state gets used to render this app on the client.
-    View: (page, hashes) => state => {
-      if (is.fn(localApp.state)) {
-        localApp.state = localApp.state(config)
-      }
-      if (is.fn(state)) {
-        state = state(config)
-      }
+    /**
+     * @param {PageObject} page
+     * @param {Hashes} hashes
+     * @returns {(state: unknown) => ViewResult}
+     */
+    View:
+      (page, hashes) =>
+      /**
+       * @param {unknown} state
+       * @returns {ViewResult}
+       */
+      state => {
+        if (is.fn(localApp.state)) {
+          localApp.state = localApp.state(config)
+        }
+        if (is.fn(state)) {
+          state = state(config)
+        }
 
-      state = {
-        ...localApp.state,
-        ...state,
-        ...page.state,
-        url: page.name,
-      }
+        /** @type {Record<string, unknown>} */
+        const stateObj = is.objectNative(state) ? state : {}
+        /** @type {Record<string, unknown>} */
+        const merged = {
+          ...localApp.state,
+          ...stateObj,
+          ...page.state,
+          url: page.name,
+        }
 
-      const shortJsHash = hashes['/magic.js'].split('-')[1].substr(0, 10)
-      const magicJs = {
-        src: `${WEB_ROOT}${CLIENT_LIB_NAME}.js?${shortJsHash}`,
-        integrity: hashes['/magic.js'],
-        crossorigin: 'anonymous',
-        type: 'module',
-      }
+        const shortJsHash = hashes['/magic.js'].split('-')[1].substr(0, 10)
+        const magicJs = {
+          src: `${WEB_ROOT}${CLIENT_LIB_NAME}.js?${shortJsHash}`,
+          integrity: hashes['/magic.js'],
+          crossorigin: 'anonymous',
+          type: 'module',
+        }
 
-      const shortCssHash = hashes['/magic.css'].split('-')[1].substr(0, 10)
-      const magicCss = {
-        rel: 'stylesheet',
-        href: `${WEB_ROOT}${CLIENT_LIB_NAME}.css?${shortCssHash}`,
-        integrity: hashes['/magic.css'],
-        crossorigin: 'anonymous',
-      }
+        const shortCssHash = hashes['/magic.css'].split('-')[1].substr(0, 10)
+        const magicCss = {
+          rel: 'stylesheet',
+          href: `${WEB_ROOT}${CLIENT_LIB_NAME}.css?${shortCssHash}`,
+          integrity: hashes['/magic.css'],
+          crossorigin: 'anonymous',
+        }
 
-      // const shortSwHash = hashes.serviceWorker.split('-')[1].substr(0, 10)
-      // const serviceWorker = {
-      //   src: `${config.WEB_ROOT}${config.CLIENT_SERVICE_WORKER_NAME}.js?${shortSwHash}`,
-      //   integrity: hashes.serviceWorker,
-      //   crossorigin: 'anonymous',
-      // }
+        // const shortSwHash = hashes.serviceWorker.split('-')[1].substr(0, 10)
+        // const serviceWorker = {
+        //   src: `${config.WEB_ROOT}${config.CLIENT_SERVICE_WORKER_NAME}.js?${shortSwHash}`,
+        //   integrity: hashes.serviceWorker,
+        //   crossorigin: 'anonymous',
+        // }
 
-      return [
-        h('', { innerHTML: '<!DOCTYPE html>' }),
-        html({ lang: state.lang || LANG }, [
-          head([
-            meta({ charset: 'utf-8' }),
-            meta({ 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' }),
-            meta({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }),
-            meta({ 'http-equiv': 'Permissions-Policy', content: 'interest-cohort=()' }),
-            Seo({ ...state, seo }),
-            link(magicCss),
-            page.Head && page.Head(state),
+        return [
+          h('', { innerHTML: '<!DOCTYPE html>' }),
+          html({ lang: merged.lang || LANG }, [
+            head([
+              meta({ charset: 'utf-8' }),
+              meta({ 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' }),
+              meta({ name: 'viewport', content: 'width=device-width, initial-scale=1.0' }),
+              meta({ 'http-equiv': 'Permissions-Policy', content: 'interest-cohort=()' }),
+              Seo({ ...merged, seo }),
+              link(magicCss),
+              page.Head && page.Head(merged),
+            ]),
+
+            body([
+              SkipLink(),
+              PREPEND_TAGS.map(tag => h(tag.name, tag.props, tag.children)),
+              Page({ page: page.View, state: merged }),
+              APPEND_TAGS.map(tag => h(tag.name, tag.props, tag.children)),
+
+              PREPEND_SCRIPTS.map(scr => script(scr)),
+              script(magicJs),
+              APPEND_SCRIPTS.map(scr => script(scr)),
+              // script(serviceWorker),
+            ]),
           ]),
-
-          body([
-            SkipLink(),
-            PREPEND_TAGS.map(tag => h(tag.name, tag.props, tag.children)),
-            Page({ page: page.View, state }),
-            APPEND_TAGS.map(tag => h(tag.name, tag.props, tag.children)),
-
-            PREPEND_SCRIPTS.map(scr => script(scr)),
-            script(magicJs),
-            APPEND_SCRIPTS.map(scr => script(scr)),
-            // script(serviceWorker),
-          ]),
-        ]),
-      ]
-    },
+        ]
+      },
   }
 
   const app = deep.merge(defaultApp, localApp)

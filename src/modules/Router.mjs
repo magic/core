@@ -1,4 +1,10 @@
 // Page Module
+/** @import { ViewResult } from '../types.mjs' */
+/**
+ * @param {{ page: (state: unknown) => ViewResult, state: Record<string, unknown> }} props
+ * @param {unknown} [children]
+ * @returns {unknown}
+ */
 export const View = ({ page, state }, children) => {
   const magicProps = {
     id: 'Magic',
@@ -22,6 +28,11 @@ export const View = ({ page, state }, children) => {
   )
 }
 
+/**
+ * @param {{ to?: string, action?: unknown, text?: unknown, href?: string } & Record<string, unknown>} props
+ * @param {unknown} [children]
+ * @returns {unknown}
+ */
 export const Link = ({ to, action = actions.go, text, ...p }, children) => {
   const { href, nofollow, noreferrer, ...props } = p
   to = to || href || ''
@@ -48,7 +59,7 @@ export const Link = ({ to, action = actions.go, text, ...p }, children) => {
       props.rel += ' nofollow'
     }
     if (noreferrer) {
-      props.rel += ' noreferrer'
+      props.rel = `${props.rel} noreferrer`
     }
   }
 
@@ -60,13 +71,18 @@ export const state = {
 }
 
 export const actions = {
+  /**
+   * @param {Record<string, unknown>} state
+   * @param {{ state?: { url: string, hash: string, scrollY?: number } } | null | undefined} [e]
+   * @returns {Record<string, unknown>}
+   */
   pop: (state, e) => {
     let { pathname: url, hash } = window.location
     hash = hash.substring(1)
 
     let top = 0
 
-    if (e.state) {
+    if (e && e.state) {
       url = e.state.url
       hash = e.state.hash
       top = e.state.scrollY || 0
@@ -85,6 +101,11 @@ export const actions = {
     }
   },
 
+  /**
+   * @param {Record<string, unknown>} state
+   * @param {{ currentTarget?: { href: string } } | null | undefined} [e]
+   * @returns {Record<string, unknown>}
+   */
   go: (state, e) => {
     // if called without an event, do nothing
     if (!e || !e.currentTarget) {
@@ -105,7 +126,8 @@ export const actions = {
       return state
     }
 
-    const title = state.pages && state.pages[url] && state.pages[url].title
+    const pages = /** @type {{ [key: string]: { title?: string } } | undefined } */ (state.pages)
+    const title = pages && pages[url] && pages[url].title
     if (title) {
       document.title = state.title = title
     }
@@ -119,7 +141,7 @@ export const actions = {
     }
 
     const { scrollY } = window
-    window.history.pushState({ url, hash, scrollY }, state.title, to)
+    window.history.pushState({ url, hash, scrollY }, String(state.title), to)
 
     return {
       ...state,
@@ -131,7 +153,15 @@ export const actions = {
 }
 
 export const effects = {
+  /**
+   * @param {(action: string, e: unknown) => void} dispatch
+   * @param {string} action
+   * @returns {() => void}
+   */
   listenPopState: (dispatch, action) => {
+    /**
+     * @param {unknown} e
+     */
     const listener = e => dispatch(action, e)
 
     addEventListener('popstate', listener)

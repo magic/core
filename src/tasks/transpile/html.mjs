@@ -1,21 +1,32 @@
 import { renderToString } from '@magic/hyperapp'
 
 import deep from '@magic/deep'
+import is from '@magic/types'
 import log from '@magic/log'
 
 import { replaceSlashSlash } from '../../lib/replaceSlashSlash.mjs'
 
+/** @import { AppObject, PageObject } from '../../types.mjs' */
+
+/**
+ * @param {{ app: AppObject, root: string | undefined }} params
+ * @returns {PageObject[]}
+ */
 export default ({ app, root }) => {
-  app.state.root = root
+  if (!app.state) {
+    app.state = {}
+  }
+  const state = app.state
+  state.root = root
 
-  return app.pages.map(page => {
+  return (app.pages ?? []).map(page => {
     try {
-      app.state.url = page.name
-      const state = deep.merge(app.state, page.state)
+      state.url = page.name
+      const mergedState = deep.merge(state, page.state)
 
-      const view = app.View(page, app.hashes)
+      const view = app.View(page, app.hashes ?? {})
 
-      const pageObj = view(state)
+      const pageObj = view(mergedState)
 
       let rendered = renderToString(pageObj)
 
@@ -27,11 +38,11 @@ export default ({ app, root }) => {
         const urls = urlsTangle
           .map(url => {
             url = url.split('"')[0]
-            if (url.startsWith('/') && !url.startsWith(root)) {
-              return [url, replaceSlashSlash(`${root}/${url}`)]
+            if (url.startsWith('/') && !url.startsWith(String(root))) {
+              return [url, replaceSlashSlash(`${String(root)}/${url}`)]
             }
           })
-          .filter(a => a)
+          .filter(a => is.array(a))
 
         urls.forEach(([oldUrl, newUrl]) => {
           rendered = rendered.replace(new RegExp(`${tag}="${oldUrl}"`, 'gim'), `${tag}="${newUrl}"`)
@@ -43,7 +54,7 @@ export default ({ app, root }) => {
         rendered,
       }
     } catch (e) {
-      log.error('E_TRANSPILE_HTML', `Page url: ${page.name.replace(root, '/')}`, e)
+      log.error('E_TRANSPILE_HTML', `Page url: ${String(page.name).replace(String(root), '/')}`, e)
       process.exit(1)
     }
   })

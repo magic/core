@@ -2,22 +2,34 @@ import deep from '@magic/deep'
 import is from '@magic/types'
 import log from '@magic/log'
 
+/** @import { AppObject, Config, ModuleDecl, Subscription } from '../../types.mjs' */
+
+/**
+ * @param {AppObject} app
+ * @returns {(entry: [string, ModuleDecl]) => void}
+ */
 export const prepareModule =
   app =>
   ([name, component]) => {
     const lowerName = name.toLowerCase()
 
-    const glob = component.global || component.globals || {}
+    /** @type {Record<string, unknown>} */
+    const glob = /** @type {Record<string, unknown>} */ (
+      component.global || component.globals || {}
+    )
 
+    /** @type {Record<string, unknown>} */
     const tempState = {}
 
-    if (!is.empty(component.state)) {
+    if (!is.empty(component.state) && is.objectNative(component.state)) {
+      const globState = /** @type {Record<string, unknown> | undefined} */ (glob.state)
       Object.entries(component.state).forEach(([key, val]) => {
-        if (glob.state && glob.state[key] === true) {
+        if (globState && globState[key] === true) {
           tempState[key] = val
         } else {
-          tempState[lowerName] = tempState[lowerName] || {}
-          tempState[lowerName][key] = val
+          const subState = /** @type {Record<string, unknown>} */ (tempState[lowerName] ?? {})
+          tempState[lowerName] = subState
+          subState[key] = val
         }
       })
     }
@@ -33,15 +45,23 @@ export const prepareModule =
       // if component has no actions or effects, do nothing
       .filter(type => !is.empty(component[type]))
       .forEach(type => {
-        Object.entries(component[type]).forEach(([key, val]) => {
-          if (glob[type] && glob[type][key] === true) {
-            app[type][key] = val
+        const typeObj = component[type]
+        if (!is.objectNative(typeObj)) {
+          return
+        }
+
+        const globType = /** @type {Record<string, unknown> | undefined} */ (glob[type])
+        Object.entries(typeObj).forEach(([key, val]) => {
+          const appType = /** @type {Record<string, unknown>} */ (app[type])
+          if (globType && globType[key] === true) {
+            appType[key] = val
           } else {
-            app[type][lowerName] = app[type][lowerName] || {}
+            const subType = /** @type {Record<string, unknown>} */ (appType[lowerName] ?? {})
+            appType[lowerName] = subType
             if (lowerName === key) {
-              app[type][lowerName] = val
+              appType[lowerName] = val
             } else {
-              app[type][lowerName][key] = val
+              subType[key] = val
             }
           }
         })
@@ -54,17 +74,23 @@ export const prepareModule =
         'using app.helpers is deprecated, use actions, effects or lib instead.',
       )
 
-      app.helpers = deep.merge(app.helpers, component.helpers)
+      app.helpers = /** @type {Record<string, unknown>} */ (
+        deep.merge(app.helpers, component.helpers)
+      )
     }
 
-    if (!is.empty(component.subscriptions)) {
+    if (!is.empty(component.subscriptions) && is.array(component.subscriptions)) {
       component.subscriptions.forEach(sub => {
-        app.subscriptions.push(sub)
+        if (is.array(app.subscriptions)) {
+          app.subscriptions.push(/** @type {Subscription} */ (sub))
+        }
       })
     }
 
     if (!is.empty(component.cookies)) {
-      app.cookies = deep.merge(app.cookies, component.cookies)
+      app.cookies = /** @type {Record<string, unknown>} */ (
+        deep.merge(app.cookies, component.cookies)
+      )
     }
 
     if (!is.empty(component.init)) {
@@ -72,10 +98,14 @@ export const prepareModule =
     }
   }
 
+/**
+ * @param {AppObject} app
+ * @returns {void}
+ */
 export const prepareModules = app => {
   // merge component states into app.state[componentName].
   // this makes all identical components share their state.
-  Object.entries(app.modules)
+  Object.entries(app.modules ?? {})
     .filter(([name]) => is.case.upper(name[0]))
-    .forEach(prepareModule(app))
+    .forEach(entry => prepareModule(app)(/** @type {[string, ModuleDecl]} */ (entry)))
 }

@@ -1,3 +1,6 @@
+/**
+ * @param {Record<string, unknown> & { day: string, month: string, year: string, name: string, title: string, description: string }} state
+ */
 export const View = state =>
   div([
     h4([

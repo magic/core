@@ -4,7 +4,11 @@ import fs from '@magic/fs'
 
 import { writeFile } from '../../lib/index.mjs'
 
-const handleImage = file => {
+/**
+ * @param {[string, unknown]} _file
+ * @returns {void}
+ */
+const handleImage = _file => {
   // check if file is image
   // if is image, check if alternative formats (webp, avif) exist in docs
   // if not in docs, check if they are in src/assets/static
@@ -14,6 +18,13 @@ const handleImage = file => {
   // console.log({ file })
 }
 
+/** @import { AppObject, Config } from '../../types.mjs' */
+
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<void>}
+ */
 export const writeStatic = async (app, config) => {
   const { DIR, IGNORED_STATIC } = config
 
@@ -23,7 +34,7 @@ export const writeStatic = async (app, config) => {
   // write static first to make sure all other files below get written
   // even if there is a name clash
   await Promise.all(
-    Object.entries(stat)
+    Object.entries(stat ?? {})
       // .filter(([name]) => !images.includes(getFileType(name)))
       .map(async file => {
         const [name] = file
@@ -38,7 +49,7 @@ export const writeStatic = async (app, config) => {
 
         const dir = path.join(DIR.PUBLIC, path.dirname(name))
         await fs.mkdirp(dir)
-        await writeFile(file, config)
+        await writeFile(/** @type {[string, unknown]} */ (file), config)
       }),
   )
 }

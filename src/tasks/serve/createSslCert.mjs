@@ -4,11 +4,16 @@ import error from '@magic/error'
 import fs from '@magic/fs'
 import log from '@magic/log'
 
-import { xc } from '../lib/index.mjs'
+import { xc } from '../../lib/index.mjs'
 
 const url = new URL(import.meta.url)
 const dirName = path.dirname(url.pathname)
 
+/** @import { NodeError } from '../../types.mjs' */
+
+/**
+ * @returns {Promise<{ key: Buffer, cert: Buffer } | undefined>}
+ */
 const ssl = async () => {
   const privFilename = path.join(dirName, 'priv.pem')
   const certFilename = path.join(dirName, 'cert.pem')
@@ -18,18 +23,18 @@ const ssl = async () => {
     await fs.stat(privFilename)
     keyExists = true
   } catch (e) {
-    if (e.code !== 'ENOENT') {
-      throw error(e)
+    if (/** @type {NodeError} */ (e).code !== 'ENOENT') {
+      throw error(/** @type {Error} */ (e))
     }
   }
 
-  const certExists = false
+  let certExists = false
   try {
     await fs.stat(certFilename)
-    const certExists = true
+    certExists = true
   } catch (e) {
-    if (e.code !== 'ENOENT') {
-      throw error(e)
+    if (/** @type {NodeError} */ (e).code !== 'ENOENT') {
+      throw error(/** @type {Error} */ (e))
     }
   }
   if (certExists && keyExists) {

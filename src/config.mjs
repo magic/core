@@ -6,31 +6,43 @@ import deep from '@magic/deep'
 import error from '@magic/error'
 import fs from '@magic/fs'
 import is from '@magic/types'
+import log from '@magic/log'
 
 import colors from './themes/colors.mjs'
 
 import { findConfigFile, replaceSlashSlash, saveImport } from './lib/index.mjs'
 
+/** @import { Config, ConfigDraft, ScriptSrc, NodeError } from './types.mjs' */
+
 const magicConfigNames = ['magic.mjs', 'magic.js']
 const oldConfigName = 'config.mjs'
 
+/**
+ * @param {{ [key: string]: unknown }} [args]
+ * @returns {Promise<Config | undefined>}
+ */
 export const runConfig = async (args = {}) => {
+  /** @type {ConfigDraft} */
   let conf = {}
 
   conf.CONFIG_FILE_PATH = await findConfigFile(
     process.cwd(),
     magicConfigNames,
     oldConfigName,
-    args.silent,
+    Boolean(args.silent),
   )
 
   if (!conf.CONFIG_FILE_PATH) {
-    return
+    return undefined
   }
 
-  const { default: imported } = await saveImport(conf.CONFIG_FILE_PATH)
+  const importedModule = await saveImport(conf.CONFIG_FILE_PATH)
+  const imported =
+    importedModule instanceof Error
+      ? {}
+      : /** @type {{ default?: { [key: string]: unknown } }} */ (importedModule).default
 
-  conf = deep.merge(conf, imported)
+  conf = /** @type {ConfigDraft} */ (deep.merge(conf, imported))
 
   // make sure conf.ROOT starts with or is equal to process.cwd()
   if (!conf.ROOT) {
@@ -64,19 +76,21 @@ export const runConfig = async (args = {}) => {
   conf.URL = conf.URL || false
 
   // the CNAME of this app. domain.tld
-  conf.CNAME = conf.hasOwnProperty('CNAME') ? conf.CNAME : false
+  conf.CNAME = Object.prototype.hasOwnProperty.call(conf, 'CNAME') ? conf.CNAME : false
 
   // set to false to not emit a robots.txt file
-  conf.ROBOTS_TXT = conf.hasOwnProperty('ROBOTS_TXT') ? conf.ROBOTS_TXT : true
+  conf.ROBOTS_TXT = Object.prototype.hasOwnProperty.call(conf, 'ROBOTS_TXT')
+    ? conf.ROBOTS_TXT
+    : true
 
   // set to false to not emit a sitemap.xml file
-  conf.SITEMAP = conf.hasOwnProperty('SITEMAP') ? conf.SITEMAP : true
+  conf.SITEMAP = Object.prototype.hasOwnProperty.call(conf, 'SITEMAP') ? conf.SITEMAP : true
 
   // the pages directory with page files to build
   const PAGES = path.join(conf.ROOT, 'pages')
 
   // the output dir that files get written to
-  const PUBLIC = path.join(process.cwd(), conf.PUBLIC || conf.DIR.PUBLIC || 'docs')
+  const PUBLIC = path.join(process.cwd(), conf.PUBLIC || conf.DIR?.PUBLIC || 'docs')
 
   // assets dir, can include themes, modules, libraries
   const ASSETS = path.join(conf.ROOT, 'assets')
@@ -87,6 +101,7 @@ export const runConfig = async (args = {}) => {
   const MODULES = path.join(ASSETS, 'modules')
 
   // static directory, files in this dir get copied to conf.PUBLIC
+  /** @type {string | string[]} */
   let STATIC = path.join(ASSETS, 'static')
 
   if (conf.ADD_STATIC) {
@@ -121,25 +136,31 @@ export const runConfig = async (args = {}) => {
     const content = await fs.readFile(hashPath, 'utf8')
     conf.HASHES = JSON.parse(content)
   } catch (e) {
-    if (e.code === 'ENOENT') {
+    const err = /** @type {NodeError} */ (e)
+    if (err.code === 'ENOENT') {
       conf.HASHES = {}
     } else {
-      throw error(e)
+      throw error(e instanceof Error ? e : new Error(String(e)))
     }
   }
 
   // array of scripts that should be appended to the body
+  /**
+   * @param {string} src
+   * @returns {ScriptSrc}
+   */
   const mapScript = src => {
-    if (!src.startsWith(conf.WEB_ROOT)) {
+    if (conf.WEB_ROOT && !src.startsWith(conf.WEB_ROOT)) {
       src = replaceSlashSlash(`${conf.WEB_ROOT}/${src}`)
     }
 
+    /** @type {ScriptSrc} */
     const result = {
       src,
-      integrity: conf.HASHES[src],
+      integrity: conf.HASHES ? conf.HASHES[src] : undefined,
     }
 
-    if (!src.startsWith(conf.URL) && !src.startsWith('/')) {
+    if ((typeof conf.URL !== 'string' || !src.startsWith(conf.URL)) && !src.startsWith('/')) {
       result.crossorigin = 'anonymous'
     }
 
@@ -152,11 +173,12 @@ export const runConfig = async (args = {}) => {
     // scripts that get added as script tags before of magic.js
     if (is.empty(conf[key])) {
       conf[key] = []
-    } else if (!is.array(conf.PREPEND_SCRIPTS)) {
+    } else if (!is.array(conf[key])) {
       conf[key] = [conf[key]]
     }
 
-    conf[key] = conf[key].map(mapScript)
+    const scripts = Array.isArray(conf[key]) ? conf[key] : []
+    conf[key] = scripts.map(mapScript)
   })
 
   const addKeys = ['PREPEND_JS', 'APPEND_JS', 'PREPEND_CSS', 'APPEND_CSS']
@@ -167,7 +189,7 @@ export const runConfig = async (args = {}) => {
     }
 
     if (!is.array(conf[key])) {
-      conf[key] = conf[key]
+      conf[key] = [conf[key]]
     }
   })
 
@@ -255,7 +277,7 @@ export const runConfig = async (args = {}) => {
     conf.IGNORED_STATIC = [conf.IGNORED_STATIC]
   }
 
-  conf.IGNORED_STATIC = conf.IGNORED_STATIC.map(st => {
+  conf.IGNORED_STATIC = conf.IGNORED_STATIC.map((/** @type {string} */ st) => {
     if (!st.startsWith('.')) {
       st = '.' + st
     }
@@ -307,8 +329,8 @@ export const runConfig = async (args = {}) => {
 
   // blog support
   if (conf.BLOG_DIR) {
-    if (!conf.BLOG_DIR.startsWith(conf.ROOT)) {
-      conf.BLOG_DIR = path.join(conf.ROOT, conf.BLOG_DIR)
+    if (!conf.BLOG_DIR.startsWith(conf.ROOT || '')) {
+      conf.BLOG_DIR = path.join(conf.ROOT || '', conf.BLOG_DIR)
     }
   }
 
@@ -340,7 +362,9 @@ export const runConfig = async (args = {}) => {
     conf[snaked] = v || v === ''
   })
 
-  conf.__DEPRECATED__ = [...scriptKeys, ...addKeys].filter(k => conf[k] && conf[k].length)
+  conf.__DEPRECATED__ = [...scriptKeys, ...addKeys].filter(
+    k => Array.isArray(conf[k]) && conf[k].length,
+  )
 
-  return conf
+  return /** @type {Config} */ (conf)
 }

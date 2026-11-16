@@ -7,16 +7,25 @@ import transmute from '@magic/transmute'
 
 import { replaceSlashSlash, saveImport } from '../../lib/index.mjs'
 
+/** @import { Config, PageObject, ModuleView } from '../../types.mjs' */
+
+/**
+ * @param {{ root?: string, pageDir: string, state?: Record<string, unknown>, config: Config }} params
+ * @returns {(file: string) => Promise<PageObject | undefined>}
+ */
 export const prepareBlogPost =
   ({ pageDir, state = {}, config }) =>
   async file => {
     const { TMP_DIR } = config
+    // the caller only runs this for blog files, so BLOG_DIR is set
+    const BLOG_DIR = /** @type {string} */ (config.BLOG_DIR)
 
     const ext = path.extname(file)
 
     const markdownExtensions = ['.md', '.markdown']
     const htmlExtensions = ['.html', '.htm']
 
+    /** @type {Record<string, unknown> & { rendered?: string, originalState?: unknown }} */
     let transmuted = {}
 
     if (markdownExtensions.includes(ext)) {
@@ -29,9 +38,13 @@ export const prepareBlogPost =
       file = file.replace('.html', '.mjs').replace('.htm', '.mjs')
     }
 
+    /** @type {string | undefined} */
+    let viewString
+
+    /** @type {Record<string, unknown> | Error | undefined} */
     let pageTmp
     if (!is.empty(transmuted)) {
-      const viewString = `export const View = state => BlogPost(state, [${transmuted.rendered}])`
+      viewString = `export const View = state => BlogPost(state, [${transmuted.rendered}])`
 
       const fileTmpPath = path.join(TMP_DIR, path.basename(file))
       await fs.mkdirp(TMP_DIR)
@@ -40,10 +53,11 @@ export const prepareBlogPost =
     } else {
       pageTmp = await saveImport(file)
 
+      /** @type {string | string[]} */
       let children = []
       if (is.fn(pageTmp)) {
         children = pageTmp.toString().split('=>')[1]
-      } else if (is.fn(pageTmp.View)) {
+      } else if (!is.error(pageTmp) && is.fn(pageTmp.View)) {
         children = pageTmp.View.toString().split('=>')[1]
       }
 
@@ -55,17 +69,22 @@ export const prepareBlogPost =
       pageTmp = await saveImport(fileTmpPath)
     }
 
+    /** @type {PageObject} */
     let page
     if (is.fn(pageTmp)) {
-      page = {
+      page = /** @type {PageObject} */ ({
         ...transmuted,
-        View: pageTmp,
-      }
+        View: /** @type {ModuleView} */ (pageTmp),
+      })
     } else if (transmuted) {
-      const { rendered, ...trans } = transmuted
-      page = { ...trans, ...pageTmp }
+      const { rendered: _rendered, ...trans } = transmuted
+      /** @type {Record<string, unknown>} */
+      const importedPage = is.error(pageTmp) || is.undefined(pageTmp) ? {} : pageTmp
+      page = /** @type {PageObject} */ ({ ...trans, ...importedPage })
     } else {
-      page = { ...pageTmp }
+      /** @type {Record<string, unknown>} */
+      const importedPage = is.error(pageTmp) || is.undefined(pageTmp) ? {} : pageTmp
+      page = /** @type {PageObject} */ ({ ...importedPage })
     }
 
     page.file = file.replace(/\\/gim, '/')
@@ -78,7 +97,9 @@ export const prepareBlogPost =
         transmuted.originalState = transmuted.originalState(config)
       }
 
-      page.state = transmuted.originalState
+      if (is.objectNative(transmuted.originalState)) {
+        page.state = transmuted.originalState
+      }
     }
 
     const pageName = file
@@ -88,20 +109,22 @@ export const prepareBlogPost =
       .replace(/\\/gim, '/')
 
     page.name = replaceSlashSlash(
-      `${config.BLOG_DIR.replace(config.ROOT, config.WEB_ROOT)}/${pageName}`.replace(/\\/gim, '/'),
+      `${BLOG_DIR.replace(config.ROOT, String(config.WEB_ROOT))}/${pageName}`.replace(/\\/gim, '/'),
     )
 
     page.path = `${page.name}index.html`
 
     if (!page.View || !is.function(page.View.toString)) {
-      const pageDir = pageDir.replace(process.cwd(), '')
+      // these names are local to this block; the block-scoped names
+      // shadowing the outer pageDir/page would hit the temporal dead zone
+      const relativePageDir = pageDir.replace(process.cwd(), '')
       // remove slashes
-      const pageName = page.name.replace(/\//g, '')
-      const page = `${pageDir}/${pageName}.mjs`
+      const postName = page.name.replace(/\//g, '')
+      const pagePath = `${relativePageDir}/${postName}.mjs`
 
       throw error(
         `
-${page}
+${pagePath}
 needs to either
 export default state => []
 or

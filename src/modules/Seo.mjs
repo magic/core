@@ -1,5 +1,11 @@
 import { replaceSlashSlash } from '../lib/index.mjs'
 
+/**
+ * @param {Record<string, unknown> & {
+ *   seo?: { name?: string, image?: string, type?: string, context?: string, custom?: { [key: string]: unknown }[], author?: { name?: string, givenName?: string, additionalName?: string, lastName?: string }, [key: string]: unknown },
+ *   title?: string, description?: unknown, keywords?: unknown, favicon?: string, root?: string, image?: string, logo?: string
+ * }} state
+ */
 export const View = state => {
   const { seo = {} } = state
   const {
@@ -53,7 +59,7 @@ export const View = state => {
   if (author) {
     let authorName = ''
     if (author.name) {
-      authorName = state.seo.author.name
+      authorName = author.name
     } else if (author.givenName) {
       authorName = author.givenName
       if (author.additionalName) {

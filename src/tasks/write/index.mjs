@@ -7,6 +7,13 @@ import { writePages } from './pages.mjs'
 import { writeStatic } from './static.mjs'
 import { writeServer } from './server.mjs'
 
+/** @import { AppObject, Config } from '../../types.mjs' */
+
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<void>}
+ */
 export const write = async (app, config) => {
   const {
     DIR,
@@ -31,17 +38,18 @@ export const write = async (app, config) => {
     log.warn('W_NOT_IMPLENTED', 'should write client bundles for js and css.')
   } else {
     const jsFile = path.join(DIR.PUBLIC, `${CLIENT_LIB_NAME}.js`)
-    await fs.writeFile(jsFile, client)
+    await fs.writeFile(jsFile, /** @type {string} */ (client))
 
     const cssFile = path.join(DIR.PUBLIC, `${CLIENT_LIB_NAME}.css`)
-    const usedCss = IS_PROD ? css.minified : css.css
-    await fs.writeFile(cssFile, usedCss)
+    const cssObj = /** @type {Record<string, string>} */ (css ?? {})
+    const usedCss = IS_PROD ? cssObj.minified : cssObj.css
+    await fs.writeFile(cssFile, /** @type {string} */ (usedCss))
   }
 
   // const serviceWorkerFile = path.join(DIR.PUBLIC, `${CLIENT_SERVICE_WORKER_NAME}.js`)
   // await fs.writeFile(serviceWorkerFile, app.sw)
 
-  await writeServer(app)
+  await writeServer(app, config)
 }
 
 export default write

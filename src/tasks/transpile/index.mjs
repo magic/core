@@ -10,6 +10,15 @@ import style from './css.mjs'
 
 import { addEmbeddedCss, createHash, checkLinks, addJsFiles } from '../../lib/index.mjs'
 
+import error from '@magic/error'
+
+/** @import { AppObject, Config, Hashes, ScriptSrc, PageObject } from '../../types.mjs' */
+
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<AppObject | undefined>}
+ */
 export const transpile = async (app, config) => {
   try {
     const {
@@ -25,13 +34,22 @@ export const transpile = async (app, config) => {
       NO_CHECK_LINKS_LIST,
       WEB_ROOT: root,
       NO_CHECK_LINKS_REMOTE: noRemote,
+      IS_DEV,
     } = config
 
-    const { code, serviceWorker } = await js({ app, config })
+    const jsResult = await js({ app, config })
+    if (!jsResult) {
+      throw error('E_TRANSPILE', 'js() did not return a result')
+    }
+    const { code, serviceWorker } = jsResult
     app.client = code
     app.sw = serviceWorker
 
-    const css = await style(app.style, config.THEME_VARS)
+    const cssResult = await style(/** @type {unknown} */ (app.style), config.THEME_VARS)
+    if (!cssResult) {
+      throw error('E_TRANSPILE', 'style() did not return css')
+    }
+    const css = /** @type {{ css: string, minified: string }} */ (cssResult)
 
     if (!is.empty(PREPEND_CSS)) {
       const prependStyles = PREPEND_CSS.map(addEmbeddedCss).join('\n')
@@ -47,57 +65,64 @@ export const transpile = async (app, config) => {
 
     app.css = css
 
-    app.hashes = {
+    /** @type {Hashes} */
+    let hashes = {
       '/magic.css': createHash(ENV === 'production' ? css.minified : css.css),
       '/magic.js': createHash(code),
       // 'worker.js': createHash(serviceWorker),
     }
+    app.hashes = hashes
 
     if (PREPEND_SCRIPTS) {
       const prependScripts = addJsFiles({ js: PREPEND_SCRIPTS, WEB_ROOT: config.WEB_ROOT })
       if (!is.empty(prependScripts)) {
-        app.hashes = deep.merge(app.hashes, prependScripts)
+        hashes = /** @type {Hashes} */ (deep.merge(hashes, prependScripts))
+        app.hashes = hashes
       }
     }
 
     if (APPEND_SCRIPTS) {
       const appendScripts = addJsFiles({ js: APPEND_SCRIPTS, WEB_ROOT: config.WEB_ROOT })
       if (!is.empty(appendScripts)) {
-        app.hashes = deep.merge(app.hashes, appendScripts)
+        hashes = /** @type {Hashes} */ (deep.merge(hashes, appendScripts))
+        app.hashes = hashes
       }
     }
 
     const pages = html({ app, root: config.WEB_ROOT })
 
     pages
-      .sort((a, b) => (a.name < b.name ? -1 : 1))
+      .sort((a, b) => (String(a.name) < String(b.name) ? -1 : 1))
       .forEach(page => {
-        page.hash = createHash(page.rendered)
-        app.hashes[page.name] = page.hash
+        page.hash = createHash(String(page.rendered))
+        hashes[String(page.name)] = page.hash
       })
 
-    app.pages = pages
+    app.pages = /** @type {PageObject[]} */ (pages)
 
     // const ignored = config.IGNORED_STATIC
 
     const included = INCLUDED_HASH_EXTENSIONS
 
     if (included.length) {
-      Object.entries(app.static)
+      Object.entries(/** @type {Record<string, unknown>} */ (app.static ?? {}))
         .filter(([name]) => included.includes(path.extname(name)) || included.includes(name))
         .sort(([a], [b]) => (a > b ? 1 : -1))
         .forEach(([name, val]) => {
-          app.hashes[name] = createHash(val)
+          hashes[name] = createHash(/** @type {string} */ (val))
         })
     }
 
+    app.static = /** @type {Record<string, string>} */ (app.static ?? {})
     app.static[`/${HASH_FILE_NAME}`] = JSON.stringify(app.hashes, null, 2)
 
     const staticUrls = Object.keys(app.static)
-    const links = Array.from(new Set(app.links))
+    /** @type {Set<string>} */
+    const linkSet = new Set(/** @type {string[]} */ (app.links ?? []))
+    const links = /** @type {string[]} */ ([...linkSet])
 
     if (!NO_CHECK_LINKS) {
-      const ignoredLinks = NO_CHECK_LINKS_LIST || []
+      const ignoredLinks = /** @type {string[] | undefined} */ (NO_CHECK_LINKS_LIST) || []
 
       if (ENV === 'production') {
         log('Checking page links')
@@ -106,10 +131,10 @@ export const transpile = async (app, config) => {
           staticUrls,
           links,
           pages,
-          noRemote,
+          noRemote: /** @type {boolean | undefined} */ (noRemote),
           root,
           ignoredLinks,
-          dev: config.IS_DEV,
+          dev: /** @type {boolean} */ (IS_DEV),
         })
 
         if (unresolvedLinks.length) {
@@ -121,7 +146,15 @@ export const transpile = async (app, config) => {
           }
         }
       } else {
-        checkLinks({ staticUrls, links, pages, noRemote, ignoredLinks, root, dev: config.IS_DEV })
+        checkLinks({
+          staticUrls,
+          links,
+          pages,
+          noRemote: /** @type {boolean | undefined} */ (noRemote),
+          ignoredLinks,
+          root,
+          dev: /** @type {boolean} */ (IS_DEV),
+        })
       }
     }
 

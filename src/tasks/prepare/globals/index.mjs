@@ -8,11 +8,19 @@ import { findLibraries } from './findLibraries.mjs'
 import { findThemes } from './findThemes.mjs'
 import { registerModule } from './registerModule.mjs'
 
+/** @import { AppObject, Config } from '../../../types.mjs' */
+
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<{ modules: Record<string, unknown>, libs: { key: string, lib: unknown }[] }>}
+ */
 export const prepareGlobals = async (app, config) => {
-  global.app = app
+  ;/** @type {Record<string, unknown>} */ (/** @type {unknown} */ (global)).app = app
 
   const { DIR, NODE_MODULES, ROOT, THEME } = config
 
+  /** @type {Record<string, unknown>} */
   let modules = {}
 
   // load core builtin modules

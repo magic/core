@@ -5,6 +5,12 @@ import runCmd from './runCmd.mjs'
 
 import { serve } from '../tasks/index.mjs'
 
+/** @import { AppObject, Config } from '../types.mjs' */
+
+/**
+ * @param {{ commands: { [key: string]: unknown }, config: Config }} params
+ * @returns {Promise<void>}
+ */
 export const build = async ({ commands, config }) => {
   try {
     const App = await runApp(config)
@@ -17,9 +23,9 @@ export const build = async ({ commands, config }) => {
     }
 
     if (commands.serve) {
-      serve(app, config)
+      serve(/** @type {AppObject} */ (app), config)
     } else {
-      process.send({ evt: 'quit' })
+      process.send?.({ evt: 'quit' })
     }
   } catch (e) {
     log.error('E_MAGIC_BUILD', e)

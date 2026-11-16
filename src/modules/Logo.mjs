@@ -1,3 +1,6 @@
+/**
+ * @param {{ logo?: string, logotext?: string, root?: string }} props
+ */
 export const View = ({ logo, logotext, root }) =>
   CHECK_PROPS({ logo, logotext, root }, propTypes, 'Logo') &&
   Link({ to: root, class: 'Logo' }, [logo && Img(logo), logotext && span(logotext)])

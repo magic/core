@@ -1,6 +1,10 @@
+/**
+ * @param {Record<string, unknown> & { url: string, title: string, description: string }} state
+ * @param {unknown} [children]
+ */
 export const View = (state, children) => {
   const { url, title, description } = state
-  const [_, root, prefix, year, month, day, name] = url.split('/')
+  const [_, root, prefix, year, month] = url.split('/')
 
   return [
     h2(title),

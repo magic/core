@@ -1,3 +1,7 @@
+/**
+ * @param {Record<string, unknown> & { logo?: string, menu?: unknown[], logotext?: string, root?: string, theme?: string, hash?: string, url?: string }} props
+ * @param {unknown[]} [children]
+ */
 export const View = (props = {}, children = []) => {
   CHECK_PROPS(props, propTypes, 'Header')
 

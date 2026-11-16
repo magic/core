@@ -6,17 +6,26 @@ import is from '@magic/types'
 
 import { saveImport } from '../../../lib/index.mjs'
 
+/** @import { AppObject, ConfigDir } from '../../../types.mjs' */
+
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 
+/**
+ * @param {AppObject} app
+ * @param {Record<string, unknown>} modules
+ * @param {{ DIR: ConfigDir, ROOT?: string }} params
+ * @returns {Promise<{ key: string, lib: unknown }[]>}
+ */
 export const findLibraries = async (app, modules, { DIR }) => {
+  /** @type {{ [key: string]: string | Record<string, unknown> }} */
   const libraries = {}
 
   if (app.lib) {
-    Object.entries(app.lib).forEach(([name, val]) => {
+    Object.entries(/** @type {Record<string, unknown>} */ (app.lib)).forEach(([name, val]) => {
       if (is.string(val)) {
         libraries[name] = path.resolve(val)
       } else {
-        libraries[name] = val
+        libraries[name] = /** @type {Record<string, unknown>} */ (val)
       }
     })
   }
@@ -60,40 +69,42 @@ export const findLibraries = async (app, modules, { DIR }) => {
     libraries[libName] = libDir
   })
 
+  /**
+   * @param {[string, unknown]} entry
+   */
   const handleModuleLibs = ([key, val]) => {
     key = `${key[0].toLowerCase()}${key.substring(1)}`
-    if (val.lib) {
-      libraries[key] = val.lib
+    const valObj = /** @type {{ lib?: string }} */ (val)
+    if (valObj.lib) {
+      libraries[key] = valObj.lib
     }
 
-    Object.entries(val).forEach(([viewKey, view]) => {
-      if (view.lib) {
-        viewKey = `${viewKey[0].toLowerCase()}${key.substring(1)}`
-        libraries[viewKey] = view.lib
+    Object.entries(/** @type {Record<string, unknown>} */ (val)).forEach(([viewKey, view]) => {
+      const viewObj = /** @type {{ lib?: string }} */ (view)
+      if (viewObj.lib) {
+        const viewLibKey = `${viewKey[0].toLowerCase()}${key.substring(1)}`
+        libraries[viewLibKey] = viewObj.lib
       }
     })
   }
 
-  // Object.entries(app.pages).forEach(([ k, v ]) => {
-  //   if (v.lib) {
-  //     Object.entries(v.lib).forEach(([ key, lib ]) => {
-  //       handleModuleLibs([ key, { lib } ])
-  //     })
-  //   }
-  // })
-
   Object.entries(modules).forEach(handleModuleLibs)
 
-  global.lib = global.lib || {}
+  const globals = /** @type {Record<string, unknown>} */ (globalThis)
+  globals.lib =
+    /** @type {Record<string, unknown>} */ (globals.lib) ||
+    /** @type {Record<string, unknown>} */ (/** @type {unknown} */ ({}))
 
   const libFnPromises = Object.entries(libraries).map(async ([key, val]) => {
     const camelKey = cases.camel(key)
 
+    /** @type {unknown} */
     let lib
 
     if (!is.string(val)) {
-      if (val[key] && Object.keys(val).length === 1) {
-        lib = val[key]
+      const valRecord = /** @type {Record<string, unknown>} */ (val)
+      if (valRecord[key] && Object.keys(valRecord).length === 1) {
+        lib = valRecord[key]
       } else {
         lib = val
       }
@@ -113,17 +124,21 @@ export const findLibraries = async (app, modules, { DIR }) => {
       }
 
       const imported = await saveImport(val)
+      const namespace =
+        imported instanceof Error
+          ? /** @type {Record<string, unknown>} */ (/** @type {unknown} */ ({}))
+          : imported
 
-      if (imported.default) {
-        lib = imported.default
-      } else if (imported[key]) {
-        lib = imported[key]
+      if (namespace.default) {
+        lib = namespace.default
+      } else if (namespace[key]) {
+        lib = namespace[key]
       } else {
         lib = imported
       }
     }
 
-    global.lib[camelKey] = lib
+    ;/** @type {Record<string, unknown>} */ (globals.lib)[camelKey] = lib
 
     return {
       key,

@@ -1,8 +1,12 @@
+/**
+ * @param {Record<string, unknown> & { collapse?: boolean, items?: { [key: string]: unknown }[], text?: unknown, url: string, to?: string }} props
+ */
 export const View = props => {
   CHECK_PROPS(props, propTypes, 'MenuItem', true)
 
   const { collapse, items = [], text, url, ...item } = props
 
+  /** @type {{ class: Record<string, unknown> }} */
   const p = {
     class: {},
   }
@@ -13,8 +17,9 @@ export const View = props => {
     p.class.active = true
   }
 
+  /** @type {unknown} */
   let children = []
-  const active = !collapse || url.includes(to)
+  const active = !collapse || url.includes(to ?? 'undefined')
 
   if (active && items.length) {
     children = ul(items.map(i => MenuItem({ url, collapse, ...i })))

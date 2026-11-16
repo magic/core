@@ -1,40 +1,60 @@
 import path from 'path'
 
+import is from '@magic/types'
+
 import { prepareBlogPost } from './blogPost.mjs'
 
 import { replaceSlashSlash } from '../../lib/index.mjs'
 
+/** @import { AppObject, Config, PageObject, BlogData, BlogPostEntry, ModuleView } from '../../types.mjs' */
+
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<{ posts: PageObject[], index: BlogData }>}
+ */
 export const prepareBlog = async (app, config) => {
-  const relativeBlogDir = config.BLOG_DIR.replace(`${config.ROOT}${path.sep}`, '')
+  // the caller (tasks/prepare/index.mjs) only runs this with a BLOG_DIR set
+  const BLOG_DIR = /** @type {string} */ (config.BLOG_DIR)
+
+  const relativeBlogDir = BLOG_DIR.replace(`${config.ROOT}${path.sep}`, '')
 
   const extensions = ['.markdown', '.js', '.htm', '.mjs', '.html', '.md']
 
   const root = replaceSlashSlash(`${config.WEB_ROOT}/${relativeBlogDir}`)
 
+  /** @type {BlogData} */
   const index = {}
 
   const posts = await Promise.all(
-    app.blog.map(async file => {
+    (app.blog ?? []).map(async file => {
       const preparePost = prepareBlogPost({
         root,
-        pageDir: config.BLOG_DIR,
+        pageDir: BLOG_DIR,
         state: app.state,
         config,
       })
 
       const post = await preparePost(file)
-      const rootedBlogPath = file.replace(config.BLOG_DIR, '')
-      let [year, month, day, ...postPath] = rootedBlogPath.split(path.sep).filter(a => a)
+      const rootedBlogPath = file.replace(BLOG_DIR, '')
+      const parts = rootedBlogPath.split(path.sep).filter(a => a)
+      const [year] = parts
+      /** @type {string | boolean | undefined} */
+      let month = parts[1]
+      /** @type {string | boolean | undefined} */
+      let day = parts[2]
+      /** @type {string | string[]} */
+      let postPath = parts.slice(3)
 
-      if (year.startsWith('index')) {
+      if (!year || year.startsWith('index')) {
         return post
       }
 
-      if (month.startsWith('index')) {
+      if (!month || month.startsWith('index')) {
         return post
       }
 
-      if (day.startsWith('index')) {
+      if (!is.string(day) || day.startsWith('index')) {
         return post
       }
 
@@ -56,22 +76,30 @@ export const prepareBlog = async (app, config) => {
         index[year][month] = {}
       }
 
-      if (day) {
+      if (month && day) {
+        if (!index[year][month]) {
+          index[year][month] = {}
+        }
+
         if (!index[year][month][day]) {
           index[year][month][day] = []
         }
 
-        index[year][month][day].push(post)
+        if (post) {
+          index[year][month][day].push(/** @type {BlogPostEntry} */ (post))
+        }
       }
 
       return post
     }),
   )
 
-  const file = app.blog.find(file => extensions.some(f => file === relativeBlogDir + f))
+  const file = (app.blog ?? []).find(blogFile =>
+    extensions.some(f => blogFile === relativeBlogDir + f),
+  )
   if (!file) {
     const post = {
-      View: state => BlogArchive(state),
+      View: /** @type {ModuleView} */ (state => BlogArchive(state)),
       name: `${root}/`.replace(/\\/gim, '/'),
       path: `${root}/index.html`.replace(/\\/gim, '/'),
     }
@@ -81,12 +109,12 @@ export const prepareBlog = async (app, config) => {
 
   // create yearly and monthly archives if they do not exist yet.
   Object.entries(index).forEach(([year, months]) => {
-    const yearDir = path.join(config.BLOG_DIR, year, 'index')
-    const file = app.blog.find(file => extensions.some(f => file === yearDir + f))
+    const yearDir = path.join(BLOG_DIR, year, 'index')
+    const file = (app.blog ?? []).find(blogFile => extensions.some(f => blogFile === yearDir + f))
 
     if (!file) {
       const post = {
-        View: state => BlogYear(state),
+        View: /** @type {ModuleView} */ (state => BlogYear(state)),
         name: `${root}/${year}/`.replace(/\\/gim, '/'),
         path: `${root}/${year}/index.html`.replace(/\\/gim, '/'),
         state: {
@@ -97,13 +125,15 @@ export const prepareBlog = async (app, config) => {
       posts.push(post)
     }
 
-    Object.entries(months).forEach(([month, days]) => {
-      const monthDir = path.join(config.BLOG_DIR, year, 'index')
-      const file = app.blog.find(file => extensions.some(f => file === monthDir + f))
+    Object.entries(months).forEach(([month]) => {
+      const monthDir = path.join(BLOG_DIR, year, month, 'index')
+      const file = (app.blog ?? []).find(blogFile =>
+        extensions.some(f => blogFile === monthDir + f),
+      )
 
       if (!file) {
         const post = {
-          View: state => BlogMonth(state),
+          View: /** @type {ModuleView} */ (state => BlogMonth(state)),
           name: `${root}/${year}/${month}/`.replace(/\\/gim, '/'),
           path: `${root}/${year}/${month}/index.html`.replace(/\\/gim, '/'),
           state: {
@@ -117,5 +147,5 @@ export const prepareBlog = async (app, config) => {
     })
   })
 
-  return { posts, index }
+  return { posts: posts.filter(post => post !== undefined), index }
 }

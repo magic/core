@@ -1,3 +1,6 @@
+/**
+ * @param {Record<string, unknown> & { menu?: { [key: string]: unknown }[], hash?: string, url?: string, class?: string, collapse?: boolean }} props
+ */
 export const View = (props = {}) => {
   CHECK_PROPS(props, propTypes, 'Menu')
 
@@ -8,11 +11,11 @@ export const View = (props = {}) => {
     className = `Menu ${className}`.trim()
   }
 
-  if (hash && !url.endsWith(hash)) {
+  if (hash && url && !url.endsWith(hash)) {
     url += `#${hash}`
   }
 
-  return nav({ className }, ul(menu.map(item => MenuItem({ ...item, url, collapse }))))
+  return nav({ className }, ul((menu ?? []).map(item => MenuItem({ ...item, url, collapse }))))
 }
 
 export const style = {
