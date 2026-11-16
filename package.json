@@ -21,7 +21,10 @@
     "dev": "src/bin.mjs dev --watch src --keep-client",
     "format": "f -w --exclude docs api",
     "test": "t -i src",
-    "calls": "calls"
+    "tsc": "tsc --noEmit",
+    "tsc:test": "tsc --noEmit -p tsconfig.test.json",
+    "lint": "lint",
+    "check": "npm run tsc && npm run tsc:test && npm run lint"
   },
   "bin": {
     "magic": "src/bin.mjs"
