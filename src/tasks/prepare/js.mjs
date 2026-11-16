@@ -120,7 +120,7 @@ return { ${imports} }
 
   const stateForString = stringifyObject(magic.state)
 
-  let stateString = `const initialState = ${stateForString}`
+  const stateString = `const initialState = ${stateForString}`
 
   let helperString = ''
   if (!is.empty(magic.helpers)) {
@@ -201,7 +201,7 @@ const pages = {
   // }
   // `
 
-  let initState = `{
+  const initState = `{
   ...initialState,
   url: window.location.pathname,
   hash: window.location.hash.substr(1),

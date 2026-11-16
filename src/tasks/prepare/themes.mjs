@@ -31,7 +31,7 @@ export const prepareThemes = async (app, config) => {
   // merge user created custom reset.css into styles, if it exists
   try {
     // merge default reset css into styles
-    let { reset } = await saveImport('../themes/reset.css.mjs')
+    const { reset } = await saveImport('../themes/reset.css.mjs')
 
     resetStyles.push(reset)
 

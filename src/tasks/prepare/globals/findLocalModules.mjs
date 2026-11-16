@@ -7,7 +7,7 @@ import log from '@magic/log'
 import { saveImport } from '../../../lib/index.mjs'
 
 export const findLocalModules = async dir => {
-  let modules = {}
+  const modules = {}
 
   const assetModules = await fs.getFiles(dir)
   const assetPromises = assetModules

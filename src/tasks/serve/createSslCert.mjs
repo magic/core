@@ -23,7 +23,7 @@ const ssl = async () => {
     }
   }
 
-  let certExists = false
+  const certExists = false
   try {
     await fs.stat(certFilename)
     const certExists = true

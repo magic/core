@@ -8,7 +8,7 @@ export const findAssetFile = async dir => {
   try {
     const maybeAssetFile = path.join(dir, 'index.mjs')
     const assets = await saveImport(maybeAssetFile)
-    let modules = {}
+    const modules = {}
     Object.entries(assets).forEach(([name, mod]) => {
       if (is.fn(mod)) {
         modules[name] = mod

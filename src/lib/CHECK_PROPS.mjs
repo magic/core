@@ -55,7 +55,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log) => {
   }
 
   if (!propTypes[0].key) {
-    let [FALLBACK, ...pT] = propTypes
+    const [FALLBACK, ...pT] = propTypes
     propTypes = pT
 
     if (FALLBACK && typeof props === FALLBACK.type) {

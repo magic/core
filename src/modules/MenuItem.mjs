@@ -7,7 +7,7 @@ export const View = props => {
     class: {},
   }
 
-  let { to } = item
+  const { to } = item
 
   if (to === url) {
     p.class.active = true

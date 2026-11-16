@@ -93,7 +93,7 @@ export const actions = {
 
     // make sure our to never includes the origin
     // this makes sure we can distinguish between local and external links below
-    let to = e.currentTarget.href.replace(window.location.origin, '')
+    const to = e.currentTarget.href.replace(window.location.origin, '')
 
     const [url, hash = ''] = to.split('#')
 

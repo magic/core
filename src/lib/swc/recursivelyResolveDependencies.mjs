@@ -93,7 +93,7 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
     app.pages.map(async page => {
       const pageView = page.View.toString()
       const ast = await swc.parse(pageView)
-      let usedInPage = resolveDependencies({ parent: ast, app })
+      const usedInPage = resolveDependencies({ parent: ast, app })
 
       usedInPage.modules.forEach(moduleName =>
         mergeSubModules({

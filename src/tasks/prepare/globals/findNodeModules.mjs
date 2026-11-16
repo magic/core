@@ -13,7 +13,7 @@ const localLibMjsPath = path.join('src', 'lib')
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
 
 export const findNodeModules = async () => {
-  let modules = {}
+  const modules = {}
 
   const dirs = await fs.getDirectories(nodeModuleDir, { depth: false })
 
