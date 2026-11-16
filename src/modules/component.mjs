@@ -1,21 +1,30 @@
 import { h } from '@magic/hyperapp'
 
+/** @import { VNode } from '@magic/hyperapp' */
+
+/**
+ * @param {string} name
+ * @returns {(props?: unknown, children?: unknown) => VNode}
+ */
 export const component =
   name =>
   (props = {}, children) => {
-    const is = (ele, ...types) => types.some(type => type === typeof ele)
-
-    if (is(children, 'undefined')) {
+    if (lib.is(children, 'undefined')) {
       // are there children that have been processed by h already?
-      if (props.props) {
+      if (/** @type {Record<string, unknown>} */ (props).props) {
         return h(name, {}, [props])
       }
 
-      if (is(props, 'string', 'number', 'function') || Array.isArray(props)) {
+      if (
+        lib.is(props, 'string') ||
+        lib.is.number(props) ||
+        lib.is(props, 'function') ||
+        lib.is.array(props)
+      ) {
         children = props
         props = {}
-      } else if (is(props.View, 'function')) {
-        children = props.View
+      } else if (lib.is(/** @type {Record<string, unknown>} */ (props).View, 'function')) {
+        children = /** @type {Record<string, unknown>} */ (props).View
         props = {}
       }
     }

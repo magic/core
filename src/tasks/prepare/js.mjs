@@ -9,6 +9,13 @@ import error from '@magic/error'
 import { stringifyObject, replaceSlashSlash } from '../../lib/index.mjs'
 import { prepareCheckProps } from './checkProps.mjs'
 
+/** @import { AppObject, Config, ModuleView } from '../../types.mjs' */
+
+/**
+ * @param {AppObject} magic
+ * @param {Config} config
+ * @returns {Promise<string>}
+ */
 export const prepareJs = async (magic, config) => {
   const { HOIST, PREPEND_JS, APPEND_JS /*, WEB_ROOT*/ } = config
 
@@ -33,7 +40,7 @@ return { ${imports} }
 })()`
 
   // add the Component module that wraps all other html tags
-  const componentString = `const C = ${global.component.toString()}\n`
+  const componentString = `const C = ${component.toString()}\n`
     // replace names of variables to enforce minification
     .replace(/attributes/gm, 'a')
     .replace(/name/gm, 'n')
@@ -85,13 +92,17 @@ return { ${imports} }
     'yield',
   ])
 
+  /**
+   * @param {string} name
+   * @returns {string}
+   */
   const toVarName = name => {
     const camelName = cases.camel(name)
     return reservedKeywords.has(camelName) ? `${camelName}El` : camelName
   }
 
   let htmlTagString = ''
-  Object.entries({ ...magic.modules, ...magic.tags })
+  Object.entries({ ...(magic.modules ?? {}), ...(magic.tags ?? {}) })
     .filter(([k]) => k !== 'Magic' && k !== 'component')
     .sort(([a], [b]) => (a > b ? 1 : -1))
     .forEach(([k, v]) => {
@@ -102,16 +113,21 @@ return { ${imports} }
         let str
         if (is.function(v)) {
           str = `\nconst ${k} = ${v.toString()}\n`
-        } else if (is.function(v.View)) {
-          str = `\nconst ${k} = ${v.View.toString()}\n`
+        } else if (is.function(/** @type {{ View?: unknown }} */ (v)?.View)) {
+          str = `\nconst ${k} = ${/** @type {{ View: { toString(): string } }} */ (v).View.toString()}\n`
         } else {
           log.error(`${k} Module does not export a View`, 'E_MODULE_NO_VIEW')
         }
 
-        const subStr = Object.entries(v)
+        const subStr = Object.entries(/** @type {Record<string, unknown>} */ (v))
           .filter(([sk]) => is.case.upper(sk[0]) && sk !== 'View')
           .sort(([a], [b]) => (a > b ? 1 : -1))
-          .map(([sk, sv]) => `\n${k}.${sk} = ${is.fn(sv) ? sv.toString() : sv.View.toString()}`)
+          .map(([sk, sv]) => {
+            const svString = is.fn(sv)
+              ? /** @type {() => string} */ (sv).toString()
+              : /** @type {{ View: { toString(): string } }} */ (sv).View.toString()
+            return `\n${k}.${sk} = ${svString}`
+          })
           .join('\n')
 
         depString += `${str}\n${subStr}`
@@ -141,7 +157,7 @@ return { ${imports} }
 
   // create global subscription object
   let subscriptionString = ''
-  if (!is.empty(magic.subscriptions)) {
+  if (!is.empty(magic.subscriptions) && is.array(magic.subscriptions)) {
     subscriptionString = `
   subscriptions: state => [
     [${magic.subscriptions.join('],\n    [')}]
@@ -150,8 +166,9 @@ return { ${imports} }
   }
 
   let libString = ''
-  if (!is.empty(magic.lib)) {
-    const libPromises = Object.entries(magic.lib)
+  if (!is.empty(magic.lib) && is.objectNative(magic.lib)) {
+    const lib = magic.lib
+    const libPromises = Object.entries(lib)
       .sort(([a], [b]) => (a > b ? 1 : -1))
       .map(async ([name, fn]) => {
         if (name.includes('-')) {
@@ -159,6 +176,29 @@ return { ${imports} }
         }
 
         if (is.function(fn)) {
+          const fnObj = /** @type {Record<string, unknown>} */ (/** @type {unknown} */ (fn))
+          const ownProps = Object.keys(fnObj).filter(k => is.fn(fnObj[k]))
+
+          if (ownProps.length) {
+            // inline the function together with its attached properties,
+            // bound to its own name, so the inlined copy stays self-contained
+            // (eg the @magic-libraries/is base function references itself).
+            const varName = reservedKeywords.has(name) ? 'fn' : name
+            const assignments = ownProps
+              .map(
+                k =>
+                  `${varName}[${JSON.stringify(k)}] = ${
+                    /** @type {() => string} */ (fnObj[k]).toString()
+                  };`,
+              )
+              .join('\n')
+            return ` ${name}: (function () {
+      const ${varName} = ${fn.toString()};
+      ${assignments}
+      return ${varName};
+    })(),`
+          }
+
           return ` ${name}: ${fn.toString()},`
         } else if (is.array(fn)) {
           return ` ${name}: ${JSON.stringify(fn)},`
@@ -167,7 +207,7 @@ return { ${imports} }
         } else {
           log.error(
             'UNKNOWN_LIB_TYPE',
-            `app.lib.${name} has to be a function, array or object, got: ${typeof app.lib[name]}`,
+            `app.lib.${name} has to be a function, array or object, got: ${typeof lib[name]}`,
           )
         }
       })
@@ -183,9 +223,12 @@ return { ${imports} }
 
   const pageString = `
 const pages = {
-  ${magic.pages
-    .sort(({ name: a }, { name: b }) => (a > b ? 1 : -1))
-    .map(page => `\n  '${page.name}': ${page.View.toString()},`)
+  ${(magic.pages ?? [])
+    .sort(({ name: a }, { name: b }) => ((a ?? '') > (b ?? '') ? 1 : -1))
+    .map(page => {
+      const viewString = /** @type {ModuleView} */ (page.View).toString()
+      return `\n  '${page.name}': ${viewString},`
+    })
     .join('\n')}
 }
 `
@@ -211,12 +254,12 @@ const pages = {
 
   if (!is.empty(magic.init)) {
     if (is.array(magic.init)) {
-      if (is.string(magic.init[0]) && is.len(magic.init, 1)) {
+      if (is.string(magic.init[0]) && is.len(magic.init)) {
         const [name, value] = magic.init
         initFunc = `[[${name}, ${stringifyObject(value)}]]`
       } else {
         const init = magic.init.map(fn => {
-          if (is.array(fn) && is.len(fn, 1) && is.string(fn[0])) {
+          if (is.array(fn) && is.len(fn) && is.string(fn[0])) {
             return `[${fn[0]}, ${stringifyObject(fn[1])}]`
           } else if (is.string(fn)) {
             return fn
@@ -284,20 +327,26 @@ app({
 
   const prependJSContents = PREPEND_JS.map(file => {
     const fullFilePath = replaceSlashSlash(`/${file}`)
-    const fileContent = app.static[fullFilePath]
+    const fileContent = /** @type {{ toString?: () => string } | undefined} */ (
+      app.static?.[fullFilePath]
+    )
+    const contentToString = fileContent?.toString
 
-    if (is.empty(fileContent) || !is.function(fileContent.toString)) {
+    if (is.empty(fileContent) || !is.function(contentToString)) {
       throw error(`fileContent undefined for config.PREPEND_JS: ${file}`, 'E_PREPEND_JS_EMPTY')
     }
 
-    return fileContent.toString()
+    return contentToString.call(fileContent)
   })
 
   const appendJSContents = APPEND_JS.map(file => {
     const fullFilePath = replaceSlashSlash(`/${file}`)
-    const fileContent = app.static[fullFilePath]
+    const fileContent = /** @type {{ toString?: () => string } | undefined} */ (
+      app.static?.[fullFilePath]
+    )
+    const contentToString = fileContent?.toString
 
-    if (is.empty(fileContent) || !is.function(fileContent.toString)) {
+    if (is.empty(fileContent) || !is.function(contentToString)) {
       throw error(`fileContent undefined for config.APPEND_JS: ${file}`, 'E_PREPEND_JS_EMPTY')
     }
 
