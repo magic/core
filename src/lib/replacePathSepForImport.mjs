@@ -1,5 +1,10 @@
 import path from 'path'
 
+/**
+ * @param {string} p
+ * @param {string} [sep]
+ * @returns {string}
+ */
 export const replacePathSepForImport = (p, sep = path.sep) => {
   if (sep !== '/') {
     if (sep === '\\') {

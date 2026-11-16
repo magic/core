@@ -1,4 +1,7 @@
 import log from '@magic/log'
+import is from '@magic/types'
+
+/** @import { AppObject, SwcNode, UsedObject } from '../../types.mjs' */
 
 const noopTypes = [
   'StringLiteral',
@@ -14,19 +17,29 @@ const noopTypes = [
 /*
  * which types of member accesses we want to track in the used object
  */
-const validTypes = ['lib', 'actions', 'effects', 'subscriptions', 'helpers']
+// const validTypes = ['lib', 'actions', 'effects', 'subscriptions', 'helpers']
 
+/**
+ * Visit an SWC AST node (or list of nodes) in place,
+ * tracking which modules and object members are used.
+ *
+ * @param {{ parent: SwcNode | (SwcNode | undefined)[] | undefined, app: AppObject, used: UsedObject }} params
+ * @returns {SwcNode | undefined}
+ */
 const visit = ({ parent, app, used }) => {
   if (!parent) {
-    return parent
+    return undefined
   }
 
-  if (Array.isArray(parent)) {
-    return parent.map(n => visit({ parent: n, app, used }))
+  if (is.array(parent)) {
+    const list = parent.map(n => visit({ parent: n, app, used }))
+    return /** @type {SwcNode} */ (/** @type {unknown} */ (list))
   }
 
   if (parent.type === 'VariableDeclaration') {
-    parent.declarations = parent.declarations.map(decl => visit({ parent: decl, app, used }))
+    parent.declarations = (parent.declarations ?? []).map(decl =>
+      visit({ parent: decl, app, used }),
+    )
   } else if (parent.type === 'ExpressionStatement') {
     parent.expression = visit({ parent: parent.expression, app, used })
   } else if (parent.type === 'AssignmentExpression') {
@@ -34,15 +47,18 @@ const visit = ({ parent, app, used }) => {
     parent.left = visit({ parent: parent.left, app, used })
   } else if (parent.type === 'ArrowFunctionExpression') {
     if (parent.params) {
-      parent.params = visit({ parent: parent.params, app, used })
+      parent.params = /** @type {SwcNode[]} */ (visit({ parent: parent.params, app, used }))
       parent.body = visit({ parent: parent.body, app, used })
-    } else if (parent.body.callee) {
-      parent.body.callee = visit({ parent: parent.body.callee, app, used })
-      parent.params = visit({ parent: parent.params, app, used })
-    } else if (parent.body.stmts) {
-      parent.body.stmts = parent.body.stmts.map(stmt => visit({ parent: stmt, app, used }))
     } else {
-      log.warn('unhandled ArrowFunctionExpression', parent)
+      const body = parent.body ?? {}
+      if (body.callee) {
+        body.callee = visit({ parent: body.callee, app, used })
+        parent.params = /** @type {SwcNode[]} */ (visit({ parent: parent.params, app, used }))
+      } else if (body.stmts) {
+        body.stmts = (body.stmts ?? []).map(stmt => visit({ parent: stmt, app, used }))
+      } else {
+        log.warn('unhandled ArrowFunctionExpression', /** @type {string} */ (parent))
+      }
     }
   } else if (parent.type === 'IfStatement') {
     parent.test = visit({ parent: parent.test, app, used })
@@ -51,17 +67,24 @@ const visit = ({ parent, app, used }) => {
       parent.alternate = visit({ parent: parent.alternate, app, used })
     }
   } else if (parent.type === 'CallExpression') {
-    parent.arguments = parent.arguments.map(arg => {
+    parent.arguments = (parent.arguments ?? []).map(arg => {
+      if (!arg) {
+        return arg
+      }
       arg.expression = visit({ parent: arg.expression, app, used })
       return arg
     })
 
     parent.callee = visit({ parent: parent.callee, app, used })
 
-    if (parent.callee.type === 'Identifier') {
-      if (Object.keys(app.modules).includes(parent.callee.value)) {
-        if (!used.modules.includes(parent.callee.value)) {
-          used.modules.push(parent.callee.value)
+    const callee = parent.callee
+
+    if (callee && callee.type === 'Identifier') {
+      const calleeValue = String(callee.value)
+
+      if (Object.keys(app.modules ?? {}).includes(calleeValue)) {
+        if (!used.modules.includes(calleeValue)) {
+          used.modules.push(calleeValue)
         }
       }
     }
@@ -69,45 +92,53 @@ const visit = ({ parent, app, used }) => {
     parent.id = visit({ parent: parent.id, app, used })
     parent.init = visit({ parent: parent.init, app, used })
   } else if (parent.type === 'ObjectExpression') {
-    parent.properties = parent.properties.map(prop => visit({ parent: prop, app, used }))
+    parent.properties = (parent.properties ?? []).map(prop => visit({ parent: prop, app, used }))
   } else if (parent.type === 'KeyValueProperty') {
     parent.key = visit({ parent: parent.key, app, used })
-    parent.value = visit({ parent: parent.value, app, used })
+    parent.value = visit({ parent: /** @type {SwcNode} */ (parent.value), app, used })
   } else if (parent.type === 'MemberExpression') {
     parent.property = visit({ parent: parent.property, app, used })
     parent.object = visit({ parent: parent.object, app, used })
 
-    const { value: type } = parent.object
-    const { value: key } = parent.property
+    const { value: typeRaw } = parent.object ?? {}
+    const { value: keyRaw } = parent.property ?? {}
+    const type = String(typeRaw)
+    const key = String(keyRaw)
 
-    if (used.hasOwnProperty(type) && !used[type].includes(key)) {
+    if (Object.prototype.hasOwnProperty.call(used, type) && !used[type].includes(key)) {
       used[type].push(key)
     }
 
-    if (Object.keys(app.modules).includes(type) && type[0].toUpperCase() === type[0]) {
+    if (Object.keys(app.modules ?? {}).includes(type) && type[0]?.toUpperCase() === type[0]) {
       used.modules.push(`${type}.${key}`)
     }
   } else if (parent.type === 'ArrayExpression') {
-    parent.elements = parent.elements.map(ele => {
-      ele.expression = visit({ parent: ele.expression, undefined, app, used })
+    parent.elements = (parent.elements ?? []).map(ele => {
+      if (!ele) {
+        return ele
+      }
+      ele.expression = visit({ parent: ele.expression, app, used })
       return ele
     })
   } else if (parent.type === 'ArrayPattern') {
-    parent.elements = parent.elements.map(ele => visit({ parent: ele, app, used }))
+    parent.elements = (parent.elements ?? []).map(ele => visit({ parent: ele, app, used }))
   } else if (parent.type === 'TemplateLiteral') {
-    parent.quasis = parent.quasis.map(quasi => {
-      quasi.raw = visit({ parent: quasi.raw, app, used })
-      quasi.cooked = visit({ parent: quasi.cooked, app, used })
+    parent.quasis = (parent.quasis ?? []).map(quasi => {
+      if (!quasi) {
+        return quasi
+      }
+      quasi.raw = visit({ parent: /** @type {SwcNode} */ (quasi.raw), app, used })
+      quasi.cooked = visit({ parent: /** @type {SwcNode} */ (quasi.cooked), app, used })
       return quasi
     })
   } else if (parent.type === 'SpreadElement') {
-    parent.arguments = visit({ parent: parent.arguments, app, used })
+    parent.arguments = /** @type {SwcNode[]} */ (visit({ parent: parent.arguments, app, used }))
   } else if (parent.type === 'BlockStatement') {
-    parent.stmts = parent.stmts.map(stmt => visit({ parent: stmt, app, used }))
+    parent.stmts = (parent.stmts ?? []).map(stmt => visit({ parent: stmt, app, used }))
   } else if (parent.type === 'ReturnStatement') {
     parent.argument = visit({ parent: parent.argument, app, used })
   } else if (parent.type === 'ObjectPattern') {
-    parent.properties.map(prop => visit({ parent: prop, app, used }))
+    ;(parent.properties ?? []).map(prop => visit({ parent: prop, app, used }))
   } else if (parent.type === 'AssignmentPattern') {
     parent.left = visit({ parent: parent.left, app, used })
     parent.right = visit({ parent: parent.right, app, used })
@@ -127,10 +158,10 @@ const visit = ({ parent, app, used }) => {
   } else if (parent.type === 'ParenthesisExpression') {
     parent.expression = visit({ parent: parent.expression, app, used })
   } else if (parent.type === 'RestElement') {
-    parent.argument = visit({ parent: parent.argument, undefined, app, used })
+    parent.argument = visit({ parent: parent.argument, app, used })
   } else if (parent.type === 'KeyValuePatternProperty') {
     parent.key = visit({ parent: parent.key, app, used })
-    parent.value = visit({ parent: parent.value, app, used })
+    parent.value = visit({ parent: /** @type {SwcNode} */ (parent.value), app, used })
   } else if (parent.type === 'TryStatement') {
     parent.block = visit({ parent: parent.block, app, used })
     parent.handler = visit({ parent: parent.handler, app, used })
@@ -147,7 +178,7 @@ const visit = ({ parent, app, used }) => {
     parent.update = visit({ parent: parent.update, app, used })
     parent.body = visit({ parent: parent.body, app, used })
   } else if (parent.type === 'FunctionExpression') {
-    parent.params = visit({ parent: parent.params, app, used })
+    parent.params = /** @type {SwcNode[]} */ (visit({ parent: parent.params, app, used }))
     parent.body = visit({ parent: parent.body, app, used })
     parent.decorators = visit({ parent: parent.decorators, app, used })
   } else if (parent.type === 'Parameter') {
@@ -164,27 +195,40 @@ const visit = ({ parent, app, used }) => {
   } else if (parent.type === 'BreakStatement') {
     parent.label = visit({ parent: parent.label, app, used })
   } else if (parent.type === 'SequenceExpression') {
-    parent.expressions = visit({ parent: parent.expressions, app, used })
+    parent.expressions = /** @type {(SwcNode | undefined)[] | undefined} */ (
+      visit({ parent: parent.expressions, app, used })
+    )
   } else if (parent.type === 'ContinueStatement') {
     parent.label = visit({ parent: parent.label, app, used })
   } else if (parent.type === 'ImportDeclaration') {
-    parent.specifiers = visit({ parent: parent.specifiers, app, used })
+    parent.specifiers = /** @type {(SwcNode | undefined)[] | undefined} */ (
+      visit({ parent: parent.specifiers, app, used })
+    )
   } else if (parent.type === 'ImportSpecifier') {
     parent.local = visit({ parent: parent.local, app, used })
   } else if (parent.type === 'ExportNamedDeclaration') {
-    parent.specifiers = visit({ parent: parent.specifiers, app, used })
+    parent.specifiers = /** @type {(SwcNode | undefined)[] | undefined} */ (
+      visit({ parent: parent.specifiers, app, used })
+    )
   } else if (parent.type === 'ExportSpecifier') {
     parent.orig = visit({ parent: parent.orig, app, used })
-  } else if (noopTypes.includes(parent.type)) {
+  } else if (parent.type && noopTypes.includes(parent.type)) {
     // noop
   } else if (parent.type) {
-    log.warn('unexpected parent type', parent.type, parent)
+    log.warn('unexpected parent type', parent.type, /** @type {string} */ (parent))
   }
 
-  return parent
+  return /** @type {SwcNode} */ (parent)
 }
 
+/**
+ * Resolve which modules and object members are used by a piece of code.
+ *
+ * @param {{ parent: SwcNode, app: AppObject }} params
+ * @returns {UsedObject}
+ */
 export const resolveDependencies = ({ parent: m, app }) => {
+  /** @type {UsedObject} */
   const used = {
     modules: [],
     lib: [],
@@ -194,7 +238,8 @@ export const resolveDependencies = ({ parent: m, app }) => {
     helpers: [],
   }
 
-  m.body.map(item => visit({ parent: item, app, used }))
+  const bodyList = /** @type {SwcNode[]} */ (m.body ?? [])
+  bodyList.map(item => visit({ parent: item, app, used }))
 
   return used
 }

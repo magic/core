@@ -1,6 +1,15 @@
 import swc from '@swc/core'
 import is from '@magic/types'
 
+/** @import { AppObject, Config, SwcNode } from '../../types.mjs' */
+/** @import { Module, ParseOptions } from '@swc/core' */
+
+/**
+ * A loose SWC BlockStatement-like node, for the dead-code removal helpers.
+ *
+ * @typedef {{ type: string, stmts: { type: string, declarations: { id?: { type: string, value: string }, [key: string]: unknown }[], [key: string]: unknown }[] }} SwcBlock
+ */
+
 import { visit, used } from './visit.mjs'
 
 // Core magic variables that are not modules - cached as Set for O(1) lookup
@@ -25,20 +34,29 @@ const CORE_VARS = new Set([
  * Collect all module variable names that are actually used in pages/object values
  * These variables must be kept because they're referenced
  */
+/**
+ * @param {unknown} block
+ * @returns {Set<string>}
+ */
 const collectUsedModuleVars = block => {
+  /** @type {Set<string>} */
   const usedVars = new Set()
 
+  /**
+   * @param {unknown} node
+   */
   const traverse = node => {
     if (!is.objectNative(node)) {
       return
     }
 
-    if (node.type === 'ObjectExpression' && node.properties) {
+    if (node.type === 'ObjectExpression' && is.array(node.properties)) {
       for (const prop of node.properties) {
-        if (prop.value?.type === 'Identifier') {
-          usedVars.add(prop.value.value)
+        const propNode = /** @type {{ value?: { type?: string, value?: string } }} */ (prop)
+        if (propNode.value?.type === 'Identifier' && is.string(propNode.value.value)) {
+          usedVars.add(propNode.value.value)
         }
-        traverse(prop.value)
+        traverse(propNode.value)
       }
     }
 
@@ -47,7 +65,7 @@ const collectUsedModuleVars = block => {
         continue
       }
       const child = node[key]
-      if (Array.isArray(child)) {
+      if (is.array(child)) {
         child.forEach(traverse)
       } else if (is.objectNative(child)) {
         traverse(child)
@@ -63,12 +81,19 @@ const collectUsedModuleVars = block => {
  * Remove unused module declarations from a BlockStatement
  * Handles multi-declarator statements (const a = A, b = B)
  */
+/**
+ * @param {unknown} block
+ * @param {Set<string>} usedModules
+ * @param {Set<string>} usedModuleVars
+ * @returns {void}
+ */
 const removeUnusedFromBlock = (block, usedModules, usedModuleVars) => {
-  if (!block || block.type !== 'BlockStatement' || !block.stmts) {
+  if (!is.objectNative(block) || block.type !== 'BlockStatement' || !block.stmts) {
     return
   }
 
-  block.stmts = block.stmts.filter(stmt => {
+  const blockNode = /** @type {SwcBlock} */ (/** @type {unknown} */ (block))
+  blockNode.stmts = blockNode.stmts.filter(stmt => {
     // Only process variable declarations
     if (stmt.type !== 'VariableDeclaration') {
       return true
@@ -119,11 +144,20 @@ const removeUnusedFromBlock = (block, usedModules, usedModuleVars) => {
 /**
  * Find the __MAGIC__ arrow function and remove unused modules from its body
  */
+/**
+ * @param {Module} ast
+ * @param {Set<string>} usedModules
+ * @returns {void}
+ */
 const filterMagicFunction = (ast, usedModules) => {
   for (const item of ast.body) {
     if (item.type === 'VariableDeclaration') {
       for (const decl of item.declarations) {
-        if (decl.id?.value === '__MAGIC__' && decl.init?.type === 'ArrowFunctionExpression') {
+        if (
+          decl.id?.type === 'Identifier' &&
+          decl.id.value === '__MAGIC__' &&
+          decl.init?.type === 'ArrowFunctionExpression'
+        ) {
           const arrowFn = decl.init
           // The body is either a BlockStatement directly or an object
           if (arrowFn.body?.type === 'BlockStatement') {
@@ -145,6 +179,12 @@ const filterMagicFunction = (ast, usedModules) => {
  * 4. Generate code from AST
  * 5. Minify the output
  */
+/**
+ * @param {string | undefined} code
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Promise<string>}
+ */
 export const transformClient = async (code, app, config) => {
   const fileName = `${config.CLIENT_LIB_NAME}.js`
 
@@ -160,20 +200,35 @@ export const transformClient = async (code, app, config) => {
     return 'const __MAGIC__ = () => {};\n__MAGIC__();\n'
   }
 
-  const ast = await swc.parse(code, {
-    syntax: 'typescript',
-    jsx: true,
-    isModule: true,
-    target: 'es2017',
-  })
-
-  // Transform the AST - this tracks used modules and removes CHECK_PROPS calls
-  ast.body = ast.body.map(item => visit({ parent: item, app, config }))
-
-  // Filter unused modules from app.modules
-  app.modules = Object.fromEntries(
-    Object.entries(app.modules).filter(([name]) => used.modules.has(name)),
+  const ast = await swc.parse(
+    code,
+    /** @type {ParseOptions} */ (
+      /** @type {unknown} */ ({
+        syntax: 'typescript',
+        jsx: true,
+        isModule: true,
+        target: 'es2017',
+      })
+    ),
   )
+  // Transform the AST - this tracks used modules and removes CHECK_PROPS calls
+  // par is unused by visit, but part of its expected shape
+  ast.body = /** @type {typeof ast.body} */ (
+    ast.body.map(item =>
+      visit({
+        par: /** @type {SwcNode} */ (item),
+        parent: /** @type {SwcNode} */ (item),
+        app,
+        config,
+      }),
+    )
+  )
+  // Filter unused modules from app.modules
+  if (is.objectNative(app.modules)) {
+    app.modules = Object.fromEntries(
+      Object.entries(app.modules).filter(([name]) => used.modules.has(name)),
+    )
+  }
 
   // Remove unused module declarations from __MAGIC__ function body
   filterMagicFunction(ast, used.modules)

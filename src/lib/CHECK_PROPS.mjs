@@ -1,31 +1,54 @@
+/** @import { Props, PropTypeDecls, PropTypeDecl, LogLike } from '../types.mjs' */
+import { isObjectNative } from '@magic/types'
+
+/**
+ * @param {Props} props
+ * @param {PropTypeDecls} [propTypeDecl]
+ * @param {string} [name]
+ * @param {LogLike | false} [log]
+ * @returns {boolean}
+ */
 export const CHECK_PROPS = (props, propTypeDecl, name, log) => {
   const currentPage = app && app.state?.url ? app.state.url : 'Unknown on client.'
 
   if (log === false) {
     log = () => {}
   } else if (!log) {
-    log = e => console.log(e.code, e.message)
+    log = e =>
+      console.log(
+        e instanceof Error ? e.code : undefined,
+        e instanceof Error ? e.message : undefined,
+      )
   }
 
-  const error = (msg, code = 'E_CHECK_PROPS') => {
-    const err = new Error(msg)
-    err.code = code
-    return err
-  }
+  /**
+   * @param {string} msg
+   * @param {string} [code]
+   * @returns {Error & { code: string }}
+   */
+  const error = (msg, code = 'E_CHECK_PROPS') => Object.assign(new Error(msg), { code })
 
+  /** @type {{ [key: string]: ((e: unknown) => boolean) | undefined }} */
+  const checks = {}
+
+  checks.number = e => typeof e === 'number' && e === +e
+  checks.integer = e => typeof e === 'number' && e === +e && e === (e | 0)
+  checks.float = e => typeof e === 'number' && e === +e
+
+  checks.array = e => Array.isArray(e)
+  checks.regexp = e => e instanceof RegExp
+  checks.date = e => e instanceof Date
+  checks.error = e => e instanceof Error
+  checks.null = e => e === null
+  checks.promise = e => e instanceof Promise
+
+  /**
+   * @param {unknown} e
+   * @param {...string} types
+   * @returns {boolean}
+   */
   const is = (e, ...types) =>
-    types.some(type => (typeof is[type] === 'function' ? is[type](e) : typeof e === type))
-
-  is.number = e => e === +e
-  is.integer = e => e === +e && e === (e | 0)
-  is.float = e => e === +e
-
-  is.array = e => Array.isArray(e)
-  is.regexp = e => e instanceof RegExp
-  is.date = e => e instanceof Date
-  is.error = e => e instanceof Error
-  is.null = e => e === null
-  is.promise = e => e instanceof Promise
+    types.some(type => (typeof checks[type] === 'function' ? checks[type](e) : typeof e === type))
 
   if (!propTypeDecl) {
     const err = error('expected propTypes as second argument', `E_CHECK_PROPS_${currentPage}`)
@@ -43,13 +66,17 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log) => {
 
   let propTypes = propTypeDecl[name]
 
-  if (!is.array(propTypes)) {
+  if (!Array.isArray(propTypes)) {
     const err = error(
       `expected propTypes to be an array. received: ${propTypes} on page ${currentPage} in component ${name}`,
       'E_CHECK_PROPS',
     )
 
-    log.error(err)
+    // the fallback log has no error method; the unguarded call
+    // intentionally throws, as the tests expect an error here.
+    const logError = /** @type {{ error: (error: Error & { code?: string }) => boolean }} */ (log)
+      .error
+    logError(err)
 
     return false
   }
@@ -63,13 +90,15 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log) => {
     }
   }
 
+  /** @type {(Error & { code?: string })[]} */
   const errors = []
 
   propTypes.forEach(propType => {
     const { key, required, type, oneOf, someOf } = propType
-    let value = props[key]
+    let value = key ? props[key] : undefined
 
-    const types = is.array(type) ? type : [type]
+    /** @type {string[]} */
+    const types = Array.isArray(type) ? [...type] : [type ?? 'undefined']
 
     if (!required && !types.includes('undefined')) {
       types.push('undefined')
@@ -97,29 +126,29 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log) => {
         value = propType.default
       }
 
-      if (!is.array(value)) {
+      if (!Array.isArray(value)) {
         const err = error(
           `${name} has someOf, someOf needs value to be an array.
         received ${value}, which is a ${typeof value}`,
           'E_CHECK_PROPS_SOMEOF_ARG_NOT_ARRAY',
         )
         errors.push(err)
-      }
+      } else {
+        const includes = !value.some(inc => !someOf.includes(inc))
+        if (!includes && value !== propType.default) {
+          const err = error(
+            `${name} needs value to be one of [${someOf.join(', ')}]. received ${value}`,
+            'E_CHECK_PROPS_SOME_OF_ARG_MISMATCH',
+          )
 
-      const includes = !value.some(inc => !someOf.includes(inc))
-      if (!includes && value !== propType.default) {
-        const err = error(
-          `${name} needs value to be one of [${someOf.join(', ')}]. received ${value}`,
-          'E_CHECK_PROPS_SOME_OF_ARG_MISMATCH',
-        )
-
-        errors.push(err)
+          errors.push(err)
+        }
       }
     }
 
     const match = is(value, ...types)
 
-    if (is.array(required)) {
+    if (Array.isArray(required)) {
       if (!match) {
         const altExists = required.filter(key => is(props[key], ...types))
         if (altExists.length) {
@@ -138,7 +167,7 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log) => {
       )
       errors.push(err)
     } else if (required) {
-      if (typeof value === 'object' && !Object.keys(value).length) {
+      if (typeof value === 'object' && value !== null && !Object.keys(value).length) {
         let typeString = ''
         if (types.includes('array')) {
           typeString += ' array'
@@ -159,15 +188,16 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log) => {
 
     if (is(value, 'number')) {
       // handle range prop here
+      const num = typeof value === 'number' ? value : Number(value)
       const { max = Number.MAX_SAFE_INTEGER, min = Number.MIN_SAFE_INTEGER } = propType
 
-      if (max && value > max) {
+      if (max && num > max) {
         const err = error(
           `${name} number expected to be <= ${max}, was ${value}`,
           'E_CHECK_PROPS_NUMBER_TOO_BIG',
         )
         errors.push(err)
-      } else if (min > 0 && value < min) {
+      } else if (min > 0 && num < min) {
         const err = error(
           `${name} number expected to be >= ${min}, was ${value}`,
           'E_CHECK_PROPS_NUMBER_TOO_SMALL',
@@ -177,17 +207,18 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log) => {
     }
 
     if (is(value, 'string')) {
+      const str = typeof value === 'string' ? value : String(value)
       const { max = 500, min = 0 } = propType
 
-      if (max && value.length > max) {
+      if (max && str.length > max) {
         const err = error(
-          `${name} string length expected to be <= ${max}, length was ${value.length}`,
+          `${name} string length expected to be <= ${max}, length was ${str.length}`,
           'E_CHECK_PROPS_STRING_TO_LONG',
         )
         errors.push(err)
-      } else if (min > 0 && value.length < min) {
+      } else if (min > 0 && str.length < min) {
         const err = error(
-          `${name} string length expected to be >= ${min}, length was ${value.length}`,
+          `${name} string length expected to be >= ${min}, length was ${str.length}`,
           'E_CHECK_PROPS_STRING_TO_SHORT',
         )
         errors.push(err)
@@ -197,65 +228,65 @@ export const CHECK_PROPS = (props, propTypeDecl, name, log) => {
     if (type === 'array' && propType.item && value) {
       const { item } = propType
 
-      if (!is(value, 'array')) {
+      if (!Array.isArray(value)) {
         const err = error(
           `${name} needs props.${key} to be an array. received ${typeof value}`,
           'E_CHECK_PROPS_ARRAY_MISMATCH',
         )
         errors.push(err)
-      }
+      } else {
+        value.forEach(val => {
+          /** @type {string[]} */
+          const itemType = Array.isArray(item.type) ? item.type : [item.type]
+          const typeInfo = itemType.length > 1 ? 'one of' : 'a'
+          const typeString = itemType.length > 1 ? `["${itemType.join(', "')}"]` : itemType[0]
 
-      value.forEach(val => {
-        const typeInfo = is(item.type, 'array') && item.type.length > 1 ? 'one of' : 'a'
-        const typeString = is(item.type, 'array')
-          ? item.type.length > 1
-            ? `["${item.type.join(', "')}"]`
-            : item.type[0]
-          : item.type
+          if (itemType.includes('object') && isObjectNative(val)) {
+            if (item.keys) {
+              item.keys.forEach(iKey => {
+                const v = val[iKey.key]
+                if (!is(v, iKey.type)) {
+                  const typeInfo = is(iKey.type, 'array') && iKey.type.length > 1 ? 'one of' : 'a'
 
-        if (item.type.includes('object') && is(val, 'object')) {
-          item.keys.forEach(iKey => {
-            const v = val[iKey.key]
-            if (!is(v, iKey.type)) {
-              const typeInfo = is(iKey.type, 'array') && iKey.type.length > 1 ? 'one of' : 'a'
+                  let typeString = ''
+                  if (Array.isArray(iKey.type)) {
+                    if (iKey.type.length > 1) {
+                      typeString = `["${iKey.type.join(', "')}"]`
+                    } else {
+                      typeString = iKey.type[0]
+                    }
+                  } else {
+                    typeString = iKey.type
+                  }
 
-              let typeString = ''
-              if (Array.isArray(iKey.type)) {
-                if (iKey.type.length > 1) {
-                  typeString = `["${iKey.type.join(', "')}"]`
-                } else {
-                  typeString = iKey.type[0]
+                  const err = error(
+                    `${name} expects item.${
+                      iKey.key
+                    } to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`,
+                    'E_CHECK_PROPS_OBJECT_KEY_MISMATCH',
+                  )
+
+                  errors.push(err)
                 }
-              } else {
-                typeString = iKey.type
-              }
-
+              })
+            }
+          } else {
+            if (!is(val, ...itemType)) {
               const err = error(
-                `${name} expects item.${
-                  iKey.key
-                } to be ${typeInfo} ${typeString}, received ${typeof v}, on page ${currentPage}`,
-                'E_CHECK_PROPS_OBJECT_KEY_MISMATCH',
+                `${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}, on page ${currentPage}`,
+                'E_CHECK_PROPS_ARRAY_ITEM_MISMATCH',
               )
-
               errors.push(err)
             }
-          })
-        } else {
-          const type = is(item.type, 'array') ? item.type : [item.type]
-          if (!is(val, ...type)) {
-            const err = error(
-              `${name} has item that is expected to be ${typeInfo} ${typeString}, received ${typeof val}, on page ${currentPage}`,
-              'E_CHECK_PROPS_ARRAY_ITEM_MISMATCH',
-            )
-            errors.push(err)
           }
-        }
-      })
+        })
+      }
     }
   })
 
-  if (log.error) {
-    errors.forEach(log.error)
+  const logError = log.error
+  if (logError) {
+    errors.forEach(logError)
   }
 
   return !errors.length

@@ -1,8 +1,13 @@
 import is from '@magic/types'
 
-export const handleStyleFunctions = s => {
+/**
+ * @param {unknown} s
+ * @param {{ THEME_VARS?: { [key: string]: unknown } }} [config]
+ * @returns {unknown}
+ */
+export const handleStyleFunctions = (s, config) => {
   if (is.function(s)) {
-    const variables = config.THEME_VARS || {}
+    const variables = (config && config.THEME_VARS) || {}
     return s(variables)
   }
 

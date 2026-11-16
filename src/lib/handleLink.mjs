@@ -1,15 +1,24 @@
 import log from '@magic/log'
+import is from '@magic/types'
 
 import { replaceSlashSlash } from './replaceSlashSlash.mjs'
 
+/** @import { AppObject } from '../types.mjs' */
+
+/**
+ * @param {{ app?: { [key: string]: unknown }, href: string, parent?: Record<string, unknown>, WEB_ROOT?: string }} params
+ * @returns {string}
+ */
 export const handleLink = ({ app, href, parent = {}, WEB_ROOT }) => {
   if (href.startsWith('mailto:')) {
     return href
   }
 
-  if (href.startsWith(WEB_ROOT)) {
+  if (href.startsWith(String(WEB_ROOT))) {
     href = replaceSlashSlash(href)
-    app.links.push(href)
+    if (app && is.array(app.links)) {
+      app.links.push(href)
+    }
     return href
   }
 
@@ -22,8 +31,8 @@ export const handleLink = ({ app, href, parent = {}, WEB_ROOT }) => {
   if (href.startsWith('/') && !href.startsWith('//')) {
     local = true
 
-    if (!href.startsWith(WEB_ROOT)) {
-      href = `${WEB_ROOT}${href.substr(1)}`
+    if (!href.startsWith(String(WEB_ROOT))) {
+      href = `${String(WEB_ROOT)}${href.substr(1)}`
     }
   } else if (href.startsWith('#')) {
     local = true
@@ -31,7 +40,7 @@ export const handleLink = ({ app, href, parent = {}, WEB_ROOT }) => {
     if (parent.to) {
       href = `${parent.to}/${href}`
     } else {
-      href = `${WEB_ROOT}/${href}`
+      href = `${String(WEB_ROOT)}/${href}`
     }
   } else if (href.startsWith('-')) {
     if (parent.to) {
@@ -70,7 +79,9 @@ export const handleLink = ({ app, href, parent = {}, WEB_ROOT }) => {
     }
   }
 
-  app.links.push(href)
+  if (app && is.array(app.links)) {
+    app.links.push(href)
+  }
 
   return href
 }

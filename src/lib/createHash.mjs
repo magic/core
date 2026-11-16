@@ -3,6 +3,10 @@ import crypto from 'crypto'
 import is from '@magic/types'
 import error from '@magic/error'
 
+/**
+ * @param {string | Buffer} content
+ * @returns {string}
+ */
 export const createHash = content => {
   if (!is.buffer(content) && !is.string(content)) {
     throw error(`createHash(content) expects a string or buffer, got ${typeof content}`, 'ARG_TYPE')

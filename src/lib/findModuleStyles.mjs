@@ -1,16 +1,28 @@
 import deep from '@magic/deep'
 import is from '@magic/types'
 
+/**
+ * @param {Record<string, unknown>} modules
+ * @param {unknown} vars
+ * @param {string | undefined} [parent]
+ * @returns {Record<string, unknown>}
+ */
 export const findModuleStyles = (modules, vars, parent) => {
+  /** @type {Record<string, unknown>} */
   let styles = {}
 
   Object.entries(modules)
     .sort(([a], [b]) => (a > b ? 1 : -1))
     .forEach(([name, mod]) => {
-      if (!is.empty(mod.style)) {
-        let style = mod.style
+      const modObj = /** @type {Record<string, unknown>} */ (mod)
+
+      if (!is.empty(modObj.style)) {
+        /** @type {unknown} */
+        let style = modObj.style
         if (is.function(style)) {
-          style = style(vars)
+          style = /** @type {Record<string, unknown>} */ (
+            /** @type {(v: unknown) => unknown} */ (style)(vars)
+          )
         }
 
         let selector = `.${name}`
@@ -19,29 +31,36 @@ export const findModuleStyles = (modules, vars, parent) => {
           selector = `.${parent}${name}`
         }
 
+        /** @type {Record<string, unknown>} */
         let finalStyle = {}
-        if (!style[selector]) {
+        if (!(/** @type {Record<string, unknown>} */ (style)[selector])) {
+          /** @type {Record<string, unknown>} */
           const modStyle = {}
+          /** @type {Record<string, unknown>} */
           const metaStyle = {}
 
           if (is.array(style)) {
+            /** @type {Record<string, unknown>} */
             let s = {}
-            style.forEach(item => {
-              if (is.fn(item)) {
-                item = item(vars)
-              }
-
-              s = deep.merge(s, item)
-            })
+            for (const rawItem of /** @type {unknown[]} */ (style)) {
+              const item = is.fn(rawItem)
+                ? /** @type {(v: unknown) => unknown} */ (rawItem)(vars)
+                : rawItem
+              s = /** @type {Record<string, unknown>} */ (deep.merge(s, item))
+            }
             style = s
           }
 
-          Object.entries(style)
+          Object.entries(/** @type {Record<string, unknown>} */ (style))
             .sort(([a], [b]) => (a > b ? 1 : -1))
             .forEach(([k, v]) => {
               if (k.startsWith('@')) {
                 if (k.startsWith('@media')) {
-                  if (!Object.keys(v).some(kk => kk.includes(`.${k}`))) {
+                  if (
+                    !Object.keys(/** @type {Record<string, unknown>} */ (v)).some(kk =>
+                      kk.includes(`.${k}`),
+                    )
+                  ) {
                     v = {
                       [selector]: v,
                     }
@@ -62,24 +81,24 @@ export const findModuleStyles = (modules, vars, parent) => {
             ...metaStyle,
           }
         } else {
-          if (!style[selector]) {
+          if (!(/** @type {Record<string, unknown>} */ (style)[selector])) {
             style = {
               [selector]: style,
             }
           }
 
-          finalStyle = style
+          finalStyle = /** @type {Record<string, unknown>} */ (style)
         }
 
-        styles = deep.merge(styles, finalStyle)
+        styles = /** @type {Record<string, unknown>} */ (deep.merge(styles, finalStyle))
       }
 
-      Object.entries(mod)
+      Object.entries(modObj)
         .filter(([k]) => is.case.upper(k[0]))
-        .filter(([_, m]) => !is.empty(m.style))
+        .filter(([_, m]) => !is.empty(/** @type {Record<string, unknown>} */ (m).style))
         .forEach(([subName, subMod]) => {
           const subStyles = findModuleStyles({ [subName]: subMod }, vars, name)
-          styles = deep.merge(styles, subStyles)
+          styles = /** @type {Record<string, unknown>} */ (deep.merge(styles, subStyles))
         })
     })
 

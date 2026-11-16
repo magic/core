@@ -1,3 +1,8 @@
+/**
+ * @param {{ [key: string]: unknown } | null | undefined} a
+ * @param {{ [key: string]: unknown } | null | undefined} b
+ * @returns {{ [key: string]: unknown } | null | undefined}
+ */
 export const uniqueMerge = (a, b) => {
   if (!a) {
     return b
@@ -15,14 +20,17 @@ export const uniqueMerge = (a, b) => {
   Object.keys(a)
     .filter(a => a)
     .forEach(key => {
-      a[key].forEach(name => {
-        if (b.hasOwnProperty(key) && !b[key].includes(name)) {
-          b[key].push(name)
+      const aValues = /** @type {string[]} */ (a[key])
+      const bValues = /** @type {string[] | undefined} */ (b[key])
+
+      aValues.forEach(name => {
+        if (bValues && !bValues.includes(name)) {
+          bValues.push(name)
         }
       })
 
-      if (b[key]) {
-        b[key] = b[key].sort()
+      if (bValues) {
+        b[key] = bValues.sort()
       }
     })
 

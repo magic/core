@@ -8,7 +8,14 @@ import { resolveDependencies } from '../../lib/swc/resolveDependencies.mjs'
 import { moduleViewToString } from './moduleViewToString.mjs'
 import { mergeSubModules } from './mergeSubModules.mjs'
 
-export const recursivelyResolveDependencies = async ({ app, config }) => {
+/** @import { AppObject, Config, ModuleView, SwcNode } from '../../types.mjs' */
+
+/**
+ * @param {{ app: AppObject, config: Config }} params
+ * @returns {Promise<Record<string, unknown>>}
+ */
+export const recursivelyResolveDependencies = async ({ app, config: _config }) => {
+  /** @type {Record<string, unknown>} */
   let totalUsed = {
     modules: [],
     lib: [],
@@ -21,8 +28,20 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
     resolved: [],
   }
 
+  /** @type {Record<string, Record<string, unknown>>} */
   const moduleDependencies = {}
+  /** @type {Record<string, string[]>} */
   const modulePages = {}
+
+  /**
+   * @param {Record<string, unknown>} a
+   * @param {Record<string, unknown>} b
+   * @returns {Record<string, unknown>}
+   */
+  const mergeUsed = (a, b) => {
+    const merged = uniqueMerge(a, b)
+    return merged ?? a
+  }
 
   {
     const rootCode = app.View.toString()
@@ -30,16 +49,21 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
     const hoistedString = `\nconst hoisted = ${app.hoisted}`
 
     const ast = await swc.parse(rootCode + hoistedString)
-    const usedInRoot = resolveDependencies({ parent: ast, app })
-    totalUsed = uniqueMerge(usedInRoot, totalUsed)
+    const usedInRoot = resolveDependencies({ parent: /** @type {SwcNode} */ (ast), app })
+    totalUsed = mergeUsed(/** @type {Record<string, unknown>} */ (usedInRoot), totalUsed)
   }
 
   {
-    const { Page } = app.modules
-    const pageCode = Page.View.toString()
-    const pageAst = await swc.parse(pageCode)
-    const usedInPage = resolveDependencies({ parent: pageAst, app })
-    totalUsed = uniqueMerge(usedInPage, totalUsed)
+    const Page = /** @type {{ View?: { toString(): string } } | undefined} */ (app.modules?.Page)
+    if (Page && Page.View) {
+      const pageCode = Page.View.toString()
+      const pageAst = await swc.parse(pageCode)
+      const usedInPage = resolveDependencies({
+        parent: /** @type {SwcNode} */ (pageAst),
+        app,
+      })
+      totalUsed = mergeUsed(/** @type {Record<string, unknown>} */ (usedInPage), totalUsed)
+    }
   }
 
   {
@@ -50,52 +74,67 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
 
     const totalString = [actionString, effectString, subString, libString].join('\n')
     const ast = await swc.parse(totalString)
-    const usedInFunctions = resolveDependencies({ parent: ast, app })
-    totalUsed = uniqueMerge(usedInFunctions, totalUsed)
+    const usedInFunctions = resolveDependencies({
+      parent: /** @type {SwcNode} */ (ast),
+      app,
+    })
+    totalUsed = mergeUsed(/** @type {Record<string, unknown>} */ (usedInFunctions), totalUsed)
   }
 
   await Promise.all(
-    Object.entries(app.modules).map(async ([name, module]) => {
-      const view = moduleViewToString(module)
+    Object.entries(app.modules ?? {}).map(async ([name, module]) => {
+      const viewString = /** @type {string} */ (moduleViewToString(module))
+      /** @type {string[]} */
       const subViews = []
 
       if (is.objectNative(module)) {
         const modSubViews = Object.entries(module)
-          .filter(([name]) => isModuleName(name))
+          .filter(([subName]) => isModuleName(subName))
           .map(([_name, subModule]) => {
             if (is.function(subModule)) {
               return subModule.toString()
-            } else if (is.function(subModule.View)) {
-              return subModule.View.toString()
+            } else if (is.function(/** @type {{ View?: unknown }} */ (subModule)?.View)) {
+              return /** @type {{ View: { toString(): string } }} */ (subModule).View.toString()
             }
           })
 
-        subViews.push(...modSubViews)
+        subViews.push(...modSubViews.filter(v => is.string(v)))
       }
 
-      const ast = await swc.parse(view)
-      let usedInModule = resolveDependencies({ parent: ast, app })
-
+      const ast = await swc.parse(viewString)
+      /** @type {Record<string, unknown>} */
+      let usedInModule = /** @type {Record<string, unknown>} */ (
+        resolveDependencies({ parent: /** @type {SwcNode} */ (ast), app })
+      )
       await Promise.all(
-        subViews.map(async view => {
-          const ast = await swc.parse(view)
-          const usedInSubModule = resolveDependencies({ parent: ast, app })
-          usedInModule = uniqueMerge(usedInSubModule, usedInModule)
+        subViews.map(async subView => {
+          const subAst = await swc.parse(subView)
+          const usedInSubModule = resolveDependencies({
+            parent: /** @type {SwcNode} */ (subAst),
+            app,
+          })
+          usedInModule = mergeUsed(
+            /** @type {Record<string, unknown>} */ (usedInSubModule),
+            usedInModule,
+          )
         }),
       )
 
       moduleDependencies[name] = usedInModule
-      totalUsed = uniqueMerge(usedInModule, totalUsed)
+      totalUsed = mergeUsed(usedInModule, totalUsed)
     }),
   )
 
   await Promise.all(
-    app.pages.map(async page => {
-      const pageView = page.View.toString()
+    (app.pages ?? []).map(async page => {
+      const pageView = /** @type {ModuleView} */ (page.View).toString()
       const ast = await swc.parse(pageView)
-      const usedInPage = resolveDependencies({ parent: ast, app })
+      const usedInPage = /** @type {Record<string, unknown>} */ (
+        resolveDependencies({ parent: /** @type {SwcNode} */ (ast), app })
+      )
 
-      usedInPage.modules.forEach(moduleName =>
+      const usedModules = /** @type {string[]} */ (usedInPage.modules)
+      usedModules.forEach(moduleName =>
         mergeSubModules({
           used: usedInPage,
           name: moduleName,
@@ -103,12 +142,16 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
         }),
       )
 
-      totalUsed.pages[page.name] = usedInPage
-      totalUsed = uniqueMerge(usedInPage, totalUsed)
+      const pagesMap = /** @type {Record<string, unknown>} */ (totalUsed.pages ?? {})
+      pagesMap[String(page.name)] = usedInPage
+      totalUsed.pages = pagesMap
+      totalUsed = mergeUsed(usedInPage, totalUsed)
 
-      usedInPage.modules.forEach(moduleName => {
+      usedModules.forEach(moduleName => {
         modulePages[moduleName] = modulePages[moduleName] || []
-        modulePages[moduleName].push(page.name)
+        if (is.string(page.name)) {
+          modulePages[moduleName].push(page.name)
+        }
       })
     }),
   )
@@ -116,7 +159,7 @@ export const recursivelyResolveDependencies = async ({ app, config }) => {
   totalUsed.modulesByPage = modulePages
 
   totalUsed.singlePageModules = Object.entries(modulePages).filter(
-    ([name, pages]) => pages.length === 1,
+    ([_name, pages]) => pages.length === 1,
   )
 
   return totalUsed

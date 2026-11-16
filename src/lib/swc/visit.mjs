@@ -4,6 +4,8 @@ import log from '@magic/log'
 import { handleLink } from '../handleLink.mjs'
 // import { replaceSlashSlash } from '../replaceSlashSlash.mjs'
 
+/** @import { AppObject, Config, SwcNode } from '../../types.mjs' */
+
 const validKeys = ['src', 'srcset', 'logo', 'href', 'to']
 
 const noopTypes = new Set([
@@ -16,21 +18,31 @@ const noopTypes = new Set([
   'Identifier',
 ])
 
+/** @type {{ modules: Set<string>, moduleNames?: Set<string> }} */
 export const used = {
   modules: new Set(),
 }
 
-export const visit = ({ app, config, parent, par }) => {
+/**
+ * Visit an SWC AST node (or list of nodes) in place:
+ * rewrites links in `source`/`img` calls and KeyValueProperties,
+ * tracks used modules, and removes CHECK_PROPS calls.
+ *
+ * @param {{ app: AppObject, config: Config, parent: SwcNode | (SwcNode | undefined)[] | undefined, par?: SwcNode | (SwcNode | undefined)[] }} params
+ * @returns {SwcNode | undefined}
+ */
+export const visit = ({ app, config, parent }) => {
   if (!parent) {
-    return parent
+    return /** @type {SwcNode | undefined} */ (parent)
   }
 
   if (Array.isArray(parent)) {
-    return parent.map(n => visit({ par: parent, parent: n, app, config }))
+    const list = parent.map(n => visit({ par: parent, parent: n, app, config }))
+    return /** @type {SwcNode} */ (/** @type {unknown} */ (list))
   }
 
   if (parent.type === 'VariableDeclaration') {
-    parent.declarations = parent.declarations.map(decl =>
+    parent.declarations = (parent.declarations ?? []).map(decl =>
       visit({ par: parent, parent: decl, app, config }),
     )
   } else if (parent.type === 'ExpressionStatement') {
@@ -48,17 +60,24 @@ export const visit = ({ app, config, parent, par }) => {
     parent.left = visit({ par: parent, parent: parent.left, app, config })
   } else if (parent.type === 'ArrowFunctionExpression') {
     if (parent.params) {
-      parent.params = visit({ par: parent, parent: parent.params, app, config })
-      parent.body = visit({ par: parent, parent: parent.body, app, config })
-    } else if (parent.body.callee) {
-      parent.body.callee = visit({ par: parent, parent: parent.body.callee, app, config })
-      parent.params = visit({ par: parent, parent: parent.params, app, config })
-    } else if (parent.body.stmts) {
-      parent.body.stmts = parent.body.stmts.map(stmt =>
-        visit({ par: parent, parent: stmt, app, config }),
+      parent.params = /** @type {SwcNode[]} */ (
+        visit({ par: parent, parent: parent.params, app, config })
       )
+      parent.body = visit({ par: parent, parent: parent.body, app, config })
     } else {
-      log.warn('unhandled ArrowFunctionExpression', parent)
+      const body = parent.body ?? {}
+      if (body.callee) {
+        body.callee = visit({ par: parent, parent: body.callee, app, config })
+        parent.params = /** @type {SwcNode[]} */ (
+          visit({ par: parent, parent: parent.params, app, config })
+        )
+      } else if (body.stmts) {
+        body.stmts = (body.stmts ?? []).map(stmt =>
+          visit({ par: parent, parent: stmt, app, config }),
+        )
+      } else {
+        log.warn('unhandled ArrowFunctionExpression', /** @type {string} */ (parent))
+      }
     }
   } else if (parent.type === 'IfStatement') {
     parent.test = visit({ par: parent, parent: parent.test, app, config })
@@ -67,13 +86,13 @@ export const visit = ({ app, config, parent, par }) => {
       parent.alternate = visit({ par: parent, parent: parent.alternate, app, config })
     }
   } else if (parent.type === 'CallExpression') {
-    const name = parent.callee.value
-    const isModule = used.moduleNames.has(name)
-    const lib = Object.keys(app.lib).find(v => v === name)
+    const name = /** @type {string | undefined} */ (parent.callee?.value)
+    const isModule = Boolean(used.moduleNames?.has(String(name)))
+    const lib = Object.keys(app.lib ?? {}).find(v => v === name)
     const isLib = lib && is.function(lib)
 
     if (isModule) {
-      used.modules.add(name)
+      used.modules.add(String(name))
     }
 
     if (isLib) {
@@ -81,29 +100,36 @@ export const visit = ({ app, config, parent, par }) => {
     }
 
     /* remove CHECK_PROPS function calls */
-    if (parent.callee.value === 'CHECK_PROPS') {
+    if (parent.callee?.value === 'CHECK_PROPS') {
       // Return undefined to signal that this expression should be removed
       // The parent ExpressionStatement handler will replace it with an EmptyStatement
       return undefined
     } else {
-      if (parent.callee.value === 'source' || parent.callee.value === 'img') {
+      if (parent.callee?.value === 'source' || parent.callee?.value === 'img') {
         const ignoredProps = ['Identifier', 'TemplateLiteral', 'BinaryExpression']
 
-        parent.arguments.forEach(arg => {
+        ;(parent.arguments ?? []).forEach(arg => {
+          if (!arg) {
+            return
+          }
           arg.expression?.properties?.forEach(prop => {
+            if (!prop) {
+              return
+            }
             if (prop.type === 'KeyValueProperty') {
-              if (validKeys.includes(prop.key?.value)) {
-                let url
-                if (prop.value.type === 'StringLiteral') {
-                  url = prop.value.value
-                } else if (prop.value.type === 'TemplateLiteral') {
+              if (validKeys.includes(String(prop.key?.value))) {
+                const pv = /** @type {SwcNode} */ (prop.value)
+                let url = ''
+                if (pv.type === 'StringLiteral') {
+                  url = String(pv.value)
+                } else if (pv.type === 'TemplateLiteral') {
                   /*
                    * We return on TemplateLiterals
                    * there are variable in play here,
                    * we do not want to risk mutating them
                    */
                   return
-                } else if (ignoredProps.includes(prop.value.type)) {
+                } else if (ignoredProps.includes(pv.type ?? '')) {
                   /*
                    * we return on Identifier, TemplateLiteral and BinaryExpression
                    * they mean this is a variable or function being passed,
@@ -111,16 +137,20 @@ export const visit = ({ app, config, parent, par }) => {
                    */
                   return
                 } else {
-                  log.warn('W_UNKNOWN_URL_TYPE', 'could not find valid ast url type for', prop)
-                  url = config.WEB_ROOT
+                  log.warn(
+                    'W_UNKNOWN_URL_TYPE',
+                    'could not find valid ast url type for',
+                    /** @type {string} */ (prop),
+                  )
+                  url = String(config.WEB_ROOT)
                 }
 
                 const isInternal = !url.includes('://')
-                const isRooted = url.startsWith(config.WEB_ROOT)
+                const isRooted = url.startsWith(String(config.WEB_ROOT))
 
                 if (isInternal && !isRooted) {
                   if (!url) {
-                    url = config.WEB_ROOT
+                    url = String(config.WEB_ROOT)
                   } else {
                     url = handleLink({
                       app,
@@ -129,12 +159,13 @@ export const visit = ({ app, config, parent, par }) => {
                     })
                   }
 
-                  if (prop.value.type === 'StringLiteral') {
-                    prop.value.value = url
-                    prop.value.raw = `'${url}'`
-                  } else if (prop.value?.quasis) {
-                    prop.value.quasis[0].cooked = url
-                    prop.value.quasis[0].raw = `'${url}'`
+                  if (pv.type === 'StringLiteral') {
+                    pv.value = url
+                    pv.raw = `'${url}'`
+                  } else if (pv.quasis) {
+                    const firstQuasi = pv.quasis[0] ?? {}
+                    firstQuasi.cooked = url
+                    firstQuasi.raw = `'${url}'`
                   }
                 }
               }
@@ -143,12 +174,17 @@ export const visit = ({ app, config, parent, par }) => {
         })
       }
 
-      parent.arguments = parent.arguments.map(arg => {
+      parent.arguments = (parent.arguments ?? []).map(arg => {
+        if (!arg) {
+          return arg
+        }
         arg.expression = visit({ par: parent, parent: arg.expression, app, config })
 
-        if (arg.expression.type === 'StringLiteral') {
-          if (used.moduleNames.has(parent.callee.value)) {
-            const expr = {
+        const newExpr = arg.expression
+
+        if (newExpr && newExpr.type === 'StringLiteral') {
+          if (used.moduleNames?.has(String(parent.callee?.value))) {
+            const _expr = {
               type: 'ExpressionStatement',
               span: {
                 start: 0,
@@ -182,8 +218,8 @@ export const visit = ({ app, config, parent, par }) => {
                         end: 21,
                         ctxt: 0,
                       },
-                      value: arg.expression.value,
-                      raw: arg.expression.raw,
+                      value: newExpr.value,
+                      raw: newExpr.raw,
                     },
                   },
                 ],
@@ -202,54 +238,78 @@ export const visit = ({ app, config, parent, par }) => {
     parent.id = visit({ par: parent, parent: parent.id, app, config })
     parent.init = visit({ par: parent, parent: parent.init, app, config })
   } else if (parent.type === 'ObjectExpression') {
-    parent.properties = parent.properties.map(prop =>
+    parent.properties = (parent.properties ?? []).map(prop =>
       visit({ par: parent, parent: prop, app, config }),
     )
   } else if (parent.type === 'KeyValueProperty') {
-    if (parent.value.type === 'StringLiteral') {
-      if (validKeys.includes(parent.key.value)) {
-        parent.value.value = handleLink({
+    const val = /** @type {SwcNode} */ (parent.value)
+
+    if (val?.type === 'StringLiteral') {
+      if (validKeys.includes(String(parent.key?.value))) {
+        val.value = handleLink({
           app,
-          href: parent.value.value,
+          href: String(val.value),
           WEB_ROOT: config.WEB_ROOT,
         })
       }
     }
 
     // Track module references used as values in objects (e.g., pages object: { '/a/': A })
-    if (parent.value?.type === 'Identifier') {
-      const valueName = parent.value.value
-      if (used.moduleNames.has(valueName)) {
+    if (val?.type === 'Identifier') {
+      const valueName = String(val.value)
+      if (used.moduleNames?.has(valueName)) {
         used.modules.add(valueName)
       }
     }
 
     parent.key = visit({ par: parent, parent: parent.key, app, config })
-    parent.value = visit({ par: parent, parent: parent.value, app, config })
+    parent.value = visit({
+      par: parent,
+      parent: /** @type {SwcNode} */ (parent.value),
+      app,
+      config,
+    })
   } else if (parent.type === 'MemberExpression') {
     parent.property = visit({ par: parent, parent: parent.property, app, config })
     parent.object = visit({ par: parent, parent: parent.object, app, config })
   } else if (parent.type === 'ArrayExpression') {
-    parent.elements = parent.elements.map(ele => {
-      ele.expression = visit({ par: parent, parent: ele.expression, undefined, app, config })
+    parent.elements = (parent.elements ?? []).map(ele => {
+      if (!ele) {
+        return ele
+      }
+      ele.expression = visit({ par: parent, parent: ele.expression, app, config })
       return ele
     })
   } else if (parent.type === 'ArrayPattern') {
-    parent.elements = parent.elements.map(ele => visit({ par: parent, parent: ele, app, config }))
+    parent.elements = (parent.elements ?? []).map(ele =>
+      visit({ par: parent, parent: ele, app, config }),
+    )
   } else if (parent.type === 'TemplateLiteral') {
-    parent.quasis = parent.quasis.map(quasi => {
-      quasi.raw = visit({ par: parent, parent: quasi.raw, app, config })
-      quasi.cooked = visit({ par: parent, parent: quasi.cooked, app, config })
+    parent.quasis = (parent.quasis ?? []).map(quasi => {
+      if (!quasi) {
+        return quasi
+      }
+      quasi.raw = visit({ par: parent, parent: /** @type {SwcNode} */ (quasi.raw), app, config })
+      quasi.cooked = visit({
+        par: parent,
+        parent: /** @type {SwcNode} */ (quasi.cooked),
+        app,
+        config,
+      })
       return quasi
     })
   } else if (parent.type === 'SpreadElement') {
-    parent.arguments = visit({ par: parent, parent: parent.arguments, app, config })
+    parent.arguments = /** @type {SwcNode[]} */ (
+      visit({ par: parent, parent: parent.arguments, app, config })
+    )
   } else if (parent.type === 'BlockStatement') {
-    parent.stmts = parent.stmts.map(stmt => visit({ par: parent, parent: stmt, app, config }))
+    parent.stmts = (parent.stmts ?? []).map(stmt =>
+      visit({ par: parent, parent: stmt, app, config }),
+    )
   } else if (parent.type === 'ReturnStatement') {
     parent.argument = visit({ par: parent, parent: parent.argument, app, config })
   } else if (parent.type === 'ObjectPattern') {
-    parent.properties.map(prop => visit({ par: parent, parent: prop, app, config }))
+    ;(parent.properties ?? []).map(prop => visit({ par: parent, parent: prop, app, config }))
   } else if (parent.type === 'AssignmentPattern') {
     parent.left = visit({ par: parent, parent: parent.left, app, config })
     parent.right = visit({ par: parent, parent: parent.right, app, config })
@@ -269,10 +329,15 @@ export const visit = ({ app, config, parent, par }) => {
   } else if (parent.type === 'ParenthesisExpression') {
     parent.expression = visit({ par: parent, parent: parent.expression, app, config })
   } else if (parent.type === 'RestElement') {
-    parent.argument = visit({ par: parent, parent: parent.argument, undefined, app, config })
+    parent.argument = visit({ par: parent, parent: parent.argument, app, config })
   } else if (parent.type === 'KeyValuePatternProperty') {
     parent.key = visit({ par: parent, parent: parent.key, app, config })
-    parent.value = visit({ par: parent, parent: parent.value, app, config })
+    parent.value = visit({
+      par: parent,
+      parent: /** @type {SwcNode} */ (parent.value),
+      app,
+      config,
+    })
   } else if (parent.type === 'TryStatement') {
     parent.block = visit({ par: parent, parent: parent.block, app, config })
     parent.handler = visit({ par: parent, parent: parent.handler, app, config })
@@ -289,11 +354,15 @@ export const visit = ({ app, config, parent, par }) => {
     parent.update = visit({ par: parent, parent: parent.update, app, config })
     parent.body = visit({ par: parent, parent: parent.body, app, config })
   } else if (parent.type === 'FunctionExpression') {
-    parent.params = visit({ par: parent, parent: parent.params, app, config })
+    parent.params = /** @type {SwcNode[]} */ (
+      visit({ par: parent, parent: parent.params, app, config })
+    )
     parent.body = visit({ par: parent, parent: parent.body, app, config })
     parent.decorators = visit({ par: parent, parent: parent.decorators, app, config })
   } else if (parent.type === 'FunctionBody') {
-    parent.stmts = parent.stmts.map(stmt => visit({ par: parent, parent: stmt, app, config }))
+    parent.stmts = (parent.stmts ?? []).map(stmt =>
+      visit({ par: parent, parent: stmt, app, config }),
+    )
   } else if (parent.type === 'Parameter') {
     parent.pat = visit({ par: parent, parent: parent.pat, app, config })
   } else if (parent.type === 'ForInStatement') {
@@ -308,15 +377,21 @@ export const visit = ({ app, config, parent, par }) => {
   } else if (parent.type === 'BreakStatement') {
     parent.label = visit({ par: parent, parent: parent.label, app, config })
   } else if (parent.type === 'SequenceExpression') {
-    parent.expressions = visit({ par: parent, parent: parent.expressions, app, config })
+    parent.expressions = /** @type {(SwcNode | undefined)[] | undefined} */ (
+      visit({ par: parent, parent: parent.expressions, app, config })
+    )
   } else if (parent.type === 'ContinueStatement') {
     parent.label = visit({ par: parent, parent: parent.label, app, config })
   } else if (parent.type === 'ImportDeclaration') {
-    parent.specifiers = visit({ par: parent, parent: parent.specifiers, app, config })
+    parent.specifiers = /** @type {(SwcNode | undefined)[] | undefined} */ (
+      visit({ par: parent, parent: parent.specifiers, app, config })
+    )
   } else if (parent.type === 'ImportSpecifier') {
     parent.local = visit({ par: parent, parent: parent.local, app, config })
   } else if (parent.type === 'ExportNamedDeclaration') {
-    parent.specifiers = visit({ par: parent, parent: parent.specifiers, app, config })
+    parent.specifiers = /** @type {(SwcNode | undefined)[] | undefined} */ (
+      visit({ par: parent, parent: parent.specifiers, app, config })
+    )
   } else if (parent.type === 'ExportSpecifier') {
     parent.orig = visit({ par: parent, parent: parent.orig, app, config })
   } else if (parent.type === 'StringLiteral') {
@@ -328,10 +403,11 @@ export const visit = ({ app, config, parent, par }) => {
     parent.body = visit({ par: parent, parent: parent.body, app, config })
     parent.left = visit({ par: parent, parent: parent.left, app, config })
     parent.right = visit({ par: parent, parent: parent.right, app, config })
-  } else if (noopTypes.has(parent.type)) {
+  } else if (parent.type && noopTypes.has(parent.type)) {
+    // noop
   } else if (parent.type) {
-    log.warn('unexpected parent type', parent.type, parent)
+    log.warn('unexpected parent type', parent.type, /** @type {string} */ (parent))
   }
 
-  return parent
+  return /** @type {SwcNode} */ (parent)
 }

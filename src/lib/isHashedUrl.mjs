@@ -1,3 +1,8 @@
+/**
+ * @param {{ name?: string, rendered?: string }[]} list
+ * @param {string} link
+ * @returns {boolean}
+ */
 export const isHashedUrl = (list, link) => {
   if (!link.includes('#')) {
     return false
@@ -9,5 +14,5 @@ export const isHashedUrl = (list, link) => {
     return false
   }
 
-  return page.rendered.includes(`id="${hash}"`)
+  return !!page.rendered && page.rendered.includes(`id="${hash}"`)
 }

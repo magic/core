@@ -1,12 +1,19 @@
 import log from '@magic/log'
+import is from '@magic/types'
 
 import { httpGet } from './httpGet.mjs'
 import { isPageUrl } from './isPageUrl.mjs'
 import { isHashedUrl } from './isHashedUrl.mjs'
 import { isStaticUrl } from './isStaticUrl.mjs'
 
+/** @import { NodeError, PageObject } from '../types.mjs' */
+
 const redirectStatusCodes = [301, 302, 303, 307, 308]
 
+/**
+ * @param {{ staticUrls: string[], links: string[], pages: PageObject[], ignoredLinks?: string[], noRemote?: boolean, root: string | undefined, dev?: boolean }} params
+ * @returns {Promise<string[]>}
+ */
 export const checkLinks = async ({
   staticUrls,
   links,
@@ -17,7 +24,7 @@ export const checkLinks = async ({
   dev,
 }) => {
   const linkResolvers = links.map(async link => {
-    if (link.startsWith(root)) {
+    if (link.startsWith(String(root))) {
       if (isPageUrl(pages, link)) {
         return
       } else if (isHashedUrl(pages, link)) {
@@ -36,8 +43,8 @@ export const checkLinks = async ({
 
       if (statusCode === 200) {
         return
-      } else if (redirectStatusCodes.includes(statusCode)) {
-        if (headers.location) {
+      } else if (statusCode !== undefined && redirectStatusCodes.includes(statusCode)) {
+        if (headers && headers.location) {
           log.warn(
             'W_CHECKLINKS_REDIRECT',
             'There is a link in your app that is getting redirected.\nto make this warning disappear: change:',
@@ -55,7 +62,7 @@ export const checkLinks = async ({
           return
         }
       } else if (error) {
-        if (error.code === 'EAI_AGAIN') {
+        if (/** @type {NodeError} */ (error).code === 'EAI_AGAIN') {
           log.error('E_CHECKLINKS_HOSTNAME_NOT_FOUND', 'could not resolve hostname:', link)
 
           return
@@ -70,7 +77,7 @@ export const checkLinks = async ({
   })
 
   const unresolvedLinks = await Promise.all(linkResolvers)
-  const filteredUnresolvedLinks = unresolvedLinks.filter(a => a)
+  const filteredUnresolvedLinks = unresolvedLinks.filter(a => is.string(a))
 
   if (filteredUnresolvedLinks.length) {
     log.error(

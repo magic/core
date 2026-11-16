@@ -1,9 +1,30 @@
 import magic from './dead_code.mjs'
 
-export const getBabelConf = (app, config) => {
-  const { CLIENT_LIB_NAME, BABEL_DEBUG, REMOVE_CHECK_PROPS, MINIFY, USE_PRESETS, KEEP_COMMENTS } =
-    config.BABEL
+/** @import { AppObject, Config } from '../../types.mjs' */
 
+/**
+ * The `BABEL` section of a magic config.
+ * @typedef {{ CLIENT_LIB_NAME?: string, BABEL_DEBUG?: boolean, REMOVE_CHECK_PROPS?: boolean, MINIFY?: boolean, USE_PRESETS?: boolean, KEEP_COMMENTS?: boolean }} BabelConfig */
+
+/**
+ * A babel preset or plugin entry.
+ * @typedef {string | [string, { [key: string]: unknown }]} BabelEntry */
+
+/**
+ * A babel plugin function, as returned by `./dead_code.mjs`.
+ * @typedef {(opts: { types: { [key: string]: (node: unknown) => boolean } }) => { visitor: unknown }} BabelPluginFn */
+
+/**
+ * @param {AppObject} app
+ * @param {Config} config
+ * @returns {Record<string, unknown>}
+ */
+export const getBabelConf = (app, config) => {
+  const babelConfig = /** @type {BabelConfig} */ (config.BABEL ?? {})
+  const { CLIENT_LIB_NAME, BABEL_DEBUG, REMOVE_CHECK_PROPS, MINIFY, USE_PRESETS, KEEP_COMMENTS } =
+    babelConfig
+
+  /** @type {BabelEntry[]} */
   const presets = [
     [
       '@babel/preset-env',
@@ -21,6 +42,7 @@ export const getBabelConf = (app, config) => {
     ],
   ]
 
+  /** @type {(BabelEntry | BabelPluginFn)[]} */
   const plugins = [['@babel/plugin-transform-react-jsx', { pragma: 'h' }], magic(app, config)]
 
   if (REMOVE_CHECK_PROPS) {

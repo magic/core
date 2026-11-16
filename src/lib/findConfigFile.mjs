@@ -5,6 +5,13 @@ import log from '@magic/log'
 
 import { replacePathSepForImport } from './replacePathSepForImport.mjs'
 
+/**
+ * @param {string} ROOT
+ * @param {string[]} magicConfigNames
+ * @param {string} oldConfigName
+ * @param {boolean} [silent]
+ * @returns {Promise<string | undefined>}
+ */
 export const findConfigFile = async (ROOT, magicConfigNames, oldConfigName, silent = false) => {
   let filePath
 

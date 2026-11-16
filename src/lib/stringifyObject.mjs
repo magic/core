@@ -1,5 +1,10 @@
 import is from '@magic/types'
 
+/**
+ * @param {unknown} obj
+ * @param {string | false} [indent]
+ * @returns {unknown}
+ */
 export const stringifyObject = (obj, indent = '') => {
   if (indent === false) {
     indent = ''

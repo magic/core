@@ -1,6 +1,10 @@
 import error from '@magic/error'
 import fs from '@magic/fs'
 
+/**
+ * @param {{ dir: string, root?: string }} params
+ * @returns {Promise<string[]>}
+ */
 export const getPages = async ({ dir, root }) => {
   try {
     const files = await fs.getFiles(dir)
@@ -11,7 +15,7 @@ export const getPages = async ({ dir, root }) => {
 
     return files
   } catch (e) {
-    if (dir.startsWith(root)) {
+    if (dir.startsWith(root ?? '')) {
       throw error(`${dir} does not exist or does not contain pages`, 'E_PAGE_DIR_NOEXIST')
 
       // TODO: install an example and give the user a choice which one
@@ -22,6 +26,6 @@ export const getPages = async ({ dir, root }) => {
       //~ return await getPages()
     }
 
-    throw error(e)
+    throw error(/** @type {Error} */ (e))
   }
 }
