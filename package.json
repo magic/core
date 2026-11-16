@@ -38,18 +38,18 @@
   },
   "dependencies": {
     "@magic-libraries/prevent-default": "0.0.6",
-    "@magic/cases": "0.0.14",
-    "@magic/cli": "0.0.55",
-    "@magic/css": "0.7.61",
-    "@magic/deep": "0.1.22",
-    "@magic/error": "0.0.24",
-    "@magic/fs": "0.0.40",
+    "@magic/cases": "0.0.15",
+    "@magic/cli": "0.0.56",
+    "@magic/css": "0.7.62",
+    "@magic/deep": "0.1.23",
+    "@magic/error": "0.0.26",
+    "@magic/fs": "0.0.41",
     "@magic/hyperapp": "2.0.4-alpha.0.6",
-    "@magic/log": "0.1.23",
-    "@magic/tags": "0.0.16",
-    "@magic/transmute": "0.0.59",
-    "@magic/types": "0.1.40",
-    "@swc/core": "1.15.47"
+    "@magic/log": "0.1.26",
+    "@magic/tags": "0.0.17",
+    "@magic/transmute": "0.0.60",
+    "@magic/types": "0.1.42",
+    "@swc/core": "1.16.22"
   },
   "devDependencies": {
     "@magic-modules/git-badges": "0.0.12",
@@ -60,8 +60,9 @@
     "@magic-modules/pre": "0.0.12",
     "@magic-modules/theme-list": "0.0.14",
     "@magic-themes/docs": "0.0.15",
-    "@magic/format": "0.0.75",
-    "@magic/test": "0.3.34"
+    "@magic/format": "0.0.79",
+    "@magic/lint": "0.0.5",
+    "@magic/test": "0.3.57"
   },
   "keywords": [
     "magic",
@@ -94,10 +95,6 @@
       "github": "norpol"
     },
     {
-      "name": "litto",
-      "github": "mslitto"
-    },
-    {
       "name": "michael parenti",
       "github": "exiledsurfer"
     },
@@ -115,7 +112,6 @@
     }
   ],
   "allowScripts": {
-    "canvas@3.2.3": true,
-    "@swc/core@1.15.47": true
+    "@swc/core@1.16.22": true
   }
 }
