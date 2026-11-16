@@ -1,5 +1,5 @@
 import path from 'path'
-import { is, tryCatch } from '@magic/test'
+import { is } from '@magic/test'
 
 import { isLocalPath } from '../../src/lib/index.mjs'
 

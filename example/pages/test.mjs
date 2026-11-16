@@ -1,4 +1,4 @@
-export const View = state => [
+export const View = _state => [
   h2('Test page'),
 
   p('This page shows various features and tests of magic functionality'),

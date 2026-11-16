@@ -1,5 +1,3 @@
-import { is } from '@magic/test'
-
 import { isStaticUrl } from '../../src/lib/index.mjs'
 
 // export const isStaticUrl = (list, link, root) => {

@@ -32,7 +32,7 @@ const moduleWithMedia = {
 
 const moduleWithMediaExpect = { '@media screen': { '.Module': { color: 'green' } } }
 
-const moduleWithSubModule = {
+const _moduleWithSubModule = {
   Module: {
     ModuleSubModule: {
       style: {
@@ -42,7 +42,7 @@ const moduleWithSubModule = {
   },
 }
 
-const expectModuleWithSubmodule = { '.ModuleSubModule': { color: 'green' } }
+const _expectModuleWithSubmodule = { '.ModuleSubModule': { color: 'green' } }
 
 export default [
   { fn: findModuleStyles(exampleModules), expect: is.object },

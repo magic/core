@@ -268,7 +268,7 @@ const log = {
     }
 
     const name = err.message.split(' ')[0]
-    if (!errored.hasOwnProperty(name)) {
+    if (!Object.prototype.hasOwnProperty.call(errored, name)) {
       errored[name] = 1
     } else {
       errored[name] += 1
