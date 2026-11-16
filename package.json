@@ -75,7 +75,7 @@
     "prod": "NODE_ENV=production src/bin.mjs build serve --watch src",
     "clean": "src/bin.mjs clean",
     "dev": "src/bin.mjs dev --watch src --keep-client",
-    "format": "f -w --exclude docs --exclude api",
+    "format": "f -w --exclude docs --exclude api !example/pages/modules/html.html",
     "test": "t -i src",
     "tsc": "tsc --noEmit",
     "tsc:test": "tsc --noEmit -p tsconfig.test.json",
