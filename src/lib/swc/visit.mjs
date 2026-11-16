@@ -292,6 +292,8 @@ export const visit = ({ app, config, parent, par }) => {
     parent.params = visit({ par: parent, parent: parent.params, app, config })
     parent.body = visit({ par: parent, parent: parent.body, app, config })
     parent.decorators = visit({ par: parent, parent: parent.decorators, app, config })
+  } else if (parent.type === 'FunctionBody') {
+    parent.stmts = parent.stmts.map(stmt => visit({ par: parent, parent: stmt, app, config }))
   } else if (parent.type === 'Parameter') {
     parent.pat = visit({ par: parent, parent: parent.pat, app, config })
   } else if (parent.type === 'ForInStatement') {
