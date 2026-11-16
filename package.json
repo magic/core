@@ -1,81 +1,22 @@
 {
   "name": "@magic/core",
   "version": "0.0.161",
-  "author": "Wizards & Witches",
-  "homepage": "https://magic.github.io/",
-  "license": "AGPL-3.0",
   "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
-  "main": "src/index.mjs",
-  "type": "module",
-  "engines": {
-    "node": ">=14.15.4"
-  },
-  "engineStrict": true,
-  "scripts": {
-    "start": "t -p",
-    "build": "NODE_ENV=production src/bin.mjs build --no-check-links-exit",
-    "devbuild": "src/bin.mjs build",
-    "serve": "src/bin.mjs serve --watch src",
-    "prod": "NODE_ENV=production src/bin.mjs build serve --watch src",
-    "clean": "src/bin.mjs clean",
-    "dev": "src/bin.mjs dev --watch src --keep-client",
-    "format": "f -w --exclude docs api",
-    "test": "t -i src",
-    "tsc": "tsc --noEmit",
-    "tsc:test": "tsc --noEmit -p tsconfig.test.json",
-    "lint": "lint",
-    "check": "npm run tsc && npm run tsc:test && npm run lint"
-  },
-  "bin": {
-    "magic": "src/bin.mjs"
-  },
-  "files": [
-    "src"
+  "keywords": [
+    "generator",
+    "hyperapp",
+    "lamda",
+    "magic",
+    "page",
+    "serverless",
+    "static"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/magic/core.git"
-  },
+  "homepage": "https://magic.github.io/",
   "bugs": {
     "url": "https://github.com/magic/core/issues"
   },
-  "dependencies": {
-    "@magic-libraries/prevent-default": "0.0.6",
-    "@magic/cases": "0.0.15",
-    "@magic/cli": "0.0.56",
-    "@magic/css": "0.7.62",
-    "@magic/deep": "0.1.23",
-    "@magic/error": "0.0.26",
-    "@magic/fs": "0.0.41",
-    "@magic/hyperapp": "2.0.4-alpha.0.6",
-    "@magic/log": "0.1.26",
-    "@magic/tags": "0.0.17",
-    "@magic/transmute": "0.0.60",
-    "@magic/types": "0.1.42",
-    "@swc/core": "1.16.22"
-  },
-  "devDependencies": {
-    "@magic-modules/git-badges": "0.0.12",
-    "@magic-modules/library-list": "0.0.18",
-    "@magic-modules/light-switch": "0.0.12",
-    "@magic-modules/module-list": "0.0.22",
-    "@magic-modules/no-spy": "0.0.9",
-    "@magic-modules/pre": "0.0.12",
-    "@magic-modules/theme-list": "0.0.14",
-    "@magic-themes/docs": "0.0.15",
-    "@magic/format": "0.0.79",
-    "@magic/lint": "0.0.5",
-    "@magic/test": "0.3.57"
-  },
-  "keywords": [
-    "magic",
-    "static",
-    "page",
-    "generator",
-    "serverless",
-    "lamda",
-    "hyperapp"
-  ],
+  "license": "AGPL-3.0",
+  "author": "Wizards & Witches",
   "contributors": [
     {
       "name": "jascha ehrenreich",
@@ -114,6 +55,65 @@
       "github": "ylem235"
     }
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magic/core.git"
+  },
+  "bin": {
+    "magic": "src/bin.mjs"
+  },
+  "files": [
+    "src"
+  ],
+  "type": "module",
+  "main": "src/index.mjs",
+  "scripts": {
+    "start": "t -p",
+    "build": "NODE_ENV=production src/bin.mjs build --no-check-links-exit",
+    "devbuild": "src/bin.mjs build",
+    "serve": "src/bin.mjs serve --watch src",
+    "prod": "NODE_ENV=production src/bin.mjs build serve --watch src",
+    "clean": "src/bin.mjs clean",
+    "dev": "src/bin.mjs dev --watch src --keep-client",
+    "format": "f -w --exclude docs --exclude api",
+    "test": "t -i src",
+    "tsc": "tsc --noEmit",
+    "tsc:test": "tsc --noEmit -p tsconfig.test.json",
+    "lint": "lint",
+    "check": "npm run tsc && npm run tsc:test && npm run lint"
+  },
+  "dependencies": {
+    "@magic-libraries/prevent-default": "0.0.6",
+    "@magic/cases": "0.0.15",
+    "@magic/cli": "0.0.56",
+    "@magic/css": "0.7.62",
+    "@magic/deep": "0.1.23",
+    "@magic/error": "0.0.26",
+    "@magic/fs": "0.0.41",
+    "@magic/hyperapp": "2.0.4-alpha.0.6",
+    "@magic/log": "0.1.26",
+    "@magic/tags": "0.0.17",
+    "@magic/transmute": "0.0.60",
+    "@magic/types": "0.1.42",
+    "@swc/core": "1.16.22"
+  },
+  "devDependencies": {
+    "@magic-modules/git-badges": "0.0.12",
+    "@magic-modules/library-list": "0.0.18",
+    "@magic-modules/light-switch": "0.0.12",
+    "@magic-modules/module-list": "0.0.22",
+    "@magic-modules/no-spy": "0.0.9",
+    "@magic-modules/pre": "0.0.12",
+    "@magic-modules/theme-list": "0.0.14",
+    "@magic-themes/docs": "0.0.15",
+    "@magic/format": "0.0.79",
+    "@magic/lint": "0.0.5",
+    "@magic/test": "0.3.57"
+  },
+  "engines": {
+    "node": ">=14.15.4"
+  },
+  "engineStrict": true,
   "allowScripts": {
     "@swc/core@1.16.22": true
   }

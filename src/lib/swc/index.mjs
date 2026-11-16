@@ -43,7 +43,9 @@ const collectUsedModuleVars = block => {
     }
 
     for (const key of Object.keys(node)) {
-      if (key === 'span' || key === 'ctxt') {continue}
+      if (key === 'span' || key === 'ctxt') {
+        continue
+      }
       const child = node[key]
       if (Array.isArray(child)) {
         child.forEach(traverse)
