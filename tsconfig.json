@@ -9,7 +9,7 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "strict": false,
+    "strict": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "outDir": "types",
