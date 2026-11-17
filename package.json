@@ -112,7 +112,7 @@
     "@magic-themes/docs": "0.0.15",
     "@magic/format": "0.0.82",
     "@magic/lint": "0.0.6",
-    "@magic/test": "0.3.57"
+    "@magic/test": "0.3.59"
   },
   "engines": {
     "node": ">=14.15.4"
