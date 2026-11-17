@@ -32,7 +32,7 @@ const moduleWithMedia = {
 
 const moduleWithMediaExpect = { '@media screen': { '.Module': { color: 'green' } } }
 
-const _moduleWithSubModule = {
+const moduleWithSubModule = {
   Module: {
     ModuleSubModule: {
       style: {
@@ -42,7 +42,15 @@ const _moduleWithSubModule = {
   },
 }
 
-const _expectModuleWithSubmodule = { '.ModuleSubModule': { color: 'green' } }
+const expectModuleWithSubmodule = { '.ModuleModuleSubModule': { color: 'green' } }
+
+const moduleWithArrayStyle = {
+  Module: {
+    style: [{ color: 'red' }, () => ({ margin: '1px' })],
+  },
+}
+
+const expectModuleWithArrayStyle = { '.Module': { color: 'red', margin: '1px' } }
 
 export default [
   { fn: findModuleStyles(exampleModules), expect: is.object },
@@ -52,5 +60,14 @@ export default [
     expect: is.deep.equal(expectExampleModules),
   },
   { fn: findModuleStyles(moduleWithMedia), expect: is.deep.equal(moduleWithMediaExpect) },
-  // { fn: findModuleStyles(moduleWithSubModule), expect: is.deep.equal(expectModuleWithSubmodule) },
+  {
+    fn: findModuleStyles(moduleWithSubModule),
+    expect: is.deep.equal(expectModuleWithSubmodule),
+    info: 'findModuleStyles recurses into submodules',
+  },
+  {
+    fn: findModuleStyles(moduleWithArrayStyle),
+    expect: is.deep.equal(expectModuleWithArrayStyle),
+    info: 'findModuleStyles merges array styles',
+  },
 ]
