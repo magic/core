@@ -2,8 +2,8 @@ import path from 'path'
 
 import error from '@magic/error'
 import fs from '@magic/fs'
-import is from '@magic/types'
 import transmute from '@magic/transmute'
+import is from '@magic/types'
 
 import { replaceSlashSlash, saveImport } from '../../lib/index.mjs'
 

@@ -1,24 +1,22 @@
+import deep from '@magic/deep'
 import error from '@magic/error'
 import fs from '@magic/fs'
-import is from '@magic/types'
-import deep from '@magic/deep'
 import log from '@magic/log'
+import is from '@magic/types'
 
+import { defaultApp } from '../../defaultApp.mjs'
 import { getBlog, getPages, replaceSlashSlash } from '../../lib/index.mjs'
-
+// import { prepareServiceWorker } from './service-worker.mjs'
+import { prepareApi } from './api.mjs'
 import { prepareBlog } from './blog.mjs'
-import { prepareThemes } from './themes.mjs'
+import { prepareDependencies } from './dependencies.mjs'
 import { prepareGlobals } from './globals/index.mjs'
 import { prepareJs } from './js.mjs'
 import { prepareMetaFiles } from './meta.mjs'
 import { prepareModules } from './modules.mjs'
 import { preparePages } from './pages.mjs'
-// import { prepareServiceWorker } from './service-worker.mjs'
-import { prepareApi } from './api.mjs'
 import { prepareStateLinks } from './stateLinks.mjs'
-import { prepareDependencies } from './dependencies.mjs'
-
-import { defaultApp } from '../../defaultApp.mjs'
+import { prepareThemes } from './themes.mjs'
 
 /** @import { AppObject, Config, PageObject, NodeError, Subscription } from '../../types.mjs' */
 

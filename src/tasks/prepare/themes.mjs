@@ -1,9 +1,9 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import deep from '@magic/deep'
 import error from '@magic/error'
 import is from '@magic/types'
-import deep from '@magic/deep'
 
 import { findModuleStyles, saveImport } from '../../lib/index.mjs'
 import colors from '../../themes/colors.mjs'

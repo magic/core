@@ -2,8 +2,8 @@ import path from 'path'
 
 import deep from '@magic/deep'
 import { h } from '@magic/hyperapp'
-import is from '@magic/types'
 import log from '@magic/log'
+import is from '@magic/types'
 
 import { saveImport } from '../lib/index.mjs'
 

@@ -1,5 +1,5 @@
-import is from '@magic/types'
 import log from '@magic/log'
+import is from '@magic/types'
 
 import { handleLink } from '../handleLink.mjs'
 // import { replaceSlashSlash } from '../replaceSlashSlash.mjs'

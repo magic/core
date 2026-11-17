@@ -1,8 +1,8 @@
 import path from 'path'
 
 import fs from '@magic/fs'
-import is from '@magic/types'
 import log from '@magic/log'
+import is from '@magic/types'
 
 import { saveImport } from '../../../lib/index.mjs'
 

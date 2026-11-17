@@ -1,8 +1,8 @@
 import fs from '@magic/fs'
 
 import { addTrailingSlash } from '../../lib/index.mjs'
-import { prepareApi } from './prepareApi.mjs'
 import { apiHandler } from './apiHandler.mjs'
+import { prepareApi } from './prepareApi.mjs'
 
 /** @import { AppObject, Config } from '../../types.mjs' */
 

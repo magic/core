@@ -1,5 +1,6 @@
-import fs from '@magic/fs'
 import path from 'path'
+
+import fs from '@magic/fs'
 
 export const state = config => ({
   seo: {

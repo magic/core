@@ -1,12 +1,10 @@
-import swc from '@swc/core'
-
 import is from '@magic/types'
 
+import swc from '@swc/core'
 import { stringifyObject, isModuleName, uniqueMerge } from '../../lib/index.mjs'
 import { resolveDependencies } from '../../lib/swc/resolveDependencies.mjs'
-
-import { moduleViewToString } from './moduleViewToString.mjs'
 import { mergeSubModules } from './mergeSubModules.mjs'
+import { moduleViewToString } from './moduleViewToString.mjs'
 
 /** @import { AppObject, Config, ModuleView, SwcNode } from '../../types.mjs' */
 

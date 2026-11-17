@@ -1,5 +1,5 @@
-import is from '@magic/types'
 import error from '@magic/error'
+import is from '@magic/types'
 
 import { createHash } from './createHash.mjs'
 import { replaceSlashSlash } from './replaceSlashSlash.mjs'

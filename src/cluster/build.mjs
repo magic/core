@@ -1,9 +1,8 @@
 import log from '@magic/log'
 
 import runApp from '../modules/app.mjs'
-import runCmd from './runCmd.mjs'
-
 import { serve } from '../tasks/index.mjs'
+import runCmd from './runCmd.mjs'
 
 /** @import { AppObject, Config } from '../types.mjs' */
 

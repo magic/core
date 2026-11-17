@@ -1,6 +1,6 @@
 import deep from '@magic/deep'
-import is from '@magic/types'
 import log from '@magic/log'
+import is from '@magic/types'
 
 /** @import { AppObject, Config, ModuleDecl, Subscription } from '../../types.mjs' */
 

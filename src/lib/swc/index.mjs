@@ -1,15 +1,13 @@
-import swc from '@swc/core'
 import is from '@magic/types'
 
+import swc from '@swc/core'
 /** @import { AppObject, Config, SwcNode } from '../../types.mjs' */
 /** @import { Module, ParseOptions } from '@swc/core' */
-
 /**
  * A loose SWC BlockStatement-like node, for the dead-code removal helpers.
  *
  * @typedef {{ type: string, stmts: { type: string, declarations: { id?: { type: string, value: string }, [key: string]: unknown }[], [key: string]: unknown }[] }} SwcBlock
  */
-
 import { visit, used } from './visit.mjs'
 
 // Core magic variables that are not modules - cached as Set for O(1) lookup

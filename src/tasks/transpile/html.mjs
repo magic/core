@@ -1,8 +1,7 @@
-import { renderToString } from '@magic/hyperapp'
-
 import deep from '@magic/deep'
-import is from '@magic/types'
+import { renderToString } from '@magic/hyperapp'
 import log from '@magic/log'
+import is from '@magic/types'
 
 import { replaceSlashSlash } from '../../lib/replaceSlashSlash.mjs'
 

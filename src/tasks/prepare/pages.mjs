@@ -1,6 +1,5 @@
-import { preparePage } from './page.mjs'
-
 import { replaceSlashSlash } from '../../lib/index.mjs'
+import { preparePage } from './page.mjs'
 
 /** @import { AppObject, Config, PageObject, ModuleView } from '../../types.mjs' */
 

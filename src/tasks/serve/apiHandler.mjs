@@ -1,5 +1,5 @@
-import is from '@magic/types'
 import log from '@magic/log'
+import is from '@magic/types'
 
 /**
  * @param {import('http').IncomingMessage & { body?: unknown }} req

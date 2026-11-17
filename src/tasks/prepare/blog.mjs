@@ -2,9 +2,8 @@ import path from 'path'
 
 import is from '@magic/types'
 
-import { prepareBlogPost } from './blogPost.mjs'
-
 import { replaceSlashSlash } from '../../lib/index.mjs'
+import { prepareBlogPost } from './blogPost.mjs'
 
 /** @import { AppObject, Config, PageObject, BlogData, BlogPostEntry, ModuleView } from '../../types.mjs' */
 

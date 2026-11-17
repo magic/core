@@ -5,12 +5,11 @@ import cases from '@magic/cases'
 import deep from '@magic/deep'
 import error from '@magic/error'
 import fs from '@magic/fs'
-import is from '@magic/types'
 import log from '@magic/log'
-
-import colors from './themes/colors.mjs'
+import is from '@magic/types'
 
 import { findConfigFile, replaceSlashSlash, saveImport } from './lib/index.mjs'
+import colors from './themes/colors.mjs'
 
 /** @import { Config, ConfigDraft, ScriptSrc, NodeError } from './types.mjs' */
 

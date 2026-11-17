@@ -1,11 +1,11 @@
 import path from 'path'
 
-import log from '@magic/log'
 import fs from '@magic/fs'
+import log from '@magic/log'
 
 import { writePages } from './pages.mjs'
-import { writeStatic } from './static.mjs'
 import { writeServer } from './server.mjs'
+import { writeStatic } from './static.mjs'
 
 /** @import { AppObject, Config } from '../../types.mjs' */
 

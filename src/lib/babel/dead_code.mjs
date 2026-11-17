@@ -1,5 +1,5 @@
-import is from '@magic/types'
 import cases from '@magic/cases'
+import is from '@magic/types'
 
 import { handleLink } from '../handleLink.mjs'
 

@@ -1,10 +1,10 @@
 import path from 'path'
 
 import cases from '@magic/cases'
-import fs from '@magic/fs'
-import is from '@magic/types'
-import log from '@magic/log'
 import error from '@magic/error'
+import fs from '@magic/fs'
+import log from '@magic/log'
+import is from '@magic/types'
 
 import { stringifyObject, replaceSlashSlash } from '../../lib/index.mjs'
 import { prepareCheckProps } from './checkProps.mjs'

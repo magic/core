@@ -1,4 +1,5 @@
 import path from 'path'
+
 import { is } from '@magic/test'
 
 import { isLocalPath } from '../../src/lib/index.mjs'

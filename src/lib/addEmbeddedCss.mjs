@@ -1,5 +1,5 @@
-import is from '@magic/types'
 import error from '@magic/error'
+import is from '@magic/types'
 
 /**
  * @param {string} file

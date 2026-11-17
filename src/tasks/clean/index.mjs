@@ -2,8 +2,8 @@ import path from 'path'
 
 import error from '@magic/error'
 import fs from '@magic/fs'
-import is from '@magic/types'
 import log from '@magic/log'
+import is from '@magic/types'
 
 import { isLocalPath } from '../../lib/index.mjs'
 

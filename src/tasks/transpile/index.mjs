@@ -1,16 +1,14 @@
 import path from 'path'
 
-import log from '@magic/log'
 import deep from '@magic/deep'
+import error from '@magic/error'
+import log from '@magic/log'
 import is from '@magic/types'
 
+import { addEmbeddedCss, createHash, checkLinks, addJsFiles } from '../../lib/index.mjs'
+import style from './css.mjs'
 import html from './html.mjs'
 import js from './js.mjs'
-import style from './css.mjs'
-
-import { addEmbeddedCss, createHash, checkLinks, addJsFiles } from '../../lib/index.mjs'
-
-import error from '@magic/error'
 
 /** @import { AppObject, Config, Hashes, ScriptSrc, PageObject } from '../../types.mjs' */
 

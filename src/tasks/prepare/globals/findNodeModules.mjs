@@ -1,7 +1,6 @@
 import path from 'path'
 
 import cases from '@magic/cases'
-
 import error from '@magic/error'
 import fs from '@magic/fs'
 import log from '@magic/log'

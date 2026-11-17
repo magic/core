@@ -1,10 +1,10 @@
 import deep from '@magic/deep'
 
-import { findNodeModules } from './findNodeModules.mjs'
-import { findLocalModules } from './findLocalModules.mjs'
 import { findAssetFile } from './findAssetFile.mjs'
 import { findBuiltins } from './findBuiltins.mjs'
 import { findLibraries } from './findLibraries.mjs'
+import { findLocalModules } from './findLocalModules.mjs'
+import { findNodeModules } from './findNodeModules.mjs'
 import { findThemes } from './findThemes.mjs'
 import { registerModule } from './registerModule.mjs'
 

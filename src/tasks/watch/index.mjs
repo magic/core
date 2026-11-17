@@ -1,7 +1,7 @@
 import path from 'path'
 
-import is from '@magic/types'
 import fs from '@magic/fs'
+import is from '@magic/types'
 
 /**
  * @param {string} dir

@@ -2,8 +2,8 @@ import log from '@magic/log'
 import is from '@magic/types'
 
 import { httpGet } from './httpGet.mjs'
-import { isPageUrl } from './isPageUrl.mjs'
 import { isHashedUrl } from './isHashedUrl.mjs'
+import { isPageUrl } from './isPageUrl.mjs'
 import { isStaticUrl } from './isStaticUrl.mjs'
 
 /** @import { NodeError, PageObject } from '../types.mjs' */

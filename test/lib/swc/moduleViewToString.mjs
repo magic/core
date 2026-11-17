@@ -1,4 +1,5 @@
 import { is } from '@magic/test'
+
 import { moduleViewToString } from '../../../src/lib/swc/moduleViewToString.mjs'
 
 const pkg = `moduleViewToString`
