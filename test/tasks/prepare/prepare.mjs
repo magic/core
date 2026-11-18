@@ -28,8 +28,6 @@ const write = async (p, content) => {
   await fs.writeFile(p, content)
 }
 
-// blog trees must not contain two posts with the same basename:
-// prepareBlogPost writes tmp files keyed by basename, in parallel
 const makeConfigOver = config => {
   config.ROOT = base
   config.DIR.PAGES = path.join(base, 'pages404')

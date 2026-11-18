@@ -62,6 +62,22 @@ const patchExit = () => {
   }
 }
 
+// The tests below patch the process-level global process.exit. The runner
+// executes an array suite's tests in parallel, so concurrent patches would
+// stomp on each other: one test's recorded exit code would land in another
+// test's closure. Serialize the process.exit patching tests with a promise
+// chain, the same way transpile.mjs serializes its globalThis.app mutations.
+let chain = Promise.resolve()
+/** @param {() => Promise<unknown>} fn */
+const lock = fn => {
+  const run = chain.then(fn, fn)
+  chain = run.then(
+    () => undefined,
+    () => undefined,
+  )
+  return run
+}
+
 export default [
   {
     fn: () => {
@@ -111,107 +127,110 @@ export default [
     info: 'html leaves rooted hrefs alone',
   },
   {
-    fn: () => {
-      // a view that throws during render exits the process
-      /** @type {any} */
-      const app = {
-        state: {},
-        View: () => /** @type {any} */ () => {
-          throw new Error('render boom')
-        },
-        pages: [
-          {
-            name: '/core/x/',
-            state: {},
-            View: () => {
-              throw new Error('render boom')
-            },
+    fn: async () =>
+      lock(async () => {
+        // a view that throws during render exits the process
+        /** @type {any} */
+        const app = {
+          state: {},
+          View: () => /** @type {any} */ () => {
+            throw new Error('render boom')
           },
-        ],
-        hashes: {},
-      }
-      const unpatch = patchExit()
-      try {
-        const pages = html({ app, root: '/core/' })
-        // the exit is a recorded no-op, so the failing page map callback
-        // falls through and returns undefined
-        return pages[0] === undefined && unpatch() === 1
-      } finally {
-        if (unpatch() === undefined) {
-          unpatch()
+          pages: [
+            {
+              name: '/core/x/',
+              state: {},
+              View: () => {
+                throw new Error('render boom')
+              },
+            },
+          ],
+          hashes: {},
         }
-      }
-    },
+        const unpatch = patchExit()
+        try {
+          const pages = html({ app, root: '/core/' })
+          // the exit is a recorded no-op, so the failing page map callback
+          // falls through and returns undefined
+          return pages[0] === undefined && unpatch() === 1
+        } finally {
+          if (unpatch() === undefined) {
+            unpatch()
+          }
+        }
+      }),
     expect: true,
     info: 'html exits with code 1 when a page fails to render',
   },
   {
-    fn: async () => {
-      // production build with a broken local link exits with code 0
-      const app = makeApp({
-        links: ['/core/missing-page'],
-        pages: [
-          {
-            name: '/core/',
-            state: {},
-            View: () => h('a', { href: '/core/missing-page' }, ['x']),
-          },
-        ],
-      })
-      const unpatch = patchExit()
-      try {
-        const result = await transpile(
-          app,
-          makeConfig({
-            ENV: 'production',
-            IS_DEV: false,
-            IS_PROD: true,
-            NO_CHECK_LINKS: false,
-            NO_CHECK_LINKS_EXIT: undefined,
-            NO_CHECK_LINKS_LIST: [],
-          }),
-        )
-        // the exit is a recorded no-op, so transpile continues and returns
-        // the app even though it wanted to exit with code 0
-        return is.str(result?.client) && unpatch() === 0
-      } finally {
-        if (unpatch() === undefined) {
-          unpatch()
+    fn: async () =>
+      lock(async () => {
+        // production build with a broken local link exits with code 0
+        const app = makeApp({
+          links: ['/core/missing-page'],
+          pages: [
+            {
+              name: '/core/',
+              state: {},
+              View: () => h('a', { href: '/core/missing-page' }, ['x']),
+            },
+          ],
+        })
+        const unpatch = patchExit()
+        try {
+          const result = await transpile(
+            app,
+            makeConfig({
+              ENV: 'production',
+              IS_DEV: false,
+              IS_PROD: true,
+              NO_CHECK_LINKS: false,
+              NO_CHECK_LINKS_EXIT: undefined,
+              NO_CHECK_LINKS_LIST: [],
+            }),
+          )
+          // the exit is a recorded no-op, so transpile continues and returns
+          // the app even though it wanted to exit with code 0
+          return is.str(result?.client) && unpatch() === 0
+        } finally {
+          if (unpatch() === undefined) {
+            unpatch()
+          }
         }
-      }
-    },
+      }),
     expect: true,
     info: 'transpile exits with code 0 on broken links in production',
   },
   {
-    fn: async () => {
-      // a dev build checks links without exiting
-      const app = makeApp({
-        pages: [
-          {
-            name: '/core/',
-            state: {},
-            View: () => h('a', { href: '/core/missing-page' }, ['x']),
-          },
-        ],
-      })
-      const unpatch = patchExit()
-      try {
-        const result = await transpile(
-          app,
-          makeConfig({
-            ENV: 'development',
-            IS_DEV: true,
-            NO_CHECK_LINKS: false,
-            NO_CHECK_LINKS_REMOTE: true,
-            NO_CHECK_LINKS_LIST: [],
-          }),
-        )
-        return is.str(result?.client)
-      } finally {
-        unpatch()
-      }
-    },
+    fn: async () =>
+      lock(async () => {
+        // a dev build checks links without exiting
+        const app = makeApp({
+          pages: [
+            {
+              name: '/core/',
+              state: {},
+              View: () => h('a', { href: '/core/missing-page' }, ['x']),
+            },
+          ],
+        })
+        const unpatch = patchExit()
+        try {
+          const result = await transpile(
+            app,
+            makeConfig({
+              ENV: 'development',
+              IS_DEV: true,
+              NO_CHECK_LINKS: false,
+              NO_CHECK_LINKS_REMOTE: true,
+              NO_CHECK_LINKS_LIST: [],
+            }),
+          )
+          return is.str(result?.client)
+        } finally {
+          unpatch()
+        }
+      }),
     expect: true,
     info: 'transpile checks links in dev mode without exiting',
   },
