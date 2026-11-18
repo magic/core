@@ -1,4 +1,5 @@
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 import cases from '@magic/cases'
 import error from '@magic/error'
@@ -12,6 +13,40 @@ import { prepareCheckProps } from './checkProps.mjs'
 /** @import { AppObject, Config, ModuleView } from '../../types.mjs' */
 
 /**
+ * The @magic/hyperapp source has to be inlined into the client bundle.
+ *
+ * Candidate paths, tried in order:
+ * 1. resolved through the module system from this package's context.
+ *    works for regular installs (hoisted into the project's node_modules),
+ *    file: linked dev installs (found in core's own node_modules)
+ *    and global installs.
+ * 2. the project's node_modules (process.cwd()).
+ *
+ * @returns {Promise<string[]>}
+ */
+const getHyperappPaths = async () => {
+  /** @type {string[]} */
+  const candidates = []
+
+  try {
+    // import.meta.resolve returns a Promise on older node versions,
+    // awaiting a plain string is a no-op
+    const resolved = await import.meta.resolve('@magic/hyperapp')
+    // resolves to .../node_modules/@magic/hyperapp/src/index.mjs
+    candidates.push(path.join(path.dirname(fileURLToPath(resolved)), 'hyperapp.mjs'))
+  } catch {
+    // import.meta.resolve unavailable (old node) or the package is
+    // unresolvable. fall back to the project's node_modules.
+  }
+
+  candidates.push(
+    path.join(process.cwd(), 'node_modules', '@magic', 'hyperapp', 'src', 'hyperapp.mjs'),
+  )
+
+  return candidates
+}
+
+/**
  * @param {AppObject} magic
  * @param {Config} config
  * @returns {Promise<string>}
@@ -19,15 +54,25 @@ import { prepareCheckProps } from './checkProps.mjs'
 export const prepareJs = async (magic, config) => {
   const { HOIST, PREPEND_JS, APPEND_JS /*, WEB_ROOT*/ } = config
 
-  const hyperappPath = path.join(
-    process.cwd(),
-    'node_modules',
-    '@magic',
-    'hyperapp',
-    'src',
-    'hyperapp.mjs',
-  )
-  const hyperappContent = await fs.readFile(hyperappPath, 'utf8')
+  const hyperappPaths = await getHyperappPaths()
+
+  /** @type {string | undefined} */
+  let hyperappContent
+  for (const hyperappPath of hyperappPaths) {
+    try {
+      hyperappContent = await fs.readFile(hyperappPath, 'utf8')
+      break
+    } catch {
+      // try the next candidate path
+    }
+  }
+
+  if (hyperappContent === undefined) {
+    throw error(
+      `could not find the @magic/hyperapp source file. tried:\n${hyperappPaths.join('\n')}`,
+      'E_HYPERAPP_NOT_FOUND',
+    )
+  }
 
   const imports = 'h, app'
 
