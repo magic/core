@@ -32,6 +32,7 @@ every rendering frame, the state determines the output of the html views.`),Z(`c
   shown: false,
   count: 0,
 }
+
 `),E({id:"actions"},"actions"),R("actions are an object containing functions"),R("those functions get the state and their props and may return a new full, but changed, state."),Z(`const actions = {
   toggleModal: state => {
     return {
