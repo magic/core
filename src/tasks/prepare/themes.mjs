@@ -156,7 +156,12 @@ export const prepareThemes = async (app, config) => {
 
     const result = await saveImport(filePath)
     if (is.instance(result, Error)) {
-      log.error(result)
+      // app.js and app.mjs are probed in order, a missing file is not
+      // an error. only log unexpected import failures.
+      const code = /** @type {NodeError} */ (result).code
+      if (!code || !code.includes('MODULE_NOT_FOUND')) {
+        log.error(result)
+      }
       return null
     }
 
