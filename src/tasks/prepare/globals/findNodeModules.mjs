@@ -28,7 +28,9 @@ export const findNodeModules = async _modules => {
   const dirPromises = dirs
     .filter(dir => dir.includes('magic-module-') || dir.includes('magic-modules-'))
     .map(async nodeModule => {
-      const name = cases.pascal(nodeModule.split(/magic-module(s)?-/)[1])
+      // split with a capture group inserts the group into the result,
+      // so the module name is the last part
+      const name = cases.pascal(nodeModule.split(/magic-module(s)?-/).pop() ?? nodeModule)
       const importDir = nodeModule.replace(nodeModuleDir + path.sep, '')
       const loadPath = replacePathSepForImport(importDir, path.sep)
 

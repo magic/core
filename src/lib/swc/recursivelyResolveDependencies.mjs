@@ -82,6 +82,10 @@ export const recursivelyResolveDependencies = async ({ app, config: _config }) =
   await Promise.all(
     Object.entries(app.modules ?? {}).map(async ([name, module]) => {
       const viewString = /** @type {string} */ (moduleViewToString(module))
+      // a module without a view (eg a broken node module) has nothing to resolve
+      if (!is.string(viewString)) {
+        return
+      }
       /** @type {string[]} */
       const subViews = []
 
