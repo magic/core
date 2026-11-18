@@ -1,8 +1,12 @@
 #### changelog
 
-##### 0.0.163 - unreleased
+##### 0.0.164 - unreleased
 
 ...
+
+##### 0.0.164
+
+- update @magic/hyperapp dependency to correctly handle text nodes
 
 ##### 0.0.162
 
