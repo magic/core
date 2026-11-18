@@ -1,4 +1,5 @@
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 import cases from '@magic/cases'
 import fs from '@magic/fs'
@@ -9,6 +10,18 @@ import { saveImport } from '../../../lib/index.mjs'
 /** @import { AppObject, ConfigDir } from '../../../types.mjs' */
 
 const nodeModuleDir = path.join(process.cwd(), 'node_modules')
+
+// core's own node_modules. in file: linked dev installs,
+// core's dependencies (eg @magic-libraries/*) live here,
+// not in the project's node_modules.
+const coreNodeModuleDir = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '..',
+  '..',
+  '..',
+  'node_modules',
+)
 
 /**
  * @param {AppObject} app
@@ -30,14 +43,47 @@ export const findLibraries = async (app, modules, { DIR }) => {
     })
   }
 
-  const libNodeModuleDir = path.join(nodeModuleDir, '@magic-libraries')
-  let libOfficialNodeModuleFiles = await fs.getDirectories(libNodeModuleDir, { depth: false })
-  libOfficialNodeModuleFiles = libOfficialNodeModuleFiles.filter(n => n !== libNodeModuleDir)
+  // @magic-libraries/* dirs. the project's node_modules wins over
+  // core's own node_modules, if the same lib exists in both.
+  /** @type {Map<string, string>} */
+  const officialLibDirs = new Map()
+  for (const dir of [nodeModuleDir, coreNodeModuleDir]) {
+    const libNodeModuleDir = path.join(dir, '@magic-libraries')
+    try {
+      const files = await fs.getDirectories(libNodeModuleDir, { depth: false })
+      for (const file of files) {
+        if (file === libNodeModuleDir) {
+          continue
+        }
+        const name = path.basename(file)
+        if (!officialLibDirs.has(name)) {
+          officialLibDirs.set(name, file)
+        }
+      }
+    } catch {
+      // no @magic-libraries in this node_modules, keep looking
+    }
+  }
 
-  const nodeModules = await fs.getDirectories(nodeModuleDir, { depth: false })
-  const libInofficialNodeModuleFiles = nodeModules.filter(
-    n => n.includes('magic-library-') || n.includes('magic-libraries-'),
-  )
+  // unofficial magic-library-* / magic-libraries-* packages in the
+  // node_modules root, same project-wins dedup
+  /** @type {Map<string, string>} */
+  const inofficialLibDirs = new Map()
+  for (const dir of [nodeModuleDir, coreNodeModuleDir]) {
+    try {
+      const nodeModules = await fs.getDirectories(dir, { depth: false })
+      for (const file of nodeModules) {
+        if (file.includes('magic-library-') || file.includes('magic-libraries-')) {
+          const name = path.basename(file)
+          if (!inofficialLibDirs.has(name)) {
+            inofficialLibDirs.set(name, file)
+          }
+        }
+      }
+    } catch {
+      // keep looking
+    }
+  }
 
   await Promise.all(
     DIR.LIB.map(async dir => {
@@ -54,8 +100,8 @@ export const findLibraries = async (app, modules, { DIR }) => {
     }),
   )
 
-  const libDirs = [...libOfficialNodeModuleFiles, ...libInofficialNodeModuleFiles]
-  libDirs.forEach(async libDir => {
+  const libDirs = [...officialLibDirs.values(), ...inofficialLibDirs.values()]
+  libDirs.forEach(libDir => {
     let libName = ''
 
     if (libDir.includes('@magic-libraries')) {
