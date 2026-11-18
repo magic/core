@@ -58,6 +58,13 @@ export const startServer = async (server, options, attempts = 0) => {
  * @returns {Promise<import('http').Server>}
  */
 export const serve = async (app, config) => {
+  if (!app || app instanceof Error) {
+    throw error(
+      'serve() was called with an invalid app object, a previous build step probably failed.',
+      'E_SERVE_INVALID_APP',
+    )
+  }
+
   const handle = await handler(app, config)
 
   const { PORT, HOST, WEB_ROOT } = config

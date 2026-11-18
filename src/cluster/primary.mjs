@@ -94,6 +94,10 @@ export const primary = async ({
       if (msg.evt === 'quit') {
         log('quit event received')
         process.exit()
+      } else if (msg.evt === 'failed') {
+        // the build worker already logged the error.
+        // exit with a failure code, so the dev/build process fails loudly.
+        process.exit(1)
       } else {
         log.warn('Unexpected message from build worker', msg)
       }

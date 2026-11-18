@@ -119,11 +119,17 @@ export default [
   {
     fn: async () => {
       const app = makeApp({ client: 'not ( valid js' })
-      const result = await transpile(app, makeConfig())
-      return result === undefined
+      try {
+        await transpile(app, makeConfig())
+        return false
+      } catch (e) {
+        // transpile rethrows, runCmd catches and returns the error,
+        // so a broken client never silently becomes an undefined app
+        return is.error(e)
+      }
     },
     expect: true,
-    info: 'transpile returns undefined when the client code cannot be parsed',
+    info: 'transpile throws when the client code cannot be parsed',
   },
   {
     fn: async () => {

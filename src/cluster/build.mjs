@@ -15,14 +15,35 @@ export const build = async ({ commands, config }) => {
     const App = await runApp(config)
     let app = await runCmd('prepare', App, config)
 
+    if (app instanceof Error) {
+      log.error('E_PREPARE', app)
+      process.send?.({ evt: 'failed', error: app.toString() })
+      return
+    }
+
     app = await runCmd('transpile', app, config)
 
+    if (app instanceof Error) {
+      log.error('E_TRANSPILE', app)
+      process.send?.({ evt: 'failed', error: app.toString() })
+      return
+    }
+
     if (commands.build) {
-      await runCmd('write', app, config)
+      const writeResult = await runCmd('write', app, config)
+
+      if (writeResult instanceof Error) {
+        log.error('E_WRITE', writeResult)
+        process.send?.({ evt: 'failed', error: writeResult.toString() })
+        return
+      }
     }
 
     if (commands.serve) {
-      serve(/** @type {AppObject} */ (app), config)
+      serve(/** @type {AppObject} */ (app), config).catch(e => {
+        log.error('E_SERVE', e)
+        process.send?.({ evt: 'failed', error: String(e) })
+      })
     } else {
       process.send?.({ evt: 'quit' })
     }
