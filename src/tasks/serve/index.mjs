@@ -16,6 +16,10 @@ const MAX_PORT_RETRIES = 10
  * @returns {Promise<{ port: number, host?: string }>}
  */
 export const startServer = async (server, options, attempts = 0) => {
+  // Remove any existing listeners to prevent accumulation
+  server.removeAllListeners('listening')
+  server.removeAllListeners('error')
+
   try {
     server.listen(options)
 
