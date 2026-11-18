@@ -46,8 +46,11 @@ export const prepareBlogPost =
     if (!is.empty(transmuted)) {
       viewString = `export const View = state => BlogPost(state, [${transmuted.rendered}])`
 
-      const fileTmpPath = path.join(TMP_DIR, path.basename(file))
-      await fs.mkdirp(TMP_DIR)
+      // key the tmp file by the post's path relative to the blog dir, not just
+      // its basename: posts in different dirs often share a basename (index.md
+      // archives, same-named posts) and are prepared in parallel
+      const fileTmpPath = path.join(TMP_DIR, file.replace(pageDir, ''))
+      await fs.mkdirp(path.dirname(fileTmpPath))
       await fs.writeFile(fileTmpPath, viewString)
       pageTmp = await saveImport(fileTmpPath)
     } else {
@@ -63,8 +66,8 @@ export const prepareBlogPost =
 
       viewString = `export const View = state => BlogPost(state, ${children})`
 
-      const fileTmpPath = path.join(TMP_DIR, path.basename(file))
-      await fs.mkdirp(TMP_DIR)
+      const fileTmpPath = path.join(TMP_DIR, file.replace(pageDir, ''))
+      await fs.mkdirp(path.dirname(fileTmpPath))
       await fs.writeFile(fileTmpPath, viewString)
       pageTmp = await saveImport(fileTmpPath)
     }
