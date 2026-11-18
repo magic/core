@@ -1,6 +1,6 @@
 {
   "name": "@magic/core",
-  "version": "0.0.162",
+  "version": "0.0.163",
   "description": "@magic core. generate static pages and serverless lambdas. ~15kb client (html + css + js) boilerplate.",
   "keywords": [
     "generator",
