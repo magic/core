@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url'
 
 import deep from '@magic/deep'
 import error from '@magic/error'
+import log from '@magic/log'
 import is from '@magic/types'
 
 import { findModuleStyles, saveImport } from '../../lib/index.mjs'
@@ -152,18 +153,14 @@ export const prepareThemes = async (app, config) => {
     if (filePath === fileName) {
       return null
     }
-    try {
-      return await saveImport(filePath)
-    } catch (e) {
-      const eCode = is.error(e) ? /** @type {NodeError} */ (e).code : undefined
-      if (eCode && eCode.includes('MODULE_NOT_FOUND')) {
-        return null
-      }
-      if (e instanceof Error) {
-        throw e
-      }
-      throw new Error(String(e), { cause: e })
+
+    const result = await saveImport(filePath)
+    if (is.instance(result, Error)) {
+      log.error(result)
+      return null
     }
+
+    return result
   }
 
   const appResult = (await loadAppFile(maybeAppFileJs)) || (await loadAppFile(maybeAppFileMjs))
