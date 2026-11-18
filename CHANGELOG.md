@@ -1,8 +1,18 @@
 #### changelog
 
-##### 0.0.162 - unreleased
+##### 0.0.163 - unreleased
 
 ...
+
+##### 0.0.162
+
+- build: fail loudly on task errors instead of cascading
+- prepare: don't log expected app.js/app.mjs fallback as error
+- tasks/prepare/blogPost: safer write for blogposts, avoiding race conditions
+- prepare: log saveImport errors in theme preparation
+- fix: skip modules without views, improve module name extraction
+- client: use @magic-libraries/is in emitted code
+- update dependencies
 
 ##### 0.0.161
 
