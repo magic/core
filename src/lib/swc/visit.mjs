@@ -47,12 +47,13 @@ export const visit = ({ app, config, parent }) => {
     )
   } else if (parent.type === 'ExpressionStatement') {
     const result = visit({ par: parent, parent: parent.expression, app, config })
-    // If result is undefined (e.g., CHECK_PROPS was removed), replace with EmptyStatement
+    // If result is undefined (e.g., CHECK_PROPS was removed),
+    // turn the statement into an EmptyStatement in place,
+    // keeping its original span
     if (result === undefined) {
-      return {
-        type: 'EmptyStatement',
-        span: parent.span,
-      }
+      delete parent.expression
+      parent.type = 'EmptyStatement'
+      return parent
     }
     parent.expression = result
   } else if (parent.type === 'AssignmentExpression') {
@@ -320,6 +321,27 @@ export const visit = ({ app, config, parent }) => {
     parent.consequent = visit({ par: parent, parent: parent.consequent, app, config })
     parent.alternate = visit({ par: parent, parent: parent.alternate, app, config })
   } else if (parent.type === 'BinaryExpression') {
+    // the Logo pattern: CHECK_PROPS(...) && View().
+    // visit() removes the CHECK_PROPS call (returns undefined),
+    // so splice the right hand side into this node in place
+    // and keep visiting it
+    const bin = /** @type {{ operator?: string }} */ (parent)
+    if (
+      bin.operator === '&&' &&
+      parent.left?.type === 'CallExpression' &&
+      parent.left?.callee?.value === 'CHECK_PROPS'
+    ) {
+      const right = parent.right
+      // drop the leftover BinaryExpression fields, so the spliced
+      // node carries no stale properties
+      const binRecord = /** @type {Record<string, unknown>} */ (parent)
+      for (const key of Object.keys(binRecord)) {
+        delete binRecord[key]
+      }
+      Object.assign(binRecord, right)
+      return visit({ par: parent, parent, app, config })
+    }
+
     parent.left = visit({ par: parent, parent: parent.left, app, config })
     parent.right = visit({ par: parent, parent: parent.right, app, config })
   } else if (parent.type === 'UnaryExpression') {
