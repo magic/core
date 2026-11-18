@@ -86,7 +86,7 @@
     "check": "npm run tsc && npm run tsc:test && npm run lint"
   },
   "dependencies": {
-    "@magic-libraries/is": "^0.0.8",
+    "@magic-libraries/is": "0.0.8",
     "@magic-libraries/prevent-default": "0.0.6",
     "@magic/cases": "0.0.15",
     "@magic/cli": "0.0.56",
@@ -94,10 +94,10 @@
     "@magic/deep": "0.1.23",
     "@magic/error": "0.0.26",
     "@magic/fs": "0.0.41",
-    "@magic/hyperapp": "2.0.4-alpha.0.7",
+    "@magic/hyperapp": "2.0.22-alpha.1",
     "@magic/log": "0.1.26",
     "@magic/tags": "0.0.17",
-    "@magic/transmute": "0.0.60",
+    "@magic/transmute": "0.0.61",
     "@magic/types": "0.1.42",
     "@swc/core": "1.16.22"
   },
