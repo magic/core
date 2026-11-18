@@ -1,7 +1,7 @@
 {
   "name": "@magic/core",
   "version": "0.0.162",
-  "description": "@magic core. generate static pages and serverless lambdas. ~5kb client boilerplate.",
+  "description": "@magic core. generate static pages and serverless lambdas. ~15kb client (html + css + js) boilerplate.",
   "keywords": [
     "generator",
     "hyperapp",
@@ -94,7 +94,7 @@
     "@magic/deep": "0.1.23",
     "@magic/error": "0.0.26",
     "@magic/fs": "0.0.41",
-    "@magic/hyperapp": "2.0.22-alpha.1",
+    "@magic/hyperapp": "2.0.22-alpha.2",
     "@magic/log": "0.1.26",
     "@magic/tags": "0.0.17",
     "@magic/transmute": "0.0.61",
