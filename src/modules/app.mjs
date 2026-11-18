@@ -5,7 +5,7 @@ import { h } from '@magic/hyperapp'
 import log from '@magic/log'
 import is from '@magic/types'
 
-import { saveImport } from '../lib/index.mjs'
+import { saveImport, getThemeLocations } from '../lib/index.mjs'
 
 /** @import { Config, AppObject, PageObject, Hashes, ViewResult } from '../types.mjs' */
 
@@ -47,21 +47,9 @@ const App = async config => {
   let seo = {}
 
   const themeData = await Promise.all(
-    THEME.map(async theme_name => {
+    THEME.map(async themeName => {
       // order is meaningful.
-      const themeLocations = [
-        // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
-        path.join(dirName, '..', 'themes', theme_name, 'index.mjs'),
-        // see if the theme is a full name of a js module in node_modules,
-        // eg: theme-name
-        theme_name,
-        // see if this is a @magic-themes theme
-        `@magic-themes/${theme_name}`,
-        // see if it is installed locally.
-        path.join(DIR.THEMES, theme_name, 'index.mjs'),
-        // npm i -g magic: load magic-themes from node_modules explicitly.
-        path.join(NODE_MODULES, '@magic-themes', theme_name, 'src', 'index.mjs'),
-      ]
+      const themeLocations = getThemeLocations({ dirName, themeName, DIR, NODE_MODULES })
 
       return await Promise.all(
         themeLocations.map(async location => {

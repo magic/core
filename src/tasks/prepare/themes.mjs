@@ -6,7 +6,7 @@ import error from '@magic/error'
 import log from '@magic/log'
 import is from '@magic/types'
 
-import { findModuleStyles, saveImport } from '../../lib/index.mjs'
+import { findModuleStyles, getThemeLocations, saveImport } from '../../lib/index.mjs'
 import colors from '../../themes/colors.mjs'
 
 /** @import { AppObject, Config, ThemeVars, NodeError } from '../../types.mjs' */
@@ -73,21 +73,9 @@ export const prepareThemes = async (app, config) => {
   // load user's chosen theme, if it is set and exists, and merge it into the styles
   if (THEME) {
     const result = await Promise.all(
-      THEME.map(async theme_name => {
+      THEME.map(async themeName => {
         // order is meaningful.
-        const themeLocations = [
-          // first look if we have this theme preinstalled in @magic, if so, merge it into the styles
-          path.join(dirName, '..', '..', 'themes', theme_name, 'index.mjs'),
-          // see if the theme is a full name of a js module in node_modules,
-          // eg: @org/theme-name or theme-name
-          theme_name,
-          // see if this is a @magic-themes theme
-          `@magic-themes/${theme_name}`,
-          // see if it is installed locally.
-          path.join(DIR.THEMES, theme_name, 'index.mjs'),
-          // if called from globally installed magic, load with absolute path
-          path.join(NODE_MODULES, '@magic-themes', theme_name, 'src', 'index.mjs'),
-        ]
+        const themeLocations = getThemeLocations({ dirName, themeName, DIR, NODE_MODULES })
 
         return await Promise.all(
           themeLocations.map(async location => {
