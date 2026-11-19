@@ -58,6 +58,50 @@ export default {
       expect: has.string('/local'),
       info: 'Router Link falls back to to as text',
     },
+    {
+      fn: () => {
+        const vnode = Link({ to: '/about' })
+        return typeof vnode.props.onclick === 'function'
+      },
+      expect: true,
+      info: 'Router Link local links use a plain onclick handler',
+    },
+    {
+      fn: () => {
+        const vnode = Link({ to: '/about' })
+        const event = {
+          currentTarget: { href: `${origin}/about` },
+          preventDefault() {
+            this.defaultPrevented = true
+          },
+        }
+        const state = vnode.props.onclick(
+          { url: '/current', hash: '', pages: { '/about': { title: 'About' } } },
+          event,
+        )
+        return (
+          event.defaultPrevented === true && state.url === '/about' && state.prev === '/current'
+        )
+      },
+      expect: true,
+      info: 'Router Link onclick preventDefaults the event and navigates via actions.go',
+    },
+    {
+      fn: () => {
+        const customAction = (state, e) => ({ ...state, custom: e.currentTarget.href })
+        const vnode = Link({ to: '/about', action: customAction })
+        const event = {
+          currentTarget: { href: `${origin}/about` },
+          preventDefault() {
+            this.defaultPrevented = true
+          },
+        }
+        const state = vnode.props.onclick({ url: '/current', hash: '' }, event)
+        return event.defaultPrevented === true && state.custom === `${origin}/about`
+      },
+      expect: true,
+      info: 'Router Link custom action receives the real event after preventDefault',
+    },
   ],
   actions: {
     go: [

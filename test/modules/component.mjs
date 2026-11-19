@@ -13,7 +13,7 @@ export default [
   {
     fn: () => {
       const vnode = C('some text')
-      return vnode.tag === 'TestComponent' && vnode.children[0] === 'some text'
+      return vnode.tag === 'TestComponent' && vnode.children[0].tag === 'some text'
     },
     expect: true,
     info: 'component uses bare string as children',
@@ -21,7 +21,7 @@ export default [
   {
     fn: () => {
       const vnode = C(42)
-      return vnode.children[0] === 42
+      return vnode.children[0].tag === 42
     },
     expect: true,
     info: 'component uses number as children',
@@ -29,7 +29,7 @@ export default [
   {
     fn: () => {
       const vnode = C(['a', 'b'])
-      return vnode.children[0] === 'a' && vnode.children[1] === 'b'
+      return vnode.children[0].tag === 'a' && vnode.children[1].tag === 'b'
     },
     expect: true,
     info: 'component uses array as children',
@@ -62,7 +62,7 @@ export default [
   {
     fn: () => {
       const vnode = C({ to: '/x' }, 'kid')
-      return vnode.props.to === '/x' && vnode.children[0] === 'kid'
+      return vnode.props.to === '/x' && vnode.children[0].tag === 'kid'
     },
     expect: true,
     info: 'component keeps explicit children',

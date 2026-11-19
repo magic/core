@@ -24,10 +24,12 @@ export default {
     await rm(base, { recursive: true, force: true })
     await mkdir(base, { recursive: true })
 
-    // asset file with function, object and non-module exports
+    // asset file with function, object, module namespace and non-module exports
+    await write(path.join(base, 'assets', 'dep.mjs'), `export const View = () => 1\n`)
     await write(
       path.join(base, 'assets', 'index.mjs'),
-      `export const fnExport = () => 1
+      `export * as nsExport from './dep.mjs'
+export const fnExport = () => 1
 export const objExport = { a: 1 }
 export const other = 'string'
 `,
@@ -103,10 +105,15 @@ export const AsObj = { View: () => 4, style: { a: 1 } }
     {
       fn: async () => {
         const modules = await findAssetFile(path.join(base, 'assets'))
-        return is.fn(modules.fnExport) && modules.objExport.a === 1 && modules.other === undefined
+        return (
+          is.fn(modules.fnExport) &&
+          modules.objExport.a === 1 &&
+          is.fn(modules.nsExport.View) &&
+          modules.other === undefined
+        )
       },
       expect: true,
-      info: 'findAssetFile imports function and object exports from the asset file',
+      info: 'findAssetFile imports function, object and module namespace exports from the asset file',
     },
     {
       fn: async () => {
