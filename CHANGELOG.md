@@ -7,7 +7,7 @@
 ##### 0.0.164
 
 - update @magic/hyperapp dependency to correctly handle text nodes
-- fix router handling of actions
+- fix router handling of actions in local links
 - @magic/transmute now correctly escapes markdown html in Pre
 - update dependencies
 
