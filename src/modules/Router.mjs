@@ -29,7 +29,7 @@ export const View = ({ page, state }, children) => {
 }
 
 /**
- * @param {{ to?: string, action?: unknown, text?: unknown, href?: string } & Record<string, unknown>} props
+ * @param {{ to?: string, action?: ((state: Record<string, unknown>, e: { currentTarget?: { href: string } } | null | undefined) => Record<string, unknown>), text?: unknown, href?: string } & Record<string, unknown>} props
  * @param {unknown} [children]
  * @returns {unknown}
  */
@@ -51,7 +51,19 @@ export const Link = ({ to, action = actions.go, text, ...p }, children) => {
   const isLocal = to[0] === '/' || to[0] === '#'
 
   if (isLocal) {
-    props.onclick = (state, e) => (e.preventDefault(), action(state, e))
+    /**
+     * @param {Record<string, unknown>} state
+     * @param {{ preventDefault: () => void, currentTarget?: { href: string } } | null | undefined} e
+     * @returns {void}
+     */
+    const handleClick = (state, e) => {
+      if (!e) {
+        return
+      }
+      e.preventDefault()
+      action(state, e)
+    }
+    props.onclick = handleClick
   } else {
     props.target = '_blank'
     props.rel = 'noopener'
