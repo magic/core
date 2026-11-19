@@ -2,6 +2,7 @@ import { rm, mkdir, writeFile, readFile, access } from 'node:fs/promises'
 import path from 'path'
 
 import { is } from '@magic/test'
+/** @import { AppObject, Config } from '../../../src/types.mjs' */
 
 import { write } from '../../../src/tasks/write/index.mjs'
 import { writePages } from '../../../src/tasks/write/pages.mjs'
@@ -38,26 +39,55 @@ const exists = async p => {
 /**
  * @param {{ publicDir: string, apiDir: string }} tmp
  * @param {Record<string, unknown>} [over]
+ * @returns {Config}
  */
-const makeConfig = (tmp, over = {}) => ({
-  DIR: { PUBLIC: tmp.publicDir, API: tmp.apiDir },
-  CLIENT_LIB_NAME: 'magic',
-  IS_PROD: false,
-  WEB_ROOT: '/core/',
-  HASHES: {},
-  IGNORED_STATIC: [],
-  ...over,
-})
-
-/** @param {Record<string, unknown>} [over] */
-const makeApp = over => ({
-  css: { css: 'dev-css', minified: 'min-css' },
-  client: 'client-js',
-  static: {},
-  pages: [],
-  lambdas: {},
-  ...over,
-})
+const makeConfig = /** @param {Record<string, unknown>} [over] */ (tmp, over = {}) =>
+  /** @type {Config} */
+  (
+    /** @type {unknown} */ ({
+      DIR: { PUBLIC: tmp.publicDir, API: tmp.apiDir },
+      CLIENT_LIB_NAME: 'magic',
+      IS_PROD: false,
+      WEB_ROOT: '/core/',
+      HASHES: {},
+      IGNORED_STATIC: [],
+      CONFIG_FILE_PATH: '/test/magic.mjs',
+      ROOT: '/test',
+      NODE_MODULES: '/test/node_modules',
+      CLIENT_SERVICE_WORKER_NAME: 'sw.js',
+      HOST: 'localhost',
+      PORT: 3000,
+      URL: false,
+      CNAME: false,
+      ROBOTS_TXT: false,
+      SITEMAP: false,
+      FILETYPES: { ZIPPABLE: [], IMAGES: [] },
+      THEME: [],
+      PREPEND_JS: [],
+      APPEND_JS: [],
+      PREPEND_CSS: [],
+      APPEND_CSS: [],
+      PREPEND_SCRIPTS: [],
+      APPEND_SCRIPTS: [],
+      PREPEND_TAGS: [],
+      APPEND_TAGS: [],
+      INCLUDED_HASH_EXTENSIONS: [],
+      HOIST: [],
+      TMP_DIR: '/tmp',
+      ...over,
+    })
+  )
+const makeApp = /** @param {Record<string, unknown>} [over] */ over =>
+  /** @type {AppObject} */
+  ({
+    css: { css: 'dev-css', minified: 'min-css' },
+    client: 'client-js',
+    static: {},
+    pages: [],
+    lambdas: {},
+    View: /** @type {AppObject['View']} */ (() => () => null),
+    ...over,
+  })
 
 export default {
   afterAll: async () => {
@@ -268,9 +298,23 @@ export default {
           () => 'existing',
           () => 'missing',
         )
-        await writeServer(makeApp({ lambdas: { mylambda: async () => 'x' } }), {
-          DIR: { PUBLIC: '/tmp/nope' },
-        })
+        await writeServer(
+          makeApp({ lambdas: { mylambda: async () => 'x' } }),
+          /** @type {Config} */ (
+            /** @type {unknown} */ ({
+              DIR: {
+                PAGES: '/tmp/pages',
+                PUBLIC: '/tmp/nope',
+                ASSETS: '/tmp/assets',
+                MODULES: '/tmp/modules',
+                STATIC: '/tmp/static',
+                THEMES: '/tmp/themes',
+                API: '/tmp/api',
+                LIB: ['/tmp/lib'],
+              },
+            })
+          ),
+        )
         const written = await readFile(path.join(apiDir, 'mylambda.mjs'), 'utf8')
         const ok = written.includes('export default')
         // clean up if the test created the dir
