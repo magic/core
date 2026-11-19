@@ -1,12 +1,15 @@
 #### changelog
 
-##### 0.0.164 - unreleased
+##### 0.0.165 - unreleased
 
 ...
 
 ##### 0.0.164
 
 - update @magic/hyperapp dependency to correctly handle text nodes
+- fix router handling of actions
+- @magic/transmute now correctly escapes markdown html in Pre
+- update dependencies
 
 ##### 0.0.162
 
