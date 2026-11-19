@@ -1,6 +1,7 @@
+import type { AppObject, Config, Hashes, ModuleView, PageObject } from '../../../src/types.mjs'
+
 import { h } from '@magic/hyperapp'
 import { is } from '@magic/test'
-/** @import { AppObject, Config, ModuleView, PageObject, Hashes } from '../../../src/types.mjs' */
 
 import html from '../../../src/tasks/transpile/html.mjs'
 import { transpile } from '../../../src/tasks/transpile/index.mjs'
@@ -8,9 +9,8 @@ import js from '../../../src/tasks/transpile/js.mjs'
 
 // tests that need specific static files mutate globalThis.app,
 // serialize them with a promise chain
-let chain = Promise.resolve()
-/** @param {() => Promise<unknown>} fn */
-const lock = fn => {
+let chain: Promise<unknown> = Promise.resolve()
+const lock = (fn: () => Promise<unknown>) => {
   const run = chain.then(fn, fn)
   chain = run.then(
     () => undefined,
@@ -19,32 +19,28 @@ const lock = fn => {
   return run
 }
 
-/** @param {Record<string, unknown>} [over] */
-const makeApp = over =>
-  /** @type {AppObject} */ ({
+const makeApp = (over?: Record<string, unknown>) =>
+  ({
     client: 'const __MAGIC__ = () => { const x = 1; return x; };\n__MAGIC__();\n',
     style: [['a', { color: 'red' }]],
-    View:
-      (/** @type {PageObject} */ page, /** @type {Hashes} */ hashes) =>
-      (/** @type {any} */ state) => [
-        h('html', { lang: 'en' }, [page.View ? page.View(/** @type {any} */ state) : null]),
-      ],
+    View: (page: PageObject) => (state: unknown) => [
+      h('html', { lang: 'en' }, [page.View ? page.View(state as never) : null]),
+    ],
     pages: [
       {
         name: '/core/',
         state: {},
-        View: /** @type {ModuleView} */ (() => h('div', {}, ['hello-page'])),
+        View: (() => h('div', {}, ['hello-page'])) as unknown as ModuleView,
       },
     ],
     static: {},
     links: [],
     modules: {},
     ...over,
-  })
+  }) as unknown as AppObject
 
-/** @returns {Config} */
-const makeConfig = /** @param {Record<string, unknown>} [over] */ over =>
-  /** @type {Config} */ ({
+const makeConfig = (over?: Record<string, unknown>) =>
+  ({
     ENV: 'development',
     IS_DEV: true,
     IS_PROD: false,
@@ -89,7 +85,7 @@ const makeConfig = /** @param {Record<string, unknown>} [over] */ over =>
     SITEMAP: false,
     HASHES: {},
     ...over,
-  })
+  }) as unknown as Config
 
 export default [
   {
@@ -99,19 +95,21 @@ export default [
       if (!result) {
         return false
       }
-      const page = /** @type {any} */ (result.pages)[0]
-      const hashes = /** @type {Hashes} */ (result.hashes)
+      const page = result.pages?.[0]
+      const hashes = result.hashes as Hashes
+      const css = result.css as { css?: string } | undefined
+      const staticFiles = result.static as Record<string, unknown> | undefined
       return (
         is.str(result.client) &&
-        is.str(/** @type {any} */ (result.css).css) &&
-        /** @type {any} */ (result.css).css.includes('a { color: red; }') &&
+        is.str(css?.css) &&
+        css?.css?.includes('a { color: red; }') &&
         is.str(hashes['/magic.js']) &&
         is.str(hashes['/magic.css']) &&
         is.str(hashes['/core/']) &&
-        is.str(/** @type {any} */ (result.static)['/sri-hashes.json']) &&
-        is.str(page.rendered) &&
-        page.rendered.includes('hello-page') &&
-        is.str(page.hash)
+        is.str(staticFiles?.['/sri-hashes.json']) &&
+        is.str(page?.rendered) &&
+        page?.rendered?.includes('hello-page') &&
+        is.str(page?.hash)
       )
     },
     expect: true,
@@ -134,7 +132,7 @@ export default [
         ],
       })
       const result = await transpile(app, makeConfig())
-      const names = /** @type {any[]} */ (result?.pages ?? []).map(p => p.name)
+      const names = (result?.pages ?? []).map(p => p.name)
       return JSON.stringify(names) === JSON.stringify(['/core/a/', '/core/b/'])
     },
     expect: true,
@@ -144,7 +142,7 @@ export default [
     fn: async () => {
       const app = makeApp({ static: { '/data.txt': 'file-content' } })
       const result = await transpile(app, makeConfig({ INCLUDED_HASH_EXTENSIONS: ['.txt'] }))
-      const hashes = /** @type {Record<string, string>} */ (result?.hashes ?? {})
+      const hashes = (result?.hashes ?? {}) as Record<string, string>
       return is.str(hashes['/data.txt'])
     },
     expect: true,
@@ -208,16 +206,17 @@ export default [
   {
     fn: async () =>
       lock(async () => {
-        /** @type {any} */
-        const gt = globalThis
+        const gt = globalThis as unknown as { app?: unknown }
         const prevApp = gt.app
-        gt.app = {
-          static: {
-            '/core/pre.css': 'pre{color:red}',
-            '/core/post.css': 'post{color:blue}',
-            '/vendor.js': 'var v = 1;',
+        Object.assign(globalThis, {
+          app: {
+            static: {
+              '/core/pre.css': 'pre{color:red}',
+              '/core/post.css': 'post{color:blue}',
+              '/vendor.js': 'var v = 1;',
+            },
           },
-        }
+        })
         try {
           const app = makeApp()
           const result = await transpile(
@@ -229,11 +228,11 @@ export default [
               APPEND_SCRIPTS: [],
             }),
           )
-          const css = /** @type {any} */ (result?.css)
-          const hashes = /** @type {Record<string, string>} */ (result?.hashes ?? {})
+          const css = result?.css as { css?: string } | undefined
+          const hashes = (result?.hashes ?? {}) as Record<string, string>
           return (
-            css.css.startsWith('pre{color:red}') &&
-            css.css.endsWith('post{color:blue}') &&
+            css?.css?.startsWith('pre{color:red}') === true &&
+            css?.css?.endsWith('post{color:blue}') === true &&
             is.str(hashes['vendor.js'])
           )
         } finally {
@@ -249,13 +248,13 @@ export default [
       const app = makeApp()
       app.hashes = {}
       const pages = html({ app, root: '/core/' })
-      const page = /** @type {any} */ (pages)[0]
+      const page = pages[0]
       return (
         is.arr(pages) &&
         is.str(page.rendered) &&
         page.rendered.includes('hello-page') &&
-        /** @type {any} */ (app).state.root === '/core/' &&
-        /** @type {any} */ (app).state.url === '/core/'
+        app.state?.root === '/core/' &&
+        app.state?.url === '/core/'
       )
     },
     expect: true,
@@ -274,7 +273,7 @@ export default [
       })
       app.hashes = {}
       const pages = html({ app, root: '/core/' })
-      const rendered = /** @type {string} */ (/** @type {any} */ (pages)[0].rendered)
+      const rendered = pages[0].rendered as string
       return rendered.includes('href="/core/target/"')
     },
     expect: true,
@@ -293,7 +292,7 @@ export default [
       })
       app.hashes = {}
       const pages = html({ app, root: '/core/' })
-      const rendered = /** @type {string} */ (/** @type {any} */ (pages)[0].rendered)
+      const rendered = pages[0].rendered as string
       return rendered.includes('src="/core/logo.png"')
     },
     expect: true,
@@ -306,7 +305,7 @@ export default [
         app: makeApp(),
         config: makeConfig(),
       })
-      return is.obj(result) && is.str(/** @type {any} */ (result).code)
+      return is.obj(result) && is.str(result?.code)
     },
     expect: true,
     info: 'js transforms the client code',
@@ -329,7 +328,7 @@ export default [
         config: makeConfig(),
       })
       // undefined code returns a minimal valid client
-      return is.obj(result) && /** @type {any} */ (result).code.includes('__MAGIC__')
+      return is.obj(result) && result?.code.includes('__MAGIC__')
     },
     expect: true,
     info: 'js returns a minimal client when no code is given',

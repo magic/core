@@ -1,3 +1,5 @@
+import type { AppObject, Config } from '../../../src/types.mjs'
+
 import { rm, mkdir, chmod } from 'node:fs/promises'
 import path from 'path'
 
@@ -23,12 +25,12 @@ import { prepareThemes } from '../../../src/tasks/prepare/themes.mjs'
 
 const base = path.join(process.cwd(), '.test-prepare-tmp')
 
-const write = async (p, content) => {
+const write = async (p: string, content: string) => {
   await fs.mkdirp(path.dirname(p))
   await fs.writeFile(p, content)
 }
 
-const makeConfigOver = config => {
+const makeConfigOver = (config: Config) => {
   config.ROOT = base
   config.DIR.PAGES = path.join(base, 'pages404')
   config.DIR.STATIC = path.join(base, 'static')
@@ -157,7 +159,10 @@ export const styleVars = { themed: 'vars' }
             },
           },
         }
-        const { checkProps, propTypeString } = prepareCheckProps(magic, { IS_DEV: true })
+        const { checkProps, propTypeString } = prepareCheckProps(
+          magic as unknown as AppObject,
+          { IS_DEV: true } as unknown as Config,
+        )
         return (
           checkProps.includes('CHECK_PROPS') &&
           propTypeString.includes('Nested') &&
@@ -171,8 +176,10 @@ export const styleVars = { themed: 'vars' }
     {
       fn: () => {
         const { checkProps, propTypeString } = prepareCheckProps(
-          { modules: { Nested: { View: () => null, propTypes: { Nested: { a: 'string' } } } } },
-          { IS_DEV: false },
+          {
+            modules: { Nested: { View: () => null, propTypes: { Nested: { a: 'string' } } } },
+          } as unknown as AppObject,
+          { IS_DEV: false } as unknown as Config,
         )
         return checkProps === '' && propTypeString === ''
       },
@@ -183,25 +190,25 @@ export const styleVars = { themed: 'vars' }
       fn: async () => {
         const RealDate = Date
         class FakeDate extends RealDate {
-          constructor(...args) {
+          constructor(...args: (string | number | Date)[]) {
             if (args.length === 0) {
               super(2026, 0, 5)
             } else {
-              super(...args)
+              super(...(args as [string | number | Date]))
             }
           }
         }
-        globalThis.Date = FakeDate
+        globalThis.Date = FakeDate as unknown as typeof Date
         try {
           const res = await prepareMetaFiles(
-            { pages: [{ name: '/core/about/' }] },
+            { pages: [{ name: '/core/about/' }] } as unknown as AppObject,
             {
               CNAME: true,
               ROBOTS_TXT: true,
               SITEMAP: true,
               URL: 'example.com',
               WEB_ROOT: '/core/',
-            },
+            } as unknown as Config,
           )
           return (
             res['/CNAME'] === 'example.com' &&
@@ -218,7 +225,10 @@ export const styleVars = { themed: 'vars' }
     },
     {
       fn: async () => {
-        const res = await prepareMetaFiles({ pages: [] }, { URL: 'example.com', WEB_ROOT: '/' })
+        const res = await prepareMetaFiles(
+          { pages: [] } as unknown as AppObject,
+          { URL: 'example.com', WEB_ROOT: '/' } as unknown as Config,
+        )
         return Object.keys(res).length === 0
       },
       expect: true,
@@ -226,14 +236,14 @@ export const styleVars = { themed: 'vars' }
     },
     {
       fn: async () => {
-        const api = await prepareApi(
+        const api = (await prepareApi(
           {
             modules: { MyMod: { server: { modLambda: async () => 'm' } } },
             pages: [{ name: '/core/page/', server: { pageLambda: async () => 'p' } }],
             server: { appLambda: async () => 'a' },
-          },
-          { API_DIR: true, DIR: { API: path.join(base, 'api') } },
-        )
+          } as unknown as AppObject,
+          { API_DIR: true, DIR: { API: path.join(base, 'api') } } as unknown as Config,
+        )) as Record<string, Record<string, unknown>>
         return (
           is.fn(api.mymod.modLambda) &&
           is.fn(api['/core/page/'].pageLambda) &&
@@ -247,8 +257,8 @@ export const styleVars = { themed: 'vars' }
     {
       fn: async () => {
         const api = await prepareApi(
-          { server: { appLambda: async () => 'a' } },
-          { DIR: { API: path.join(base, 'api') } },
+          { server: { appLambda: async () => 'a' } } as unknown as AppObject,
+          { DIR: { API: path.join(base, 'api') } } as unknown as Config,
         )
         return is.fn(api.appLambda) && api.file1 === undefined
       },
@@ -257,7 +267,7 @@ export const styleVars = { themed: 'vars' }
     },
     {
       fn: () => {
-        const app = { state: undefined }
+        const app = { state: undefined } as unknown as AppObject
         const result = prepareStateLinks(app, { WEB_ROOT: '/' })
         return result !== undefined && Object.keys(result).length === 0
       },
@@ -266,7 +276,16 @@ export const styleVars = { themed: 'vars' }
     },
     {
       fn: () => {
-        const app = {
+        const app: {
+          state: Record<string, unknown>
+          actions: Record<string, unknown>
+          effects: Record<string, unknown>
+          helpers: Record<string, unknown>
+          subscriptions: unknown[]
+          cookies: Record<string, unknown>
+          init: Record<string, unknown>
+          modules: Record<string, unknown>
+        } = {
           state: { logo: '/logo.png' },
           actions: {},
           effects: {},
@@ -292,14 +311,14 @@ export const styleVars = { themed: 'vars' }
             },
           },
         }
-        prepareModules(app)
+        prepareModules(app as unknown as AppObject)
         return (
           app.state.global === 'state' &&
-          app.state.withall.local === 'state' &&
+          (app.state.withall as Record<string, unknown>).local === 'state' &&
           is.fn(app.actions.globalAction) &&
-          is.fn(app.actions.withall.localAction) &&
+          is.fn((app.actions.withall as Record<string, unknown>).localAction) &&
           is.fn(app.effects.globalEffect) &&
-          is.fn(app.effects.withall.localEffect) &&
+          is.fn((app.effects.withall as Record<string, unknown>).localEffect) &&
           is.fn(app.helpers.helper) &&
           app.subscriptions.length === 1 &&
           app.cookies.cookie === 'value'
@@ -320,7 +339,10 @@ export const styleVars = { themed: 'vars' }
           state: {},
           blog: await fs.getFiles(config.BLOG_DIR),
         }
-        const { posts, index } = await prepareBlog(app, config)
+        const { posts, index } = await prepareBlog(
+          app as unknown as AppObject,
+          config as unknown as Config,
+        )
         return (
           posts.length === 13 &&
           // the full date post went into the index
@@ -347,7 +369,10 @@ export const styleVars = { themed: 'vars' }
           state: {},
           blog: await fs.getFiles(config.BLOG_DIR),
         }
-        const { posts, index } = await prepareBlog(app, config)
+        const { posts, index } = await prepareBlog(
+          app as unknown as AppObject,
+          config as unknown as Config,
+        )
         return posts.length === 4 && index['2026']['03']['04'].length === 1
       },
       expect: true,
@@ -364,9 +389,9 @@ export const styleVars = { themed: 'vars' }
         const post = await prepareBlogPost({
           pageDir: config.BLOG_DIR,
           state: {},
-          config,
+          config: config as unknown as Config,
         })(path.join(config.BLOG_DIR, '2025', '02', '03', 'html.html'))
-        return is.fn(post.View) && post.name.includes('/2025/02/03/')
+        return is.fn(post?.View) && post?.name?.includes('/2025/02/03/')
       },
       expect: true,
       info: 'prepareBlogPost transmutes html posts',
@@ -382,9 +407,9 @@ export const styleVars = { themed: 'vars' }
         const post = await prepareBlogPost({
           pageDir: config.BLOG_DIR,
           state: {},
-          config,
+          config: config as unknown as Config,
         })(path.join(config.BLOG_DIR, '2025', '02', '05', 'defaultpost.mjs'))
-        return is.fn(post.View)
+        return is.fn(post?.View)
       },
       expect: true,
       info: 'prepareBlogPost wraps default exported posts',
@@ -405,9 +430,9 @@ export const styleVars = { themed: 'vars' }
           const post = await prepareBlogPost({
             pageDir: config.BLOG_DIR,
             state: {},
-            config,
+            config: config as unknown as Config,
           })(file)
-          return is.fn(post.View)
+          return is.fn(post?.View)
         } catch (e) {
           return is.error(e)
         }
@@ -421,10 +446,10 @@ export const styleVars = { themed: 'vars' }
           WEB_ROOT: '/',
           pageDir: path.join(base, 'pages404'),
           state: {},
-          config: { TMP_DIR: path.join(base, 'tmp-page3') },
+          config: { TMP_DIR: path.join(base, 'tmp-page3') } as unknown as Config,
         })
         const page = await pageWorker(path.join(base, 'pages404', '404.mjs'))
-        return page.name === '/404/' && page.path === '/404.html'
+        return page?.name === '/404/' && page?.path === '/404.html'
       },
       expect: true,
       info: 'preparePage names the 404 page 404.html',
@@ -435,10 +460,10 @@ export const styleVars = { themed: 'vars' }
           WEB_ROOT: '/core/',
           pageDir: path.join(base, 'pages404'),
           state: {},
-          config: { TMP_DIR: path.join(base, 'tmp-page3') },
+          config: { TMP_DIR: path.join(base, 'tmp-page3') } as unknown as Config,
         })
         const page = await pageWorker(path.join(base, 'pages404', '404.mjs'))
-        return page.path === '/core/404/index.html'
+        return page?.path === '/core/404/index.html'
       },
       expect: true,
       info: 'preparePage names other trailing slash pages index.html',
@@ -450,7 +475,7 @@ export const styleVars = { themed: 'vars' }
             WEB_ROOT: '/core/',
             pageDir: path.join(base, 'pages'),
             state: {},
-            config: { TMP_DIR: path.join(base, 'tmp-page3') },
+            config: { TMP_DIR: path.join(base, 'tmp-page3') } as unknown as Config,
           })
           await pageWorker(path.join(base, 'pages', 'broken.mjs'))
           return false
@@ -467,13 +492,13 @@ export const styleVars = { themed: 'vars' }
         const config = {
           WEB_ROOT: '/core/',
           DIR: { PAGES: path.join(base, 'pages2') },
-        }
+        } as unknown as Config
         const app = {
           files: await fs.getFiles(config.DIR.PAGES),
           pages: [{ name: '/core/existing/', View: () => null }],
           state: {},
         }
-        const pages = await preparePages(app, config)
+        const pages = await preparePages(app as unknown as AppObject, config)
         const names = pages.map(p => p.name)
         return (
           names.includes('/core/existing/') &&
@@ -491,8 +516,8 @@ export const styleVars = { themed: 'vars' }
           NODE_MODULES: path.join(process.cwd(), 'node_modules'),
           ROOT: path.join(base, 'themed-app'),
           THEME: 't1',
-        }
-        const styles = await prepareThemes({ pages: [] }, config)
+        } as unknown as Config
+        const styles = await prepareThemes({ pages: [] } as unknown as AppObject, config)
         return Array.isArray(styles) && styles.length > 1
       },
       expect: true,
@@ -506,14 +531,14 @@ export const styleVars = { themed: 'vars' }
           NODE_MODULES: path.join(process.cwd(), 'node_modules'),
           ROOT: path.join(base, 'themed-app'),
           THEME: [],
-        }
+        } as unknown as Config
         const app = {
           pages: [{ style: { pageStyle: 'blue' } }],
           modules: {
             Styled: { style: { color: 'green' } },
           },
         }
-        const styles = await prepareThemes(app, config)
+        const styles = await prepareThemes(app as unknown as AppObject, config)
         const strings = styles.map(s => (typeof s === 'function' ? '' : JSON.stringify(s)))
         const all = strings.join('\n')
         return all.includes('pageStyle') && all.includes('red')
@@ -524,7 +549,7 @@ export const styleVars = { themed: 'vars' }
     {
       fn: async () => {
         const sw = await prepareServiceWorker(
-          { static: { '/a.png': 'x' } },
+          { static: { '/a.png': 'x' } } as unknown as AppObject,
           { CLIENT_LIB_NAME: 'magic' },
         )
         return sw.includes("'magic.js'") && sw.includes("'/a.png'")
@@ -535,7 +560,7 @@ export const styleVars = { themed: 'vars' }
     {
       fn: async () => {
         const sw = await prepareServiceWorker(
-          { static: { '/a.png': 'x' } },
+          { static: { '/a.png': 'x' } } as unknown as AppObject,
           { CLIENT_LIB_NAME: 'magic', WEB_ROOT: '/core/' },
         )
         return sw.includes('/core/magic.js')
@@ -555,8 +580,8 @@ export const styleVars = { themed: 'vars' }
             subscriptions: [],
             lib: {},
             pages: [],
-          },
-          { NODE_MODULES: path.join(process.cwd(), 'node_modules') },
+          } as unknown as AppObject,
+          { NODE_MODULES: path.join(process.cwd(), 'node_modules') } as unknown as Config,
         )
         return dependencies !== undefined
       },
@@ -566,7 +591,7 @@ export const styleVars = { themed: 'vars' }
     {
       fn: async () => {
         // a full prepare run on a small app
-        const config = makeConfigOver(await runConfig({ 'no-check-links': true }))
+        const config = makeConfigOver((await runConfig({ 'no-check-links': true }))!)
         config.TMP_DIR = path.join(base, 'tmp2')
 
         const App = await runApp(config)
@@ -574,7 +599,7 @@ export const styleVars = { themed: 'vars' }
         return (
           is.str(app.client) &&
           app.client.includes('__MAGIC__') &&
-          app.static['/img.png'] !== undefined &&
+          app.static?.['/img.png'] !== undefined &&
           is.fn(app.View)
         )
       },
@@ -585,7 +610,7 @@ export const styleVars = { themed: 'vars' }
     {
       // SPLIT runs the dependency resolution
       fn: async () => {
-        const config = makeConfigOver(await runConfig({ 'no-check-links': true }))
+        const config = makeConfigOver((await runConfig({ 'no-check-links': true }))!)
         config.TMP_DIR = path.join(base, 'tmp3')
         config.SPLIT = true
         config.HOIST = ['LightSwitch']
@@ -602,7 +627,7 @@ export const styleVars = { themed: 'vars' }
       // a static file that cannot be read throws,
       // a missing static dir does not
       fn: async () => {
-        const config = makeConfigOver(await runConfig({ 'no-check-links': true }))
+        const config = makeConfigOver((await runConfig({ 'no-check-links': true }))!)
         config.TMP_DIR = path.join(base, 'tmp4')
 
         const App = await runApp(config)
@@ -646,18 +671,21 @@ export const styleVars = { themed: 'vars' }
           subscriptions: [],
           helpers: {},
           lib: { myLib: () => 1 },
-          pages: [{ name: '/x/', View: _state => [div('x')] }],
+          pages: [{ name: '/x/', View: (_state: unknown) => [div('x')] }],
           modules: {
-            MyMod: { View: _state => [div('mod')] },
+            MyMod: { View: (_state: unknown) => [div('mod')] },
           },
           init: [['init', 'value']],
           static: {},
         }
-        const client = await prepareJs(magic, {
-          HOIST: 'MyMod',
-          PREPEND_JS: [],
-          APPEND_JS: [],
-        })
+        const client = await prepareJs(
+          magic as unknown as AppObject,
+          {
+            HOIST: 'MyMod',
+            PREPEND_JS: [],
+            APPEND_JS: [],
+          } as unknown as Config,
+        )
         return (
           client.includes('__MAGIC__') &&
           client.includes('const MyMod') &&

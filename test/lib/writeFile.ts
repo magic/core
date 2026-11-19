@@ -1,3 +1,5 @@
+import type { Config } from '../../src/types.mjs'
+
 import fs from '@magic/fs'
 
 import { writeFile } from '../../src/lib/writeFile.mjs'
@@ -16,7 +18,9 @@ export default {
   tests: [
     {
       fn: async () => {
-        await writeFile(['index.html', '<html>hello</html>'], { DIR: { PUBLIC: tmpDir } })
+        await writeFile(['index.html', '<html>hello</html>'], {
+          DIR: { PUBLIC: tmpDir },
+        } as unknown as Config)
         return await fs.readFile(`${tmpDir}/index.html`, 'utf-8')
       },
       expect: '<html>hello</html>',
@@ -24,7 +28,9 @@ export default {
     },
     {
       fn: async () => {
-        await writeFile(['css/style.css', 'body {}'], { DIR: { PUBLIC: tmpDir } })
+        await writeFile(['css/style.css', 'body {}'], {
+          DIR: { PUBLIC: tmpDir },
+        } as unknown as Config)
         return await fs.readFile(`${tmpDir}/css/style.css`, 'utf-8')
       },
       expect: 'body {}',

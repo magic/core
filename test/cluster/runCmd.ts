@@ -5,7 +5,8 @@ import { runCmd } from '../../src/cluster/runCmd.mjs'
 export default [
   {
     fn: async () => {
-      const result = await runCmd('nonexistent-command')
+      // an unknown command is deliberately not a valid task key
+      const result = await runCmd('nonexistent-command' as never)
       // unknown tasks reject, the error is returned instead of thrown
       return is.error(result)
     },

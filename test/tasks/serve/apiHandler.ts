@@ -1,21 +1,28 @@
+import type { IncomingMessage, ServerResponse } from 'http'
+
 import { EventEmitter } from 'events'
 
 import { is } from '@magic/test'
 
 import { apiHandler } from '../../../src/tasks/serve/apiHandler.mjs'
 
-/** @returns {{ code: number | undefined, headers: Record<string, unknown> | undefined, body: unknown, writeHead: Function, end: Function }} */
-const makeRes = () => {
-  const res = {
+type FakeRes = {
+  code: number | undefined
+  headers: Record<string, unknown> | undefined
+  body: unknown
+  writeHead: (code: number, headers?: Record<string, unknown>) => void
+  end: (body?: unknown) => void
+}
+
+const makeRes = (): FakeRes => {
+  const res: FakeRes = {
     code: undefined,
     headers: undefined,
     body: undefined,
-    /** @param {number} code @param {Record<string, unknown>} headers */
     writeHead(code, headers) {
       this.code = code
       this.headers = headers
     },
-    /** @param {unknown} body */
     end(body) {
       this.body = body
     },
@@ -23,34 +30,28 @@ const makeRes = () => {
   return res
 }
 
-/** @param {Record<string, string>} [headers] */
-const makeReq = headers => {
-  /** @type {any} */
-  const req = new EventEmitter()
+const makeReq = (headers?: Record<string, string>) => {
+  const req = new EventEmitter() as unknown as IncomingMessage & { body?: unknown }
   req.headers = headers ?? {}
   return req
 }
 
-/**
- * emit request body and wait for the async 'end' handler to finish
- * @param {EventEmitter} req
- * @param {string | Buffer} [body]
- */
-const sendBody = async (req, body = '') => {
+const sendBody = async (req: EventEmitter, body: string | Buffer = '') => {
   req.emit('data', body)
   req.emit('end')
   // the end handler is async, give it a few ticks
   await new Promise(resolve => setTimeout(resolve, 20))
 }
 
-/**
- * helper for lambda-call tests: register, send body, wait
- * @param {() => void} [headers]
- */
-const handleAndSend = async (lambdas, rawUrl, body = '', headers) => {
+const handleAndSend = async (
+  lambdas: Record<string, unknown>,
+  rawUrl: string,
+  body: string = '',
+  headers?: Record<string, string>,
+) => {
   const req = makeReq(headers)
   const res = makeRes()
-  const handled = await apiHandler(req, res, { lambdas, rawUrl })
+  const handled = await apiHandler(req, res as unknown as ServerResponse, { lambdas, rawUrl })
   if (handled) {
     await sendBody(req, body)
   }
@@ -61,17 +62,17 @@ export default [
   {
     fn: async () => {
       const res = makeRes()
-      const handled = await apiHandler(makeReq(), res, {
+      const handled = await apiHandler(makeReq(), res as unknown as ServerResponse, {
         lambdas: { a: () => 'x', b: 'static' },
         rawUrl: '/api/',
       })
-      const entries = JSON.parse(/** @type {string} */ (res.body))
+      const entries = JSON.parse(res.body as string)
       return (
         handled === undefined &&
         res.code === 200 &&
         entries.a === true &&
         entries.b === 'static' &&
-        res.headers['Content-Type'] === 'text/plain'
+        res.headers?.['Content-Type'] === 'text/plain'
       )
     },
     expect: true,
@@ -80,7 +81,7 @@ export default [
   {
     fn: async () => {
       const res = makeRes()
-      const handled = await apiHandler(makeReq(), res, {
+      const handled = await apiHandler(makeReq(), res as unknown as ServerResponse, {
         lambdas: { a: () => 'x' },
         rawUrl: '/api',
       })
@@ -92,7 +93,7 @@ export default [
   {
     fn: async () => {
       const res = makeRes()
-      const handled = await apiHandler(makeReq(), res, {
+      const handled = await apiHandler(makeReq(), res as unknown as ServerResponse, {
         lambdas: {},
         rawUrl: '/api/missing',
       })
@@ -109,7 +110,7 @@ export default [
         handled === true &&
         res.code === 201 &&
         res.body === 'created' &&
-        res.headers['Content-Type'] === 'application/json'
+        res.headers?.['Content-Type'] === 'application/json'
       )
     },
     expect: true,
@@ -136,7 +137,11 @@ export default [
     fn: async () => {
       const { handled, res } = await handleAndSend(
         {
-          echo: async req => ({ code: 200, body: String(req.body.a), type: 'text/plain' }),
+          echo: async (req: { body: { a?: unknown } }) => ({
+            code: 200,
+            body: String(req.body.a),
+            type: 'text/plain',
+          }),
         },
         '/api/echo',
         '{"a":1}',
@@ -151,7 +156,7 @@ export default [
     fn: async () => {
       const { handled, res } = await handleAndSend(
         {
-          echo: async req => ({
+          echo: async (req: { body?: unknown }) => ({
             code: 200,
             body: is.error(req.body) ? 'parse-error' : 'no-error',
             type: 'text/plain',
@@ -170,11 +175,11 @@ export default [
     fn: async () => {
       const req = makeReq()
       const res = makeRes()
-      const handled = await apiHandler(req, res, {
+      const handled = await apiHandler(req, res as unknown as ServerResponse, {
         lambdas: {
-          body: async request => ({
+          body: async (request: { body?: unknown }) => ({
             code: 200,
-            body: /** @type {string} */ (request.body),
+            body: request.body as string,
             type: 'text/plain',
           }),
         },
@@ -197,10 +202,10 @@ export default [
     fn: async () => {
       const req = makeReq()
       const res = makeRes()
-      const seen = /** @type {Record<string, unknown>} */ ({})
-      const handled = await apiHandler(req, res, {
+      const seen: Record<string, unknown> = {}
+      const handled = await apiHandler(req, res as unknown as ServerResponse, {
         lambdas: {
-          data: async (request, res2) => {
+          data: async (request: { body?: unknown }, res2: unknown) => {
             seen.bodyType = typeof request.body
             seen.isRes = res2 === res
             return { code: 200, body: 'ok', type: 'text/plain' }

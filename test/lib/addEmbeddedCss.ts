@@ -5,7 +5,7 @@ const file = 'styles.css'
 export default [
   {
     fn: () => {
-      globalThis.app = { static: { [file]: { toString: () => 'body {}' } } }
+      Object.assign(globalThis, { app: { static: { [file]: { toString: () => 'body {}' } } } })
       return addEmbeddedCss(file)
     },
     expect: 'body {}',
@@ -13,7 +13,7 @@ export default [
   },
   {
     fn: () => {
-      globalThis.app = { static: { [file]: '' } }
+      Object.assign(globalThis, { app: { static: { [file]: '' } } })
       try {
         addEmbeddedCss(file)
         return false

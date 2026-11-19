@@ -14,7 +14,7 @@ export default [
     info: 'xc handles quoted arguments',
   },
   {
-    fn: tryCatch(xc, 'exit 1'),
+    fn: tryCatch(xc as unknown as (...args: unknown[]) => unknown, 'exit 1'),
     expect: is.error,
     info: 'xc throws for failed command',
   },

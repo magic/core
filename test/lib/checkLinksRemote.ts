@@ -27,15 +27,17 @@ server.listen(0, '127.0.0.1')
 /** @type {Promise<string>} */
 const baseUrl = new Promise(resolve =>
   server.once('listening', () => {
-    /** @type {import('net').AddressInfo} */
-    const addr = server.address()
+    const addr = server.address() as { port: number }
     resolve(`http://127.0.0.1:${addr.port}`)
   }),
 )
 
-const silent = async fn => {
-  const spy = mock.spy(log, 'error', () => {})
-  const warn = mock.spy(log, 'warn', () => {})
+/** the spy needs an indexable object, the log interface is not one */
+const silentLog = log as unknown as Record<string, unknown>
+
+const silent = async (fn: () => Promise<unknown>) => {
+  const spy = mock.spy(silentLog, 'error', () => {})
+  const warn = mock.spy(silentLog, 'warn', () => {})
   try {
     return await fn()
   } finally {
@@ -47,7 +49,7 @@ const silent = async fn => {
 const base = { staticUrls: [], pages: [], root: '/' }
 
 export default {
-  afterAll: () => new Promise(resolve => server.close(() => resolve())),
+  afterAll: () => new Promise<void>(resolve => server.close(() => resolve())),
   tests: [
     {
       fn: async () => silent(async () => checkLinks({ ...base, links: [`${await baseUrl}/ok`] })),

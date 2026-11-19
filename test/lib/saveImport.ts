@@ -11,7 +11,7 @@ export default [
   {
     fn: async () => {
       const result = await saveImport(new URL('../../src/lib/xc.mjs', import.meta.url))
-      return is.fn(result.xc)
+      return is.fn((result as { xc?: unknown }).xc)
     },
     expect: true,
     info: 'existing module is imported',

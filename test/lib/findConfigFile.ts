@@ -8,9 +8,12 @@ const tmpDir = '/tmp/magic-test-findconfig'
 const configNames = ['magic.js', 'magic.cjs', 'magic.mjs']
 const oldName = 'config.mjs'
 
-const withSilentLog = async fn => {
-  const spy = mock.spy(log, 'error', () => {})
-  const warn = mock.spy(log, 'warn', () => {})
+/** the spy needs an indexable object, the log interface is not one */
+const silentLog = log as unknown as Record<string, unknown>
+
+const withSilentLog = async (fn: () => Promise<unknown>) => {
+  const spy = mock.spy(silentLog, 'error', () => {})
+  const warn = mock.spy(silentLog, 'warn', () => {})
   try {
     return await fn()
   } finally {
@@ -42,17 +45,18 @@ export default {
   tests: [
     {
       fn: () => findConfigFile(`${tmpDir}/one`, configNames, oldName),
-      expect: s => typeof s === 'string' && s.endsWith('magic.js'),
+      expect: (s: string | undefined) => typeof s === 'string' && s.endsWith('magic.js'),
       info: 'findConfigFile finds magic.js',
     },
     {
       fn: () => withSilentLog(() => findConfigFile(`${tmpDir}/old`, configNames, oldName)),
-      expect: s => typeof s === 'string' && s.endsWith('config.mjs'),
+      expect: (s: string | undefined) => typeof s === 'string' && s.endsWith('config.mjs'),
       info: 'findConfigFile falls back to old config.mjs',
     },
     {
       fn: () => withSilentLog(() => findConfigFile(`${tmpDir}/multi`, configNames, oldName)),
-      expect: s => typeof s === 'string' && (s.endsWith('magic.js') || s.endsWith('magic.cjs')),
+      expect: (s: string | undefined) =>
+        typeof s === 'string' && (s.endsWith('magic.js') || s.endsWith('magic.cjs')),
       info: 'findConfigFile warns but returns a config when multiple exist',
     },
     {

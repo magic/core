@@ -1,3 +1,6 @@
+import type { Module, ParseOptions, Program } from '@swc/core'
+import type { AppObject, Config, SwcNode } from '../../../src/types.mjs'
+
 import { is } from '@magic/test'
 
 import swc from '@swc/core'
@@ -7,9 +10,8 @@ import { visit, used } from '../../../src/lib/swc/visit.mjs'
 
 // visit.mjs keeps a module level `used` object -
 // serialize the tests that mutate it
-let chain = Promise.resolve()
-/** @param {() => Promise<unknown>} fn */
-const lock = fn => {
+let chain: Promise<unknown> = Promise.resolve()
+const lock = (fn: () => Promise<unknown>) => {
   const run = chain.then(fn, fn)
   chain = run.then(
     () => undefined,
@@ -18,21 +20,27 @@ const lock = fn => {
   return run
 }
 
-/** @param {Record<string, unknown>} [over] */
-const makeApp = over => ({
-  modules: { Foo: {}, Bar: {} },
-  lib: { 'my-lib': () => 1 },
-  links: [],
-  ...over,
-})
+const makeApp = (over?: Record<string, unknown>) =>
+  ({
+    modules: { Foo: {}, Bar: {} },
+    lib: { 'my-lib': () => 1 },
+    links: [],
+    ...over,
+  }) as unknown as AppObject
 
-/** @param {Record<string, unknown>} [over] */
-const makeConfig = over => ({
-  WEB_ROOT: '/core/',
-  CLIENT_LIB_NAME: 'magic',
-  IS_PROD: false,
-  ...over,
-})
+const makeConfig = (over?: Record<string, unknown>) =>
+  ({
+    WEB_ROOT: '/core/',
+    CLIENT_LIB_NAME: 'magic',
+    IS_PROD: false,
+    ...over,
+  }) as unknown as Config
+
+/** structural view of the swc nodes the visit tests read */
+type SwcValue = { value: string; type?: string }
+type SwcStmt = {
+  expression: { arguments: { expression: { properties: { value: SwcValue }[] } }[] }
+}
 
 const CODE = `
 const Foo = () => h('div')
@@ -59,7 +67,11 @@ __MAGIC__()
  * @param {Record<string, unknown>} [app]
  * @returns {Promise<{ ast: any, app: Record<string, unknown>, config: Record<string, unknown> }>}
  */
-const parseAndVisit = async (code, moduleNames = ['Foo', 'Bar'], app = makeApp()) => {
+const parseAndVisit = async (
+  code: string,
+  moduleNames: string[] = ['Foo', 'Bar'],
+  app: AppObject = makeApp(),
+) => {
   used.modules = new Set()
   used.moduleNames = new Set(moduleNames)
   const ast = await swc.parse(code, {
@@ -67,9 +79,16 @@ const parseAndVisit = async (code, moduleNames = ['Foo', 'Bar'], app = makeApp()
     jsx: true,
     isModule: true,
     target: 'es2017',
-  })
+  } as unknown as ParseOptions)
   const config = makeConfig()
-  ast.body = ast.body.map(item => visit({ par: item, parent: item, app, config }))
+  ast.body = ast.body.map(item =>
+    visit({
+      par: item as unknown as SwcNode,
+      parent: item as unknown as SwcNode,
+      app,
+      config,
+    }),
+  ) as unknown as Module['body']
   return { ast, app, config }
 }
 
@@ -102,7 +121,7 @@ export default {
         const app = makeApp()
         await transformClient(CODE, app, makeConfig())
         // Bar is never used, Foo is
-        return Object.keys(app.modules).join(',') === 'Foo'
+        return Object.keys(app.modules ?? {}).join(',') === 'Foo'
       },
       expect: true,
       info: 'transformClient filters unused modules from app.modules',
@@ -196,7 +215,10 @@ import { something } from 'mod'
 export { a }
 `,
           )
-          const { code: printed } = await swc.print(ast, { filename: 'x.js', isModule: true })
+          const { code: printed } = await swc.print(ast as Program, {
+            filename: 'x.js',
+            isModule: true,
+          })
           return used.modules.has('Foo') && printed.includes('function')
         }),
       expect: true,
@@ -206,9 +228,14 @@ export { a }
       fn: async () =>
         lock(async () => {
           const { ast, app, config } = await parseAndVisit('CHECK_PROPS("Foo", {})', [])
-          const result = visit({ par: ast.body, parent: ast.body[0], app, config })
+          const result = visit({
+            par: ast.body as unknown as SwcNode[],
+            parent: ast.body[0] as unknown as SwcNode,
+            app,
+            config,
+          })
           // the ExpressionStatement is replaced by an EmptyStatement
-          return result.type === 'EmptyStatement'
+          return result?.type === 'EmptyStatement'
         }),
       expect: true,
       info: 'visit replaces CHECK_PROPS expression statements with empty statements',
@@ -217,7 +244,7 @@ export { a }
       fn: async () =>
         lock(async () => {
           const { ast } = await parseAndVisit('source({ href: "/local/" })', [])
-          const stmt = /** @type {any} */ (ast.body[0])
+          const stmt = ast.body[0] as unknown as SwcStmt
           const prop = stmt.expression.arguments[0].expression.properties[0]
           return prop.value.value === '/core/local'
         }),
@@ -228,7 +255,7 @@ export { a }
       fn: async () =>
         lock(async () => {
           const { ast } = await parseAndVisit('source({ href: externalUrl })', [])
-          const stmt = /** @type {any} */ (ast.body[0])
+          const stmt = ast.body[0] as unknown as SwcStmt
           const prop = stmt.expression.arguments[0].expression.properties[0]
           // identifiers are left untouched
           return prop.value.type === 'Identifier'
@@ -240,7 +267,7 @@ export { a }
       fn: async () =>
         lock(async () => {
           const { ast } = await parseAndVisit('source({ href: `template` })', [])
-          const stmt = /** @type {any} */ (ast.body[0])
+          const stmt = ast.body[0] as unknown as SwcStmt
           const prop = stmt.expression.arguments[0].expression.properties[0]
           // template literals are left untouched
           return prop.value.type === 'TemplateLiteral'
@@ -252,7 +279,7 @@ export { a }
       fn: async () =>
         lock(async () => {
           const { ast } = await parseAndVisit('source({ href: "https://example.com/x" })', [])
-          const stmt = /** @type {any} */ (ast.body[0])
+          const stmt = ast.body[0] as unknown as SwcStmt
           const prop = stmt.expression.arguments[0].expression.properties[0]
           // external urls are not rewritten
           return prop.value.value === 'https://example.com/x'
@@ -300,7 +327,7 @@ Bar.sub()
 actions.go()
 `
         const ast = await swc.parse(code)
-        const usedDeps = resolveDependencies({ parent: ast, app })
+        const usedDeps = resolveDependencies({ parent: ast as unknown as SwcNode, app })
         return (
           usedDeps.modules.includes('Foo') &&
           usedDeps.modules.includes('Bar.sub') &&
@@ -349,8 +376,11 @@ const c = obj['a']
 import { x } from 'm'
 export { z }
 `
-        const ast = await swc.parse(code, { syntax: 'ecmascript', isModule: true })
-        const usedDeps = resolveDependencies({ parent: ast, app })
+        const ast = await swc.parse(code, {
+          syntax: 'ecmascript',
+          isModule: true,
+        } as unknown as ParseOptions)
+        const usedDeps = resolveDependencies({ parent: ast as unknown as SwcNode, app })
         return (
           is.obj(usedDeps) &&
           is.arr(usedDeps.modules) &&

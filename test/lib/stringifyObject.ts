@@ -1,5 +1,7 @@
 import { stringifyObject } from '../../src/lib/stringifyObject.mjs'
 
+const fn = () => {}
+
 export default [
   { fn: stringifyObject('string'), expect: `'string'`, info: 'stringifies string' },
   {
@@ -13,7 +15,7 @@ export default [
   { fn: stringifyObject(undefined), expect: undefined, info: 'passes undefined through' },
   { fn: stringifyObject([1, 2, 3]), expect: `[1,2,3]`, info: 'stringifies arrays' },
   { fn: stringifyObject(['a', 'b']), expect: `['a','b']`, info: 'stringifies string arrays' },
-  { fn: stringifyObject(() => {}), expect: '() => {}', info: 'stringifies functions' },
+  { fn: stringifyObject(fn), expect: fn.toString(), info: 'stringifies functions' },
   { fn: stringifyObject(/regex/), expect: '/regex/', info: 'stringifies regex' },
   {
     fn: stringifyObject({ b: 2, a: 1 }),

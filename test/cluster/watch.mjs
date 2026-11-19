@@ -36,21 +36,29 @@ const beforeAll = async () => {
   await mkdir(path.join(base, 'two'), { recursive: true })
   await writeFile(path.join(base, 'magic.mjs'), 'export default {}')
   armed = true
-  fs.watch = (/** @type {any} */ dir, cb) => {
+  /** @type {any} */
+  const fsAny = fs
+  fsAny.watch = (/** @type {string} */ dir, /** @type {(...args: unknown[]) => void} */ cb) => {
     if (armed && fakedDirs.has(dir)) {
       sink.push({ dir, cb })
       return { close: () => {} }
     }
     return origWatch(dir, cb)
   }
-  fs.watchFile = (/** @type {any} */ file, cb) => {
+  fsAny.watchFile = (
+    /** @type {string} */ file,
+    /** @type {(...args: unknown[]) => void} */ cb,
+  ) => {
     if (armed && file === fakedFile) {
       sink.push({ dir: file, cb })
       return { close: () => {} }
     }
     return origWatchFile(file, cb)
   }
-  fs.getDirectories = (/** @type {any} */ dir, /** @type {any} */ opts) => {
+  fsAny.getDirectories = (
+    /** @type {string} */ dir,
+    /** @type {number | false | { root?: string, maxDepth?: number, minDepth?: number, depth?: number | boolean, noRoot?: boolean } | undefined} */ opts,
+  ) => {
     if (armed && fakedDirs.has(dir)) {
       return Promise.resolve([])
     }
@@ -60,9 +68,11 @@ const beforeAll = async () => {
 
 const afterAll = async () => {
   armed = false
-  fs.watch = origWatch
-  fs.watchFile = origWatchFile
-  fs.getDirectories = origGetDirectories
+  /** @type {any} */
+  const fsAny = fs
+  fsAny.watch = origWatch
+  fsAny.watchFile = origWatchFile
+  fsAny.getDirectories = origGetDirectories
   await rm(base, { recursive: true, force: true })
 }
 
@@ -135,7 +145,9 @@ export default {
         const w = sink[0]
         /** @type {unknown} */
         let message
-        process.send = msg => {
+        /** @type {any} */
+        const proc = process
+        proc.send = (/** @type {unknown} */ msg) => {
           message = msg
         }
         try {

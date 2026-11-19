@@ -3,9 +3,9 @@ import { addJsFiles } from '../../src/lib/addJsFiles.mjs'
 export default [
   {
     fn: () => {
-      globalThis.app = { static: { '/script1.js': 'var a = 1;' } }
+      Object.assign(globalThis, { app: { static: { '/script1.js': 'var a = 1;' } } })
       const result = addJsFiles({
-        js: [{ src: 'script1.js', content: 'var a = 1;' }],
+        js: [{ src: 'script1.js' }],
         WEB_ROOT: '/',
       })
       return typeof result?.['script1.js'] === 'string'
@@ -15,7 +15,7 @@ export default [
   },
   {
     fn: () => {
-      globalThis.app = { static: { '/script1.js': 'var a = 1;' } }
+      Object.assign(globalThis, { app: { static: { '/script1.js': 'var a = 1;' } } })
       const result = addJsFiles({ js: [], WEB_ROOT: '/' })
       return result === undefined
     },
@@ -24,7 +24,7 @@ export default [
   },
   {
     fn: () => {
-      globalThis.app = { static: { '/single.js': 'var s = 1;' } }
+      Object.assign(globalThis, { app: { static: { '/single.js': 'var s = 1;' } } })
       const result = addJsFiles({ js: { src: 'single.js' }, WEB_ROOT: '/' })
       return typeof result?.['single.js'] === 'string'
     },
@@ -33,7 +33,7 @@ export default [
   },
   {
     fn: () => {
-      globalThis.app = { static: {} }
+      Object.assign(globalThis, { app: { static: {} } })
       try {
         addJsFiles({ js: [{ src: 'missing.js' }], WEB_ROOT: '/' })
         return false

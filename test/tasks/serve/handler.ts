@@ -1,42 +1,50 @@
+import type { IncomingMessage, ServerResponse } from 'http'
+import type { AppObject, Config } from '../../../src/types.mjs'
+
 import { EventEmitter } from 'events'
 
 import { handler } from '../../../src/tasks/serve/handler.mjs'
 
-/** @param {Record<string, unknown>} [over] */
-const makeApp = over => ({
-  client: 'client-js',
-  css: { css: 'a{color:rgb(1,2,3)}', minified: 'a{color:rgb(1,2,3)}' },
-  static: { '/logo.png': 'png-bytes' },
-  pages: [
-    { name: '/core/', rendered: '<html>home</html>' },
-    { name: '/core/about/', rendered: '<html>about</html>' },
-  ],
-  lambdas: {},
-  ...over,
-})
+const makeApp = (over?: Record<string, unknown>) =>
+  ({
+    client: 'client-js',
+    css: { css: 'a{color:rgb(1,2,3)}', minified: 'a{color:rgb(1,2,3)}' },
+    static: { '/logo.png': 'png-bytes' },
+    pages: [
+      { name: '/core/', rendered: '<html>home</html>' },
+      { name: '/core/about/', rendered: '<html>about</html>' },
+    ],
+    lambdas: {},
+    ...over,
+  }) as unknown as AppObject
 
-/** @param {Record<string, unknown>} [over] */
-const makeConfig = over => ({
-  IS_PROD: false,
-  CLIENT_LIB_NAME: 'magic',
-  HOST: 'localhost',
-  WEB_ROOT: '/core/',
-  FOR_DEATH_CAN_NOT_HAVE_HIM: true,
-  ...over,
-})
+const makeConfig = (over?: Record<string, unknown>) =>
+  ({
+    IS_PROD: false,
+    CLIENT_LIB_NAME: 'magic',
+    HOST: 'localhost',
+    WEB_ROOT: '/core/',
+    FOR_DEATH_CAN_NOT_HAVE_HIM: true,
+    ...over,
+  }) as unknown as Config
 
-/** @returns {{ code: number | undefined, headers: Record<string, unknown> | undefined, body: unknown, writeHead: Function, end: Function }} */
-const makeRes = () => {
-  const res = {
+type FakeRes = {
+  code: number | undefined
+  headers: Record<string, unknown> | undefined
+  body: unknown
+  writeHead: (code: number, headers?: Record<string, unknown>) => void
+  end: (body?: unknown) => void
+}
+
+const makeRes = (): FakeRes => {
+  const res: FakeRes = {
     code: undefined,
     headers: undefined,
     body: undefined,
-    /** @param {number} code @param {Record<string, unknown>} headers */
     writeHead(code, headers) {
       this.code = code
       this.headers = headers
     },
-    /** @param {unknown} body */
     end(body) {
       this.body = body
     },
@@ -44,22 +52,20 @@ const makeRes = () => {
   return res
 }
 
-/** @param {string | undefined} url */
-const makeReq = url => {
-  /** @type {any} */
-  const req = new EventEmitter()
+const makeReq = (url?: string) => {
+  const req = new EventEmitter() as unknown as IncomingMessage
   req.url = url
   req.headers = {}
   return req
 }
 
-/**
- * @param {Record<string, unknown>} [appOver]
- * @param {Record<string, unknown>} [configOver]
- */
-const makeHandle = async (appOver, configOver) => {
+const makeHandle = async (
+  appOver?: Record<string, unknown>,
+  configOver?: Record<string, unknown>,
+) => {
   const handle = await handler(makeApp(appOver), makeConfig(configOver))
-  return handle
+  // the fakes above stand in for the real http objects
+  return (req: IncomingMessage, res: FakeRes) => handle(req, res as unknown as ServerResponse)
 }
 
 export default [
@@ -71,8 +77,8 @@ export default [
       return (
         res.code === 200 &&
         res.body === '<html>home</html>' &&
-        res.headers['Content-Type'] === 'text/html' &&
-        res.headers['X-Clacks-Overhead'] === 'GNU Terry Pratchet'
+        res.headers?.['Content-Type'] === 'text/html' &&
+        res.headers?.['X-Clacks-Overhead'] === 'GNU Terry Pratchet'
       )
     },
     expect: true,
@@ -83,7 +89,7 @@ export default [
       const handle = await makeHandle({}, { FOR_DEATH_CAN_NOT_HAVE_HIM: false })
       const res = makeRes()
       await handle(makeReq('/core/'), res)
-      return res.code === 200 && res.headers['X-Clacks-Overhead'] === undefined
+      return res.code === 200 && res.headers?.['X-Clacks-Overhead'] === undefined
     },
     expect: true,
     info: 'handler omits clacks header when not requested',
@@ -105,7 +111,7 @@ export default [
       await handle(makeReq('/core/magic.css'), res)
       return (
         res.code === 200 &&
-        res.headers['Content-Type'] === 'text/css' &&
+        res.headers?.['Content-Type'] === 'text/css' &&
         res.body === 'a{color:rgb(1,2,3)}'
       )
     },
@@ -120,7 +126,7 @@ export default [
       return (
         res.code === 200 &&
         res.body === 'client-js' &&
-        res.headers['Content-Type'] === 'application/javascript'
+        res.headers?.['Content-Type'] === 'application/javascript'
       )
     },
     expect: true,
@@ -169,7 +175,7 @@ export default [
       const handle = await makeHandle()
       const res = makeRes()
       await handle(makeReq('/core/unknown'), res)
-      return res.code === 302 && res.headers['Location'] === '/core/'
+      return res.code === 302 && res.headers?.['Location'] === '/core/'
     },
     expect: true,
     info: 'handler redirects unknown urls to web root',
@@ -179,7 +185,7 @@ export default [
       const handle = await makeHandle()
       const res = makeRes()
       await handle(makeReq('/core/about'), res)
-      return res.code === 302 && res.headers['Location'] === '/core/about/'
+      return res.code === 302 && res.headers?.['Location'] === '/core/about/'
     },
     expect: true,
     info: 'handler redirects page urls without trailing slash to the page',
@@ -190,7 +196,7 @@ export default [
       const res = makeRes()
       await handle(makeReq(undefined), res)
       // url defaults to '/', no page, redirect to web root
-      return res.code === 302 && res.headers['Location'] === '/core/'
+      return res.code === 302 && res.headers?.['Location'] === '/core/'
     },
     expect: true,
     info: 'handler defaults missing url to /',
@@ -201,7 +207,7 @@ export default [
       const handle = await makeHandle()
       const res = makeRes()
       await handle(makeReq('/magic.css'), res)
-      return res.code === 200 && res.headers['Content-Type'] === 'text/css'
+      return res.code === 200 && res.headers?.['Content-Type'] === 'text/css'
     },
     expect: true,
     info: 'handler serves css for web root relative requests too',

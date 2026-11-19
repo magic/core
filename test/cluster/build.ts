@@ -1,12 +1,17 @@
+import type { Config } from '../../src/types.mjs'
+
 import { build } from '../../src/cluster/build.mjs'
 
 /**
  * the real config of this package - used for the full pipeline run
- * @returns {Promise<Record<string, unknown>>}
  */
-const getRealConfig = async () => {
+const getRealConfig = async (): Promise<Config> => {
   const { runConfig } = await import('../../src/config.mjs')
-  return /** @type {Record<string, unknown>} */ (await runConfig({ noCheckLinks: true }))
+  const config = await runConfig({ noCheckLinks: true })
+  if (!config) {
+    throw new Error('no config found')
+  }
+  return config
 }
 
 export default [
@@ -34,6 +39,10 @@ export default [
             PUBLIC: '/nonexistent-magic-test/public',
             ASSETS: '/nonexistent-magic-test/assets',
             STATIC: '/nonexistent-magic-test/assets/static',
+            MODULES: '/nonexistent-magic-test/modules',
+            THEMES: '/nonexistent-magic-test/assets/themes',
+            API: '/nonexistent-magic-test/api',
+            LIB: ['/nonexistent-magic-test/lib'],
           },
           CLIENT_LIB_NAME: 'magic',
           WEB_ROOT: '/x/',
@@ -41,7 +50,7 @@ export default [
           NODE_MODULES: '/nonexistent-magic-test/node_modules',
           BLOG_DIR: undefined,
           TMP_DIR: '/nonexistent-magic-test/.tmp',
-        },
+        } as unknown as Config,
       })
       return result === undefined
     },

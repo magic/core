@@ -1,10 +1,11 @@
+import type { ConfigDir } from '../../src/types.mjs'
+
 import { mkdir, writeFile, rm, access } from 'node:fs/promises'
 import path from 'path'
 
 import { primary } from '../../src/cluster/primary.mjs'
 
-/** @param {string} p */
-const exists = async p => {
+const exists = async (p: string) => {
   try {
     await access(p)
     return true
@@ -13,51 +14,67 @@ const exists = async p => {
   }
 }
 
-/**
- * @param {{ on?: (evt: string, cb: (...args: unknown[]) => void) => void } & Record<string, unknown>} [over]
- */
-const makeCluster = over => {
-  /** @type {Record<string, (...args: unknown[]) => void>} */
-  const handlers = {}
-  /** @type {number} */
+type FakeWorker = {
+  id: number
+  killed: boolean
+  signal?: string
+  kill: (signal?: string) => boolean
+}
+
+type FakeCluster = {
+  isPrimary: boolean
+  fork: () => FakeWorker
+  on: (evt: string, cb: (...args: unknown[]) => void) => void
+  handlers: Record<string, (...args: unknown[]) => void>
+  forks: { count: number }
+}
+
+/** every dir of a test config points at the same path */
+const makeDir = (PUBLIC: string): ConfigDir => ({
+  PAGES: PUBLIC,
+  PUBLIC,
+  ASSETS: PUBLIC,
+  MODULES: PUBLIC,
+  STATIC: PUBLIC,
+  THEMES: PUBLIC,
+  API: PUBLIC,
+  LIB: [],
+})
+
+const makeCluster = (over?: Record<string, unknown>): FakeCluster & typeof import('cluster') => {
+  const handlers: Record<string, (...args: unknown[]) => void> = {}
   let workerId = 0
-  /** @type {Record<string, number>} */
   const forks = { count: 0 }
   const cluster = {
     isPrimary: true,
-    /** @returns {{ id: number, killed: boolean, kill: (signal?: string) => boolean }} */
-    fork: () => {
+    fork: (): FakeWorker => {
       workerId += 1
       forks.count += 1
-      return {
+      const worker: FakeWorker = {
         id: workerId,
         killed: false,
-        /** @param {string} [signal] */
+        signal: undefined,
         kill(signal) {
           this.killed = true
           this.signal = signal
           return true
         },
       }
+      return worker
     },
-    /** @param {string} evt @param {(...args: unknown[]) => void} cb */
-    on: (evt, cb) => {
+    on: (evt: string, cb: (...args: unknown[]) => void) => {
       handlers[evt] = cb
     },
     handlers,
     forks,
     ...over,
   }
-  return /** @type {any} */ (cluster)
+  return cluster as unknown as FakeCluster & typeof import('cluster')
 }
 
-/**
- * emit a cluster message
- * @param {any} cluster
- * @param {{ id: number }} worker
- * @param {Record<string, unknown>} msg
- */
-const emit = (cluster, worker, msg) => cluster.handlers.message(worker, msg)
+/** emit a cluster message */
+const emit = (cluster: FakeCluster, worker: { id: number }, msg: Record<string, unknown>) =>
+  cluster.handlers.message(worker, msg)
 
 const primaryTmpDir = path.join(process.cwd(), '.test-primary-tmp')
 
@@ -73,9 +90,10 @@ export default {
           args: {},
           cluster,
           commands: {},
-          DIR: { PUBLIC: '/nowhere' },
+          DIR: makeDir('/nowhere'),
           GIT: {},
           URL: 'magic.github.io/core/',
+          URL_WARNING: undefined,
           WEB_ROOT: '/core/',
         })
         // no commands: no workers are forked
@@ -91,9 +109,10 @@ export default {
           args: {},
           cluster,
           commands: { serve: true },
-          DIR: { PUBLIC: '/nowhere' },
+          DIR: makeDir('/nowhere'),
           GIT: {},
           URL: 'magic.github.io/core/',
+          URL_WARNING: undefined,
           WEB_ROOT: '/core/',
         })
         // serve forks a watch worker and a build worker
@@ -109,9 +128,10 @@ export default {
           args: {},
           cluster,
           commands: { build: true },
-          DIR: { PUBLIC: '/nowhere' },
+          DIR: makeDir('/nowhere'),
           GIT: {},
           URL: 'magic.github.io/core/',
+          URL_WARNING: undefined,
           WEB_ROOT: '/core/',
         })
         // build only forks the build worker
@@ -131,9 +151,10 @@ export default {
           args: {},
           cluster,
           commands: { clean: true },
-          DIR: { PUBLIC: publicDir },
+          DIR: makeDir(publicDir),
           GIT: {},
           URL: 'magic.github.io/core/',
+          URL_WARNING: undefined,
           WEB_ROOT: '/core/',
         })
         return !(await exists(publicDir))
@@ -148,7 +169,7 @@ export default {
           args: {},
           cluster,
           commands: {},
-          DIR: { PUBLIC: '/nowhere' },
+          DIR: makeDir('/nowhere'),
           GIT: {},
           URL: 'magic.github.io/core/',
           URL_WARNING: 42,
@@ -167,9 +188,10 @@ export default {
           args: {},
           cluster,
           commands: { serve: true },
-          DIR: { PUBLIC: '/nowhere' },
+          DIR: makeDir('/nowhere'),
           GIT: {},
           URL: 'magic.github.io/core/',
+          URL_WARNING: undefined,
           WEB_ROOT: '/core/',
         })
         // emit a change message from the watch worker (worker id 1)
@@ -192,9 +214,10 @@ export default {
           args: {},
           cluster,
           commands: { serve: true },
-          DIR: { PUBLIC: '/nowhere' },
+          DIR: makeDir('/nowhere'),
           GIT: {},
           URL: 'magic.github.io/core/',
+          URL_WARNING: undefined,
           WEB_ROOT: '/core/',
         })
         const watch = { id: 1 }
@@ -214,9 +237,10 @@ export default {
           args: {},
           cluster,
           commands: { serve: true },
-          DIR: { PUBLIC: '/nowhere' },
+          DIR: makeDir('/nowhere'),
           GIT: {},
           URL: 'magic.github.io/core/',
+          URL_WARNING: undefined,
           WEB_ROOT: '/core/',
         })
         const watch = { id: 1 }
@@ -234,9 +258,10 @@ export default {
           args: {},
           cluster,
           commands: { serve: true },
-          DIR: { PUBLIC: '/nowhere' },
+          DIR: makeDir('/nowhere'),
           GIT: {},
           URL: 'magic.github.io/core/',
+          URL_WARNING: undefined,
           WEB_ROOT: '/core/',
         })
         // exit with code 0 does not exit the process

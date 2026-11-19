@@ -1,3 +1,5 @@
+import type { AppObject, Config } from '../../../src/types.mjs'
+
 import http from 'http'
 
 import { is } from '@magic/test'
@@ -6,65 +8,68 @@ import { handler } from '../../../src/tasks/serve/handler.mjs'
 import { serve, startServer } from '../../../src/tasks/serve/index.mjs'
 import { prepareApi } from '../../../src/tasks/serve/prepareApi.mjs'
 
-/** @returns {Promise<number>} */
 const getFreePort = () =>
-  new Promise(resolve => {
+  new Promise<number>(resolve => {
     const srv = http.createServer()
     srv.listen(0, '127.0.0.1', () => {
-      const port = /** @type {import('net').AddressInfo} */ (srv.address()).port
+      const port = (srv.address() as { port: number }).port
       srv.close(() => resolve(port))
     })
   })
 
-/**
- * @param {number} port
- * @returns {Promise<() => void>}
- */
-const occupy = port =>
-  new Promise(resolve => {
+const occupy = (port: number) =>
+  new Promise<() => void>(resolve => {
     const srv = http.createServer(() => {})
     srv.listen(port, '127.0.0.1', () => {
       resolve(() => new Promise(r => srv.close(r)))
     })
   })
 
-const makeApp = over => ({
-  client: 'console.log("magic")',
-  css: { css: 'body{}', minified: 'body{}' },
-  static: { '/file.txt': 'static content' },
-  lambdas: {
-    ok: async () => async (_req, res) => {
-      res.writeHead(200)
-      res.end('lambda ok')
+const makeApp = (over?: Record<string, unknown>) =>
+  ({
+    client: 'console.log("magic")',
+    css: { css: 'body{}', minified: 'body{}' },
+    static: { '/file.txt': 'static content' },
+    lambdas: {
+      ok:
+        async () =>
+        async (
+          _req: unknown,
+          res: { writeHead: (code: number) => void; end: (body: string) => void },
+        ) => {
+          res.writeHead(200)
+          res.end('lambda ok')
+        },
+      throwing: async () => {
+        throw new Error('lambda boom')
+      },
+      notAFunction: async () => 42,
     },
-    throwing: async () => {
-      throw new Error('lambda boom')
-    },
-    notAFunction: async () => 42,
-  },
-  pages: [
-    { name: '/core/', rendered: '<html>page</html>' },
-    { name: '/core/other/', rendered: '<html>other</html>' },
-  ],
-  ...over,
-})
+    pages: [
+      { name: '/core/', rendered: '<html>page</html>' },
+      { name: '/core/other/', rendered: '<html>other</html>' },
+    ],
+    ...over,
+  }) as unknown as AppObject
 
-const makeConfig = (over = {}) => ({
-  CLIENT_LIB_NAME: 'magic',
-  HOST: '127.0.0.1',
-  IS_PROD: false,
-  PORT: 49999,
-  WEB_ROOT: '/core/',
-  ...over,
-})
+const makeConfig = (over: Record<string, unknown> = {}) =>
+  ({
+    CLIENT_LIB_NAME: 'magic',
+    HOST: '127.0.0.1',
+    IS_PROD: false,
+    PORT: 49999,
+    WEB_ROOT: '/core/',
+    ...over,
+  }) as unknown as Config
 
-/**
- * @param {any} handle
- * @param {number} port
- * @param {string} url
- */
-const request = (_handle, port, url) =>
-  new Promise((resolve, reject) => {
+type RequestResult = {
+  status: number | undefined
+  data: string
+  headers: Record<string, unknown>
+}
+
+const request = (_handle: unknown, port: number, url: string) =>
+  new Promise<RequestResult>((resolve, reject) => {
     http
       .get(`http://127.0.0.1:${port}${url}`, res => {
         let data = ''
@@ -123,8 +128,7 @@ export default [
   {
     fn: async () => {
       const port = await getFreePort()
-      /** @type {(() => void)[]} */
-      const closers = []
+      const closers: (() => void)[] = []
       // occupy the port and all ten retry ports
       for (let i = 0; i <= 10; i += 1) {
         closers.push(await occupy(port + i))
@@ -171,7 +175,7 @@ export default [
       const port = await getFreePort()
       const server = http.createServer(handle)
       try {
-        await new Promise(resolve => server.listen(port, '127.0.0.1', resolve))
+        await new Promise(resolve => server.listen(port, '127.0.0.1', () => resolve(true)))
         const res = await request(handle, port, '/core/api/ok')
         return res.status === 200 && res.data === 'lambda ok'
       } finally {

@@ -40,7 +40,8 @@ export default [
       }
       const result = mergeSubModules({ used, name: 'AModule', dependencies })
       // recursion into SubModule merges its dependencies as well
-      return result.modules.includes('SubModule') || result.modules.includes('Deep')
+      const modules = result.modules as string[]
+      return modules.includes('SubModule') || modules.includes('Deep')
     },
     expect: true,
     info: 'mergeSubModules recurses into sub module dependencies',

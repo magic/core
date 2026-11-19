@@ -13,7 +13,7 @@ export default [
   },
   {
     fn: getGitConfig(undefined),
-    expect: o =>
+    expect: (o: { ORIGIN?: string; BRANCH?: string } | undefined) =>
       o !== undefined &&
       typeof o.ORIGIN === 'string' &&
       o.ORIGIN.length > 0 &&

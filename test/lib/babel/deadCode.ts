@@ -2,14 +2,21 @@ import { is } from '@magic/test'
 
 import magic from '../../../src/lib/babel/dead_code.mjs'
 
+/** a structural babel type checker, as expected by dead_code */
+type TypeCheck = (node: unknown) => boolean
+
+/** minimal structural AST node for this test */
+type AstNode = { type?: string; id?: { name?: string }; [key: string]: unknown }
+
 /**
  * minimal structural babel `types` implementation
- * @param {Record<string, unknown>} [over]
+ * @param {Record<string, TypeCheck>} [over]
  */
-const makeTypes = over => {
-  /** @param {string} type */
-  const ofType = type => (/** @param {unknown} node */ node) =>
-    is.objectNative(node) && /** @type {any} */ (node).type === type
+const makeTypes = (over?: Record<string, TypeCheck>) => {
+  const ofType =
+    (type: string): TypeCheck =>
+    (node: unknown) =>
+      is.objectNative(node) && (node as { type?: unknown }).type === type
   return {
     isCallExpression: ofType('CallExpression'),
     isIdentifier: ofType('Identifier'),
@@ -30,26 +37,24 @@ const makeTypes = over => {
  * @param {(path: Record<string, unknown>) => void} enter
  * @param {Record<string, unknown>[]} [removed]
  */
-const walk = (node, enter, removed = []) => {
+const walk = (node: unknown, enter: (path: unknown) => void, removed: (AstNode | null)[] = []) => {
   if (!is.objectNative(node)) {
     return
   }
-  /** @param {unknown} n */
-  const makePath = n => ({
-    node: n,
+  const n = node as AstNode
+  const makePath = (m: AstNode) => ({
+    node: m,
     removed: false,
-    /** @this {Record<string, unknown>} */
     remove() {
       this.removed = true
-      removed.push(/** @type {any} */ (n).type ? n : null)
+      removed.push(m.type ? m : null)
     },
-    /** @param {{ enter: Function }} opts */
-    traverse(opts) {
-      walk(n, opts.enter, removed)
+    traverse(opts: { enter: (path: unknown) => void }) {
+      walk(m, opts.enter, removed)
     },
   })
-  enter(makePath(node))
-  for (const value of Object.values(/** @type {Record<string, unknown>} */ (node))) {
+  enter(makePath(n))
+  for (const value of Object.values(node as Record<string, unknown>)) {
     if (is.array(value)) {
       value.forEach(v => walk(v, enter, removed))
     } else if (is.objectNative(value)) {
@@ -59,16 +64,14 @@ const walk = (node, enter, removed = []) => {
 }
 
 /** @param {unknown} node */
-const makeProgramPath = node => ({
+const makeProgramPath = (node: unknown) => ({
   node,
-  /** @param {{ enter: Function }} opts */
-  traverse(opts) {
+  traverse(opts: { enter: (path: unknown) => void }) {
     walk(node, opts.enter)
   },
 })
 
-/** @param {string} name */
-const declarator = name => ({
+const declarator = (name: string) => ({
   type: 'VariableDeclarator',
   id: { type: 'Identifier', name },
   init: { type: 'Identifier', name: 'init' },
@@ -81,25 +84,30 @@ const declarator = name => ({
  * @param {string} [WEB_ROOT]
  * @returns {{ removed: Record<string, unknown>[] }}
  */
-const runProgram = (app, body, WEB_ROOT = '/core/') => {
+const runProgram = (
+  app: { modules?: Record<string, unknown>; lib?: Record<string, unknown> },
+  body: AstNode[],
+  WEB_ROOT = '/core/',
+) => {
   const plugin = magic(app, { WEB_ROOT })
   const { visitor } = plugin({ types: makeTypes() })
-  /** @type {Record<string, unknown>[]} */
-  const removed = []
+  /** the fake paths below do not match babel's BabelPath, so loosen the visitor */
+  const v = visitor as unknown as {
+    Program: { enter: (path: unknown) => void; exit: (path: unknown) => void }
+  }
+  const removed: (AstNode | null)[] = []
   const program = { type: 'Program', body }
   const path = makeProgramPath(program)
-  visitor.Program.enter({
+  v.Program.enter({
     ...path,
-    /** @param {{ enter: Function }} opts */
-    traverse(opts) {
+    traverse(opts: { enter: (path: unknown) => void }) {
       // only traverse the body nodes
       body.forEach(node => walk(node, opts.enter, removed))
     },
   })
-  visitor.Program.exit({
+  v.Program.exit({
     ...path,
-    /** @param {{ enter: Function }} opts */
-    traverse(opts) {
+    traverse(opts: { enter: (path: unknown) => void }) {
       body.forEach(node => {
         walk(node, opts.enter, removed)
         // also walk into declarator inits

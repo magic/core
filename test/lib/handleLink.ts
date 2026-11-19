@@ -5,8 +5,11 @@ import { handleLink } from '../../src/lib/handleLink.mjs'
 
 const WEB_ROOT = '/web/root'
 
-const withSilentLog = fn => {
-  const spy = mock.spy(log, 'error', () => {})
+/** the spy needs an indexable object, the log interface is not one */
+const silentLog = log as unknown as Record<string, unknown>
+
+const withSilentLog = (fn: () => unknown) => {
+  const spy = mock.spy(silentLog, 'error', () => {})
   try {
     return fn()
   } finally {
@@ -32,7 +35,7 @@ export default [
   },
   {
     fn: () => {
-      const app = { links: [] }
+      const app: { links: string[] } = { links: [] }
       const result = handleLink({ href: `${WEB_ROOT}/page`, WEB_ROOT, app })
       return app.links.includes(`${WEB_ROOT}/page`) && result === `${WEB_ROOT}/page`
     },

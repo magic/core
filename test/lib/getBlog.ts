@@ -24,19 +24,25 @@ export default {
     },
     {
       fn: async () =>
-        (await getBlog({ BLOG_DIR: `${tmpDir}/blog`, ROOT: '/tmp' })).some(f =>
+        (await getBlog({ BLOG_DIR: `${tmpDir}/blog`, ROOT: '/tmp' }))!.some(f =>
           f.includes('post-1.mjs'),
         ),
       expect: true,
       info: 'getBlog returns blog post files',
     },
     {
-      fn: tryCatch(getBlog, { BLOG_DIR: `${tmpDir}/blog/post-1.mjs`, ROOT: '/tmp' }),
+      fn: tryCatch(getBlog as unknown as (...args: unknown[]) => unknown, {
+        BLOG_DIR: `${tmpDir}/blog/post-1.mjs`,
+        ROOT: '/tmp',
+      }),
       expect: is.error,
       info: 'getBlog throws when BLOG_DIR is a file under root',
     },
     {
-      fn: tryCatch(getBlog, { BLOG_DIR: `${tmpDir}/blog/post-1.mjs`, ROOT: '/nonexistent-root' }),
+      fn: tryCatch(getBlog as unknown as (...args: unknown[]) => unknown, {
+        BLOG_DIR: `${tmpDir}/blog/post-1.mjs`,
+        ROOT: '/nonexistent-root',
+      }),
       expect: is.error,
       info: 'getBlog rethrows when BLOG_DIR is a file outside root',
     },

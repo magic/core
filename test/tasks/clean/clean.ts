@@ -7,8 +7,7 @@ import { clean } from '../../../src/tasks/clean/index.mjs'
 
 const tmpDir = path.join(process.cwd(), '.test-clean-tmp')
 
-/** @param {string} p */
-const exists = async p => {
+const exists = async (p: string) => {
   try {
     await access(p)
     return true

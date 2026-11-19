@@ -10,17 +10,17 @@ export default [
     info: 'createHash handles buffer input the same as string',
   },
   {
-    fn: tryCatch(createHash, 123),
-    expect: e => e instanceof Error && e.message.includes('expects a string or buffer'),
+    fn: tryCatch(createHash as unknown as (...args: unknown[]) => unknown, 123),
+    expect: (e: unknown) => e instanceof Error && e.message.includes('expects a string or buffer'),
     info: 'createHash throws for non-string/non-buffer input',
   },
   {
-    fn: tryCatch(createHash, ''),
-    expect: e => e instanceof Error && e.message.includes('non empty'),
+    fn: tryCatch(createHash as unknown as (...args: unknown[]) => unknown, ''),
+    expect: (e: unknown) => e instanceof Error && e.message.includes('non empty'),
     info: 'createHash throws for empty string',
   },
   {
-    fn: tryCatch(createHash, Buffer.alloc(0)),
+    fn: tryCatch(createHash as unknown as (...args: unknown[]) => unknown, Buffer.alloc(0)),
     expect: is.error,
     info: 'createHash throws for empty buffer',
   },

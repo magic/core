@@ -32,12 +32,18 @@ export default {
       info: 'getPages includes index.mjs',
     },
     {
-      fn: tryCatch(getPages, { dir: `${tmpDir}/nope`, root: '/tmp' }),
+      fn: tryCatch(getPages as unknown as (...args: unknown[]) => unknown, {
+        dir: `${tmpDir}/nope`,
+        root: '/tmp',
+      }),
       expect: is.error,
       info: 'getPages throws for missing dir under root',
     },
     {
-      fn: tryCatch(getPages, { dir: '/no/such/place', root: '/tmp' }),
+      fn: tryCatch(getPages as unknown as (...args: unknown[]) => unknown, {
+        dir: '/no/such/place',
+        root: '/tmp',
+      }),
       expect: is.error,
       info: 'getPages rethrows for missing dir outside root',
     },

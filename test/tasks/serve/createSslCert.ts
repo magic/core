@@ -13,8 +13,7 @@ const certFilename = path.join(serveDir, 'cert.pem')
 // these tests create and delete files inside src/tasks/serve,
 // serialize the mutations with a promise chain so parallel tests do not interfere
 let chain = Promise.resolve()
-/** @param {() => Promise<unknown>} fn */
-const lock = fn => {
+const lock = (fn: () => Promise<unknown>) => {
   const run = chain.then(fn, fn)
   chain = run.then(
     () => undefined,
@@ -23,8 +22,7 @@ const lock = fn => {
   return run
 }
 
-/** @param {string} p */
-const exists = async p => {
+const exists = async (p: string) => {
   try {
     await access(p)
     return true
@@ -33,7 +31,9 @@ const exists = async p => {
   }
 }
 
-const withFiles = async (files, fn) => {
+type SslResult = { key: Buffer; cert: Buffer }
+
+const withFiles = async (files: [string, string][], fn: () => Promise<unknown>) => {
   return lock(async () => {
     // clean slate
     await rm(privFilename, { force: true })
@@ -56,17 +56,21 @@ const FAKE_CERT = 'fake-cert-content'
 export default [
   {
     fn: async () => {
-      const result = await withFiles(
+      const result = (await withFiles(
         [
           [privFilename, FAKE_KEY],
           [certFilename, FAKE_CERT],
         ],
         ssl,
-      )
+      )) as SslResult | undefined
+      const key = result?.key
+      const cert = result?.cert
       return (
         is.obj(result) &&
-        Buffer.from(/** @type {Buffer} */ (result.key).toString()).toString() === FAKE_KEY &&
-        result.cert.toString() === FAKE_CERT
+        key !== undefined &&
+        cert !== undefined &&
+        Buffer.from(key.toString()).toString() === FAKE_KEY &&
+        cert.toString() === FAKE_CERT
       )
     },
     expect: true,
@@ -74,7 +78,7 @@ export default [
   },
   {
     fn: async () => {
-      const result = await withFiles([[privFilename, FAKE_KEY]], ssl)
+      const result = (await withFiles([[privFilename, FAKE_KEY]], ssl)) as SslResult | undefined
       return result === undefined
     },
     expect: true,
@@ -82,7 +86,7 @@ export default [
   },
   {
     fn: async () => {
-      const result = await withFiles([[certFilename, FAKE_CERT]], ssl)
+      const result = (await withFiles([[certFilename, FAKE_CERT]], ssl)) as SslResult | undefined
       return result === undefined
     },
     expect: true,
@@ -91,12 +95,10 @@ export default [
   {
     fn: async () => {
       // both files missing: generates a self signed cert with openssl
-      const result = await withFiles([], ssl)
-      return (
-        is.obj(result) &&
-        /** @type {Buffer} */ (result.key).length > 100 &&
-        /** @type {Buffer} */ (result.cert).length > 100
-      )
+      const result = (await withFiles([], ssl)) as SslResult | undefined
+      const key = result?.key
+      const cert = result?.cert
+      return !!key && !!cert && key.length > 100 && cert.length > 100
     },
     expect: true,
     info: 'ssl generates key and cert with openssl when both are missing',

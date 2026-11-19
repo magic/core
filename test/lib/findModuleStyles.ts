@@ -14,7 +14,7 @@ const expectExampleModules = { '.Module': { color: 'green' } }
 
 const moduleWithFnStyle = {
   Module: {
-    style: vars => ({
+    style: (vars: { color?: string }) => ({
       color: vars.color,
     }),
   },
@@ -53,20 +53,26 @@ const moduleWithArrayStyle = {
 const expectModuleWithArrayStyle = { '.Module': { color: 'red', margin: '1px' } }
 
 export default [
-  { fn: findModuleStyles(exampleModules), expect: is.object },
-  { fn: findModuleStyles(exampleModules), expect: is.deep.equal(expectExampleModules) },
+  { fn: findModuleStyles(exampleModules, undefined), expect: is.object },
+  {
+    fn: findModuleStyles(exampleModules, undefined),
+    expect: is.deep.equal(expectExampleModules),
+  },
   {
     fn: findModuleStyles(moduleWithFnStyle, { color: 'green' }),
     expect: is.deep.equal(expectExampleModules),
   },
-  { fn: findModuleStyles(moduleWithMedia), expect: is.deep.equal(moduleWithMediaExpect) },
   {
-    fn: findModuleStyles(moduleWithSubModule),
+    fn: findModuleStyles(moduleWithMedia, undefined),
+    expect: is.deep.equal(moduleWithMediaExpect),
+  },
+  {
+    fn: findModuleStyles(moduleWithSubModule, undefined),
     expect: is.deep.equal(expectModuleWithSubmodule),
     info: 'findModuleStyles recurses into submodules',
   },
   {
-    fn: findModuleStyles(moduleWithArrayStyle),
+    fn: findModuleStyles(moduleWithArrayStyle, undefined),
     expect: is.deep.equal(expectModuleWithArrayStyle),
     info: 'findModuleStyles merges array styles',
   },

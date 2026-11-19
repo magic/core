@@ -4,6 +4,13 @@ import { View, Link, actions } from '../../src/modules/Router.mjs'
 
 const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost'
 
+/** structural view of the vnode Link returns, as used by these tests */
+type LinkVNode = {
+  props: {
+    onclick: (state: Record<string, unknown>, e: Record<string, unknown>) => Record<string, unknown>
+  }
+}
+
 export default {
   view: [
     {
@@ -60,7 +67,7 @@ export default {
     },
     {
       fn: () => {
-        const vnode = Link({ to: '/about' })
+        const vnode = Link({ to: '/about' }) as LinkVNode
         return typeof vnode.props.onclick === 'function'
       },
       expect: true,
@@ -68,8 +75,9 @@ export default {
     },
     {
       fn: () => {
-        const vnode = Link({ to: '/about' })
+        const vnode = Link({ to: '/about' }) as LinkVNode
         const event = {
+          defaultPrevented: false,
           currentTarget: { href: `${origin}/about` },
           preventDefault() {
             this.defaultPrevented = true
@@ -88,9 +96,13 @@ export default {
     },
     {
       fn: () => {
-        const customAction = (state, e) => ({ ...state, custom: e.currentTarget.href })
-        const vnode = Link({ to: '/about', action: customAction })
+        const customAction = (
+          state: Record<string, unknown>,
+          e: { currentTarget?: { href: string } } | null | undefined,
+        ) => ({ ...state, custom: e?.currentTarget?.href ?? '' })
+        const vnode = Link({ to: '/about', action: customAction }) as LinkVNode
         const event = {
+          defaultPrevented: false,
           currentTarget: { href: `${origin}/about` },
           preventDefault() {
             this.defaultPrevented = true
@@ -107,7 +119,7 @@ export default {
     go: [
       {
         fn: () => actions.go({ url: '/current', hash: '' }, null),
-        expect: s => s.url === '/current',
+        expect: (s: Record<string, unknown>) => s.url === '/current',
         info: 'go without event does nothing',
       },
       {
@@ -116,7 +128,7 @@ export default {
             { url: '/current', hash: '', pages: { '/about': { title: 'About' } } },
             { currentTarget: { href: `${origin}/about` } },
           ),
-        expect: s => s.url === '/about' && s.prev === '/current',
+        expect: (s: Record<string, unknown>) => s.url === '/about' && s.prev === '/current',
         info: 'go navigates to a new local page',
       },
       {
@@ -127,7 +139,7 @@ export default {
               currentTarget: { href: `${origin}/current#h1` },
             },
           ),
-        expect: s => s.url === '/current' && s.hash === 'h1',
+        expect: (s: Record<string, unknown>) => s.url === '/current' && s.hash === 'h1',
         info: 'go to same url and hash keeps state',
       },
     ],

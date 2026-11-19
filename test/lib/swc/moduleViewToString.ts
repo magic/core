@@ -4,7 +4,7 @@ import { moduleViewToString } from '../../../src/lib/swc/moduleViewToString.mjs'
 
 const pkg = `moduleViewToString`
 
-const arrowFnModule = a => a
+const arrowFnModule = (a: unknown) => a
 const fnModule = function named() {}
 
 const objectArrowFunctionModule = {

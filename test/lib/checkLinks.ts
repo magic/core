@@ -10,9 +10,12 @@ const pages = [
 ]
 const staticUrls = ['/img.png', '/style.css']
 
-const silent = async fn => {
-  const spy = mock.spy(log, 'error', () => {})
-  const warn = mock.spy(log, 'warn', () => {})
+/** the spy needs an indexable object, the log interface is not one */
+const silentLog = log as unknown as Record<string, unknown>
+
+const silent = async (fn: () => Promise<unknown>) => {
+  const spy = mock.spy(silentLog, 'error', () => {})
+  const warn = mock.spy(silentLog, 'warn', () => {})
   try {
     return await fn()
   } finally {

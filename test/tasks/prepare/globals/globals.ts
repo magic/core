@@ -1,3 +1,5 @@
+import type { AppObject, ConfigDir } from '../../../../src/types.mjs'
+
 import { rm, mkdir } from 'node:fs/promises'
 import path from 'path'
 
@@ -14,10 +16,23 @@ import { registerModule } from '../../../../src/tasks/prepare/globals/registerMo
 const base = path.join(process.cwd(), '.test-globals-tmp')
 const nodeModules = path.join(process.cwd(), 'node_modules')
 
-const write = async (p, content) => {
+const write = async (p: string, content: string) => {
   await fs.mkdirp(path.dirname(p))
   await fs.writeFile(p, content)
 }
+
+/** a ConfigDir fixture with only the relevant keys set */
+const dir = (over: Partial<ConfigDir>): ConfigDir => ({
+  PAGES: '/p',
+  PUBLIC: '/public',
+  ASSETS: '/assets',
+  MODULES: '/modules',
+  STATIC: '/static',
+  THEMES: '/themes',
+  API: '/api',
+  LIB: [],
+  ...over,
+})
 
 export default {
   beforeAll: async () => {
@@ -105,10 +120,12 @@ export const AsObj = { View: () => 4, style: { a: 1 } }
     {
       fn: async () => {
         const modules = await findAssetFile(path.join(base, 'assets'))
+        const objExport = modules.objExport as { a?: unknown } | undefined
+        const nsExport = modules.nsExport as { View?: unknown } | undefined
         return (
           is.fn(modules.fnExport) &&
-          modules.objExport.a === 1 &&
-          is.fn(modules.nsExport.View) &&
+          objExport?.a === 1 &&
+          is.fn(nsExport?.View) &&
           modules.other === undefined
         )
       },
@@ -128,7 +145,9 @@ export const AsObj = { View: () => 4, style: { a: 1 } }
       fn: async () => {
         const modules = await findLocalModules(path.join(base, 'modules'))
         return (
-          is.fn(modules.Good) && modules.Named.View !== undefined && modules.lowercase === undefined
+          is.fn(modules.Good) &&
+          (modules.Named as { View?: unknown } | undefined)?.View !== undefined &&
+          modules.lowercase === undefined
         )
       },
       expect: true,
@@ -159,21 +178,24 @@ export const AsObj = { View: () => 4, style: { a: 1 } }
           Unrelated: () => 0,
         }
         const result = await findThemes(modules, {
-          DIR: { THEMES: path.join(base, 'themes') },
+          DIR: dir({ THEMES: path.join(base, 'themes') }),
           NODE_MODULES: nodeModules,
           THEME: 'mytheme',
         })
         // theme module with an existing object module with a View:
         // the view is replaced, other props are kept
+        const merged = result?.Merged as { View?: unknown; style?: { a?: unknown } } | undefined
+        const asFn = result?.AsFn as { View?: unknown } | undefined
+        const asObj = result?.AsObj as { style?: { a?: unknown } } | undefined
         return (
-          is.fn(result.Merged.View) &&
-          result.Merged.View !== modules.Merged.View &&
-          result.Merged.style.a === 1 &&
+          is.fn(merged?.View) &&
+          merged?.View !== modules.Merged.View &&
+          merged?.style?.a === 1 &&
           // existing function module gets the theme object
-          result.AsFn.View !== undefined &&
+          asFn?.View !== undefined &&
           // existing object module is merged with the theme object
-          result.AsObj.style.a === 1 &&
-          result.Unrelated === undefined
+          asObj?.style?.a === 1 &&
+          result?.Unrelated === undefined
         )
       },
       expect: true,
@@ -185,7 +207,7 @@ export const AsObj = { View: () => 4, style: { a: 1 } }
         const result = await findThemes(
           {},
           {
-            DIR: { THEMES: path.join(base, 'themes') },
+            DIR: dir({ THEMES: path.join(base, 'themes') }),
             NODE_MODULES: nodeModules,
           },
         )
@@ -193,7 +215,7 @@ export const AsObj = { View: () => 4, style: { a: 1 } }
         const empty = await findThemes(
           {},
           {
-            DIR: { THEMES: path.join(base, 'themes') },
+            DIR: dir({ THEMES: path.join(base, 'themes') }),
             NODE_MODULES: nodeModules,
             THEME: [],
           },
@@ -217,7 +239,11 @@ export const AsObj = { View: () => 4, style: { a: 1 } }
             keyedobj: { keyedobj: () => 4 },
           },
         }
-        const libs = await findLibraries(app, {}, { DIR: { LIB: [path.join(base, 'lib')] } })
+        const libs = await findLibraries(
+          app as unknown as AppObject,
+          {},
+          { DIR: dir({ LIB: [path.join(base, 'lib')] }) },
+        )
         const byKey = Object.fromEntries(libs.map(({ key, lib }) => [key, lib]))
         return (
           is.fn(byKey.localfn) &&
@@ -236,7 +262,7 @@ export const AsObj = { View: () => 4, style: { a: 1 } }
         // a module namespace that contains a property with its own name
         const mod = { [name]: () => 2 }
         registerModule([name, mod])
-        const gt = /** @type {any} */ (globalThis)
+        const gt = globalThis as unknown as Record<string, unknown>
         const ok = is.fn(gt[name]) && gt[name]() === 2
         delete gt[name]
         return ok
@@ -250,8 +276,8 @@ export const AsObj = { View: () => 4, style: { a: 1 } }
         // sub modules with a View object get registered onto the module
         const mod = { View: () => 1, Sub: { View: () => 2 } }
         registerModule([name, mod])
-        const gt = /** @type {any} */ (globalThis)
-        const ok = is.fn(gt[name]) && is.fn(gt[name].Sub?.View)
+        const gt = globalThis as unknown as Record<string, unknown>
+        const ok = is.fn(gt[name]) && is.fn((gt[name] as { Sub?: { View?: unknown } }).Sub?.View)
         delete gt[name]
         return ok
       },

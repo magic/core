@@ -1,3 +1,5 @@
+import type { AppObject, Config, Hashes, PageObject } from '../../src/types.mjs'
+
 import { rm, mkdir, writeFile } from 'node:fs/promises'
 import path from 'path'
 
@@ -17,10 +19,10 @@ const base = path.join(process.cwd(), '.test-app-tmp')
  * as they are registered during a real build (tasks/prepare/globals)
  */
 const ensureGlobals = async () => {
-  const gt = /** @type {any} */ (globalThis)
+  const gt = globalThis as unknown as Record<string, unknown>
   Object.entries(builtins).forEach(([name, mod]) => {
     if (typeof gt[name] === 'undefined') {
-      registerModule([name, /** @type {any} */ (mod)])
+      registerModule([name, mod])
     }
   })
   Object.entries(tags).forEach(([name, tag]) => {
@@ -44,7 +46,7 @@ const ensureGlobals = async () => {
  * @param {string} name
  * @returns {Promise<string>}
  */
-const makeRoot = async name => {
+const makeRoot = async (name: string) => {
   const root = path.join(base, name)
   await rm(root, { recursive: true, force: true })
   await mkdir(root, { recursive: true })
@@ -55,22 +57,23 @@ const makeRoot = async name => {
  * @param {string} root
  * @param {Record<string, unknown>} [over]
  */
-const makeConfig = (root, over = {}) => ({
-  PREPEND_TAGS: [],
-  APPEND_TAGS: [],
-  PREPEND_SCRIPTS: [],
-  APPEND_SCRIPTS: [],
-  CLIENT_LIB_NAME: 'magic',
-  DIR: { THEMES: path.join(root, 'assets', 'themes') },
-  LANG: 'en',
-  NODE_MODULES: '/nonexistent-magic-test/node_modules',
-  ROOT: root,
-  WEB_ROOT: '/core/',
-  THEME: [],
-  ...over,
-})
+const makeConfig = (root: string, over: Record<string, unknown> = {}) =>
+  ({
+    PREPEND_TAGS: [],
+    APPEND_TAGS: [],
+    PREPEND_SCRIPTS: [],
+    APPEND_SCRIPTS: [],
+    CLIENT_LIB_NAME: 'magic',
+    DIR: { THEMES: path.join(root, 'assets', 'themes') },
+    LANG: 'en',
+    NODE_MODULES: '/nonexistent-magic-test/node_modules',
+    ROOT: root,
+    WEB_ROOT: '/core/',
+    THEME: [],
+    ...over,
+  }) as unknown as Config
 
-const HASHES = {
+const HASHES: Hashes = {
   '/magic.js': 'sha384-aaaabbbbccccddddee',
   '/magic.css': 'sha384-ffffeeee111122223333',
 }
@@ -79,14 +82,14 @@ const HASHES = {
  * @param {any} app
  * @param {Record<string, unknown>} [pageOver]
  */
-const renderView = (app, pageOver = {}) => {
+const renderView = (app: AppObject, pageOver: Record<string, unknown> = {}) => {
   const page = {
     name: '/core/',
     state: { title: 'Page Title' },
     View: () => h('div', {}, ['page-content']),
     ...pageOver,
   }
-  return renderToString(app.View(page, HASHES)({}))
+  return renderToString(app.View(page as unknown as PageObject, HASHES)({}))
 }
 
 export default {
@@ -98,7 +101,7 @@ export default {
       fn: async () => {
         const root = await makeRoot('empty')
         const app = await App(makeConfig(root))
-        return is.fn(app.View) && app.state.url === '/core/' && app.state.root === '/core/'
+        return is.fn(app.View) && app.state?.url === '/core/' && app.state?.root === '/core/'
       },
       expect: true,
       info: 'App returns a working app without an app file',
@@ -115,7 +118,7 @@ export default {
 `,
         )
         const app = await App(makeConfig(root))
-        return app.state.hello === 'world' && is.fn(app.actions.hi)
+        return app.state?.hello === 'world' && is.fn(app.actions?.hi)
       },
       expect: true,
       info: 'App merges a default exported app file',
@@ -131,7 +134,7 @@ export default {
 `,
         )
         const app = await App(makeConfig(root))
-        return app.state.fromConfig === '/core/'
+        return app.state?.fromConfig === '/core/'
       },
       expect: true,
       info: 'App calls a function state with the config',
@@ -147,7 +150,9 @@ export const actions = { namedAction: () => 1 }
         )
         const app = await App(makeConfig(root))
         return (
-          app.state.named === true && app.state.cfg === '/core/' && is.fn(app.actions.namedAction)
+          app.state?.named === true &&
+          app.state?.cfg === '/core/' &&
+          is.fn(app.actions?.namedAction)
         )
       },
       expect: true,
@@ -159,7 +164,7 @@ export const actions = { namedAction: () => 1 }
         await writeFile(path.join(root, 'app.js'), `export default { state: { from: 'js' } }`)
         await writeFile(path.join(root, 'app.mjs'), `export default { state: { from: 'mjs' } }`)
         const app = await App(makeConfig(root))
-        return app.state.from === 'js'
+        return app.state?.from === 'js'
       },
       expect: true,
       info: 'App prefers app.js over app.mjs',
@@ -193,7 +198,7 @@ export const actions = { namedAction: () => 1 }
 `,
         )
         const app = await App(makeConfig(root, { THEME: 'mytheme' }))
-        return app.state.themed === true
+        return app.state?.themed === true
       },
       expect: true,
       info: 'App loads a local theme given as a string',
@@ -210,7 +215,7 @@ export const actions = { themeAction: () => 1 }
 `,
         )
         const app = await App(makeConfig(root, { THEME: ['mytheme'] }))
-        return app.state.themed === true && is.fn(app.actions.themeAction)
+        return app.state?.themed === true && is.fn(app.actions?.themeAction)
       },
       expect: true,
       info: 'App loads themes given as an array',
@@ -297,7 +302,12 @@ export const actions = { themeAction: () => 1 }
           state: {},
           View: () => h('div', {}, ['fn-state-content']),
         }
-        const rendered = renderToString(app.View(page, HASHES)(_config => ({ url: '/core/' })))
+        const rendered = renderToString(
+          app.View(
+            page as unknown as PageObject,
+            HASHES,
+          )((_config: unknown) => ({ url: '/core/' })),
+        )
         return rendered.includes('fn-state-content')
       },
       expect: true,

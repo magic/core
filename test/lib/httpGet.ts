@@ -18,41 +18,51 @@ const server = http.createServer((req, res) => {
 
 server.listen(0, '127.0.0.1')
 
-/** @type {Promise<number>} */
-const ready = new Promise(resolve =>
-  server.once('listening', () =>
-    resolve(/** @type {import('net').AddressInfo} */ (server.address()).port),
-  ),
+const ready = new Promise<number>(resolve =>
+  server.once('listening', () => {
+    const addr = server.address() as { port: number }
+    resolve(addr.port)
+  }),
 )
 
-const url = async path => `http://127.0.0.1:${await ready}${path}`
+/** httpGet's result, as read by the tests below */
+type HttpResponse = {
+  statusCode?: number
+  headers: Record<string, string | undefined>
+  data: Buffer[]
+  error?: Error & { code?: string }
+}
+
+const url = async (path: string) => `http://127.0.0.1:${await ready}${path}`
 
 export default {
-  afterAll: () => new Promise(resolve => server.close(() => resolve())),
+  afterAll: () => new Promise<void>(resolve => server.close(() => resolve())),
   tests: [
     {
       fn: async () => httpGet(await url('/ok')),
-      expect: res => res.statusCode === 200 && Buffer.concat(res.data).toString() === 'hello world',
+      expect: (res: HttpResponse) =>
+        res.statusCode === 200 && Buffer.concat(res.data).toString() === 'hello world',
       info: 'httpGet resolves 200 response with data',
     },
     {
       fn: async () => httpGet(await url('/ok')),
-      expect: res => res.statusCode === 200 && res.headers['content-type'] === 'text/plain',
+      expect: (res: HttpResponse) =>
+        res.statusCode === 200 && res.headers['content-type'] === 'text/plain',
       info: 'httpGet resolves headers',
     },
     {
       fn: async () => httpGet(await url('/missing')),
-      expect: res => res.statusCode === 404,
+      expect: (res: HttpResponse) => res.statusCode === 404,
       info: 'httpGet resolves 404 response',
     },
     {
       fn: async () => httpGet(await url('/redirect')),
-      expect: res => res.statusCode === 301 && res.headers.location === '/ok',
+      expect: (res: HttpResponse) => res.statusCode === 301 && res.headers.location === '/ok',
       info: 'httpGet resolves redirect response with location header',
     },
     {
       fn: () => httpGet('http://127.0.0.1:1/never'),
-      expect: res => res.error && res.error.code === 'ECONNREFUSED',
+      expect: (res: HttpResponse) => res.error && res.error.code === 'ECONNREFUSED',
       info: 'httpGet resolves connection error',
     },
   ],

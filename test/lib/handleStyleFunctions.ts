@@ -22,12 +22,16 @@ export default [
     info: 'handleStyleFunctions calls function with empty vars',
   },
   {
-    fn: handleStyleFunctions(vars => vars.color, { THEME_VARS: { color: 'blue' } }),
+    fn: handleStyleFunctions((vars: { [key: string]: unknown }) => vars.color, {
+      THEME_VARS: { color: 'blue' },
+    }),
     expect: 'blue',
     info: 'handleStyleFunctions calls function with THEME_VARS',
   },
   {
-    fn: handleStyleFunctions(vars => vars, { THEME_VARS: { key: 'value' } }),
+    fn: handleStyleFunctions((vars: { [key: string]: unknown }) => vars, {
+      THEME_VARS: { key: 'value' },
+    }),
     expect: { key: 'value' },
     info: 'handleStyleFunctions passes THEME_VARS to function',
   },

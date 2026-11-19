@@ -6,8 +6,7 @@ import { watch, cleanupWatch } from '../../../src/tasks/watch/index.mjs'
 const fileTmpDir = path.join(process.cwd(), '.test-watch-file-tmp')
 const dirTmpDir = path.join(process.cwd(), '.test-watch-dir-tmp')
 
-/** @param {string} p */
-const exists = async p => {
+const exists = async (p: string) => {
   try {
     await access(p)
     return true

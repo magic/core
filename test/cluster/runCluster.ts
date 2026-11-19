@@ -4,18 +4,22 @@ import { is } from '@magic/test'
 
 import { runCluster } from '../../src/runCluster.mjs'
 
+// the cluster module's properties are read-only in the types,
+// but the test swaps them to simulate the worker processes
+const c = cluster as unknown as Record<string, unknown>
+
 const clusterProps = {
-  isPrimary: cluster.isPrimary,
-  isMaster: cluster.isMaster,
-  isWorker: cluster.isWorker,
-  worker: cluster.worker,
+  isPrimary: c.isPrimary,
+  isMaster: c.isMaster,
+  isWorker: c.isWorker,
+  worker: c.worker,
 }
 
 const restoreCluster = () => {
-  cluster.isPrimary = clusterProps.isPrimary
-  cluster.isMaster = clusterProps.isMaster
-  cluster.isWorker = clusterProps.isWorker
-  cluster.worker = clusterProps.worker
+  c.isPrimary = clusterProps.isPrimary
+  c.isMaster = clusterProps.isMaster
+  c.isWorker = clusterProps.isWorker
+  c.worker = clusterProps.worker
 }
 
 export default [
@@ -24,20 +28,20 @@ export default [
     // as the suite tests run in parallel and share the cluster module
     fn: async () => {
       // the primary process with no command just warns
-      if (cluster.isPrimary) {
+      if (c.isPrimary) {
         await runCluster({ args: { 'no-check-links': true }, commands: {} })
       }
 
       // a worker that is not the watcher runs the build pipeline;
       // the build finishes by sending a quit message to the primary
-      cluster.isPrimary = false
-      cluster.isMaster = false
-      cluster.isWorker = true
-      cluster.worker = { id: 2 }
-      /** @type {string[]} */
-      const messages = []
-      process.send = msg => {
-        messages.push(/** @type {{ evt?: string }} */ (msg)?.evt ?? 'unknown')
+      c.isPrimary = false
+      c.isMaster = false
+      c.isWorker = true
+      c.worker = { id: 2 }
+      const messages: string[] = []
+      const proc = process as unknown as { send?: (msg: unknown) => void }
+      proc.send = msg => {
+        messages.push((msg as { evt?: string } | null | undefined)?.evt ?? 'unknown')
       }
       try {
         await runCluster({ args: { 'no-check-links': true }, commands: {} })
@@ -57,17 +61,16 @@ export default [
       if (!is.fn(handler)) {
         return false
       }
-      /** @type {unknown} */
-      let message
-      process.send = msg => {
+      let message: unknown
+      proc.send = msg => {
         message = msg
       }
       try {
-        ;/** @type {(err: unknown) => void} */ (handler)(new Error('test rejection'))
+        ;(handler as unknown as (err: unknown) => void)(new Error('test rejection'))
         return (
           is.obj(message) &&
-          /** @type {{ evt: string }} */ (message).evt === 'error' &&
-          /** @type {string} */ (/** @type {any} */ (message).error).includes('test rejection')
+          (message as { evt: string }).evt === 'error' &&
+          (message as { error: string }).error.includes('test rejection')
         )
       } finally {
         delete process.send

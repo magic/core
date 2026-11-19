@@ -1,29 +1,23 @@
+import type { AppObject, Config } from '../../../src/types.mjs'
+
 import http from 'http'
 
 import { is } from '@magic/test'
 
 import { startServer, serve } from '../../../src/tasks/serve/index.mjs'
 
-/**
- * find a currently free port by binding to port 0
- * @returns {Promise<number>}
- */
-const findFreePort = async () =>
-  new Promise((resolve, reject) => {
+const findFreePort = () =>
+  new Promise<number>((resolve, reject) => {
     const srv = http.createServer()
     srv.once('error', reject)
     srv.listen(0, '127.0.0.1', () => {
-      const { port } = /** @type {import('net').AddressInfo} */ (srv.address())
+      const { port } = srv.address() as { port: number }
       srv.close(() => resolve(port))
     })
   })
 
-/**
- * occupy a port and return the server so it can be closed
- * @param {number} port
- */
-const occupyPort = port =>
-  new Promise(resolve => {
+const occupyPort = (port: number) =>
+  new Promise<http.Server>(resolve => {
     const srv = http.createServer()
     srv.listen(port, '127.0.0.1', () => resolve(srv))
   })
@@ -33,7 +27,7 @@ export default [
     fn: async () => {
       const server = http.createServer()
       const options = await startServer(server, { port: 0, host: '127.0.0.1' })
-      const { port } = /** @type {import('net').AddressInfo} */ (server.address())
+      const { port } = server.address() as { port: number }
       server.close()
       // options is returned as-is, the assigned port lives on the server
       return is.num(options.port) && port > 0
@@ -60,8 +54,7 @@ export default [
   {
     fn: async () => {
       const free = await findFreePort()
-      /** @type {import('http').Server[]} */
-      const squatters = []
+      const squatters: http.Server[] = []
       try {
         // occupy 11 consecutive ports, more than MAX_PORT_RETRIES (10)
         for (let i = 0; i < 11; i += 1) {
@@ -92,17 +85,17 @@ export default [
           static: {},
           pages: [],
           lambdas: {},
-        },
+        } as unknown as AppObject,
         {
           IS_PROD: false,
           CLIENT_LIB_NAME: 'magic',
           HOST: '127.0.0.1',
           PORT: 0,
           WEB_ROOT: '/',
-        },
+        } as unknown as Config,
       )
       try {
-        const { port } = /** @type {import('net').AddressInfo} */ (server.address())
+        const { port } = server.address() as { port: number }
         const status = await new Promise(resolve => {
           http.get(`http://127.0.0.1:${port}/`, res => resolve(res.statusCode)).end()
         })
@@ -126,17 +119,17 @@ export default [
             static: {},
             pages: [],
             lambdas: {},
-          },
+          } as unknown as AppObject,
           {
             IS_PROD: false,
             CLIENT_LIB_NAME: 'magic',
             HOST: '127.0.0.1',
             PORT: free,
             WEB_ROOT: '/',
-          },
+          } as unknown as Config,
         )
         try {
-          const { port } = /** @type {import('net').AddressInfo} */ (server.address())
+          const { port } = server.address() as { port: number }
           return port === free + 1
         } finally {
           server.close()

@@ -1,21 +1,43 @@
+import type { AppObject, Config } from '../../../src/types.mjs'
+
 import { is } from '@magic/test'
 
 import { getBabelConf } from '../../../src/lib/babel/index.mjs'
 
-/** @param {Record<string, unknown>} [over] */
-const makeConfig = over => ({
-  ENV: 'development',
-  BABEL: { CLIENT_LIB_NAME: 'magic' },
-  ...over,
-})
+/** a babel plugin/preset option bag, as read by the tests below */
+type BabelOpts = {
+  function: string
+  removeConsole?: boolean
+  removeDebugger?: boolean
+  debug?: boolean
+  [key: string]: unknown
+}
 
-/** @param {Record<string, unknown>} [over] */
-const makeApp = over => ({ ...over })
+type BabelEntry = string | [string, BabelOpts]
+
+type BabelConf = {
+  filename: string
+  minified?: boolean
+  configFile: boolean
+  sourceMaps: string | boolean
+  comments?: boolean
+  presets: BabelEntry[]
+  plugins: BabelEntry[]
+}
+
+const makeConfig = (over?: Record<string, unknown>) =>
+  ({
+    ENV: 'development',
+    BABEL: { CLIENT_LIB_NAME: 'magic' },
+    ...over,
+  }) as unknown as Config
+
+const makeApp = (over?: Record<string, unknown>) => ({ ...over }) as unknown as AppObject
 
 export default [
   {
     fn: () => {
-      const conf = getBabelConf(makeApp(), makeConfig())
+      const conf = getBabelConf(makeApp(), makeConfig()) as BabelConf
       return (
         conf.filename === 'magic.js' &&
         conf.minified === undefined &&
@@ -32,7 +54,7 @@ export default [
   },
   {
     fn: () => {
-      const conf = getBabelConf(makeApp(), makeConfig({ ENV: 'production' }))
+      const conf = getBabelConf(makeApp(), makeConfig({ ENV: 'production' })) as BabelConf
       return conf.sourceMaps === false
     },
     expect: true,
@@ -45,7 +67,7 @@ export default [
         makeConfig({
           BABEL: { CLIENT_LIB_NAME: 'magic', USE_PRESETS: true },
         }),
-      )
+      ) as BabelConf
       // presets only included when USE_PRESETS is set
       return (
         is.arr(conf.presets) &&
@@ -63,8 +85,10 @@ export default [
         makeConfig({
           BABEL: { CLIENT_LIB_NAME: 'magic', REMOVE_CHECK_PROPS: true },
         }),
-      )
-      const removeCode = conf.plugins.find(p => Array.isArray(p) && p[0] === 'remove-code')
+      ) as BabelConf
+      const removeCode = conf.plugins.find(p => Array.isArray(p) && p[0] === 'remove-code') as
+        | [string, BabelOpts]
+        | undefined
       return is.arr(removeCode) && removeCode[1].function.includes('CHECK_PROPS')
     },
     expect: true,
@@ -78,8 +102,10 @@ export default [
           BABEL: { CLIENT_LIB_NAME: 'magic', MINIFY: true, USE_PRESETS: true },
           ENV: 'production',
         }),
-      )
-      const minify = conf.presets.find(p => Array.isArray(p) && p[0] === 'minify')
+      ) as BabelConf
+      const minify = conf.presets.find(p => Array.isArray(p) && p[0] === 'minify') as
+        | [string, BabelOpts]
+        | undefined
       return (
         conf.minified === true &&
         is.arr(minify) &&
@@ -104,9 +130,14 @@ export default [
           },
           ENV: 'production',
         }),
-      )
-      const minify = conf.presets.find(p => Array.isArray(p) && p[0] === 'minify')
-      const presetEnv = conf.presets.find(p => Array.isArray(p) && p[0] === '@babel/preset-env')
+      ) as BabelConf
+      const minify = conf.presets.find(p => Array.isArray(p) && p[0] === 'minify') as [
+        string,
+        BabelOpts,
+      ]
+      const presetEnv = conf.presets.find(
+        p => Array.isArray(p) && p[0] === '@babel/preset-env',
+      ) as [string, BabelOpts]
       return (
         conf.comments === true && minify[1].removeConsole === true && presetEnv[1].debug === true
       )
@@ -130,8 +161,11 @@ export default [
           KEEP_CONSOLE: true,
           KEEP_DEBUGGER: true,
         }),
-      )
-      const minify = conf.presets.find(p => Array.isArray(p) && p[0] === 'minify')
+      ) as BabelConf
+      const minify = conf.presets.find(p => Array.isArray(p) && p[0] === 'minify') as [
+        string,
+        BabelOpts,
+      ]
       return minify[1].removeConsole === false && minify[1].removeDebugger === false
     },
     expect: true,
@@ -154,7 +188,9 @@ export default [
     fn: () => {
       // no BABEL config at all falls back to the defaults;
       // without CLIENT_LIB_NAME the filename is 'undefined.js'
-      const conf = getBabelConf(makeApp({}), { ENV: 'development' })
+      const conf = getBabelConf(makeApp({}), {
+        ENV: 'development',
+      } as unknown as Config) as BabelConf
       return conf.filename === 'undefined.js' && is.arr(conf.plugins)
     },
     expect: true,

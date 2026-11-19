@@ -1,3 +1,5 @@
+import type { LogLike, PropTypeDecls } from '../../src/types.mjs'
+
 import { is, tryCatch } from '@magic/test'
 
 import { CHECK_PROPS } from '../../src/lib/CHECK_PROPS.mjs'
@@ -241,7 +243,7 @@ const tests = [
   },
 ]
 
-const errored = {}
+const errored: Record<string, number> = {}
 
 const expectedErrors = {
   TestRequiredMissing: 1,
@@ -262,7 +264,7 @@ const expectedErrors = {
 }
 
 const log = {
-  error: err => {
+  error: (err: Error) => {
     if (!err.message) {
       console.log('E_NO_MESSAGE', 'error without a message received!', { err }, typeof err)
     }
@@ -279,18 +281,35 @@ const log = {
 export default {
   tests: [
     {
-      fn: tryCatch(CHECK_PROPS, undefined, undefined, undefined, false),
+      fn: tryCatch(
+        CHECK_PROPS as unknown as (...args: unknown[]) => unknown,
+        undefined,
+        undefined,
+        undefined,
+        false,
+      ),
       expect: is.err,
       info: 'without arguments errors',
     },
     // { fn: tryCatch(CHECK_PROPS, { key: false }, { key: 'boolean' }), expect: t => t[0].message.includes('expected Module name as third argument'), info: 'CHECK_PROPS without arguments errors with third arg error.' },
     {
-      fn: tryCatch(CHECK_PROPS, undefined, undefined, undefined, false),
+      fn: tryCatch(
+        CHECK_PROPS as unknown as (...args: unknown[]) => unknown,
+        undefined,
+        undefined,
+        undefined,
+        false,
+      ),
       expect: false,
       info: 'CHECK_PROPS without second argument errors and returns false.',
     },
     ...tests.map(t => ({
-      fn: CHECK_PROPS(t.props, t.types, t.name, log),
+      fn: CHECK_PROPS(
+        t.props,
+        t.types as unknown as PropTypeDecls,
+        t.name,
+        log as unknown as LogLike,
+      ),
       expect: t.expect,
       info: t.info,
     })),

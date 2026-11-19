@@ -1,53 +1,75 @@
+import type { AppObject, Config } from '../../../src/types.mjs'
+
 import { is } from '@magic/test'
 
 import { recursivelyResolveDependencies } from '../../../src/lib/swc/recursivelyResolveDependencies.mjs'
 
-/** @param {Record<string, unknown>} [over] */
-const makeApp = over => ({
-  hoisted: `{ url: '/' }`,
-  View: state => [Page({ page: state.pages[state.url], state }), Header(state)],
-  modules: {
-    Page: {
-      View: state => [Router(state)],
-    },
-    Router: {
-      View: state => [Foo(state)],
-      Sub: {
-        View: state => [Bar(state)],
-      },
-    },
-    Foo: () => [div({ href: '/a/' })],
-    Bar: () => [span(null)],
-    Unused: () => [span(null)],
-  },
-  actions: {
-    go: (state, _e) => state,
-  },
-  effects: {
-    listen: _dispatch => () => {},
-  },
-  subscriptions: [['effects.listen', 'actions.go']],
-  lib: {
-    'prevent-default': () => {},
-  },
-  pages: [
-    {
-      name: '/a/',
-      View: state => [Foo(state), Link({ to: '/b/' })],
-    },
-    {
-      name: '/b/',
-      View: state => [Bar(state)],
-    },
-  ],
-  ...over,
-})
+/**
+ * fixture names referenced inside view sources. the views are only ever
+ * stringified, never executed, so these stand-ins just need to exist
+ */
+const Page = (_: unknown): unknown[] => []
+const Header = (_: unknown): unknown[] => []
+const Router = (_: unknown): unknown[] => []
+const Foo = (_: unknown): unknown[] => []
+const Bar = (_: unknown): unknown[] => []
+const Link = (_: unknown): unknown[] => []
+const div = (_: unknown): unknown[] => []
+const span = (_: unknown): unknown[] => []
 
-/** @param {Record<string, unknown>} [over] */
-const makeConfig = over => ({
-  WEB_ROOT: '/core/',
-  ...over,
-})
+/** minimal app state shape used by the fixture views */
+type FixtureState = {
+  pages: Record<string, unknown>
+  url: string
+  [key: string]: unknown
+}
+
+const makeApp = (over?: Record<string, unknown>) =>
+  ({
+    hoisted: `{ url: '/' }`,
+    View: (state: FixtureState) => [Page({ page: state.pages[state.url], state }), Header(state)],
+    modules: {
+      Page: {
+        View: (state: FixtureState) => [Router(state)],
+      },
+      Router: {
+        View: (state: FixtureState) => [Foo(state)],
+        Sub: {
+          View: (state: FixtureState) => [Bar(state)],
+        },
+      },
+      Foo: () => [div({ href: '/a/' })],
+      Bar: () => [span(null)],
+      Unused: () => [span(null)],
+    },
+    actions: {
+      go: (state: FixtureState, _e: unknown) => state,
+    },
+    effects: {
+      listen: (_dispatch: unknown) => () => {},
+    },
+    subscriptions: [['effects.listen', 'actions.go']],
+    lib: {
+      'prevent-default': () => {},
+    },
+    pages: [
+      {
+        name: '/a/',
+        View: (state: FixtureState) => [Foo(state), Link({ to: '/b/' })],
+      },
+      {
+        name: '/b/',
+        View: (state: FixtureState) => [Bar(state)],
+      },
+    ],
+    ...over,
+  }) as unknown as AppObject
+
+const makeConfig = (over?: Record<string, unknown>) =>
+  ({
+    WEB_ROOT: '/core/',
+    ...over,
+  }) as unknown as Config
 
 export default [
   {
@@ -67,7 +89,7 @@ export default [
   {
     fn: async () => {
       const result = await recursivelyResolveDependencies({ app: makeApp(), config: makeConfig() })
-      const pageA = /** @type {any} */ (result.pages['/a/'])
+      const pageA = (result.pages as Record<string, { modules?: string[] }>)['/a/']
       return is.arr(pageA?.modules) && pageA.modules.includes('Foo')
     },
     expect: true,
@@ -105,14 +127,14 @@ export default [
       const result = await recursivelyResolveDependencies({
         app: {
           hoisted: `{}`,
-          View: state => [div(state)],
+          View: (state: FixtureState) => [div(state)],
           modules: {},
           actions: {},
           effects: {},
           subscriptions: [],
           lib: {},
           pages: [],
-        },
+        } as unknown as AppObject,
         config: makeConfig(),
       })
       return is.obj(result) && is.arr(result.modules)
