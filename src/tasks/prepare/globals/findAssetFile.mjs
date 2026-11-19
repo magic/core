@@ -18,7 +18,9 @@ export const findAssetFile = async dir => {
       Object.entries(assets).forEach(([name, mod]) => {
         if (is.fn(mod)) {
           modules[name] = mod
-        } else if (is.objectNative(mod)) {
+        } else if (is.objectNative(mod) || is.module(mod)) {
+          // module namespace objects (eg `export * as X from './x.mjs'`)
+          // are spread into plain objects
           modules[name] = { ...mod }
         }
       })
