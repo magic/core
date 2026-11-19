@@ -54,14 +54,14 @@ export const Link = ({ to, action = actions.go, text, ...p }, children) => {
     /**
      * @param {Record<string, unknown>} state
      * @param {{ preventDefault: () => void, currentTarget?: { href: string } } | null | undefined} e
-     * @returns {void}
+     * @returns {Record<string, unknown>}
      */
     const handleClick = (state, e) => {
       if (!e) {
-        return
+        return state
       }
       e.preventDefault()
-      action(state, e)
+      return action(state, e)
     }
     props.onclick = handleClick
   } else {
