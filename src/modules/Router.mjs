@@ -51,7 +51,7 @@ export const Link = ({ to, action = actions.go, text, ...p }, children) => {
   const isLocal = to[0] === '/' || to[0] === '#'
 
   if (isLocal) {
-    props.onclick = [action, lib.preventDefault]
+    props.onclick = (state, e) => (e.preventDefault(), action(state, e))
   } else {
     props.target = '_blank'
     props.rel = 'noopener'
